@@ -97,10 +97,10 @@ or create a new config (.conf) file (similar to ``apache-collab-coursebook.conf`
 
 
 1. restart Apache ``sudo apachectl restart``
-1. create a dedicated user, e.g. ``adduser django``
+1. create a dedicated user, e.g. ``adduser django --disabled-login``
 1. transfer ownership of the folder to the new user ``chown -R django:django /srv/collab-coursebook``
-1. Copy or symlink the uwsgi config in ``uwsgi-collab-coursebook.ini`` to ``/etc/uwsgi/apps-available/`` and then symlink it to ``/etc/uwsgi/apps-enabled/`` using e.g., ``ln -s /srv/AKPlanning/uwsgi-collab-coursebook.ini /etc/uwsgi/apps-available/collab-coursebook.ini`` and ``ln -s /etc/uwsgi/apps-available/collab-coursebook.ini /etc/uwsgi/apps-enabled/collab-coursebook.ini``
-start uwsgi using the configuration file ``uwsgi --ini uwsgi-collab-coursebook.ini``
+1. Copy or symlink the uwsgi config in ``uwsgi-collab-coursebook.ini`` to ``/etc/uwsgi/apps-available/`` and then symlink it to ``/etc/uwsgi/apps-enabled/`` using e.g., ``ln -s /srv/collab-coursebook/uwsgi-collab-coursebook.ini /etc/uwsgi/apps-available/collab-coursebook.ini`` and ``ln -s /etc/uwsgi/apps-available/collab-coursebook.ini /etc/uwsgi/apps-enabled/collab-coursebook.ini``
+1. test your uwsgi configuration file with``uwsgi --ini collab-coursebook.ini``
 1. restart uwsgi ``sudo systemctl restart uwsgi``
 1. execute the update script ``./Utils/update.sh --prod``
 
@@ -116,8 +116,5 @@ Afterwards, you may check your setup by executing ``utils/check.sh`` or ``utils/
 
 This repository contains a Django project called collab_coursebook. The functionality is encapsulated into Django apps:
 
-1. **cc_base**: This app contains the general Django models used to represent events, users, rooms, scheduling constraints etc. This app is a basic requirements for the other apps. Data Import/Export also goes here.
-1. **cc_frontend**: This app provides a landing page for the project. Per Event it provides links to all relevant functionalities and views.
-1. **AKSubmission**: This app provides forms to submit all kinds of AKs, edit or delete them, as well as a list of all submitted AKs for an event.
-1. **AKScheduling**: This app allows organizers to schedule AKs, i.e. assigning rooms, slots, etc. It marks conflicts of all modeled constraints and assists in creating a suitable schedule.
-1. **AKPlan**: This app displays AKs and where/when they will take place for each event. Views are optimised according to usage/purpose.
+1. **base**: This app contains the general Django models used to represent courses, contents, etc.
+1. **frontend**: This app provides everything the users see when reading or editing the content. It also contains a landing page.
