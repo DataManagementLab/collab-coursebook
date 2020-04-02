@@ -148,3 +148,9 @@ BOOTSTRAP4 = {
 # Settings for FontAwesome
 FONTAWESOME_5_CSS_URL = "//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
 FONTAWESOME_5_PREFIX = "fa"
+
+FOOTER_INFO = {
+    "repo_url": "https://github.com/DataManagementLab/collab-coursebook",
+    "impress_text": "",
+    "impress_url": ""
+}

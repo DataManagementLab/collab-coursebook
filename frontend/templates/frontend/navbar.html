@@ -1,0 +1,7 @@
+{% if user.is_authenticated %}
+    <div class="float-right" style="color: #ffffff;font-weight: bold;">
+        {{ user.get_username }}&nbsp;&nbsp;<a href="{% url "cas_ng_logout" %}" class="btn btn-primary" style="">Logout</a>
+    </div>
+{% endif %}
+
+<a href="{% url "frontend:dashboard" %}" style="color: #ffffff;text-decoration: none;"><h4 style="font-weight: bold;">Collab Coursebook</h4></a>
