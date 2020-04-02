@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cas_ng',
+    'bootstrap4',
+    'fontawesome_5',
     'frontend',
 ]
 
@@ -102,6 +105,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas_ng.backends.CASBackend',
+)
+
+CAS_SERVER_URL = "https://sso.tu-darmstadt.de/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -127,3 +136,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Settings for Bootstrap
+BOOTSTRAP4 = {
+    # Use custom CSS
+    "css_url": {
+        "href": STATIC_URL + "css/bootstrap.css",
+    },
+}
+
+# Settings for FontAwesome
+FONTAWESOME_5_CSS_URL = "//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
+FONTAWESOME_5_PREFIX = "fa"

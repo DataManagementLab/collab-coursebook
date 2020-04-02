@@ -14,8 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+import django_cas_ng.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('accounts/login', django_cas_ng.views.LoginView.as_view(), name='cas_ng_login'),
+    path('accounts/logout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
+    path('accounts/callback', django_cas_ng.views.CallbackView.as_view(), name='cas_ng_proxy_callback'),
+    path('', include('frontend.urls', namespace='frontend')),
 ]
