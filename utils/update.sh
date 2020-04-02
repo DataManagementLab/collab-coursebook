@@ -12,7 +12,7 @@ fi
 
 # set environment variable when we want to update in production
 if [ "$1" = "--prod" ]; then
-    export DJANGO_SETTINGS_MODULE=AKPlanning.settings_production
+    export DJANGO_SETTINGS_MODULE=collab_coursebook.settings_production
 fi
 
 git pull
