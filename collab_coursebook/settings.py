@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_cas_ng',
     'bootstrap4',
     'fontawesome_5',
+    'base',
     'frontend',
 ]
 
