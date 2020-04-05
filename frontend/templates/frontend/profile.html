@@ -1,0 +1,12 @@
+{% extends "frontend/base_logged_in.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+
+{% block content %}
+    <h1>{% trans "User" %}: {{ profile.user.get_username }}</h1>
+
+    <p>{{ profile.bio }}</p>
+{% endblock %}
