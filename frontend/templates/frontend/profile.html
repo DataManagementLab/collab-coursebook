@@ -8,5 +8,10 @@
 {% block content %}
     <h1>{% trans "User" %}: {{ profile.user.get_username }}</h1>
 
-    <p>{{ profile.bio }}</p>
+    {% if profile.pic %}
+        <img src="{{ profile.pic.url }}" class="float-left" style="max-width: 200px;padding-right: 20px;" alt="{% trans "User profile picture" %}">
+    {% endif %}
+
+    <p>{{ profile.bio }}
+
 {% endblock %}

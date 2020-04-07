@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
-    # pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", default="static/base/default_profile_pic.png")
+    pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
 
     def __str__(self):
         return str(self.user)
