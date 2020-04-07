@@ -32,3 +32,17 @@ def footer_info():
     :rtype: dict[str, str]
     """
     return settings.FOOTER_INFO
+
+
+@register.filter
+def count_content(topic_queryset):
+    """
+    This method counts the contents of the topuics in a queryset
+    :param QuerySet topic_queryset: the queryset
+    :return: the number of contents
+    :rtype: int
+    """
+    count = 0
+    for topic in topic_queryset:
+        count += len(topic.get_contents("None", "None"))
+    return str(count)

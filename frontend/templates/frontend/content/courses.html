@@ -1,0 +1,82 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% load cc_frontend_tags %}
+
+
+{# title block #}
+{% block title %}Courses - Collab Coursebook{% endblock %}
+
+{# content block #}
+{% block content %}
+    <div class="row mt-3">
+        <div class="col-md">
+            <h1>All Courses{% if sort %} ({{ sort }}){% endif %}</h1>
+        </div>
+        <div class="col-md-auto my-auto">
+                <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort by: {{ sort }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='date-new' %}">Date (newest)</a>
+                    <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='date-old' %}">Date (oldest)</a>
+                    <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='title-a' %}">Title (A-Z)</a>
+                    <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='title-z' %}">Title (Z-A)</a>
+                </div>
+            {% if user.is_authenticated %}
+                <a class="btn btn-secondary" href=""
+                   title="Add new Course">{% fa5_icon 'plus' 'fas' %} Course</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    {% if courses %}
+    <div class="row">
+        {% for course in courses %}
+            {% include "frontend/content/card_course.html" %}
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>{% trans "No matching courses found" %}</p>
+    {% endif %}
+
+
+    {% if courses|length > 0 %}
+        <div class="pagination mt-3">
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+
+                        <a class="page-link" href="?page=1">&lt;&lt;</a>
+
+                    </li>
+                    <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                        <a class="page-link"
+                           href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}{% endif %}">&lt;</a>
+                    </li>
+
+                    {% for page_number in paginator.page_range %}
+                        <li class="page-item {% if forloop.counter == page_obj.number %}active{% endif %}">
+                            <a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a>
+                        </li>
+                    {% endfor %}
+
+                    <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                        <a class="page-link"
+                           href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}{% endif %}">&gt;</a>
+                    </li>
+                    <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                        <a class="page-link" href="?page={{ paginator.num_pages }}">&gt;&gt;</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+
+{% endblock %}

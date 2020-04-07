@@ -1,0 +1,57 @@
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% load cc_frontend_tags %}
+
+<div class="card ml-3 mt-3" style="width: 20rem;">
+    <a href="">
+        <div class="card-img-top">
+            {% if course.image %}
+                <img src="{{ course.image.url }}" class="card-img-top" alt="Course Title Image" width="286"
+                     height="180" style="width:100%;height:180px;object-fit: cover;">
+            {% else %}
+                <div class="card-img-top" style="width:100%;height:180px;object-fit: cover;background-color: #f6b93b;"></div>
+            {% endif %}
+        </div>
+    </a>
+
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="">
+                {{ course.title|slice:":33" }}
+                {% if course.title|length >= 33 %}
+                    ...
+                {% endif %}
+            </a>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            {% if course in user.profile.stared_courses.all %}
+                {% fa5_icon 'bookmark' 'fas' %}
+            {% endif %}
+            {% if user in course.owner.all %}
+                {% fa5_icon 'user' 'fas' %}
+            {% endif %}
+        </h6>
+
+        <p class="card-text" style="color: #444444">
+            {{ course.description|slice:":150" }}
+            {% if course.description|length >= 146 %}
+                ...
+            {% endif %}
+        </p>
+
+    </div>
+
+    <div class="card-footer bg-transparent"
+         style="font-size: 14px; color: #343a40 ">
+        <div style="float: left">
+            {% trans "Contents:" %}: {{ course.topic_list.all|count_content }}
+        </div>
+        <div style="float: right" title="Creation Date">
+            {{ course.creation_date|date:'d.m.Y' }}
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+</div>
