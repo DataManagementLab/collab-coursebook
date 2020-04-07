@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
@@ -25,4 +27,4 @@ urlpatterns = [
     path('accounts/logout', django_cas_ng.views.LogoutView.as_view(), name='cas_ng_logout'),
     path('accounts/callback', django_cas_ng.views.CallbackView.as_view(), name='cas_ng_proxy_callback'),
     path('', include('frontend.urls', namespace='frontend')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
