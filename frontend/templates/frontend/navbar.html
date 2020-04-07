@@ -1,6 +1,14 @@
+{% load i18n %}
+
 {% if user.is_authenticated %}
     <div class="float-right" style="color: #ffffff;font-weight: bold;">
-        {{ user.get_username }}&nbsp;&nbsp;<a href="{% url "cas_ng_logout" %}" class="btn btn-primary" style="">Logout</a>
+        {% if user.is_superuser %}
+            <a href="{% url "admin:index" %}" class="btn btn-danger" style="">{% trans "Admin Menu" %}</a>
+            &nbsp;&nbsp;
+        {% endif %}
+        {{ user.get_username }}&nbsp;&nbsp;
+        &nbsp;&nbsp;
+        <a href="{% url "cas_ng_logout" %}" class="btn btn-primary" style="">{% trans "Logout" %}</a>
     </div>
 {% endif %}
 
