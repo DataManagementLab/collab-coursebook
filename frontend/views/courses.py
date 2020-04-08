@@ -10,7 +10,7 @@ class CourseListView(ListView):  # pylint: disable=too-many-ancestors
     Displays the courses page with all available course
     """
     model = Course
-    template_name = 'frontend/content/courses.html'
+    template_name = 'frontend/course_lists/courses.html'
     paginate_by = 9
 
     context_object_name = 'courses'
@@ -58,7 +58,7 @@ class CourseListView(ListView):  # pylint: disable=too-many-ancestors
 
 
 class CourseListForCategoryView(CourseListView):
-    template_name = "frontend/content/courses_category.html"
+    template_name = "frontend/course_lists/courses_category.html"
 
     def dispatch(self, request, *args, **kwargs):
         self.category = get_object_or_404(Category, pk=self.kwargs['pk'])
@@ -74,7 +74,7 @@ class CourseListForCategoryView(CourseListView):
 
 
 class CourseListForPeriodView(CourseListView):
-    template_name = "frontend/content/courses_period.html"
+    template_name = "frontend/course_lists/courses_period.html"
 
     def dispatch(self, request, *args, **kwargs):
         self.period = get_object_or_404(Period, pk=self.kwargs['pk'])
