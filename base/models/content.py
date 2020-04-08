@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-
 
 class Category(models.Model):
     class Meta:
@@ -10,6 +8,7 @@ class Category(models.Model):
         ordering = ['title']
 
     title = models.CharField(max_length=150, verbose_name=_("Title"))
+    image = models.ImageField(verbose_name=_("Title Image"), blank=True, upload_to='uploads/categories/')
 
     def __str__(self):
         return self.title
@@ -50,7 +49,7 @@ class Course(models.Model):
     image = models.ImageField(verbose_name=_("Title Image"), blank=True, upload_to='uploads/courses/%Y/%m/%d/')
     #topic_list = models.ManyToManyField(Topic, through='Structure')
 
-    owner = models.ManyToManyField(User, related_name='course_owner', name='owner')
+    owners = models.ManyToManyField("Profile", related_name='owned_courses', verbose_name=_("Owners"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
         help_text=_("Is the course protected and can only be edited by the owners?"), blank=True, default=False)
 
