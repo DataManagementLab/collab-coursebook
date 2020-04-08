@@ -112,6 +112,12 @@ AUTHENTICATION_BACKENDS = (
 )
 
 CAS_SERVER_URL = "https://sso.tu-darmstadt.de/"
+CAS_APPLY_ATTRIBUTES_TO_USER = True
+CAS_RENAME_ATTRIBUTES = {
+    'surname': 'last_name',
+    'givenName': 'first_name',
+    'mail': 'email',
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
