@@ -12,7 +12,7 @@
                 <img src="{{ course.image.url }}" class="card-img-top" alt="Course Title Image" width="286"
                      height="180" style="width:100%;height:180px;object-fit: cover;">
             {% else %}
-                <div class="card-img-top" style="width:100%;height:180px;object-fit: cover;background-color: #f6b93b;"></div>
+                <div class="card-img-top {{ bgcolor }}" style="width:100%;height:180px;object-fit: cover;"></div>
             {% endif %}
         </div>
     </a>
@@ -30,9 +30,10 @@
             {% if course in user.profile.stared_courses.all %}
                 {% fa5_icon 'bookmark' 'fas' %}
             {% endif %}
-            {% if user in course.owner.all %}
-                {% fa5_icon 'user' 'fas' %}
+            {% if user.profile in course.owners.all %}
+                {% fa5_icon 'chalkboard-teacher' 'fas' %}
             {% endif %}
+            {{ course.owners.all|join:', ' }}
         </h6>
 
         <p class="card-text" style="color: #444444">
@@ -47,7 +48,8 @@
     <div class="card-footer bg-transparent"
          style="font-size: 14px; color: #343a40 ">
         <div style="float: left">
-            {% trans "Contents:" %}: {{ course.topic_list.all|count_content }}
+            <!-- TODO Insert correct topic referencing -->
+            {% trans "Contents" %}: {{ course.topic_list.all|count_content }}
         </div>
         <div style="float: right" title="Creation Date">
             {{ course.creation_date|date:'d.m.Y' }}

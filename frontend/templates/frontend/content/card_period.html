@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load bootstrap4 %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{% load cc_frontend_tags %}
+
+<div class="card ml-3 mt-3" style="width: 20rem;">
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="">
+                {{ period.title }}
+            </a>
+        </h5>
+        <h6 class="card-subtitle mb-2 text-muted">
+            {{ period.start }} -<br>
+            {{ period.end }}
+        </h6>
+    </div>
+
+    <div class="card-footer bg-transparent text-primary"
+         style="font-size: 14px;">
+            {% trans "Courses" %}: {{ period.courses.count }}
+    </div>
+</div>

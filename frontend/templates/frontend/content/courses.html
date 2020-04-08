@@ -39,6 +39,7 @@
     {% if courses %}
     <div class="row">
         {% for course in courses %}
+            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
             {% include "frontend/content/card_course.html" %}
         {% endfor %}
     </div>

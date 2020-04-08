@@ -7,4 +7,37 @@
 
 {% block content %}
     <h1>{% trans "Dashboard" %}</h1>
+
+    <h3 class="text-danger" style="margin-top: 40px;">{% fa5_icon "chalkboard-teacher" "fas" %} {% trans "Your Courses" %}</h3>
+    <div class="row">
+        {% for course in user.profile.owned_courses.all %}
+            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
+            {% include "frontend/content/card_course.html" %}
+        {% empty %}
+            {% include "frontend/content/card_create_course.html" %}
+        {% endfor %}
+    </div>
+
+    <h3 class="text-success" style="margin-top: 40px;">{% fa5_icon "bookmark" "fas" %} {% trans "Stared Courses" %}</h3>
+    <div class="row">
+        {% for course in user.profile.stared_courses.all %}
+            {% include "frontend/content/card_course.html" %}
+        {% endfor %}
+    </div>
+
+    <h3 class="text-info" style="margin-top: 40px;">{% fa5_icon "school" "fas" %} {% trans "All Courses by Period" %}</h3>
+    <div class="row">
+        {% for period in periods %}
+            {% include "frontend/content/card_period.html" %}
+        {% endfor %}
+    </div>
+
+    <h3 class="text-warning" style="margin-top: 40px;">{% fa5_icon "school" "fas" %} {% trans "All Courses by Category" %}</h3>
+    <div class="row">
+        {% for category in categories %}
+            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
+            {% include "frontend/content/card_category.html" %}
+        {% endfor %}
+    </div>
+
 {% endblock %}
