@@ -44,7 +44,7 @@ class Course(models.Model):
         verbose_name_plural = _("Courses")
         ordering = ['title']
 
-    title = models.CharField(max_length=200, verbose_name="Title")
+    title = models.CharField(max_length=200, verbose_name="Title", unique=True)
     description = models.TextField(verbose_name=_("Description"))
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
