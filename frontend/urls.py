@@ -13,6 +13,7 @@ urlpatterns = [
         re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$', views.CourseListView.as_view(),
                 name='courses-sort'),
         path('', views.CourseListView.as_view(), name='courses'),
+        path('add/', views.AddCourseView.as_view(), name='add-course'),
     ])),
 
     path('category/<int:pk>/', include([
