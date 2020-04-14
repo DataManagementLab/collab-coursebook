@@ -1,3 +1,13 @@
 from django.contrib import admin
 
-# Register your models here.
+from content.models import YTVideoContent, ImageContent
+
+
+@admin.register(YTVideoContent)
+class YTVideoContentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ImageContent)
+class ImageContentAdmin(admin.ModelAdmin):
+    pass
