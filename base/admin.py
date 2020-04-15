@@ -1,4 +1,4 @@
-from base.models import Course, Category, Period, Topic, Content, CourseStructureEntry, Tag
+from base.models import Course, Category, Period, Topic, Content, CourseStructureEntry, Tag, Comment, Rating
 from .models import Profile
 
 from django.contrib import admin
@@ -44,3 +44,13 @@ class TagAdmin(admin.ModelAdmin):
 class CourseStructureAdmin(admin.ModelAdmin):
     list_display = ['index', 'course', 'topic']
     list_filter = ['course']
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    exclude = ['creation_date', 'last_edit']
+
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    pass
