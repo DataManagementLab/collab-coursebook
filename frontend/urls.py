@@ -7,7 +7,9 @@ app_name = "frontend"
 urlpatterns = [
     path('', views.StartView.as_view(), name="index"),
     path('dashboard/', views.DashboardView.as_view(), name="dashboard"),
+
     path('profile/<int:pk>/', views.ProfileView.as_view(), name="profile"),
+    path('profile/edit/', views.ProfileEditView.as_view(), name="profile-edit"),
 
     path('courses/', include([
         re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$', views.CourseListView.as_view(),
