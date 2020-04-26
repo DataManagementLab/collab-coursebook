@@ -1,4 +1,4 @@
-from base.models import Course, Category, Period, Topic, Content, CourseStructureEntry, Tag, Comment, Rating
+from base.models import Course, Category, Period, Topic, Content, CourseStructureEntry, Tag, Comment, Rating, Favorite
 from .models import Profile
 
 from django.contrib import admin
@@ -54,3 +54,9 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ['user', 'course', 'content']
+    list_display_links = ['user', 'course', 'content']
