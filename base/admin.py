@@ -12,7 +12,7 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'period']
-    exclude = ['creation_date']
+    readonly_fields = ['creation_date']
 
 
 @admin.register(Category)
@@ -32,7 +32,8 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
-    exclude = ['creation_date', 'preview']
+    readonly_fields = ['creation_date']
+    exclude = ['preview']
 
 
 @admin.register(Tag)
@@ -48,7 +49,7 @@ class CourseStructureAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    exclude = ['creation_date', 'last_edit']
+    readonly_fields = ['creation_date', 'last_edit']
 
 
 @admin.register(Rating)
