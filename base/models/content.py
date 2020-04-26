@@ -140,6 +140,7 @@ class Content(models.Model):
     tags = models.ManyToManyField(Tag, verbose_name=_("Tags"), related_name='contents', blank=True)
 
     readonly = models.BooleanField(verbose_name=_("Readonly"), help_text=_("Can this content be updated?"), default=False)
+    public = models.BooleanField(verbose_name=_("Show in public courses?"), help_text=_("May this content be displayed in courses that don't require registration?"), default=False)
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"), blank=True, null=True)
