@@ -1,1 +1,1 @@
-from .course import AddAndEditCourseForm
+from .comment import CommentForm

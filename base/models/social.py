@@ -51,3 +51,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment for {self.content} by {self.author}'
+
+    @property
+    def edited(self):
+        return (self.last_edit - self.creation_date).seconds > 1
