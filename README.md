@@ -118,3 +118,5 @@ This repository contains a Django project called collab_coursebook. The function
 
 1. **base**: This app contains the general Django models used to represent courses, contents, etc.
 1. **frontend**: This app provides everything the users see when reading or editing the content. It also contains a landing page.
+1. **content**: This app provides models, rendering- and export code for the different supported types of contents.
+1. **export**: This app contains export functions for the custom content collections (coursebooks).
