@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'base',
     'frontend',
     'content',
+    'export',
 ]
 
 MIDDLEWARE = [
