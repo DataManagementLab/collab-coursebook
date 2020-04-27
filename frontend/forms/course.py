@@ -13,4 +13,8 @@ class AddAndEditCourseForm(forms.ModelForm):
     class Meta:  # pylint: disable=too-few-public-methods
         model = Course
         exclude = ['creation_date', 'topics']
-        # widgets = {'owners': autocomplete.ModelSelect2Multiple(url='select_many_to_many')}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Use better multiple select input for owners
+        self.fields["owners"].widget.attrs = {'class': 'chosen-select'}
