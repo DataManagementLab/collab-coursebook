@@ -54,4 +54,4 @@ class Comment(models.Model):
 
     @property
     def edited(self):
-        return (self.last_edit - self.creation_date).seconds > 1
+        return (self.last_edit - self.creation_date).total_seconds() > 1
