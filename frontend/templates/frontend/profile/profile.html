@@ -18,7 +18,7 @@
         <img src="{{ profile.pic.url }}" class="float-left" style="max-width: 200px;padding-right: 20px;" alt="{% trans "User profile picture" %}">
     {% endif %}
 
-    <p>{{ profile.bio }}
+    <p>{{ profile.bio | linebreaks }}
 
     <div style="clear: both;"></div>
 
