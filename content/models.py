@@ -34,7 +34,7 @@ class ImageContent(models.Model):
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
     source = models.TextField(verbose_name=_("Source"))
-    license = models.CharField(verbose_name=_("Licence"), blank=True, max_length=200)
+    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
 
     def __str__(self):
         return f"{self.content}: {self.image}"
