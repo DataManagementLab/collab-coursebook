@@ -1,0 +1,22 @@
+.starrating > input {
+    display: none;
+}
+
+.starrating > label:before {
+    content: "★ ";
+    margin: 2px;
+    font-size: 2em;
+    display: inline-block;
+}
+
+.starrating > label {
+    color: #222222;
+}
+
+.starrating > input:hover ~ label {
+    color: #ffca08;
+}
+
+.active ~ label {
+    color: #ffca08;
+}

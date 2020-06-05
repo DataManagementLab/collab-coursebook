@@ -7,7 +7,7 @@
             <a href="{% url "admin:index" %}" class="btn btn-danger" style="">{% trans "Admin Menu" %}</a>
             &nbsp;
         {% endif %}
-        {{ user.get_username }}
+        <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white">{{ user.get_username }}</a>
         &nbsp;
         <a href="{% url "cas_ng_logout" %}" class="btn btn-primary" style="">{% trans "Logout" %}</a>
     </div>

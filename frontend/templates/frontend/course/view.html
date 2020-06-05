@@ -1,0 +1,102 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{% load i18n %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% load cc_frontend_tags %}
+{% load static %}
+
+
+{% block title %}
+    {{ course.title }} - Collab Coursebook
+{% endblock %}
+
+{% block imports %}
+    <link href="{% static 'css/view_course.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <!-- Course markings and actions -->
+    <div class="float-right">
+        {% if course in user.profile.stared_courses.all %}
+            {% fa5_icon 'bookmark' 'fas' %}
+        {% endif %}
+        {% if user.profile in course.owners.all %}
+            <a href="{% url 'frontend:course-delete' pk=course.pk %}" class="btn btn-warning">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}</a>
+        {% endif %}
+    </div>
+
+    <!-- Course header: Title, owners, description -->
+    <h1>{{ course.title }}</h1>
+
+    <h5 style="margin-top: 20px;">
+        {% for owner in course.owners.all %}
+            <a href="{% url 'frontend:profile' pk=owner.pk %}" class="{% if owner == user.profile %}text-danger{% endif %}">{% fa5_icon 'chalkboard-teacher' 'fas' %} {{ owner }}</a>
+        {% endfor %}
+    </h5>
+
+    <div class="row"  style="margin-top: 20px;">
+        <div class="col-md-4">
+            <ol class="list-group" style="font-weight: bold;">
+                <!-- ToDo Show nested structure -->
+                {% for entry in structure %}
+                    <li class="list-group-item">
+                        {% with forloop.counter as outer_index %}
+                            {{ outer_index }}. {{ entry.topic.title }}
+                            <span class="badge badge-primary badge-pill badge-light">{{ entry.topic.contents.count }}</span>
+                            {% if entry.subtopics %}
+                                <ol class="list-group">
+                                    {% for subtopic in entry.subtopics %}
+                                        <li class="list-group-item" style="border: none;">
+                                            {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.title }}
+                                            <span class="badge badge-primary badge-pill badge-light">{{ subtopic.contents.count }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ol>
+                            {% endif %}
+                        {% endwith %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {% trans "No topics yet" %}
+                    </li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="col-md-8">
+            {{ course.description | linebreaks}}
+        </div>
+        <!-- TODO Add image? -->
+    </div>
+
+    {% for entry in structure %}
+        <div style="margin-top: 30px;">
+            {% with forloop.counter as outer_index %}
+                <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }}</h3>
+
+                {% with entry.topic.contents.all as topic_contents %}
+                    {% include "frontend/course/topic_contents.html" %}
+                {% endwith %}
+                {% if entry.subtopics %}
+                        {% for subtopic in entry.subtopics %}
+                            <div style="margin-top: 15px;">
+                                <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.title }}</h4>
+                                {% with subtopic.contents.all as topic_contents %}
+                                    {% include "frontend/course/topic_contents.html" %}
+                                {% endwith %}
+                            </div>
+                        {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    {% empty %}
+        <h3>No Topics </h3>
+        <p>This course doesn't have topics at the moment.
+        {% if user in course.owner.all %}You can
+            <a href="{% url 'edit_course_structure' course.id %}">add topics here</a>
+        {% endif %}
+        </p>
+    {% endfor %}
+
+{% endblock %}

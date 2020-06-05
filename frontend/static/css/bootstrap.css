@@ -5596,7 +5596,8 @@ a.badge-dark:focus, a.badge-dark.focus {
 .jumbotron {
   padding: 2rem 1rem;
   margin-bottom: 2rem;
-  background-color: #fad390;
+  background-color: #3c6382;
+  color: #ffffff;
   border-radius: 0.3rem;
 }
 
@@ -10632,7 +10633,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .text-muted {
-  color: #3c6382 !important;
+  color: #cccccc !important;
 }
 
 .text-black-50 {

@@ -1,0 +1,33 @@
+{% extends "frontend/base_logged_in.html" %}
+
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+
+{% block content %}
+    <div class="float-right">
+        {% if user == profile.user %}
+            <a href="{% url 'frontend:profile-edit' %}" class="btn btn-success">{% fa5_icon "edit" "far" %} {% trans "Edit" %}</a>
+        {% endif %}
+    </div>
+
+    <h1>{% trans "User" %}: {{ profile.user.get_username }}</h1>
+
+    {% if profile.pic %}
+        <img src="{{ profile.pic.url }}" class="float-left" style="max-width: 200px;padding-right: 20px;" alt="{% trans "User profile picture" %}">
+    {% endif %}
+
+    <p>{{ profile.bio | linebreaks }}
+
+    <div style="clear: both;"></div>
+
+    <h3 class="text-info" style="margin-top: 30px;">{% fa5_icon "chalkboard-teacher" "fas" %} {% trans "Owned Courses" %}</h3>
+    <div class="row">
+        {% for course in profile.owned_courses.all %}
+            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
+            {% include "frontend/course_lists/card_course.html" %}
+        {% endfor %}
+    </div>
+
+{% endblock %}

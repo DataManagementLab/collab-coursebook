@@ -17,12 +17,14 @@
         {% include "frontend/course_lists/card_create_course.html" %}
     </div>
 
-    <h3 class="text-success" style="margin-top: 40px;">{% fa5_icon "bookmark" "fas" %} {% trans "Stared Courses" %}</h3>
-    <div class="row">
-        {% for course in user.profile.stared_courses.all %}
-            {% include "frontend/course_lists/card_course.html" %}
-        {% endfor %}
-    </div>
+    {% if user.profile.stared_courses.count > 0 %}
+        <h3 class="text-success" style="margin-top: 40px;">{% fa5_icon "bookmark" "fas" %} {% trans "Stared Courses" %}</h3>
+        <div class="row">
+            {% for course in user.profile.stared_courses.all %}
+                {% include "frontend/course_lists/card_course.html" %}
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <h3 class="text-info" style="margin-top: 40px;">{% fa5_icon "school" "fas" %} {% trans "All Courses by Period" %}</h3>
     <div class="row">

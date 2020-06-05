@@ -1,4 +1,4 @@
-from base.models import Course, Category, Period, Topic, Content, CourseStructureEntry, Tag
+from base.models import Course, Category, Period, Topic, Content, CourseStructureEntry, Tag, Comment, Rating, Favorite
 from .models import Profile
 
 from django.contrib import admin
@@ -12,7 +12,7 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'period']
-    exclude = ['creation_date']
+    readonly_fields = ['creation_date']
 
 
 @admin.register(Category)
@@ -32,7 +32,8 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
-    exclude = ['creation_date', 'preview']
+    readonly_fields = ['creation_date']
+    exclude = ['preview']
 
 
 @admin.register(Tag)
@@ -44,3 +45,19 @@ class TagAdmin(admin.ModelAdmin):
 class CourseStructureAdmin(admin.ModelAdmin):
     list_display = ['index', 'course', 'topic']
     list_filter = ['course']
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    readonly_fields = ['creation_date', 'last_edit']
+
+
+@admin.register(Rating)
+class RatingAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Favorite)
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ['user', 'course', 'content']
+    list_display_links = ['user', 'course', 'content']

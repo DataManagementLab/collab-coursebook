@@ -3,13 +3,17 @@
 {# Load the tag library #}
 {% load bootstrap4 %}
 {% load i18n %}
-{#% include 'autocomplete_light/static.html' %#}
 {% load static %}
 {% load fontawesome_5 %}
 
 {# Load CSS and JavaScript #}
 
 {% block title %}{% trans "Create a new course" %} - Collab Coursebook{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
+{% endblock %}
 
 {% block content %}
     <h1>Create a new Course</h1>
@@ -22,8 +26,17 @@
         {{ form.media }}
         <div>
 
-            <button type="submit" class="btn btn-primary">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
+            <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
             <a href="{% url 'frontend:dashboard' %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
     </form>
+{% endblock %}
+
+{% block bottom_script %}
+    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
+    <script>
+        $(function () {
+            $('.chosen-select').chosen();
+        });
+    </script>
 {% endblock %}

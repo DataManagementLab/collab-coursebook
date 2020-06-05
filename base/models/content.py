@@ -1,7 +1,10 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
 from fontawesome_5.fields import IconField
+
+from base.models import Profile
 
 
 class Category(models.Model):
@@ -52,7 +55,7 @@ class Course(models.Model):
     image = models.ImageField(verbose_name=_("Title Image"), blank=True, upload_to='uploads/courses/%Y/%m/%d/')
     topics = models.ManyToManyField("Topic", verbose_name=_("Topics"), through='CourseStructureEntry', related_name="courses", blank=True)
 
-    owners = models.ManyToManyField("Profile", related_name='owned_courses', verbose_name=_("Owners"))
+    owners = models.ManyToManyField(Profile, related_name='owned_courses', verbose_name=_("Owners"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
         help_text=_("Is the course protected and can only be edited by the owners?"), blank=True, default=False)
 
@@ -137,12 +140,84 @@ class Content(models.Model):
     tags = models.ManyToManyField(Tag, verbose_name=_("Tags"), related_name='contents', blank=True)
 
     readonly = models.BooleanField(verbose_name=_("Readonly"), help_text=_("Can this content be updated?"), default=False)
+    public = models.BooleanField(verbose_name=_("Show in public courses?"), help_text=_("May this content be displayed in courses that don't require registration?"), default=False)
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"), blank=True, null=True)
 
+    ratings = models.ManyToManyField("Profile", through='Rating')
+
     def __str__(self):
         return f"{self.type} for {self.topic} by {self.author}"
+
+    def get_rate_num(self):
+        """
+        Returns the average number of ratings and 0 of no ratings occured
+        :return: average number of ratings
+        :rtype: float
+        """
+        if self.get_rate() is None:
+            return 0
+        return self.get_rate()
+
+    def get_rate(self):
+        """
+        return the average rating and 0 if there are no ratings
+        :return: rating
+        :rtype: float
+        """
+        rating = self.ratings.aggregate(Avg('rating'))['rating__avg']
+        if rating is None:
+            return 0
+        return round(rating, 2)  # pylint: disable=no-member
+
+    def get_rate_count(self):
+        """
+        get total count of ratings
+        :return: count of ratings
+        :rtype: int
+        """
+        return self.ratings.count()  # pylint: disable=no-member
+
+    def user_already_rated(self, user):
+        """
+        check if an user already rated
+        :param User user: user
+        :return: true if an user already rated a content
+        :rtype: bool
+        """
+        return self.ratings.filter(user_id=user.pk).count() > 0  # pylint: disable=no-member
+
+    def get_user_rate(self, user):
+        """
+        get the rating of an user
+        :param user user: user
+        :return: rating of an user
+        :rtype: int
+        """
+        if self.user_already_rated(user):
+            # TODO FIX
+            return 0 #self.ratings.get(user_id=user.pk).rating  # pylint: disable=no-member
+        return 0
+
+    def rate_content(self, user, rate):
+        """
+        Rate content
+        :param User user: user
+        :param int rate: rating
+        :return: nothing
+        """
+        self.ratings.filter(user_id=user.pk, content_id=self.id).delete()  # pylint: disable=no-member
+        self.ratings.objects.create(user=user, content_id=self.pk, rating=rate)  # pylint: disable=no-member
+
+    def get_index_in_course(self, course):
+        """
+        The index of the parent topic in the course structure
+        :param Course course: the course in which the topic should be searched
+        :return: the index in the structure
+        :rtype: str
+        """
+        return CourseStructureEntry.objects.get(course=course, topic=self.topic).index
 
 
 class CourseStructureEntry(models.Model):
@@ -161,4 +236,4 @@ class CourseStructureEntry(models.Model):
     topic = models.ForeignKey(Topic, verbose_name=_("Topic"), on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f"{self.course} -> {self.topic}: {self.index}"
+        return f"{self.course} -> {self.index}. {self.topic}"
