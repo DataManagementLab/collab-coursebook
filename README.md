@@ -120,3 +120,7 @@ This repository contains a Django project called collab_coursebook. The function
 1. **frontend**: This app provides everything the users see when reading or editing the content. It also contains a landing page.
 1. **content**: This app provides models, rendering- and export code for the different supported types of contents.
 1. **export**: This app contains export functions for the custom content collections (coursebooks).
+
+## Developer Notes
+* to regenerate translations use ````python manage.py makemessages -l de_DE --ignore venv````
+* to create a data backup use ````python manage.py dumpdata --indent=2 > db.json --traceback````
