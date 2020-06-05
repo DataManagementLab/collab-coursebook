@@ -196,7 +196,8 @@ class Content(models.Model):
         :rtype: int
         """
         if self.user_already_rated(user):
-            return self.ratings.get(user_id=user.pk).rating  # pylint: disable=no-member
+            # TODO FIX
+            return 0 #self.ratings.get(user_id=user.pk).rating  # pylint: disable=no-member
         return 0
 
     def rate_content(self, user, rate):

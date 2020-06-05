@@ -1,6 +1,8 @@
 from django import template
 from django.conf import settings
 
+from content.models import CONTENT_TYPES
+
 register = template.Library()
 
 
@@ -46,3 +48,41 @@ def count_content(topic_queryset):
     for topic in topic_queryset:
         count += len(topic.get_contents("None", "None"))
     return str(count)
+
+
+@register.filter
+def rev_range(arg):
+    """
+    return range of review
+    :param arg: range
+    :return: range of review
+    """
+    return reversed(range(1, arg + 1))
+
+
+@register.filter
+def content_view(type):
+    """
+    Get matching view for type
+    :param type: type of the content
+    :type type: str
+    :return: path to matching view for type
+    :rtype: str
+    """
+    if type in CONTENT_TYPES.keys():
+        return f"content/view/{type}.html"
+    return "content/view/invalid.html"
+
+
+@register.filter
+def content_card(type):
+    """
+    Get matching view for type
+    :param type: type of the content
+    :type type: str
+    :return: path to matching view for type
+    :rtype: str
+    """
+    if type in CONTENT_TYPES.keys():
+        return f"content/cards/{type}.html"
+    return "content/cards/blank.html"

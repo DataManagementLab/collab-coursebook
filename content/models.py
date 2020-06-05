@@ -15,6 +15,10 @@ class YTVideoContent(models.Model):
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     url = models.URLField(verbose_name=_("Video URL"))
 
+    @property
+    def id(self):
+        return self.url.split("=")[1]
+
     def __str__(self):
         return f"{self.DESC}: {self.url}"
 

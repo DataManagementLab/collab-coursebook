@@ -18,3 +18,22 @@ class AddAndEditCourseForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Use better multiple select input for owners
         self.fields["owners"].widget.attrs = {'class': 'chosen-select'}
+
+
+class FilterAndSortForm(forms.Form):
+    """
+    The form for entering filter and sorting Options
+    """
+
+    FILTER_CHOICE = [('None', '------')] # + Content.STYLE # TODO Use
+    SORTING_CHOICE = [('None', '-----'), ('creation_date', 'Date')] # , ('rating', 'Rating')]
+    filter = forms.CharField(label='Filter by',
+                             widget=forms.Select(choices=FILTER_CHOICE,
+                                                 attrs={'class': 'form-control',
+                                                        'style': 'width:auto',
+                                                        'onchange': 'this.form.submit();'}))
+    sort = forms.CharField(label='Sort by',
+                           widget=forms.Select(choices=SORTING_CHOICE,
+                                               attrs={'class': 'form-control',
+                                                      'style': 'width:auto',
+                                                      'onchange': 'this.form.submit();'}))

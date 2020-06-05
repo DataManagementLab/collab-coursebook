@@ -1,0 +1,36 @@
+{% load i18n %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% load cc_frontend_tags %}
+{% load static %}
+
+<div class="card-deck add_scroll_horizontal" style="padding-bottom: 20px;margin-top: 15px;margin-bottom: 15px;">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
+            {% for content in topic_contents %}
+                <div class="card card_style" style="">
+                     <div class="card-img-top" style="position: relative; text-align: center; color: black">
+                        <a href="{% url "frontend:content" course.pk content.topic.pk content.pk %}">
+                            {% include content.type|content_card %}
+                             <div class="card-body" style="">
+                                <p>{{ content.description }}</p>
+                            </div>
+                        </a>
+                        <div class="card-footer">
+                            <span class="badge badge-primary">{{ content.language }}</span>
+                            {% if content.tags.count > 0 %}
+                                &nbsp;&middot;&nbsp;
+                                {% for tag in content.tags.all %}
+                                    <span class="badge badge-info">{{ tag }}</span>
+                                {% endfor %}
+                            {% endif %}
+                            &nbsp;&middot;&nbsp;
+                            {% trans "Rating" %}: {{ content.get_rate }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
