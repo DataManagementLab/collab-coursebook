@@ -26,9 +26,6 @@
             </button>
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="
-                        {# url 'readingmode' course.id topic.id content.id #}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
-                    Reading Mode</a>
                 {% if user.is_authenticated %}
                     <a class="dropdown-item" href="{# url 'favourite_content' course.id topic.id content.id #}?onDetailPage=True">
                         {% if favourite %}{% fa5_icon 'bookmark' 'fas' %} Unsave {% else %}{% fa5_icon 'bookmark' 'far' %} Save{% endif %}</a>
