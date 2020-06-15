@@ -1,12 +1,62 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView
+from django.views.generic import DetailView, CreateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
+from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
+from frontend.forms.addcontent import AddContentForm, AddContentFormYoutubeVideo, AddContentFormImage
+
+
+class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+    """
+    Adds a new content to the database
+    """
+    model = Course
+    template_name = 'frontend/content/addcontent.html'
+    form_class = AddContentForm
+    success_url = reverse_lazy('frontend:dashboard')
+
+    def get_success_message(self, cleaned_data):
+        return _(f"Content '{cleaned_data['type']}' successfully added")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if "type" in self.kwargs:
+            content_type = self.kwargs['type']
+            if content_type == 'youtubevideo':
+                context['typeform'] = AddContentFormYoutubeVideo
+            elif content_type == 'image':
+                context['typeform'] = AddContentFormImage
+            else:
+                pass
+        return context
+
+    def post(self, request, *args, **kwargs):
+        # TODO: process form input
+        pass
+    
+    # def form_valid(self, form):
+    #     """
+    #     Checks whether the form is valid. And saves the entered content.
+    #     :param AddContentForm form: The form that should be checked
+    #     :return: the user is redirected to the content page
+    #     :rtype: HttpResponseRedirect
+    #     """
+    #     content = form.save(commit=False)
+    #     content.author = get_user(self.request)
+    #     topic_id = self.kwargs['topic_id']
+    #     content.topic = Topic.objects.get(pk=topic_id)
+    #     content.save()
+    #     course_id = self.kwargs['course_id']
+    #     topic_id = self.kwargs['topic_id']
+    #     return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
 
 
 class ContentView(DetailView):  # pylint: disable=too-many-ancestors
