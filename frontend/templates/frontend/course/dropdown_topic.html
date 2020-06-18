@@ -11,10 +11,10 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
             {% if user.is_authenticated %}
                 <a class="dropdown-item"
-                       href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='image' %}">{% fa5_icon 'camera' 'fas' %}
+                       href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='Image' %}">{% fa5_icon 'camera' 'fas' %}
                         add image</a>
                 <a class="dropdown-item"
-                       href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='youtubevideo' %}">{% fa5_icon 'video' 'fas' %}
+                       href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='YouTubeVideo' %}">{% fa5_icon 'video' 'fas' %}
                         add youtube video</a>
                 <a class="dropdown-item"
                        href="">{% fa5_icon 'file-pdf' 'fas' %}
