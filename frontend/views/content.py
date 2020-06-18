@@ -18,7 +18,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
     """
     Adds a new content to the database
     """
-    model = Course
+    model = Content
     template_name = 'frontend/content/addcontent.html'
     form_class = AddContentForm
     success_url = reverse_lazy('frontend:dashboard')
