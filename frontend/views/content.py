@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -9,6 +9,7 @@ from django.views.generic import DetailView, CreateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
+from content.models import YTVideoContent, ImageContent
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm, AddContentFormYoutubeVideo, AddContentFormImage
 
@@ -30,33 +31,44 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
-            if content_type == 'youtubevideo':
+            if YTVideoContent.TYPE in content_type:
                 context['typeform'] = AddContentFormYoutubeVideo
-            elif content_type == 'image':
+            elif ImageContent.TYPE in content_type:
                 context['typeform'] = AddContentFormImage
             else:
-                pass
+                return HttpResponseBadRequest('Invalid Request')
         return context
 
     def post(self, request, *args, **kwargs):
-        # TODO: process form input
-        pass
-    
-    # def form_valid(self, form):
-    #     """
-    #     Checks whether the form is valid. And saves the entered content.
-    #     :param AddContentForm form: The form that should be checked
-    #     :return: the user is redirected to the content page
-    #     :rtype: HttpResponseRedirect
-    #     """
-    #     content = form.save(commit=False)
-    #     content.author = get_user(self.request)
-    #     topic_id = self.kwargs['topic_id']
-    #     content.topic = Topic.objects.get(pk=topic_id)
-    #     content.save()
-    #     course_id = self.kwargs['course_id']
-    #     topic_id = self.kwargs['topic_id']
-    #     return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
+        add_content_form = AddContentForm(request.POST)
+        content_type = self.kwargs['type']
+        if YTVideoContent.TYPE in content_type:
+            content_type_form = AddContentFormYoutubeVideo(request.POST)
+        elif ImageContent.TYPE in content_type:
+            content_type_form = AddContentFormImage(request.POST, request.FILES)
+        else:
+            return HttpResponseBadRequest('Invalid Post Request')
+        # used for HTTPResponseRedirect
+        course_id = self.kwargs['course_id']
+
+        if add_content_form.is_valid() and content_type_form.is_valid():
+            # save author etc.
+            content = add_content_form.save(commit=False)
+            content.author = get_user(self.request)
+            topic_id = self.kwargs['topic_id']
+            content.topic = Topic.objects.get(pk=topic_id)
+            content.save()
+            # save generic form. Image, YT video etc.
+            content_type_form.save()
+
+            topic_id = self.kwargs['topic_id']
+            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
+
+        # add_content_form invalid
+        if not add_content_form.is_valid():
+            return self.form_invalid(add_content_form)
+        # content_type_form invalid
+        return self.form_invalid(content_type_form)
 
 
 class ContentView(DetailView):  # pylint: disable=too-many-ancestors
@@ -65,6 +77,7 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
     """
     model = Content
     template_name = "frontend/content/detail.html"
+    context_object_name = 'content'
     #form_class = Comment
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
