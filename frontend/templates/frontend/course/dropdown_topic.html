@@ -12,16 +12,16 @@
             {% if user.is_authenticated %}
                 <a class="dropdown-item"
                        href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='Image' %}">{% fa5_icon 'camera' 'fas' %}
-                        {% trans "image" %}</a>
+                        {% trans "Image" %}</a>
                 <a class="dropdown-item"
                        href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='YouTubeVideo' %}">{% fa5_icon 'video' 'fas' %}
-                        {% trans "youtube video" %}</a>
+                        {% trans "Youtube Video" %}</a>
                 <a class="dropdown-item"
                        href="">{% fa5_icon 'file-pdf' 'fas' %}
-                        {% trans "pdf file" %}</a>
+                        {% trans "Pdf File" %}</a>
                 <a class="dropdown-item"
                        href="">{% fa5_icon 'file' 'fas' %}
-                        {% trans "markdown file" %}</a>
+                        {% trans "Markdown" %}</a>
             {% endif %}
 
         </div>
