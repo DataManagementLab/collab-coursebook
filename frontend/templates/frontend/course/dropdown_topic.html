@@ -16,6 +16,12 @@
                 <a class="dropdown-item"
                        href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='youtubevideo' %}">{% fa5_icon 'video' 'fas' %}
                         add youtube video</a>
+                <a class="dropdown-item"
+                       href="">{% fa5_icon 'file-pdf' 'fas' %}
+                        add pdf file</a>
+                <a class="dropdown-item"
+                       href="">{% fa5_icon 'file' 'fas' %}
+                        add markdown file</a>
             {% endif %}
 
         </div>
