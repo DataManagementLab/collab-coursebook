@@ -32,9 +32,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if YTVideoContent.TYPE in content_type:
-                context['typeform'] = AddContentFormYoutubeVideo
+                context['content_type_form'] = AddContentFormYoutubeVideo
             elif ImageContent.TYPE in content_type:
-                context['typeform'] = AddContentFormImage
+                context['content_type_form'] = AddContentFormImage
             else:
                 return HttpResponseBadRequest('Invalid Request')
         return context
@@ -60,7 +60,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content.type = content_type
             content.save()
             # save generic form. Image, YT video etc.
-            content_type_form.save()
+            content_type_data = content_type_form.save(commit=False)
+            content_type_data.content = content
+            content_type_data.save()
 
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
