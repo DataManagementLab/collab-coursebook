@@ -48,7 +48,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content_type_form = AddContentFormImage(request.POST, request.FILES)
         else:
             return HttpResponseBadRequest('Invalid Post Request')
-        # used for HTTPResponseRedirect
+        # use for HTTPResponseRedirect
         course_id = self.kwargs['course_id']
 
         if add_content_form.is_valid() and content_type_form.is_valid():
@@ -57,6 +57,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content.author = get_user(self.request)
             topic_id = self.kwargs['topic_id']
             content.topic = Topic.objects.get(pk=topic_id)
+            content.type = content_type
             content.save()
             # save generic form. Image, YT video etc.
             content_type_form.save()
