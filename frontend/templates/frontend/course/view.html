@@ -93,14 +93,19 @@
     {% for entry in structure %}
         <div style="margin-top: 30px;">
             {% with forloop.counter as outer_index %}
-                <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }}</h3>
-
+                {% with entry.topic as topic_replace %}
+                    {%  include 'frontend/course/dropdown_topic.html' %}
+                {% endwith %}
+                <h3 class="text-info">{{ outer_index }}. {{ topic.title }}</h3>
                 {% with entry.topic.contents.all as topic_contents %}
                     {% include "frontend/course/topic_contents.html" %}
                 {% endwith %}
                 {% if entry.subtopics %}
                         {% for subtopic in entry.subtopics %}
                             <div style="margin-top: 15px;">
+                                {% with subtopic as topic_replace %}
+                                    {%  include 'frontend/course/dropdown_topic.html' %}
+                                {%  endwith %}
                                 <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.title }}</h4>
                                 {% with subtopic.contents.all as topic_contents %}
                                     {% include "frontend/course/topic_contents.html" %}
