@@ -17,6 +17,7 @@ urlpatterns = [
         path('', views.CourseListView.as_view(), name='courses'),
         path('<int:pk>/', include([
             path('', views.CourseView.as_view(), name='course'),
+            path('edit/', views.course.EditCourseView.as_view(), name='course-edit'),
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
