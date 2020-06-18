@@ -20,7 +20,7 @@ urlpatterns = [
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
-            re_path(r'add/(?P<type>youtubevideo|image)/$', views.content.AddContentView.as_view(), name='content-add'),
+            re_path(r'add/(?P<type>YouTubeVideo|Image)/$', views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/comment/<int:pk>/delete/', views.DeleteComment.as_view(), name='comment-delete'),
             path('<int:content_id>/comment/<int:pk>/edit/', views.EditComment.as_view(), name='comment-edit'),
             path('<pk>/', views.ContentView.as_view(), name='content'),
