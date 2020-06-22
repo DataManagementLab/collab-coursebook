@@ -13,6 +13,31 @@ from base.utils import create_topic_and_subtopic_list, check_owner_permission
 from frontend.forms import AddAndEditCourseForm, FilterAndSortForm
 
 
+class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """
+    Duplicate a course
+    """
+    model = Course
+    template_name = 'frontend/course/duplicate.html'
+    form_class = AddAndEditCourseForm
+    success_url = reverse_lazy('frontend:dashboard')
+
+    def get_success_message(self, cleaned_data):
+        original_course = Course.objects.get(pk=self.get_object().id)
+        return _(f"Course '{original_course.title}' successfully duplicated.")
+
+    def get_initial(self):
+        course_to_duplicate = Course.objects.get(pk=self.get_object().id)
+        data = course_to_duplicate.__dict__
+        # set data not included in the dict
+        data['owners'] = get_user(self.request)
+        data['image'] = course_to_duplicate.image
+        # this data has the wrong key
+        data['category'] = course_to_duplicate.category
+        data['period'] = course_to_duplicate.period
+        return data
+
+
 class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
     """
     Adds a new course to the database

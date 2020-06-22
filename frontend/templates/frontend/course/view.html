@@ -22,6 +22,7 @@
         {% if course in user.profile.stared_courses.all %}
             {% fa5_icon 'bookmark' 'fas' %}
         {% endif %}
+        <a href="{% url 'frontend:course-duplicate' pk=course.pk %}" class="btn btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
         {% if user.profile in course.owners.all %}
             <a href="{% url 'frontend:course-delete' pk=course.pk %}" class="btn btn-warning">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}</a>
         {% endif %}

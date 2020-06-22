@@ -68,6 +68,7 @@ msgstr ""
 
 #: frontend/templates/frontend/content/detail.html:83
 #: frontend/templates/frontend/course/create.html:30
+#: frontend/templates/frontend/course/duplicate.html:30
 #: frontend/templates/frontend/profile/profile_edit.html:19
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -94,16 +95,21 @@ msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"
 
 #: frontend/templates/frontend/course/create.html:29
+#: frontend/templates/frontend/course/duplicate.html:29
 msgid "Create"
 msgstr "Erzeugen"
 
-#: frontend/templates/frontend/course/view.html:26
-#: frontend/templates/frontend/course/view_course.html:36
+#: frontend/templates/frontend/course/duplicate.html:11
+#: frontend/templates/frontend/course/duplicate.html:19
+#: frontend/templates/frontend/course/view.html:25
+msgid "Duplicate Course"
+msgstr "Kurs duplizieren"
+
+#: frontend/templates/frontend/course/view.html:27
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
-#: frontend/templates/frontend/course/view.html:62
-#: frontend/templates/frontend/course/view_course.html:58
+#: frontend/templates/frontend/course/view.html:63
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
@@ -223,10 +229,14 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: frontend/views/course.py:26
+#: frontend/views/course.py:27
+msgid "Course '{original_course.title}' successfully duplicated."
+msgstr "Kurs '{cleaned_data['title']}' erfolgreich dupliziert"
+
+#: frontend/views/course.py:51
 msgid "Course '{cleaned_data['title']}' successfully created"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 
-#: frontend/views/profile.py:26
+#: frontend/views/profile.py:25
 msgid "Profile updated"
 msgstr "Profil aktualisiert"

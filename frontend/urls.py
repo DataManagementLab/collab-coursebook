@@ -16,6 +16,7 @@ urlpatterns = [
                 name='courses-sort'),
         path('', views.CourseListView.as_view(), name='courses'),
         path('<int:pk>/', include([
+            path('duplicate/', views.course.DuplicateCourseView.as_view(), name='course-duplicate'),
             path('', views.CourseView.as_view(), name='course'),
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
         ])),
