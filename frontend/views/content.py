@@ -5,7 +5,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 
-from base.models import Content, Comment, Course, Topic, Favorite
+from base.models import Content, Comment, Course, Topic, Favorite, Rating, Profile
+from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
 
 
@@ -15,7 +16,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
     """
     model = Content
     template_name = "frontend/content/detail.html"
-    #form_class = Comment
+
+    # form_class = Comment
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -147,7 +149,8 @@ class ContentReadingModeView(DetailView):  # pylint: disable=too-many-ancestors
         topic = Topic.objects.get(pk=topic_id)
         if self.request.GET.get('coursebook'):
             course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
-            contents = [f.content for f in Favorite.objects.filter(course=course, user=self.request.user.profile)] #models.get_coursebook_flat(get_user(self.request), course)
+            contents = [f.content for f in Favorite.objects.filter(course=course,
+                                                                   user=self.request.user.profile)]  # models.get_coursebook_flat(get_user(self.request), course)
         else:
             contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))
 
@@ -169,3 +172,53 @@ class ContentReadingModeView(DetailView):  # pylint: disable=too-many-ancestors
             context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
                                 self.request.GET.get('f')
         return context
+
+
+class RateContentView(DetailView):
+    model = Content
+
+    #def get_context_data(self, **kwargs):
+        #None
+
+    #def dispatch(self, request, *args, **kwargs):
+        #None
+
+    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        #None
+        form = RateForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+
+
+    #def get(self, request, *args, **kwargs):
+        #form = RateForm()
+
+
+def rate_content(request, course_id, topic_id, content_id, pk):
+    """
+    Let's the user rate content
+    :param int topic_id: id of the topic
+    :param HttpRequest request: request
+    :param int course_id: course id
+    :param int content_id: id of the content which gets rated
+    :param int pk: the user rating (should be in [ 1, 2, 3, 4, 5])
+    :return: redirect to content page
+    :rtype: HttpResponse
+    """
+    # check if rating is valid
+    rating = pk
+    print(course_id,topic_id,content_id,rating)
+    print(type(get_user(request)))
+    content = get_object_or_404(Content, pk=content_id)
+    #print(Content.ratings.filter(user_id=user.pk, content_id=content.pk))
+    profile = get_user(request)
+    Rating.objects.filter(user_id=profile, content_id=content_id).delete()
+    rating_obj = Rating.objects.create(user=profile, content=content, rating=rating)  # user = profile
+    content.ratings.add(rating_obj)
+    # check if content already has rating
+    #content.rate_content()
+    content.save()
+
+    return HttpResponseRedirect(
+        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
+        + '#rating')

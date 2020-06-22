@@ -104,8 +104,7 @@
         {% for i in 5|rev_range %}
             <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
                    {% if i <= user_rate %}class="active" {% endif %}/>
-            {# TODO Replace with POST action and use proper url reversing #}
-            <label for="star{{ i }}" onclick="window.location.href ='rate/{{ i }}/#rating'"></label>
+            <label for="star{{ i }}" onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
         {% endfor %}
     </div>
 
