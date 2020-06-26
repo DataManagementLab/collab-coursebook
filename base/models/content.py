@@ -203,12 +203,18 @@ class Content(models.Model):
     def rate_content(self, user, rate):
         """
         Rate content
+        :param content: Content
         :param User user: user
         :param int rate: rating
         :return: nothing
         """
-        self.ratings.filter(user_id=user.pk, content_id=self.id).delete()  # pylint: disable=no-member
-        self.ratings.objects.create(user=user, content_id=self.pk, rating=rate)  # pylint: disable=no-member
+        #print(self.ratings.)
+        # self.ratings (Content) != Rating
+
+        #self.ratings.objects.create(user=user, content_id=self.pk, rating=rate)  # pylint: disable=no-member
+
+        self.ratings.filter(user_id=user.user.pk, content=self).delete()  # pylint: disable=no-member
+        self.ratings.objects.create(user=user, content=self, rating=rate)  # pylint: disable=no-member
 
     def get_index_in_course(self, course):
         """

@@ -210,13 +210,14 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     print(course_id,topic_id,content_id,rating)
     print(type(get_user(request)))
     content = get_object_or_404(Content, pk=content_id)
-    #print(Content.ratings.filter(user_id=user.pk, content_id=content.pk))
     profile = get_user(request)
-    Rating.objects.filter(user_id=profile, content_id=content_id).delete()
-    rating_obj = Rating.objects.create(user=profile, content=content, rating=rating)  # user = profile
-    content.ratings.add(rating_obj)
+    content.rate_content(profile, rating)
+
     # check if content already has rating
-    #content.rate_content()
+    #Rating.objects.filter(user_id=profile, content_id=content_id).delete()
+    #Rating.objects.create(user=profile, content=content, rating=rating)  # user = profile; rating_obj =
+
+    content.ratings.add(profile)
     content.save()
 
     return HttpResponseRedirect(

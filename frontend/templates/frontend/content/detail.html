@@ -98,15 +98,17 @@
             {{ content.description|linebreaks }}
         </div>
     </div>
-
+ratings
     <h5><a name="rating">{% trans "Rating" %}</a></h5>
-    <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
-        {% for i in 5|rev_range %}
-            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
-                   {% if i <= user_rate %}class="active" {% endif %}/>
-            <label for="star{{ i }}" onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
-        {% endfor %}
-    </div>
+    <div class="float-right text-right"><a>{% trans "Current" %}  {{ content.get_rate_num }}</a> </div>
+        <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
+            {% for i in 5|rev_range %}
+                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+                       {% if i <= user_rate %}class="active" {% endif %}/>
+                <label for="star{{ i }}" onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
+            {% endfor %}
+        </div>
+
 
     <h5 style="margin-top: 30px;"><a name="comments">{% trans "Comments" %}</a></h5>
     {% if user.is_authenticated %}

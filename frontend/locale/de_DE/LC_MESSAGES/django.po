@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-05 11:48+0000\n"
+"POT-Creation-Date: 2020-06-22 14:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,12 +98,10 @@ msgid "Create"
 msgstr "Erzeugen"
 
 #: frontend/templates/frontend/course/view.html:26
-#: frontend/templates/frontend/course/view_course.html:36
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
 #: frontend/templates/frontend/course/view.html:62
-#: frontend/templates/frontend/course/view_course.html:58
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
@@ -227,6 +225,6 @@ msgstr "Kommentar erfolgreich bearbeitet."
 msgid "Course '{cleaned_data['title']}' successfully created"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 
-#: frontend/views/profile.py:26
+#: frontend/views/profile.py:25
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
