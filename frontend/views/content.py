@@ -9,9 +9,9 @@ from django.views.generic import DetailView, CreateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
-from content.models import YTVideoContent, ImageContent
 from frontend.forms import CommentForm, TranslateForm
-from frontend.forms.addcontent import AddContentForm, AddContentFormYoutubeVideo, AddContentFormImage
+from frontend.forms.addcontent import AddContentForm
+from content.forms import CONTENT_TYPE_FORMS
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -31,21 +31,15 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
-            if YTVideoContent.TYPE in content_type:
-                context['content_type_form'] = AddContentFormYoutubeVideo
-            elif ImageContent.TYPE in content_type:
-                context['content_type_form'] = AddContentFormImage
-            else:
-                return HttpResponseBadRequest('Invalid Request')
+            if content_type in CONTENT_TYPE_FORMS:
+                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
         return context
 
     def post(self, request, *args, **kwargs):
         add_content_form = AddContentForm(request.POST)
         content_type = self.kwargs['type']
-        if YTVideoContent.TYPE in content_type:
-            content_type_form = AddContentFormYoutubeVideo(request.POST)
-        elif ImageContent.TYPE in content_type:
-            content_type_form = AddContentFormImage(request.POST, request.FILES)
+        if content_type in CONTENT_TYPE_FORMS:
+            content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
         else:
             return HttpResponseBadRequest('Invalid Post Request')
         # use for HTTPResponseRedirect

@@ -86,3 +86,16 @@ def content_card(type):
     if type in CONTENT_TYPES.keys():
         return f"content/cards/{type}.html"
     return "content/cards/blank.html"
+
+
+@register.filter
+def check_markdown(type):
+    # TODO: implement markdown check
+    return False
+
+
+@register.inclusion_tag("frontend/course/dropdown_topic.html")
+def add_content_button(user, course_id, topic_id):
+    # generate list of tuple (content type, content verbose name) for add content dropdown
+    content_data = [(content_type, content_model.DESC) for content_type, content_model in zip(CONTENT_TYPES.keys(), CONTENT_TYPES.values())]
+    return {'user': user, 'course_id': course_id, 'topic_id': topic_id, 'content_data': content_data}

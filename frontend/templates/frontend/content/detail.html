@@ -23,17 +23,7 @@
                         {# url 'readingmode' course.id topic.id content.id #}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
-                    <a class="dropdown-item" href="{# url 'favourite_content' course.id topic.id content.id #}?onDetailPage=True">
-                        {% if favourite %}{% fa5_icon 'bookmark' 'fas' %} Unsave {% else %}{% fa5_icon 'bookmark' 'far' %} Save{% endif %}</a>
-                    <a class="dropdown-item"
-                           href="{% url 'frontend:content-add' course_id=course.id topic_id=1 type='Image' %}">{% fa5_icon 'camera' 'fas' %}
-                            add image</a>
-                    <a class="dropdown-item"
-                           href="{% url 'frontend:content-add' course_id=course.id topic_id=1 type='YouTubeVideo' %}">{% fa5_icon 'video' 'fas' %}
-                            add youtube video</a>
-
-                    <div class="dropdown-divider"></div>
-                    {% if markdown %}
+                    {% if content.type|check_markdown %}
                         <a class="dropdown-item"
                            href="{% url 'edit_md_file' course.id topic.id content.id %}">{% fa5_icon 'pencil-alt' 'fas' %}
                             Edit</a>

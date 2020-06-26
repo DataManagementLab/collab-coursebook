@@ -3,6 +3,7 @@
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
 {% load cc_frontend_tags %}
+
 <div class="float-right text-right">
     <div class="dropdown show">
         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -10,20 +11,11 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
             {% if user.is_authenticated %}
-                <a class="dropdown-item"
-                       href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='Image' %}">{% fa5_icon 'camera' 'fas' %}
-                        {% trans "Image" %}</a>
-                <a class="dropdown-item"
-                       href="{% url 'frontend:content-add' course_id=course.id topic_id=topic_replace.id type='YouTubeVideo' %}">{% fa5_icon 'video' 'fas' %}
-                        {% trans "Youtube Video" %}</a>
-                <a class="dropdown-item"
-                       href="">{% fa5_icon 'file-pdf' 'fas' %}
-                        {% trans "Pdf File" %}</a>
-                <a class="dropdown-item"
-                       href="">{% fa5_icon 'file' 'fas' %}
-                        {% trans "Markdown" %}</a>
+                {% for content in content_data %}
+                    <a class="dropdown-item"
+                       href="{% url 'frontend:content-add' course_id=course_id topic_id=topic_id type=content.0 %}">{% trans content.1 %}</a>
+                {% endfor %}
             {% endif %}
-
         </div>
     </div>
 </div>

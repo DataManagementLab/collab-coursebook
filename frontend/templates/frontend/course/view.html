@@ -30,7 +30,8 @@
                     <a class="dropdown-item" href="{# url 'favourite_content' course.id topic.id content.id #}?onDetailPage=True">
                         {% if favourite %}{% fa5_icon 'bookmark' 'fas' %} Unsave {% else %}{% fa5_icon 'bookmark' 'far' %} Save{% endif %}</a>
                     <div class="dropdown-divider"></div>
-                    {% if markdown %}
+
+                    {% if content.type|check_markdown %}
                         <a class="dropdown-item"
                            href="{% url 'edit_md_file' course.id topic.id content.id %}">{% fa5_icon 'pencil-alt' 'fas' %}
                             Edit</a>
@@ -94,7 +95,7 @@
         <div style="margin-top: 30px;">
             {% with forloop.counter as outer_index %}
                 {% with entry.topic as topic_replace %}
-                    {%  include 'frontend/course/dropdown_topic.html' %}
+                    {% add_content_button user course.id topic_replace.id %}
                 {% endwith %}
                 <h3 class="text-info">{{ outer_index }}. {{ topic.title }}</h3>
                 {% with entry.topic.contents.all as topic_contents %}
@@ -104,7 +105,7 @@
                         {% for subtopic in entry.subtopics %}
                             <div style="margin-top: 15px;">
                                 {% with subtopic as topic_replace %}
-                                    {%  include 'frontend/course/dropdown_topic.html' %}
+                                   {% add_content_button user course.id topic_replace.id %}
                                 {%  endwith %}
                                 <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.title }}</h4>
                                 {% with subtopic.contents.all as topic_contents %}

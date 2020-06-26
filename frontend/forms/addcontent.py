@@ -10,15 +10,3 @@ class AddContentForm(forms.ModelForm):
     class Meta:  # pylint: disable=too-few-public-methods
         model = Content
         exclude = ['topic', 'author', 'creation_date', 'ratings', 'preview', 'type']
-
-
-class AddContentFormYoutubeVideo(forms.ModelForm):
-    class Meta:
-        model = YTVideoContent
-        exclude = ['content']
-
-
-class AddContentFormImage(forms.ModelForm):
-    class Meta:
-        model = ImageContent
-        exclude = ['content']
