@@ -68,6 +68,7 @@ msgstr ""
 
 #: frontend/templates/frontend/content/detail.html:83
 #: frontend/templates/frontend/course/create.html:30
+#: frontend/templates/frontend/course/edit.html:30
 #: frontend/templates/frontend/profile/profile_edit.html:19
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -235,10 +236,8 @@ msgid "Course '{cleaned_data['title']}' successfully created"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 
 #: frontend/views/course.py:52
-#, fuzzy
-#| msgid "Course '{cleaned_data['title']}' successfully created"
 msgid "Course '{cleaned_data['title']}' successfully edited"
-msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
+msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 
 #: frontend/views/profile.py:25
 msgid "Profile updated"

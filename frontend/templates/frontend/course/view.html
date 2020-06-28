@@ -22,7 +22,7 @@
         {% if course in user.profile.stared_courses.all %}
             {% fa5_icon 'bookmark' 'fas' %}
         {% endif %}
-        {% if user.profile in course.owners.all %}
+        {% if user|check_edit_course_permission:course %}
             <a href="{% url 'frontend:course-edit' pk=course.pk %}" class="btn btn-warning">{% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Course" %}</a>
             <a href="{% url 'frontend:course-delete' pk=course.pk %}" class="btn btn-warning">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}</a>
         {% endif %}
