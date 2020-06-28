@@ -23,9 +23,9 @@
                         {# url 'readingmode' course.id topic.id content.id #}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
-                    {% if content.type|check_markdown %}
+                    {% if content.type|is_content_editable %}
                         <a class="dropdown-item"
-                           href="{% url 'edit_md_file' course.id topic.id content.id %}">{% fa5_icon 'pencil-alt' 'fas' %}
+                           href="{#{% url 'edit_md_file' course.id topic.id content.id %}#}">{% fa5_icon 'pencil-alt' 'fas' %}
                             Edit</a>
 
                     {% endif %}

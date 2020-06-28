@@ -104,7 +104,7 @@ msgstr "Neuen Kurs anlegen"
 msgid "Add Content"
 msgstr "Inhalte hinzufügen"
 
-#: frontend/templates/frontend/course/view.html:83
+#: frontend/templates/frontend/course/view.html:78
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
@@ -226,7 +226,11 @@ msgstr "Kommentar erfolgreich bearbeitet."
 
 #: frontend/views/content.py:28
 msgid "Content '{cleaned_data['type']}' successfully added"
-msgstr "Inhalt '{cleaned_data['title']}' erfolgreich hinzugefügt"
+msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
+
+#: frontend/views/content.py:35
+msgid "An error occurred while processing the request"
+msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
 #: frontend/views/course.py:26
 msgid "Course '{cleaned_data['title']}' successfully created"

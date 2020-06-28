@@ -27,16 +27,11 @@
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 {% if user.is_authenticated %}
-                    <a class="dropdown-item" href="{# url 'favourite_content' course.id topic.id content.id #}?onDetailPage=True">
+                    <a class="dropdown-item" href="{# url 'favourite_content' course.id topic.id content.id ?onDetailPage=True#}">
                         {% if favourite %}{% fa5_icon 'bookmark' 'fas' %} Unsave {% else %}{% fa5_icon 'bookmark' 'far' %} Save{% endif %}</a>
+
                     <div class="dropdown-divider"></div>
 
-                    {% if content.type|check_markdown %}
-                        <a class="dropdown-item"
-                           href="{% url 'edit_md_file' course.id topic.id content.id %}">{% fa5_icon 'pencil-alt' 'fas' %}
-                            Edit</a>
-
-                    {% endif %}
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
                         <a href="{% url 'frontend:course-delete' pk=course.pk %}" class="dropdown-item text-danger"
                           >{% fa5_icon 'trash' 'fas' %} Delete</a>

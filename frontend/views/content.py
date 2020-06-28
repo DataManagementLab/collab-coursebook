@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView
@@ -26,6 +27,14 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
     def get_success_message(self, cleaned_data):
         return _(f"Content '{cleaned_data['type']}' successfully added")
 
+    def handle_error(self):
+        """
+        create error message and return to course page
+        """
+        course_id = self.kwargs['course_id']
+        messages.error(self.request, _('An error occurred while processing the request'))
+        return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -33,17 +42,22 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
                 context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
+            else:
+                return self.handle_error()
+        else:
+            return self.handle_error()
         return context
 
     def post(self, request, *args, **kwargs):
         add_content_form = AddContentForm(request.POST)
-        content_type = self.kwargs['type']
-        if content_type in CONTENT_TYPE_FORMS:
-            content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
+        if "type" in self.kwargs:
+            content_type = self.kwargs['type']
+            if content_type in CONTENT_TYPE_FORMS:
+                content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
+            else:
+                return self.handle_error()
         else:
-            return HttpResponseBadRequest('Invalid Post Request')
-        # use for HTTPResponseRedirect
-        course_id = self.kwargs['course_id']
+            return self.handle_error()
 
         if add_content_form.is_valid() and content_type_form.is_valid():
             # save author etc.
@@ -58,6 +72,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content_type_data.content = content
             content_type_data.save()
 
+            course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
 
