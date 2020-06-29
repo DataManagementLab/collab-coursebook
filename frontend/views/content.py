@@ -206,19 +206,25 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     :rtype: HttpResponse
     """
     # check if rating is valid
-    rating = pk
-    print(course_id,topic_id,content_id,rating)
-    print(type(get_user(request)))
     content = get_object_or_404(Content, pk=content_id)
     profile = get_user(request)
-    content.rate_content(profile, rating)
+    #content.rate_content(request.user, rating)
 
-    # check if content already has rating
-    #Rating.objects.filter(user_id=profile, content_id=content_id).delete()
-    #Rating.objects.create(user=profile, content=content, rating=rating)  # user = profile; rating_obj =
+    # create or update rating
+    Rating.objects.filter(user_id=profile, content_id=content_id).delete()
+    print("pk: ", pk)
+    rating = Rating.objects.create(user=profile, content=content, rating=pk)  # user = profile
+    rating.save()
 
-    content.ratings.add(profile)
-    content.save()
+    #content.rate_content(user=profile)
+
+    # update content rating
+    #content.rate_content(user=get_user(request), rate=rating)
+   # profile = get_user(request)
+    #profile
+    #content.ratings.filter(user=get_user(request)).delete()
+    print(content.get_user_rate(get_user(request)))
+   # content.save()
 
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))

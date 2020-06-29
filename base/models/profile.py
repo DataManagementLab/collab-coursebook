@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
+from .social import Rating
+
 
 
 class Profile(models.Model):
@@ -14,6 +16,9 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.user)
 
+    def get_rating_from_content(self, content_id):
+        return Rating.objects.get(user=self, content_id=content_id)
+
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -24,3 +29,4 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+

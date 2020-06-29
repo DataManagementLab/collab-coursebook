@@ -42,6 +42,7 @@ class Course(models.Model):
     description: short description of the course
     owner: people that may change the structure of the course
     """
+
     class Meta:
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
@@ -53,15 +54,17 @@ class Course(models.Model):
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
 
     image = models.ImageField(verbose_name=_("Title Image"), blank=True, upload_to='uploads/courses/%Y/%m/%d/')
-    topics = models.ManyToManyField("Topic", verbose_name=_("Topics"), through='CourseStructureEntry', related_name="courses", blank=True)
+    topics = models.ManyToManyField("Topic", verbose_name=_("Topics"), through='CourseStructureEntry',
+                                    related_name="courses", blank=True)
 
     owners = models.ManyToManyField(Profile, related_name='owned_courses', verbose_name=_("Owners"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
-        help_text=_("Is the course protected and can only be edited by the owners?"), blank=True, default=False)
+                                           help_text=_("Is the course protected and can only be edited by the owners?"),
+                                           blank=True, default=False)
 
     category = models.ForeignKey(Category, verbose_name=_("Category"), related_name="courses", on_delete=models.CASCADE)
     period = models.ForeignKey(Period, verbose_name=_("Period"), related_name="courses",
-        blank=True, null=True, on_delete=models.SET_NULL)
+                               blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.title
@@ -74,6 +77,7 @@ class Topic(models.Model):
     title: Name of the topic
     category: category this topic belongs to
     """
+
     class Meta:
         verbose_name = _("Topic")
         verbose_name_plural = _("Topics")
@@ -125,6 +129,7 @@ class Content(models.Model):
     author: user that created the content
     parent_topic: the topic the content belongs to/describes
     """
+
     class Meta:
         verbose_name = _("Content")
         verbose_name_plural = _("Contents")
@@ -139,8 +144,10 @@ class Content(models.Model):
     language = models.CharField(verbose_name=_("Language"), max_length=30, choices=settings.LANGUAGES)
     tags = models.ManyToManyField(Tag, verbose_name=_("Tags"), related_name='contents', blank=True)
 
-    readonly = models.BooleanField(verbose_name=_("Readonly"), help_text=_("Can this content be updated?"), default=False)
-    public = models.BooleanField(verbose_name=_("Show in public courses?"), help_text=_("May this content be displayed in courses that don't require registration?"), default=False)
+    readonly = models.BooleanField(verbose_name=_("Readonly"), help_text=_("Can this content be updated?"),
+                                   default=False)
+    public = models.BooleanField(verbose_name=_("Show in public courses?"), help_text=_(
+        "May this content be displayed in courses that don't require registration?"), default=False)
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"), blank=True, null=True)
@@ -166,7 +173,9 @@ class Content(models.Model):
         :return: rating
         :rtype: float
         """
-        rating = self.ratings.aggregate(Avg('rating'))['rating__avg']
+
+        rating = self.ratings.aggregate(Avg('rating'))['rating__avg']  # todo something wrong here
+        print(self.ratings)
         if rating is None:
             return 0
         return round(rating, 2)  # pylint: disable=no-member
@@ -196,11 +205,12 @@ class Content(models.Model):
         :rtype: int
         """
         if self.user_already_rated(user):
-            # TODO FIX
-            return 0 #self.ratings.get(user_id=user.pk).rating  # pylint: disable=no-member
+            content_id = self.id
+            return self.ratings.get(user=user).rating_set.first().rating
+                #user.get_rating_from_content(content_id).rating  # todo may change back to ratings
         return 0
 
-    def rate_content(self, user, rate):
+    def rate_content(self, user):
         """
         Rate content
         :param content: Content
@@ -208,13 +218,14 @@ class Content(models.Model):
         :param int rate: rating
         :return: nothing
         """
-        #print(self.ratings.)
-        # self.ratings (Content) != Rating
-
-        #self.ratings.objects.create(user=user, content_id=self.pk, rating=rate)  # pylint: disable=no-member
-
-        self.ratings.filter(user_id=user.user.pk, content=self).delete()  # pylint: disable=no-member
-        self.ratings.objects.create(user=user, content=self, rating=rate)  # pylint: disable=no-member
+        # todo delete
+        #self.ratings.get(user=user).delete()
+        #self.ratings.add(user)
+        #self.ratings.filter(user_id=user.pk).delete()  # pylint: disable=no-member
+        # create function won't work
+        #self.ratings.add
+        # pylint: disable=no-member
+        self.save()
 
     def get_index_in_course(self, course):
         """
@@ -233,6 +244,7 @@ class CourseStructureEntry(models.Model):
     index: position that is meant (e.g. "1#2" -> second undertopic of the first topic)
     topic: topic at specified position/index
     """
+
     class Meta:
         verbose_name = _("Course Structure Entry")
         verbose_name_plural = _("Course Structure Entries")
