@@ -1,12 +1,86 @@
-from django.http import HttpResponseRedirect, Http404
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView
+from django.views.generic import DetailView, CreateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
+from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
+from frontend.forms.addcontent import AddContentForm
+from content.forms import CONTENT_TYPE_FORMS
+
+
+class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+    """
+    Adds a new content to the database
+    """
+    model = Content
+    template_name = 'frontend/content/addcontent.html'
+    form_class = AddContentForm
+    success_url = reverse_lazy('frontend:dashboard')
+
+    def get_success_message(self, cleaned_data):
+        return _(f"Content '{cleaned_data['type']}' successfully added")
+
+    def handle_error(self):
+        """
+        create error message and return to course page
+        """
+        course_id = self.kwargs['course_id']
+        messages.error(self.request, _('An error occurred while processing the request'))
+        return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if "type" in self.kwargs:
+            content_type = self.kwargs['type']
+            if content_type in CONTENT_TYPE_FORMS:
+                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
+            else:
+                return self.handle_error()
+        else:
+            return self.handle_error()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        add_content_form = AddContentForm(request.POST)
+        if "type" in self.kwargs:
+            content_type = self.kwargs['type']
+            if content_type in CONTENT_TYPE_FORMS:
+                content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
+            else:
+                return self.handle_error()
+        else:
+            return self.handle_error()
+
+        if add_content_form.is_valid() and content_type_form.is_valid():
+            # save author etc.
+            content = add_content_form.save(commit=False)
+            content.author = get_user(self.request)
+            topic_id = self.kwargs['topic_id']
+            content.topic = Topic.objects.get(pk=topic_id)
+            content.type = content_type
+            content.save()
+            # save generic form. Image, YT video etc.
+            content_type_data = content_type_form.save(commit=False)
+            content_type_data.content = content
+            content_type_data.save()
+
+            course_id = self.kwargs['course_id']
+            topic_id = self.kwargs['topic_id']
+            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
+
+        # add_content_form invalid
+        if not add_content_form.is_valid():
+            return self.form_invalid(add_content_form)
+        # content_type_form invalid
+        return self.form_invalid(content_type_form)
 
 
 class ContentView(DetailView):  # pylint: disable=too-many-ancestors
@@ -15,6 +89,7 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
     """
     model = Content
     template_name = "frontend/content/detail.html"
+    context_object_name = 'content'
     #form_class = Comment
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument

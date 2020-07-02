@@ -86,3 +86,24 @@ def content_card(type):
     if type in CONTENT_TYPES.keys():
         return f"content/cards/{type}.html"
     return "content/cards/blank.html"
+
+
+@register.filter
+def is_content_editable(type):
+    # TODO: implement check
+    return False
+
+
+@register.inclusion_tag("frontend/course/dropdown_topic.html")
+def add_content_button(user, course_id, topic_id):
+    """
+    generate dropdown-button containing list of available content types
+    :param User user: the user
+    :param int course_id: id of the course
+    :param int topic_id: id of the topic
+    :return: dropdown button as html div
+    :rtype: dict
+    """
+    # generate list of tuple (content type, content verbose name) for add content dropdown
+    content_data = [(content_type, content_model.DESC) for content_type, content_model in CONTENT_TYPES.items()]
+    return {'user': user, 'course_id': course_id, 'topic_id': topic_id, 'content_data': content_data}
