@@ -1,5 +1,6 @@
 from django.urls import path, re_path, include
 
+from content.models import CONTENT_TYPES
 from frontend import views
 
 app_name = "frontend"
@@ -21,6 +22,7 @@ urlpatterns = [
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
+            re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$', views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/comment/<int:pk>/delete/', views.DeleteComment.as_view(), name='comment-delete'),
             path('<int:content_id>/comment/<int:pk>/edit/', views.EditComment.as_view(), name='comment-edit'),
             path('<pk>/', views.ContentView.as_view(), name='content'),
