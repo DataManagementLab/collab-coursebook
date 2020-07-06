@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
 
+from collab_coursebook.settings import ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE
 from content.models import CONTENT_TYPES
 
 register = template.Library()
@@ -86,6 +87,13 @@ def content_card(type):
     if type in CONTENT_TYPES.keys():
         return f"content/cards/{type}.html"
     return "content/cards/blank.html"
+
+
+@register.filter
+def check_edit_course_permission(user, course):
+    # either an user is an owner or the course is public and it is allowed to edit public courses
+    return (user.profile in course.owners.all()) or (not course.restrict_changes
+                                                     and ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE)
 
 
 @register.filter

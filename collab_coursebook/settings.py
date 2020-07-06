@@ -166,3 +166,5 @@ FOOTER_INFO = {
     "impress_text": "",
     "impress_url": ""
 }
+
+ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE = True

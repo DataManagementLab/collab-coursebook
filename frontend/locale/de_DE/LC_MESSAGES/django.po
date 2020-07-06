@@ -50,23 +50,23 @@ msgstr "Abbrechen"
 msgid "Actions"
 msgstr "Aktionen"
 
-#: frontend/templates/frontend/content/detail.html:43
+#: frontend/templates/frontend/content/detail.html:46
 msgid "Back to course "
 msgstr "Zurück zum Kurs "
 
-#: frontend/templates/frontend/content/detail.html:49
+#: frontend/templates/frontend/content/detail.html:52
 msgid "By"
 msgstr "Von"
 
-#: frontend/templates/frontend/content/detail.html:59
+#: frontend/templates/frontend/content/detail.html:62
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: frontend/templates/frontend/content/detail.html:67
+#: frontend/templates/frontend/content/detail.html:70
 msgid "Delete"
 msgstr "Löschen"
 
-#: frontend/templates/frontend/content/detail.html:71
+#: frontend/templates/frontend/content/detail.html:74
 #, python-format
 msgid ""
 "\n"
@@ -80,19 +80,26 @@ msgstr ""
 "                        "
 
 #: frontend/templates/frontend/content/detail.html:83
+#: frontend/templates/frontend/course/create.html:30
+#: frontend/templates/frontend/course/edit.html:30
+#: frontend/templates/frontend/profile/profile_edit.html:19
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: frontend/templates/frontend/content/detail.html:86
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: frontend/templates/frontend/content/detail.html:99
+#: frontend/templates/frontend/content/detail.html:102
 #: frontend/templates/frontend/course/topic_contents.html:29
 msgid "Rating"
 msgstr "Bewertung"
 
-#: frontend/templates/frontend/content/detail.html:109
+#: frontend/templates/frontend/content/detail.html:112
 msgid "Comments"
 msgstr "Kommentare"
 
-#: frontend/templates/frontend/content/detail.html:115
+#: frontend/templates/frontend/content/detail.html:118
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
 
@@ -100,10 +107,28 @@ msgstr "Kommentar hinzufügen"
 msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"
 
+#: frontend/templates/frontend/course/create.html:29
+#: frontend/templates/frontend/course/edit.html:29
+msgid "Create"
+msgstr "Erzeugen"
+
 #: frontend/templates/frontend/course/dropdown_topic.html:10
 msgid "Add Content"
 msgstr "Inhalte hinzufügen"
 
+#: frontend/templates/frontend/course/edit.html:11
+msgid "Edit course"
+msgstr "Kurs bearbeiten"
+
+#: frontend/templates/frontend/course/view.html:26
+msgid "Edit Course"
+msgstr "Kurs hinzufügen"
+
+#: frontend/templates/frontend/course/view.html:27
+msgid "Delete Course"
+msgstr "Kurs löschen"
+
+#: frontend/templates/frontend/course/view.html:63
 #: frontend/templates/frontend/course/view.html:78
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
@@ -235,6 +260,10 @@ msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 #: frontend/views/course.py:26
 msgid "Course '{cleaned_data['title']}' successfully created"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
+
+#: frontend/views/course.py:52
+msgid "Course '{cleaned_data['title']}' successfully edited"
+msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 
 #: frontend/views/profile.py:25
 msgid "Profile updated"

@@ -3,9 +3,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView
-from django.views.generic.edit import FormMixin, CreateView, DeleteView
+from django.views.generic.edit import FormMixin, CreateView, DeleteView, UpdateView
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Course, CourseStructureEntry
@@ -34,6 +34,22 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pyl
         initial = super().get_initial()
         initial['owners'] = get_user(self.request).profile
         return initial
+
+
+class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    """
+    Edit course
+    """
+    model = Course
+    template_name = 'frontend/course/edit.html'
+    form_class = AddAndEditCourseForm
+
+    def get_success_url(self):
+        course_id = self.get_object().id
+        return reverse('frontend:course', args=(course_id,))
+
+    def get_success_message(self, cleaned_data):
+        return _(f"Course '{cleaned_data['title']}' successfully edited")
 
 
 class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
