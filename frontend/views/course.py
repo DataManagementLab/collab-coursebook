@@ -24,7 +24,8 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def get_success_message(self, cleaned_data):
         original_course = Course.objects.get(pk=self.get_object().id)
-        return _(f"Course '{original_course.title}' successfully duplicated.")
+        print(cleaned_data)
+        return _(f"Course '{cleaned_data['title']}' successfully created. All settings from course '{original_course.title}' were copied.")
 
     def get_initial(self):
         course_to_duplicate = Course.objects.get(pk=self.get_object().id)
@@ -36,6 +37,17 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         data['category'] = course_to_duplicate.category
         data['period'] = course_to_duplicate.period
         return data
+
+    def form_valid(self, form):
+        duplicated_course = form.save()
+        original_course = Course.objects.get(pk=self.get_object().id)
+        course_structure_entries = CourseStructureEntry.objects.filter(course=original_course)
+        # duplicate course structure entries
+        for entry in course_structure_entries:
+            entry.pk = None
+            entry.course = duplicated_course
+            entry.save()
+        return super().form_valid(form)
 
 
 class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
