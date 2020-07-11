@@ -230,8 +230,6 @@ msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
 #: frontend/views/course.py:28
-#, fuzzy
-#| msgid "Course '{cleaned_data['title']}' successfully created"
 msgid ""
 "Course '{cleaned_data['title']}' successfully created. All settings from "
 "course '{original_course.title}' were copied."
