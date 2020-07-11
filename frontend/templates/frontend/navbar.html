@@ -1,7 +1,14 @@
 {% load i18n %}
+{% load fontawesome_5 %}
 
 {% if user.is_authenticated %}
     <div class="float-right" style="color: #ffffff;font-weight: bold;">
+
+        <form class="form-inline float-left" action="{% url 'frontend:search' %}">
+            <input class="form-control" type="search" name="q" placeholder="{% trans 'Search' %}" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">{% fa5_icon "search" "far" %}</button>
+        </form>
+
         <a href="{% url "frontend:courses" %}" class="btn btn-primary" style="">{% trans "All Courses" %}</a>
         {% if user.is_superuser %}
             <a href="{% url "admin:index" %}" class="btn btn-danger" style="">{% trans "Admin Menu" %}</a>

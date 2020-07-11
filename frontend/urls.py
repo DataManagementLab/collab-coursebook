@@ -2,13 +2,14 @@ from django.urls import path, re_path, include
 
 from content.models import CONTENT_TYPES
 from frontend import views
+from frontend.views.search import SearchView
 
 app_name = "frontend"
 
 urlpatterns = [
     path('', views.StartView.as_view(), name="index"),
     path('dashboard/', views.DashboardView.as_view(), name="dashboard"),
-
+    path('search/', views.search.SearchView.as_view(), name='search'),
     path('profile/<int:pk>/', views.ProfileView.as_view(), name="profile"),
     path('profile/edit/', views.ProfileEditView.as_view(), name="profile-edit"),
 
