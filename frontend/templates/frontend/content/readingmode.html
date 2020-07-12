@@ -1,0 +1,20 @@
+{% extends "frontend/base.html" %}
+
+{% load i18n %}
+{% load cc_frontend_tags %}
+
+{% block general_content %}
+    <div class="container-fluid" style="background-color: #0a3d62;padding-top:2em;padding-bottom:2em;color:#ffffff;">
+        <div class="container" style="border-top: 0.5em solid #ffffff;padding-top:1em;">
+            <a href="{% url 'frontend:content' course_id topic_id content.id %}" class="btn btn-primary">{% trans 'Close' %}</a>
+            <h3 class="d-inline-block">{{ content }}</h3>
+            <a href="{% url 'frontend:content-reading-mode' course_id topic_id next_id %}"
+               class="btn btn-primary d-inline-block float-right">{% trans 'Next' %}</a>
+            <a href="{% url 'frontend:content-reading-mode' course_id topic_id previous_id %}"
+               class="btn btn-primary d-inline-block float-right">{% trans 'Previous' %}</a>
+        </div>
+    </div>
+
+    {% include content.type|content_view %}
+
+{% endblock %}

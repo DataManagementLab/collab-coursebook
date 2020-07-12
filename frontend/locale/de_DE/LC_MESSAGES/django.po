@@ -35,38 +35,40 @@ msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 
 #: frontend/templates/frontend/content/addcontent.html:23
 #: frontend/templates/frontend/course/create.html:29
+#: frontend/templates/frontend/course/edit.html:29
 msgid "Create"
 msgstr "Erzeugen"
 
 #: frontend/templates/frontend/content/addcontent.html:24
 #: frontend/templates/frontend/content/detail.html:80
 #: frontend/templates/frontend/course/create.html:30
+#: frontend/templates/frontend/course/edit.html:30
 #: frontend/templates/frontend/profile/profile_edit.html:19
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: frontend/templates/frontend/content/detail.html:18
-#: frontend/templates/frontend/course/view.html:25
+#: frontend/templates/frontend/course/view.html:24
 msgid "Actions"
 msgstr "Aktionen"
 
-#: frontend/templates/frontend/content/detail.html:46
+#: frontend/templates/frontend/content/detail.html:43
 msgid "Back to course "
 msgstr "Zurück zum Kurs "
 
-#: frontend/templates/frontend/content/detail.html:52
+#: frontend/templates/frontend/content/detail.html:49
 msgid "By"
 msgstr "Von"
 
-#: frontend/templates/frontend/content/detail.html:62
+#: frontend/templates/frontend/content/detail.html:59
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: frontend/templates/frontend/content/detail.html:70
+#: frontend/templates/frontend/content/detail.html:67
 msgid "Delete"
 msgstr "Löschen"
 
-#: frontend/templates/frontend/content/detail.html:74
+#: frontend/templates/frontend/content/detail.html:71
 #, python-format
 msgid ""
 "\n"
@@ -80,37 +82,37 @@ msgstr ""
 "                        "
 
 #: frontend/templates/frontend/content/detail.html:83
-#: frontend/templates/frontend/course/create.html:30
-#: frontend/templates/frontend/course/edit.html:30
-#: frontend/templates/frontend/profile/profile_edit.html:19
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: frontend/templates/frontend/content/detail.html:86
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: frontend/templates/frontend/content/detail.html:102
+#: frontend/templates/frontend/content/detail.html:99
 #: frontend/templates/frontend/course/topic_contents.html:29
 msgid "Rating"
 msgstr "Bewertung"
 
-#: frontend/templates/frontend/content/detail.html:112
+#: frontend/templates/frontend/content/detail.html:109
 msgid "Comments"
 msgstr "Kommentare"
 
-#: frontend/templates/frontend/content/detail.html:118
+#: frontend/templates/frontend/content/detail.html:115
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
+
+#: frontend/templates/frontend/content/readingmode.html:9
+msgid "Close"
+msgstr "Schließen"
+
+#: frontend/templates/frontend/content/readingmode.html:12
+msgid "Next"
+msgstr "Nächste"
+
+#: frontend/templates/frontend/content/readingmode.html:14
+msgid "Previous"
+msgstr "Vorherige"
 
 #: frontend/templates/frontend/course/create.html:11
 msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"
-
-#: frontend/templates/frontend/course/create.html:29
-#: frontend/templates/frontend/course/edit.html:29
-msgid "Create"
-msgstr "Erzeugen"
 
 #: frontend/templates/frontend/course/dropdown_topic.html:10
 msgid "Add Content"
@@ -120,16 +122,15 @@ msgstr "Inhalte hinzufügen"
 msgid "Edit course"
 msgstr "Kurs bearbeiten"
 
-#: frontend/templates/frontend/course/view.html:26
+#: frontend/templates/frontend/course/view.html:35
 msgid "Edit Course"
 msgstr "Kurs hinzufügen"
 
-#: frontend/templates/frontend/course/view.html:27
+#: frontend/templates/frontend/course/view.html:36
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
-#: frontend/templates/frontend/course/view.html:63
-#: frontend/templates/frontend/course/view.html:78
+#: frontend/templates/frontend/course/view.html:76
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
@@ -268,6 +269,3 @@ msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 #: frontend/views/profile.py:25
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
-
-#~ msgid "Delete Course"
-#~ msgstr "Kurs löschen"

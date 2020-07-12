@@ -20,7 +20,7 @@
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="
-                        {# url 'readingmode' course.id topic.id content.id #}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
+                        {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
                     {% if content.type|is_content_editable %}
