@@ -1,5 +1,7 @@
 # Collab Coursebook
 
+![Django CI](https://github.com/DataManagementLab/collab-coursebook/workflows/Django%20CI/badge.svg)
+
 ## Description
 
 Collab Coursebook is a plattform for collaborative learning und knowledge organization. It provides a place to share and re-use notes and other learning materials.
