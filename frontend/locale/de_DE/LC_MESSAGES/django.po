@@ -229,15 +229,15 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: frontend/views/course.py:28
+#: frontend/views/course.py:27
 msgid ""
-"Course '{cleaned_data['title']}' successfully created. All settings from "
-"course '{original_course.title}' were copied."
+"Course '{cleaned_data['title']}' successfully created. All settings and "
+"contents of the course '{original_course.title}' were copied."
 msgstr ""
-"Kurs '{cleaned_data['title']}' erfolgreich erstellt. Alle Einstellungen und Inhalte des "
-"Kurses '{original_course.title}' wurden kopiert."
+"Kurs '{cleaned_data['title']}' erfolgreich erstellt. Alle Einstellungen und "
+"Inhalte des Kurses '{original_course.title}' wurden kopiert."
 
-#: frontend/views/course.py:63
+#: frontend/views/course.py:62
 msgid "Course '{cleaned_data['title']}' successfully created"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 
