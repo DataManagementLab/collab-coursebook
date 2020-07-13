@@ -24,7 +24,7 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def get_success_message(self, cleaned_data):
         original_course = Course.objects.get(pk=self.get_object().id)
-        return _(f"Course '{cleaned_data['title']}' successfully created. All settings and contents from course '{original_course.title}' were copied.")
+        return _(f"Course '{cleaned_data['title']}' successfully created. All settings and contents of the course '{original_course.title}' were copied.")
 
     def get_initial(self):
         course_to_duplicate = Course.objects.get(pk=self.get_object().id)
