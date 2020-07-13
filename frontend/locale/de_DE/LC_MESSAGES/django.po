@@ -234,8 +234,8 @@ msgid ""
 "Course '{cleaned_data['title']}' successfully created. All settings from "
 "course '{original_course.title}' were copied."
 msgstr ""
-"Kurs '{cleaned_data['title']}' erfolgreich erstellt. Alle Einstellungen von dem "
-"Kurs '{original_course.title}' wurden kopiert."
+"Kurs '{cleaned_data['title']}' erfolgreich erstellt. Alle Einstellungen und Inhalte des "
+"Kurses '{original_course.title}' wurden kopiert."
 
 #: frontend/views/course.py:63
 msgid "Course '{cleaned_data['title']}' successfully created"
