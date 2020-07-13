@@ -1,0 +1,59 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load i18n %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{# Load CSS and JavaScript #}
+
+{% block title %}{% trans "Search" %} - Collab Coursebook{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>{% trans 'Search Results for ' %}"{{ search_query }}"</h1>
+    <h3>Courses</h3>
+    {% if search_data.courses %}
+        <ul style="list-style-type: none;">
+        {% for course in search_data.courses %}
+            <li>{{ forloop.counter }}.
+                <a href="{% url 'frontend:course' course.id %}"><b>{{ course.title }}</b></a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans 'No courses found' %}</p>
+    {% endif %}
+
+    <h3>Topics</h3>
+    {% if search_data.course_structure_entries %}
+        <ul style="list-style-type: none;">
+        {% for entry in search_data.course_structure_entries %}
+            <li>{{ forloop.counter }}.
+                <a href="{% url 'frontend:course' entry.course.id %}">
+                    {{ entry.course.title }}: <b>{{ entry.topic.title }}</b>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans 'No topics found' %}</p>
+    {% endif %}
+
+
+
+{% endblock %}
+
+{% block bottom_script %}
+    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
+    <script>
+        $(function () {
+            $('.chosen-select').chosen();
+        });
+    </script>
+{% endblock %}
