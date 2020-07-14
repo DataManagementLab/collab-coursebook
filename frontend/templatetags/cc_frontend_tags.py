@@ -120,6 +120,6 @@ def add_content_button(user, course_id, topic_id):
 
 @register.filter
 def get_coursebook(user, course):
-    favourites = Favorite.objects.filter(user=user.profile, course=course)
-    coursebook = [favourite.content for favourite in favourites]
+    favorites = Favorite.objects.filter(user=user.profile, course=course)
+    coursebook = [favorite.content for favorite in favorites]
     return coursebook
