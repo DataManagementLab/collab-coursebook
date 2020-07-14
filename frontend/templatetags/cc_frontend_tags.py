@@ -123,9 +123,3 @@ def get_coursebook(user, course):
     favourites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favourite.content for favourite in favourites]
     return coursebook
-
-
-# TODO: template tag can only have 2 parameters
-@register.filter
-def is_content_in_coursebook(user, course, content):
-    return Favorite.objects.filter(user=user, course=course, content=content).count() == 1

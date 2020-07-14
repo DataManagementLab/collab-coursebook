@@ -29,10 +29,11 @@
                             Edit</a>
                     {% endif %}
 
-{#                    TODO: include link add/remove#}
-{#                    {% if is_content_in_coursebook user, course, content %}#}
-{#                        <p>TEST</p>#}
-{#                    {% endif %}#}
+                    {% if favorite %}
+                        <a class="dropdown-item" href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'times' 'far' %} Remove</a>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'frontend:coursebook-add' course.id topic.id content.id  %}">{% fa5_icon 'plus' 'far' %} Add</a>
+                    {% endif %}
 
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
