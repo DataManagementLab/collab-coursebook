@@ -82,6 +82,13 @@ msgstr ""
 "                        "
 
 #: frontend/templates/frontend/content/detail.html:83
+#: frontend/templates/frontend/course/create.html:30
+#: frontend/templates/frontend/course/duplicate.html:30
+#: frontend/templates/frontend/profile/profile_edit.html:19
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: frontend/templates/frontend/content/detail.html:86
 msgid "Confirm"
 msgstr "Bestätigen"
 
@@ -114,6 +121,23 @@ msgstr "Vorherige"
 msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"
 
+#: frontend/templates/frontend/course/create.html:29
+#: frontend/templates/frontend/course/duplicate.html:29
+msgid "Create"
+msgstr "Erzeugen"
+
+#: frontend/templates/frontend/course/duplicate.html:11
+#: frontend/templates/frontend/course/duplicate.html:19
+#: frontend/templates/frontend/course/view.html:25
+msgid "Duplicate Course"
+msgstr "Kurs duplizieren"
+
+#: frontend/templates/frontend/course/view.html:36
+#: frontend/templates/frontend/course/view.html:27
+msgid "Delete Course"
+msgstr "Kurs löschen"
+
+#: frontend/templates/frontend/course/view.html:63
 #: frontend/templates/frontend/course/dropdown_topic.html:10
 msgid "Add Content"
 msgstr "Inhalte hinzufügen"
@@ -125,10 +149,6 @@ msgstr "Kurs bearbeiten"
 #: frontend/templates/frontend/course/view.html:35
 msgid "Edit Course"
 msgstr "Kurs hinzufügen"
-
-#: frontend/templates/frontend/course/view.html:36
-msgid "Delete Course"
-msgstr "Kurs löschen"
 
 #: frontend/templates/frontend/course/view.html:76
 msgid "No topics yet"
@@ -267,6 +287,18 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
+#: frontend/views/course.py:27
+msgid ""
+"Course '{cleaned_data['title']}' successfully created. All settings and "
+"contents of the course '{original_course.title}' were copied."
+msgstr ""
+"Kurs '{cleaned_data['title']}' erfolgreich erstellt. Alle Einstellungen und "
+"Inhalte des Kurses '{original_course.title}' wurden kopiert."
+
+#: frontend/views/course.py:62
+msgid "Course '{cleaned_data['title']}' successfully created"
+msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
+
 #: frontend/views/content.py:28
 msgid "Content '{cleaned_data['type']}' successfully added"
 msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
@@ -286,3 +318,6 @@ msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 #: frontend/views/profile.py:25
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
+
+#~ msgid "Course '{original_course.title}' successfully duplicated."
+#~ msgstr "Kurs '{cleaned_data['title']}' erfolgreich dupliziert"

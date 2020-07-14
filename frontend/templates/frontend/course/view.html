@@ -28,7 +28,7 @@
                 {% if user.is_authenticated %}
                     <a class="dropdown-item" href="{# url 'favourite_content' course.id topic.id content.id ?onDetailPage=True#}">
                         {% if course in user.profile.stared_courses.all %}{% fa5_icon 'bookmark' 'fas' %} Unsave {% else %}{% fa5_icon 'bookmark' 'far' %} Save{% endif %}</a>
-
+                    <a href="{% url 'frontend:course-duplicate' pk=course.pk %}" class="btn btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
                     <div class="dropdown-divider"></div>
 
                     {% if user|check_edit_course_permission:course %}
