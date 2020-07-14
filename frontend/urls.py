@@ -26,11 +26,11 @@ urlpatterns = [
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
             re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$', views.content.AddContentView.as_view(), name='content-add'),
-            path('<int:content_id>', include([
-                path('/comment/<int:pk>/delete/', views.DeleteComment.as_view(), name='comment-delete'),
-                path('/comment/<int:pk>/edit/', views.EditComment.as_view(), name='comment-edit'),
-                path('/coursebook/add/', views.coursebook.add_to_coursebook, name='coursebook-add'),
-                path('/coursebook/remove/', views.coursebook.remove_from_coursebook, name='coursebook-remove'),
+            path('<int:content_id>/', include([
+                path('comment/<int:pk>/delete/', views.DeleteComment.as_view(), name='comment-delete'),
+                path('comment/<int:pk>/edit/', views.EditComment.as_view(), name='comment-edit'),
+                path('coursebook/add/', views.coursebook.add_to_coursebook, name='coursebook-add'),
+                path('coursebook/remove/', views.coursebook.remove_from_coursebook, name='coursebook-remove'),
             ])),
             path('<pk>/', views.ContentView.as_view(), name='content'),
             path('<pk>/read/', views.content.ContentReadingModeView.as_view(), name='content-reading-mode'),
