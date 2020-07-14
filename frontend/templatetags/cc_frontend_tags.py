@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
 
+from base.models import Favorite
 from collab_coursebook.settings import ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE
 from content.models import CONTENT_TYPES
 
@@ -115,3 +116,16 @@ def add_content_button(user, course_id, topic_id):
     # generate list of tuple (content type, content verbose name) for add content dropdown
     content_data = [(content_type, content_model.DESC) for content_type, content_model in CONTENT_TYPES.items()]
     return {'user': user, 'course_id': course_id, 'topic_id': topic_id, 'content_data': content_data}
+
+
+@register.filter
+def get_coursebook(user, course):
+    favourites = Favorite.objects.filter(user=user.profile, course=course)
+    coursebook = [favourite.content for favourite in favourites]
+    return coursebook
+
+
+# TODO: template tag can only have 2 parameters
+@register.filter
+def is_content_in_coursebook(user, course, content):
+    return Favorite.objects.filter(user=user, course=course, content=content).count() == 1

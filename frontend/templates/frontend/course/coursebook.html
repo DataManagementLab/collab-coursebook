@@ -1,0 +1,16 @@
+{% load i18n %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% load cc_frontend_tags %}
+
+<div>
+    {% with user|get_coursebook:course as topic_contents %}
+        <h2>Coursebook</h2>
+        {% if topic_contents|length > 0 %}
+            {% include "frontend/course/topic_contents.html" %}
+        {% else %}
+            <p>Coursebook empty</p>
+        {% endif %}
+    {% endwith %}
+</div>
