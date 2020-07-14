@@ -98,6 +98,18 @@ msgstr "Kommentare"
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
 
+#: frontend/templates/frontend/content/readingmode.html:9
+msgid "Close"
+msgstr "Schließen"
+
+#: frontend/templates/frontend/content/readingmode.html:12
+msgid "Next"
+msgstr "Nächste"
+
+#: frontend/templates/frontend/content/readingmode.html:14
+msgid "Previous"
+msgstr "Vorherige"
+
 #: frontend/templates/frontend/course/create.html:11
 msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"

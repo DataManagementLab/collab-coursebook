@@ -27,6 +27,7 @@ urlpatterns = [
             path('<int:content_id>/comment/<int:pk>/delete/', views.DeleteComment.as_view(), name='comment-delete'),
             path('<int:content_id>/comment/<int:pk>/edit/', views.EditComment.as_view(), name='comment-edit'),
             path('<pk>/', views.ContentView.as_view(), name='content'),
+            path('<pk>/read/', views.content.ContentReadingModeView.as_view(), name='content-reading-mode'),
         ])),
         path('add/', views.AddCourseView.as_view(), name='add-course'),
     ])),

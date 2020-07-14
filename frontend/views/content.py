@@ -200,7 +200,7 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
         return context
 
 
-class ContentReadingModeView(DetailView):  # pylint: disable=too-many-ancestors
+class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
     """
     Displays the content to the user
     """
