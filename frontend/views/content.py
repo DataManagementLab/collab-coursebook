@@ -192,11 +192,9 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
         if self.request.user.is_authenticated:
             context['user_rate'] = content.get_user_rate(self.request.user.profile)
-            """
-            if Favourite.objects.filter(course=course, user=get_user(self.request),
-                                        content_list=content).count() > 0:
-                context['favourite'] = True
-            """
+
+        context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
+                                                      content=content).count() > 0
         return context
 
 
@@ -222,7 +220,8 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
         topic = Topic.objects.get(pk=topic_id)
         if self.request.GET.get('coursebook'):
             course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
-            contents = [f.content for f in Favorite.objects.filter(course=course, user=self.request.user.profile)] #models.get_coursebook_flat(get_user(self.request), course)
+            contents = [f.content for f in Favorite.objects.filter(course=course,
+                                                                   user=self.request.user.profile)]  # models.get_coursebook_flat(get_user(self.request), course)
         else:
             contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))
 

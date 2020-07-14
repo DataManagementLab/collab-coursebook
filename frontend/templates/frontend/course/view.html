@@ -84,6 +84,8 @@
         <!-- TODO Add image? -->
     </div>
 
+    {% include 'frontend/course/coursebook.html' %}
+
     {% for entry in structure %}
         <div style="margin-top: 30px;">
             {% with forloop.counter as outer_index %}
