@@ -6,10 +6,11 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, UpdateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
+from content.models import CONTENT_TYPES
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 from content.forms import CONTENT_TYPE_FORMS
@@ -75,6 +76,58 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
+
+        # add_content_form invalid
+        if not add_content_form.is_valid():
+            return self.form_invalid(add_content_form)
+        # content_type_form invalid
+        return self.form_invalid(content_type_form)
+
+
+class EditContentView(LoginRequiredMixin, UpdateView):
+    model = Content
+    template_name = 'frontend/content/editcontent.html'
+    form_class = AddContentForm
+    success_url = reverse_lazy('frontend:dashboard')
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     # TODO: Handle access rights
+    #     super().dispatch(request, *args, **kwargs)
+
+    def handle_error(self):
+        """
+        create error message and return to course page
+        """
+        course_id = self.kwargs['course_id']
+        messages.error(self.request, _('An error occurred while processing the request'))
+        return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        content_type = self.get_object().type
+        if content_type in CONTENT_TYPE_FORMS:
+            content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
+            context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+        else:
+            return self.handle_error()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        add_content_form = AddContentForm(request.POST)
+        content_type = self.get_object().type
+        if content_type in CONTENT_TYPE_FORMS:
+            content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
+        else:
+            return self.handle_error()
+
+        if add_content_form.is_valid() and content_type_form.is_valid():
+            content_type_add = content_type_form.save(commit=False)
+            content_type_add.pk = self.get_object().pk
+            content_type_add.save()
+
+            course_id = self.kwargs['course_id']
+            topic_id = self.kwargs['topic_id']
+            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, self.get_object().id,)))
 
         # add_content_form invalid
         if not add_content_form.is_valid():
