@@ -88,11 +88,32 @@ class EditContentView(LoginRequiredMixin, UpdateView):
     model = Content
     template_name = 'frontend/content/editcontent.html'
     form_class = AddContentForm
-    success_url = reverse_lazy('frontend:dashboard')
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     # TODO: Handle access rights
-    #     super().dispatch(request, *args, **kwargs)
+    def get_content_url(self):
+        """
+        get the url of the content page
+        :return: url of the content page
+        """
+        course_id = self.kwargs['course_id']
+        topic_id = self.kwargs['topic_id']
+        content_id = self.get_object().pk
+        return reverse('frontend:content', args=(course_id, topic_id, content_id,))
+
+    def get_success_url(self):
+        return self.get_content_url()
+
+    def dispatch(self, request, *args, **kwargs):
+        user = get_user(request)
+        if self.get_object().readonly:
+            # only admins and the content owner can edit the content
+            if self.get_object().author == user or request.user.is_superuser:
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                messages.error(request, _('You are not allowed to edit this content'))
+                return HttpResponseRedirect(self.get_content_url())
+        else:
+            # everyone can edit the content
+            return super().dispatch(request, *args, **kwargs)
 
     def handle_error(self):
         """
@@ -104,6 +125,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+        context['topic_id'] = self.kwargs['topic_id']
+
         content_type = self.get_object().type
         if content_type in CONTENT_TYPE_FORMS:
             content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
@@ -112,27 +136,22 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             return self.handle_error()
         return context
 
+    # TODO: UpdateView - If no new image is uploaded the existing one should be used.
+    #  At the moment the imageview-form is invalid if it is empty.
     def post(self, request, *args, **kwargs):
-        add_content_form = AddContentForm(request.POST)
         content_type = self.get_object().type
         if content_type in CONTENT_TYPE_FORMS:
             content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
         else:
             return self.handle_error()
-
-        if add_content_form.is_valid() and content_type_form.is_valid():
+        # add_content_form (see AddContentView) is handled by django UpdateView in super().post()
+        if content_type_form.is_valid():
             content_type_add = content_type_form.save(commit=False)
             content_type_add.pk = self.get_object().pk
             content_type_add.save()
+            return super().post(request, *args, **kwargs)
 
-            course_id = self.kwargs['course_id']
-            topic_id = self.kwargs['topic_id']
-            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, self.get_object().id,)))
-
-        # add_content_form invalid
-        if not add_content_form.is_valid():
-            return self.form_invalid(add_content_form)
-        # content_type_form invalid
+        self.object = self.get_object()
         return self.form_invalid(content_type_form)
 
 

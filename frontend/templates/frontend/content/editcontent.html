@@ -20,8 +20,8 @@
         {{ form.media }}
         <div>
 
-            <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Update" %}</button>
-            <a href="{% url 'frontend:dashboard' %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
+            <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Save" %}</button>
+            <a href="{% url 'frontend:content' course_id topic_id content.id %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
 
     </form>

@@ -98,9 +98,11 @@ def check_edit_course_permission(user, course):
 
 
 @register.filter
-def is_content_editable(type):
-    # TODO: implement check
-    return False
+def check_edit_content_permission(user, content):
+    if content.readonly:
+        return content.author == user or user.is_superuser
+    else:
+        return True
 
 
 @register.inclusion_tag("frontend/course/dropdown_topic.html")
