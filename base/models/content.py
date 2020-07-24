@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from fontawesome_5.fields import IconField
 
 from base.models import Profile
+from .social import Rating
 
 
 class Category(models.Model):
@@ -168,17 +169,7 @@ class Content(models.Model):
         return self.get_rate()
 
     def get_rate(self):
-        """
-        return the average rating and 0 if there are no ratings
-        :return: rating
-        :rtype: float
-        """
-
-        rating = self.ratings.aggregate(Avg('rating'))['rating__avg']  # todo something wrong here
-        print(self.ratings)
-        if rating is None:
-            return 0
-        return round(rating, 2)  # pylint: disable=no-member
+        return Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
 
     def get_rate_count(self):
         """
@@ -207,23 +198,19 @@ class Content(models.Model):
         if self.user_already_rated(user):
             content_id = self.id
             return self.ratings.get(user=user).rating_set.first().rating
-                #user.get_rating_from_content(content_id).rating  # todo may change back to ratings
         return 0
 
-    def rate_content(self, user):
+    def rate_content(self, user, rating):
         """
         Rate content
+        :param rating: Rating of Content by User
         :param content: Content
         :param User user: user
-        :param int rate: rating
         :return: nothing
         """
-        # todo delete
-        #self.ratings.get(user=user).delete()
-        #self.ratings.add(user)
-        #self.ratings.filter(user_id=user.pk).delete()  # pylint: disable=no-member
-        # create function won't work
-        #self.ratings.add
+        Rating.objects.filter(user_id=user.user.id, content_id=self.id).delete()
+        rating = Rating.objects.create(user=user, content=self, rating=rating)  # user = profile
+        rating.save()
         # pylint: disable=no-member
         self.save()
 

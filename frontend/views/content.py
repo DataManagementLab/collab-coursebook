@@ -174,29 +174,9 @@ class ContentReadingModeView(DetailView):  # pylint: disable=too-many-ancestors
         return context
 
 
-class RateContentView(DetailView):
-    model = Content
-
-    #def get_context_data(self, **kwargs):
-        #None
-
-    #def dispatch(self, request, *args, **kwargs):
-        #None
-
-    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        #None
-        form = RateForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-
-
-    #def get(self, request, *args, **kwargs):
-        #form = RateForm()
-
-
 def rate_content(request, course_id, topic_id, content_id, pk):
     """
-    Let's the user rate content
+    Let the user rate content
     :param int topic_id: id of the topic
     :param HttpRequest request: request
     :param int course_id: course id
@@ -205,26 +185,9 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     :return: redirect to content page
     :rtype: HttpResponse
     """
-    # check if rating is valid
     content = get_object_or_404(Content, pk=content_id)
     profile = get_user(request)
-    #content.rate_content(request.user, rating)
-
-    # create or update rating
-    Rating.objects.filter(user_id=profile, content_id=content_id).delete()
-    print("pk: ", pk)
-    rating = Rating.objects.create(user=profile, content=content, rating=pk)  # user = profile
-    rating.save()
-
-    #content.rate_content(user=profile)
-
-    # update content rating
-    #content.rate_content(user=get_user(request), rate=rating)
-   # profile = get_user(request)
-    #profile
-    #content.ratings.filter(user=get_user(request)).delete()
-    print(content.get_user_rate(get_user(request)))
-   # content.save()
+    content.rate_content(user=profile, rating=pk)
 
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))

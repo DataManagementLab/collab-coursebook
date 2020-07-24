@@ -12,8 +12,8 @@ urlpatterns = [
     path('profile/edit/', views.ProfileEditView.as_view(), name="profile-edit"),
 
     path('courses/', include([
-        re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$', views.CourseListView.as_view(),
-                name='courses-sort'),
+        re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$',
+                views.CourseListView.as_view(), name='courses-sort'),
         path('', views.CourseListView.as_view(), name='courses'),
         path('<int:pk>/', include([
             path('', views.CourseView.as_view(), name='course'),

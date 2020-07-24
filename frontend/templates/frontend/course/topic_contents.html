@@ -19,14 +19,14 @@
                         </a>
                         <div class="card-footer">
                             <span class="badge badge-primary">{{ content.language }}</span>
+                            &nbsp;&middot;&nbsp;
                             {% if content.tags.count > 0 %}
-                                &nbsp;&middot;&nbsp;
                                 {% for tag in content.tags.all %}
-                                    <span class="badge badge-info">{{ tag }}</span>
+                                    <span class="badge badge-secondary">{{ tag }}</span>
                                 {% endfor %}
                             {% endif %}
                             &nbsp;&middot;&nbsp;
-                            {% trans "Rating" %}: {{ content.get_rate }}
+                              <span class="badge badge-info">{{ content.get_rate}}</span>
                         </div>
                     </div>
                 </div>
