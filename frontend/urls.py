@@ -1,5 +1,6 @@
 from django.urls import path, re_path, include
 
+from export.views import generate_coursebook
 from content.models import CONTENT_TYPES
 from frontend import views
 from frontend.views.search import SearchView
@@ -23,6 +24,7 @@ urlpatterns = [
             path('', views.CourseView.as_view(), name='course'),
             path('edit/', views.course.EditCourseView.as_view(), name='course-edit'),
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
+            path('coursebook/', generate_coursebook, name='coursebook-generate'),
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
             re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$', views.content.AddContentView.as_view(), name='content-add'),

@@ -22,6 +22,11 @@ class YTVideoContent(models.Model):
     def __str__(self):
         return f"{self.DESC}: {self.url}"
 
+    def generate_latex_template(self):
+        return r"""
+        \href{""" + str(self.url) + """}{""" + str(self.url) + """}
+        """
+
 
 class ImageContent(models.Model):
     TYPE = "Image"
@@ -38,6 +43,15 @@ class ImageContent(models.Model):
 
     def __str__(self):
         return f"{self.content}: {self.image}"
+
+    def generate_latex_template(self):
+        return r"""
+        \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{""" + str(self.image.path) + r"""}
+        \caption{""" + str(self.content.description) + r"""}
+        \end{figure}
+        """
 
 
 CONTENT_TYPES = {
