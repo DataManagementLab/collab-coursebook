@@ -39,8 +39,6 @@ def generate_coursebook_for(user, course):
 
     latex_document_string = generate_latex_head(course.title, user)
 
-    # TODO: latex section for each topic
-
     for favorite in Favorite.objects.filter(user=user.profile, course=course):
         content = favorite.content
         content_type = content.type
@@ -72,20 +70,20 @@ def generate_coursebook_for(user, course):
 
 def generate_latex_head(title, author):
     return r"""\documentclass{article}
-        \usepackage[T1]{fontenc}
-        \usepackage[utf8]{inputenc}
-        \usepackage{graphicx}
-        \usepackage{float}
-        \usepackage{grffile}
-        \usepackage{hyperref}
-    
-        \title{""" + str(title) + r""" - Coursebook}
-        \author{""" + str(author) + r"""}
-        \date{\today}
-    
-        \begin{document}
-        \maketitle
-        """
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+    \usepackage{graphicx}
+    \usepackage{float}
+    \usepackage{grffile}
+    \usepackage{hyperref}
+
+    \title{""" + str(title) + r""" - Coursebook}
+    \author{""" + str(author) + r"""}
+    \date{\today}
+
+    \begin{document}
+    \maketitle
+    """
 
 
 def generate_latex_end():

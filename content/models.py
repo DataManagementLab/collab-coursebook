@@ -26,7 +26,7 @@ class YTVideoContent(models.Model, ExportCoursebookMixin):
     def generate_latex_template(self):
         return r"""
         \href{""" + str(self.url) + """}{""" + str(self.url) + """}
-        \newline
+        \\newline
         """
 
 
