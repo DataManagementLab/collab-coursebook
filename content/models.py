@@ -2,9 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Content
+from export.mixins import ExportCoursebookMixin
 
 
-class YTVideoContent(models.Model):
+class YTVideoContent(models.Model, ExportCoursebookMixin):
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
 
@@ -25,10 +26,11 @@ class YTVideoContent(models.Model):
     def generate_latex_template(self):
         return r"""
         \href{""" + str(self.url) + """}{""" + str(self.url) + """}
+        \newline
         """
 
 
-class ImageContent(models.Model):
+class ImageContent(models.Model, ExportCoursebookMixin):
     TYPE = "Image"
     DESC = _("Single Image")
 
