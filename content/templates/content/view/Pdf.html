@@ -1,0 +1,15 @@
+{% load i18n %}
+
+
+{{ content.pdfcontent.pdf.url }}
+<a href="{{ content.pdfcontent.pdf.url }}">link</a>
+
+
+<embed src="{{ content.pdfcontent.pdf.url }}" type="application/pdf" height="700px" width="500">
+<b>{% trans "Source" %}:</b>
+<p>{{ content.Pdfcontent.source }}</p>
+
+{% if content.Pdfcontent.license %}
+    <b>{% trans "License" %}:</b>
+    <p>{{ content.Pdfcontent.license }}</p>
+{% endif %}

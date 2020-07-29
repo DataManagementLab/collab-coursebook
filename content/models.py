@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
 from base.models import Content
 
 
@@ -39,8 +38,24 @@ class ImageContent(models.Model):
     def __str__(self):
         return f"{self.content}: {self.image}"
 
+class PdfContent(models.Model):
+    TYPE = "Pdf"
+    DESC = _("Pdf")
+
+    class Meta:
+        verbose_name = _("Pdf Content")
+        verbose_name_plural = _("Pdf Contents")
+
+    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
+    pdf = models.FileField(verbose_name=_("Pdf"), upload_to='uploads/contents/%Y/%m/%d/')
+    source = models.TextField(verbose_name=_("Source"))
+    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
+
+    def __str__(self):
+        return f"{self.content}: {self.pdf}"
 
 CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
+    PdfContent.TYPE: PdfContent
 }
