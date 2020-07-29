@@ -14,9 +14,18 @@ def generate_coursebook_for(user, course):
 
     latex_document_string = generate_latex_head(course.title, user)
 
-    for favorite in Favorite.objects.filter(user=user.profile, course=course):
-        content = favorite.content
+    # sort contents by topic
+    contents = [favorite.content for favorite in Favorite.objects.filter(user=user.profile, course=course)]
+    contents = sorted(contents, key=lambda c: c.topic.title)
+
+    # this saves the last topic to generate a new section for each topic
+    last_topic = None
+    for content in contents:
         content_type = content.type
+        if last_topic != content.topic:
+            last_topic = content.topic
+            latex_document_string += r"\section{" + str(content.topic.title) + "}"
+
         if content_type in CONTENT_TYPES:
             content_type_object = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk)
             latex_document_string += content_type_object.generate_latex_template()
@@ -65,5 +74,5 @@ def generate_latex_end():
     return r"""\end{document}"""
 
 
-def generate_latex_invalid_content_type(type):
-    return r"""\textit{This type of content is not supported and cannot be displayed: """ + str(type) + """}"""
+def generate_latex_invalid_content_type(content_type):
+    return r"""\textit{This type of content is not supported and cannot be displayed: """ + str(content_type) + """}"""
