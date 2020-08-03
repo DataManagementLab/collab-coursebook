@@ -5,6 +5,12 @@ from content.models import CONTENT_TYPES
 
 
 def generate_coursebook_for(user, course):
+    """
+    Generates a pdf file of a coursebook
+    :param user: the user which exports the coursebook
+    :param course: the course containing the coursebook
+    :return: filepath of the generated pdf file
+    """
     file_directory = os.path.join(settings.BASE_DIR, "media", "coursebooks")
     filename = "Coursebook_" + str(user) + "_" + str(course)
     file_path = os.path.join(file_directory, filename)
