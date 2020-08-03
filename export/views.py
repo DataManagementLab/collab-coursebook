@@ -7,6 +7,9 @@ from export.helper_functions import generate_coursebook_for
 
 
 def generate_coursebook(request, *args, **kwargs):
+    """
+    Opens generated coursebook in a new tab
+    """
     course_id = kwargs['pk']
     course = Course.objects.get(pk=course_id)
     user = request.user

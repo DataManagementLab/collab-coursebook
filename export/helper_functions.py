@@ -18,13 +18,13 @@ def generate_coursebook_for(user, course):
     contents = [favorite.content for favorite in Favorite.objects.filter(user=user.profile, course=course)]
     contents = sorted(contents, key=lambda c: c.topic.title)
 
-    # this saves the last topic to generate a new section for each topic
+    # save the last topic to generate a new section for each topic
     last_topic = None
     for content in contents:
         content_type = content.type
         if last_topic != content.topic:
             last_topic = content.topic
-            latex_document_string += r"\section{" + str(content.topic.title) + "}"
+            latex_document_string += generate_latex_section(content.topic.title)
 
         if content_type in CONTENT_TYPES:
             content_type_object = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk)
@@ -34,16 +34,19 @@ def generate_coursebook_for(user, course):
 
     latex_document_string += generate_latex_end()
 
+    # write data into tex file
     with open(file_path + '.tex', 'w+') as file:
         file.write(latex_document_string)
         file.close()
 
+    # convert tex file into pdf
     bash_convert = "pdflatex -no-file-line-error -halt-on-error -output-directory='" + \
                    file_directory + "' " \
                    + file_path + ".tex"
     bash_quiet = " > /dev/null"  # Quiet output in the shell
     os.system(bash_convert + bash_quiet)  # run as shell command
 
+    # remove unnecessary files to save space
     os.remove(file_path + ".tex")
     os.remove(file_path + ".aux")
     os.remove(file_path + ".log")
@@ -76,3 +79,7 @@ def generate_latex_end():
 
 def generate_latex_invalid_content_type(content_type):
     return r"""\textit{This type of content is not supported and cannot be displayed: """ + str(content_type) + """}"""
+
+
+def generate_latex_section(title):
+    return r"\section{" + str(title) + "}"
