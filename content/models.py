@@ -68,14 +68,16 @@ class PdfContent(models.Model, GeneratePreviewMixin):
     license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
 
     def generate_preview(self):
-        # TODO settings.MEDIA_ROOT ?
-        save_dir = 'media/uploads/previews/'
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
+        preview_folder = 'uploads/previews/'
+        # Check if Folder exists
+        if not os.path.exists(os.path.join(settings.MEDIA_ROOT,preview_folder)):
+            os.makedirs(os.path.join(settings.MEDIA_ROOT,preview_folder))
         base_filename = os.path.splitext(os.path.basename(self.pdf.name))[0] + '.jpg'
+        # get images for every page
         pages = convert_from_path(self.pdf.path)
-        pages[0].save(os.path.join(save_dir, base_filename))
-        return os.path.join('/',save_dir, base_filename)
+        # save first page to disk
+        pages[0].save(os.path.join(settings.MEDIA_ROOT,preview_folder, base_filename))
+        return os.path.join(preview_folder, base_filename)
 
     def __str__(self):
         return f"{self.content}: {self.pdf}"

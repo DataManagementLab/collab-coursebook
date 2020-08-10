@@ -72,12 +72,10 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content_type_data.content = content
 
             content_type_data.save()
-            # generate preview 'uploads/contents/%Y/%m/%d/'
-            new_preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
-            #print("new_preview"+ new_preview)
-            content.preview = new_preview
+            # generate preview image in 'uploads/contents/'
+            preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
+            content.preview.name = preview
             content.save()
-            #print("content.preview" + content.preview)
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
