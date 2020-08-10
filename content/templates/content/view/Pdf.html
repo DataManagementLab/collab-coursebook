@@ -1,11 +1,15 @@
 {% load i18n %}
 
 
-{{ content.pdfcontent.pdf.url }}
-<a href="{{ content.pdfcontent.pdf.url }}">link</a>
+
+<div class="row">
+    <div class="col">
+        <embed src="{{ content.pdfcontent.pdf.url }}" type="application/pdf" height="700px" width="100%">
 
 
-<embed src="{{ content.pdfcontent.pdf.url }}" type="application/pdf" height="700px" width="500">
+    </div>
+
+</div>
 <b>{% trans "Source" %}:</b>
 <p>{{ content.Pdfcontent.source }}</p>
 

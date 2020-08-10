@@ -1,8 +1,17 @@
+import os
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from base.models import Content
+from content.mixin import GeneratePreviewMixin
+from pdf2image import convert_from_path, convert_from_bytes
+from pdf2image.exceptions import (
+    PDFInfoNotInstalledError,
+    PDFPageCountError,
+    PDFSyntaxError
+)
 
-
+from django.conf import settings
 class YTVideoContent(models.Model):
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
@@ -13,6 +22,9 @@ class YTVideoContent(models.Model):
 
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     url = models.URLField(verbose_name=_("Video URL"))
+
+    def generate_preview(self):
+        return
 
     @property
     def id(self):
@@ -38,7 +50,11 @@ class ImageContent(models.Model):
     def __str__(self):
         return f"{self.content}: {self.image}"
 
-class PdfContent(models.Model):
+    def generate_preview(self):
+        # TODO generate small image previews
+        return
+
+class PdfContent(models.Model, GeneratePreviewMixin):
     TYPE = "Pdf"
     DESC = _("Pdf")
 
@@ -51,8 +67,19 @@ class PdfContent(models.Model):
     source = models.TextField(verbose_name=_("Source"))
     license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
 
+    def generate_preview(self):
+        # TODO settings.MEDIA_ROOT ?
+        save_dir = 'media/uploads/previews/'
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        base_filename = os.path.splitext(os.path.basename(self.pdf.name))[0] + '.jpg'
+        pages = convert_from_path(self.pdf.path)
+        pages[0].save(os.path.join(save_dir, base_filename))
+        return os.path.join('/',save_dir, base_filename)
+
     def __str__(self):
         return f"{self.content}: {self.pdf}"
+
 
 CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,

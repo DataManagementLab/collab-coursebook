@@ -1,3 +1,4 @@
+pdf2image
 Django==3.0.4
 django-bootstrap4==1.1.1
 django-fontawesome-5==1.0.18
