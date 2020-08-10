@@ -1,25 +1,34 @@
-from pathlib import Path
-from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-from base.models import Course
-from export.helper_functions import generate_coursebook_for
+from django.http import HttpResponse
+from django.shortcuts import render
+
+from base.models import Course, Favorite
+from export.helper_functions import LaTeX
 
 
-def generate_coursebook(request, *args, **kwargs):
-    """
-    Opens generated coursebook in a new tab
-    """
-    course_id = kwargs['pk']
-    course = Course.objects.get(pk=course_id)
+def generate_coursebook(request, pk, template="content/export/base.tex", context=None):
+    """ Generates a PDF file with nametags for students in the queryset"""
+    if context is None:
+        context = {}
     user = request.user
+    course = Course.objects.get(pk=pk)
+    context['user'] = user
+    context['course'] = course
+    context['contents'] = [favorite.content for favorite in Favorite.objects.filter(user=user.profile, course=course)]
+    (pdf, pdflatex_output) = LaTeX.render(context, template, [])
+    return pdf, pdflatex_output
 
-    generated_file_path = generate_coursebook_for(user, course)
-    pdf_file_path = generated_file_path + '.pdf'
-    if Path(pdf_file_path).exists():
-        with open(pdf_file_path, 'rb') as file_handler:
-            response = HttpResponse(file_handler.read(), content_type="application/pdf")
-            file_handler.close()
-        return response
-    messages.error(request, 'There was an error while generating your coursebook.')
-    return HttpResponseRedirect(reverse('frontend:course', args=(course_id, )))
+
+def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
+    """ Generates a PDF file with nametags for students in the queryset and sends it to the browser"""
+    (pdf, pdflatex_output) = generate_coursebook(request, pk)
+
+    return write_response(request, pdf, pdflatex_output, filename)
+
+
+def write_response(request, pdf, pdflatex_output, filename, content_type='application/pdf'):
+    if not pdf:
+        return render(request, "frontend/coursebook/rendering-error.html", {"content": pdflatex_output[0].decode("utf-8")})
+    response = HttpResponse(content_type=content_type)
+    response['Content-Disposition'] = 'attachment; filename=' + filename
+    response.write(pdf)
+    return response
