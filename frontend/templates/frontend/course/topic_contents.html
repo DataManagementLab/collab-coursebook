@@ -26,7 +26,11 @@
                                 {% endfor %}
                             {% endif %}
                             &nbsp;&middot;&nbsp;
-                              <span class="badge badge-info">{{ content.get_rate}}</span>
+                            {% if content.get_rate == -1 %}
+                                <span class="badge badge-info"> ~ </span>
+                            {% else %}
+                                <span class="badge badge-info">{{ content.get_rate}}</span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

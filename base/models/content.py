@@ -169,7 +169,10 @@ class Content(models.Model):
         return self.get_rate()
 
     def get_rate(self):
-        return Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
+        rating = Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
+        if rating is not None:
+            return rating
+        return -1
 
     def get_rate_count(self):
         """
