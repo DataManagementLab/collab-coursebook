@@ -20,6 +20,7 @@ Collab Coursebook has two types of requirements: System requirements are depende
 
 * Python 3.6 incl. development tools
 * Virtualenv
+* poppler
 * for production using uwsgi:
   * C compiler e.g. gcc
   * uwsgi
