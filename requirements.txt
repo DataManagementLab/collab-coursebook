@@ -1,4 +1,4 @@
-pdf2image
+pdf2image==1.13.1s
 Django==3.0.4
 django-bootstrap4==1.1.1
 django-fontawesome-5==1.0.18

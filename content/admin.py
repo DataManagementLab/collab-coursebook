@@ -12,6 +12,7 @@ class YTVideoContentAdmin(admin.ModelAdmin):
 class ImageContentAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(PdfContent)
 class PdfContentAdmin(admin.ModelAdmin):
     pass

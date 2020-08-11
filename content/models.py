@@ -12,6 +12,8 @@ from pdf2image.exceptions import (
 )
 
 from django.conf import settings
+
+
 class YTVideoContent(models.Model):
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
@@ -53,6 +55,7 @@ class ImageContent(models.Model):
     def generate_preview(self):
         # TODO generate small image previews
         return
+
 
 class PdfContent(models.Model, GeneratePreviewMixin):
     TYPE = "Pdf"
