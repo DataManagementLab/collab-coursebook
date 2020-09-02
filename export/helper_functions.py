@@ -5,16 +5,27 @@ from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
 
+from export.templatetags.cc_export_tags import export_template
+
 
 class LaTeX:
-    """
-    https://github.com/d120/pyophase/blob/master/ophasebase/helper.py
-    Retrieved 10.08.2020
-    """
+
+    encoding = 'utf-8'
+
     @staticmethod
     def render(context, template_name, assets, app='export', external_assets=None):
+        """
+        https://github.com/d120/pyophase/blob/master/ophasebase/helper.py
+        Retrieved 10.08.2020
+        """
+
         template = get_template(template_name)
-        rendered_tpl = template.render(context).encode('utf-8')
+        rendered_tpl = template.render(context).encode(LaTeX.encoding)
+        # prerender content templates
+        for content in context['contents']:
+            rendered_tpl += LaTeX.pre_render(content)
+        rendered_tpl += "\end{document}".encode(LaTeX.encoding)
+
         with tempfile.TemporaryDirectory() as tempdir:
             # for asset in assets:
             #     shutil.copy(os.path.dirname(os.path.realpath(__file__)) + '/../' + app + '/assets/' + asset, tempdir)
@@ -29,3 +40,11 @@ class LaTeX:
             except FileNotFoundError:
                 pdf = None
         return pdf, pdflatex_output
+
+    @staticmethod
+    def pre_render(content):
+        template = get_template(export_template(content.type))
+        context = {'content': content}
+        print(content.imagecontent.image.url)
+        return template.render(context).encode(LaTeX.encoding)
+

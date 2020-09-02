@@ -6,6 +6,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{grffile}
+\usepackage{hyperref}
 \usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
 
 \begin{document}
@@ -14,10 +18,8 @@
     \author{ {{user|tex_escape}} }
     \maketitle
 
-    {% for content in contents %}
-        \input{ {{ content.type|export_template }} }
-    {% endfor %}
-
-\end{document}
+%    {% for content in contents %}
+%        \input{ {{ content.type|export_template }} }
+%    {% endfor %}
 
 {% endautoescape %}
