@@ -12,14 +12,23 @@
 \usepackage{hyperref}
 \usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
 
+%% Generate a latex graphic
+% 1: caption
+% 2: image path
+\newcommand{\Image}[2]{
+    \begin{figure}[H]
+    \centering
+    \includegraphics{#2}
+    \caption{#1}
+    \end{figure}
+}
+
 \begin{document}
 
     \title{ {{ course.title|tex_escape }} }
     \author{ {{user|tex_escape}} }
     \maketitle
 
-%    {% for content in contents %}
-%        \input{ {{ content.type|export_template }} }
-%    {% endfor %}
+% \end{document} gets appended in code
 
 {% endautoescape %}

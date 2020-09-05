@@ -39,7 +39,7 @@ class LaTeX:
                     pdf = f.read()
             except FileNotFoundError:
                 pdf = None
-        return pdf, pdflatex_output
+        return pdf, pdflatex_output, rendered_tpl
 
     @staticmethod
     def pre_render(content):

@@ -2,14 +2,5 @@
 {% autoescape off %}
 
 \textbf{ {{content.description}} }
-{{content.imagecontent.image.path|tex_escape}}
-
-\includegraphics{ {{ content.imagecontent.image.path }} }
-
-%\begin{figure}[H]
-%\centering
-%\includegraphics[width=\textwidth ext=.png]{ {{ content.imagecontent.image.url }} }
-%\caption{ {{content.description}} }
-%\end{figure}
-
+\Image{ {{content.description}} }{% templatetag openbrace %}{{content.imagecontent.image.path}}{% templatetag closebrace%}
 {% endautoescape %}
