@@ -1,6 +1,10 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
-\textbf{ {{content.description}} }
+\textbf{Image}
 \Image{ {{content.description}} }{% templatetag openbrace %}{{content.imagecontent.image.path}}{% templatetag closebrace%}
-{% endautoescape %}
+\newline
+ {{content.description}}
+\newline
+
+    {% endautoescape %}
