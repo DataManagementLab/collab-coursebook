@@ -45,6 +45,4 @@ class LaTeX:
     def pre_render(content):
         template = get_template(export_template(content.type))
         context = {'content': content}
-        print(content.imagecontent.image.url)
         return template.render(context).encode(LaTeX.encoding)
-
