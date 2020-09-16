@@ -114,7 +114,7 @@
 
     <h5 style="margin-top: 30px;"><a name="comments">{% trans "Comments" %}</a></h5>
     {% if user.is_authenticated %}
-        <form action="{% url 'frontend:content' course.id topic.id content.id %}" method="post">
+        <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
 
             {% bootstrap_form comment_form %}
