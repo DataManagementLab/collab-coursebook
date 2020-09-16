@@ -15,9 +15,35 @@
             &nbsp;
         {% endif %}
         <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white">{{ user.get_username }}</a>
-        &nbsp;
-        <a href="{% url "cas_ng_logout" %}" class="btn btn-primary" style="">{% trans "Logout" %}</a>
+
+        <div class="btn-group" role="group">
+            <div class="btn-group" role="group">
+            <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupNavbar" style="">
+                <div class="dropdown-header">
+                    {% trans "Language" %}:
+                </div>
+                <!-- language switcher -->
+                <form action="{% url 'set_language' %}" method="post" class="form-inline" name="language-form" id="language-switcher" style="flex-direction: column;">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}" />
+
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+
+                    {% for language in languages %}
+                        <button type="submit" class="dropdown-item" name="language" value="{{ language.code }}" style="align-self: end;">
+                            {{ language.code | upper }}
+                        </button>
+                    {% endfor %}
+                </form>
+                <div class="dropdown-divider"></div>
+                <a href="{% url "cas_ng_logout" %}" class="dropdown-item" style="">{% trans "Logout" %}</a>
+            </div>
+            </div>
+        </div>
     </div>
 {% endif %}
 
-    <a href="{% url "frontend:dashboard" %}" style="color: #ffffff;text-decoration: none;"><h4 style="font-weight: bold;display: inline;">Collab Coursebook</h4></a>
+<a href="{% url "frontend:dashboard" %}" style="color: #ffffff;text-decoration: none;"><h4 style="font-weight: bold;display: inline;">Collab Coursebook</h4></a>
