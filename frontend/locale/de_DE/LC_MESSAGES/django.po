@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-05 11:48+0000\n"
+"POT-Creation-Date: 2020-06-22 14:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,6 +143,7 @@ msgstr "Inhalte hinzufügen"
 #: frontend/templates/frontend/course/view.html:31
 msgid "Duplicate Course"
 msgstr "Kurs duplizieren"
+
 
 #: frontend/templates/frontend/course/edit.html:11
 msgid "Edit course"

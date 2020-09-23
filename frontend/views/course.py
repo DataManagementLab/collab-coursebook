@@ -144,14 +144,21 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
             index_split = entry.index.split('/')
             # Topic
             if len(index_split) == 1:
-                current_topic = {'topic': entry.topic, 'subtopics': []}
+                current_topic = {'topic': entry.topic, 'subtopics': [],
+                                 'topic_contents': entry.topic.get_contents(self.sorted_by, self.filtered_by)}
                 topics_recursive.append(current_topic)
             # Subtopic
             # Only handle up to one subtopic level
             else:
-                current_topic["subtopics"].append(entry.topic)
+                current_topic["subtopics"].append({'subtopic': entry.topic,  'topic_contents': entry.topic
+                                                  .get_contents(self.sorted_by, self.filtered_by)})
 
         context["structure"] = topics_recursive
+
+        if self.sorted_by is not None:
+            context['sorting'] = self.sorted_by
+        if self.filtered_by is not None:
+            context['filtering'] = self.filtered_by
 
 
         """# create a list of topics ordered by (sub-)topic and index

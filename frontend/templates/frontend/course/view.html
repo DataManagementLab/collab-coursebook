@@ -89,6 +89,14 @@
     {% for entry in structure %}
         <div style="margin-top: 30px;">
             {% with forloop.counter as outer_index %}
+                <div class="float-right text-right">
+                        <form id="filter+sort" class="form-inline" method="post"
+                          action="{% url 'frontend:course' course.id %}">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                        </form>
+                </div>
+                <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }} {% if sorting != "None" %}({{ sorting }}){% endif %}</h3>
                 {% with entry.topic as topic_replace %}
                     {% add_content_button user course.id topic_replace.id %}
                 {% endwith %}
@@ -100,6 +108,14 @@
                 {% if entry.subtopics %}
                         {% for subtopic in entry.subtopics %}
                             <div style="margin-top: 15px;">
+                                <div class="float-right text-right">
+                                        <form id="filter+sort" class="form-inline" method="post"
+                                          action="{% url 'frontend:course' course.id %}">
+                                            {% csrf_token %}
+                                            {% bootstrap_form form %}
+                                        </form>
+                                </div>
+                                <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.subtopic.title }} {% if sorting != "None" %}({{ sorting }}) {% endif %}</h4>
                                 {% with subtopic as topic_replace %}
                                    {% add_content_button user course.id topic_replace.id %}
                                 {%  endwith %}

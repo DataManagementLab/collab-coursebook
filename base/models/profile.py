@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
@@ -24,3 +25,4 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
