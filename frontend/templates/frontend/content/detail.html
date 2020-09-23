@@ -19,18 +19,23 @@
             </button>
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="{# url 'readingmode' course.id topic.id content.id #}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
+
+                <a class="dropdown-item" href="
+                        {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
-                    <a class="dropdown-item" href="{# url 'favourite_content' course.id topic.id content.id #}?onDetailPage=True">
-                        {% if favourite %}{% fa5_icon 'bookmark' 'fas' %} Unsave {% else %}{% fa5_icon 'bookmark' 'far' %} Save{% endif %}</a>
-                    <div class="dropdown-divider"></div>
-                    {% if markdown %}
+                    {% if content.type|is_content_editable %}
                         <a class="dropdown-item"
-                           href="{% url 'edit_md_file' course.id topic.id content.id %}">{% fa5_icon 'pencil-alt' 'fas' %}
+                           href="{#{% url 'edit_md_file' course.id topic.id content.id %}#}">{% fa5_icon 'pencil-alt' 'fas' %}
                             Edit</a>
-
                     {% endif %}
+
+                    {% if favorite %}
+                        <a class="dropdown-item" href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'minus' 'far' %} {% trans 'Coursebook' %}</a>
+                    {% else %}
+                        <a class="dropdown-item" href="{% url 'frontend:coursebook-add' course.id topic.id content.id  %}">{% fa5_icon 'plus' 'far' %} {% trans 'Coursebook' %}</a>
+                    {% endif %}
+
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
                            data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} Delete</a>
@@ -113,7 +118,7 @@
         </div>
     <h5 style="margin-top: 30px;"><a name="comments">{% trans "Comments" %}</a></h5>
     {% if user.is_authenticated %}
-        <form action="{% url 'frontend:content' course.id topic.id content.id %}" method="post">
+        <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
 
             {% bootstrap_form comment_form %}

@@ -2,26 +2,20 @@
 
 {# Load the tag library #}
 {% load bootstrap4 %}
-{% load i18n %}
-{% load static %}
+{% load cc_frontend_tags %}
 {% load fontawesome_5 %}
-
-{# Load CSS and JavaScript #}
-
-{% block title %}{% trans "Create a new course" %} - Collab Coursebook{% endblock %}
+{% load static %}
+{% load i18n %}
 
 {% block imports %}
-    <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
-    <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
+    <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
-    <h1>Create a new Course</h1>
-
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}
-
         {% bootstrap_form form %}
+        {% bootstrap_form content_type_form %}
 
         {{ form.media }}
         <div>
@@ -29,14 +23,6 @@
             <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
             <a href="{% url 'frontend:dashboard' %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
-    </form>
-{% endblock %}
 
-{% block bottom_script %}
-    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
-    <script>
-        $(function () {
-            $('.chosen-select').chosen();
-        });
-    </script>
+    </form>
 {% endblock %}

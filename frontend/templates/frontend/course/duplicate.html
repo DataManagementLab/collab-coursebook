@@ -8,7 +8,7 @@
 
 {# Load CSS and JavaScript #}
 
-{% block title %}{% trans "Create a new course" %} - Collab Coursebook{% endblock %}
+{% block title %}{% trans "Duplicate Course" %} - Collab Coursebook{% endblock %}
 
 {% block imports %}
     <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Create a new Course</h1>
+    <h1>{% trans "Duplicate Course" %}</h1>
 
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}

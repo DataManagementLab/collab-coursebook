@@ -3,14 +3,50 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView
-from django.views.generic.edit import FormMixin, CreateView, DeleteView
+from django.views.generic.edit import FormMixin, CreateView, DeleteView, UpdateView
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Course, CourseStructureEntry
 from base.utils import create_topic_and_subtopic_list, check_owner_permission
 from frontend.forms import AddAndEditCourseForm, FilterAndSortForm
+
+
+class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """
+    Duplicate a course
+    """
+    model = Course
+    template_name = 'frontend/course/duplicate.html'
+    form_class = AddAndEditCourseForm
+    success_url = reverse_lazy('frontend:dashboard')
+
+    def get_success_message(self, cleaned_data):
+        original_course = Course.objects.get(pk=self.get_object().id)
+        return _(f"Course '{cleaned_data['title']}' successfully created. All settings and contents of the course '{original_course.title}' were copied.")
+
+    def get_initial(self):
+        course_to_duplicate = Course.objects.get(pk=self.get_object().id)
+        data = course_to_duplicate.__dict__
+        # set data not included in the dict
+        data['owners'] = get_user(self.request)
+        data['image'] = course_to_duplicate.image
+        # this data has the wrong key
+        data['category'] = course_to_duplicate.category
+        data['period'] = course_to_duplicate.period
+        return data
+
+    def form_valid(self, form):
+        duplicated_course = form.save()
+        original_course = Course.objects.get(pk=self.get_object().id)
+        course_structure_entries = CourseStructureEntry.objects.filter(course=original_course)
+        # duplicate course structure entries
+        for entry in course_structure_entries:
+            entry.pk = None
+            entry.course = duplicated_course
+            entry.save()
+        return super().form_valid(form)
 
 
 class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -34,6 +70,22 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pyl
         initial = super().get_initial()
         initial['owners'] = get_user(self.request).profile
         return initial
+
+
+class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    """
+    Edit course
+    """
+    model = Course
+    template_name = 'frontend/course/edit.html'
+    form_class = AddAndEditCourseForm
+
+    def get_success_url(self):
+        course_id = self.get_object().id
+        return reverse('frontend:course', args=(course_id,))
+
+    def get_success_message(self, cleaned_data):
+        return _(f"Course '{cleaned_data['title']}' successfully edited")
 
 
 class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
