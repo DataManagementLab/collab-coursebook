@@ -28,4 +28,5 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py check
+        python manage.py makemigrations --check
         python manage.py test --settings collab-coursebook.settings_ci
