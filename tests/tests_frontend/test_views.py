@@ -138,7 +138,6 @@ class Test_profile_classed_based_views(TestCase):
         view = ProfileEditView()
         view.setup(self.request_profile_edit)
         response = ProfileEditView.as_view()(self.request_profile_edit)
-
         self.assertEquals(response.status_code, 200)
         self.assertEquals(view.get_success_url(), self.request_profile.path)
         self.assertEquals(view.get_object(), self.profile)
@@ -194,7 +193,6 @@ class Test_search_classed_based_views(TestCase):
     # todo test for all searching possibilities?
 
 
-
 class Test_courses_classed_based_views(TestCase):
 
     def setUp(self):
@@ -217,16 +215,16 @@ class Test_courses_classed_based_views(TestCase):
         self.comment = Comment.objects.create(content=self.content, author=self.profile, text="Comment")
         self.course = Course.objects.create(title="Course", description="D", category=self.category,
                                             period=self.period)
-        for i in range(CourseListView.paginate_by): # to have more than one site
-            Course.objects.create(title="Course"+str(i), description="D", category=self.category,
-                                            period=self.period)
+        for i in range(CourseListView.paginate_by):  # to have more than one site
+            Course.objects.create(title="Course" + str(i), description="D", category=self.category,
+                                  period=self.period)
         self.structure = CourseStructureEntry.objects.create(course=self.course, index="1", topic=self.topic)
 
         self.request_courses = RequestFactory().get(reverse("frontend:courses"))
         self.request_courses.user = self.staffuser  # for factory
 
         self.request_category_courses = RequestFactory().get(reverse("frontend:category-courses",
-                                                                     args=[self.category.id,]))
+                                                                     args=[self.category.id, ]))
         self.request_category_courses.user = self.staffuser  # for factory
 
         self.request_period_courses = RequestFactory().get(
@@ -235,7 +233,7 @@ class Test_courses_classed_based_views(TestCase):
 
     def test_CourseListView(self):
         view = CourseListView()
-        view.setup(self.request_courses, **{'sort':'title-z'})  # ** = kwargs var
+        view.setup(self.request_courses, **{'sort': 'title-z'})  # ** = kwargs var
         self.assertTrue(len(view.get_queryset()) == 10)
         view.object_list = []
         self.assertEquals(view.get_context_data()["sort"], "Z-A")
@@ -243,7 +241,6 @@ class Test_courses_classed_based_views(TestCase):
 
         response = CourseListView.as_view()(self.request_courses)
         self.assertEquals(response.status_code, 200)
-
 
     def test_CourseListForCategoryView(self):
         view = CourseListForCategoryView()
@@ -289,5 +286,4 @@ class Test_courses_classed_based_views(TestCase):
         response = CourseListForPeriodView.as_view()(self.request_period_courses, pk=self.period_fake.id)
         self.assertEquals(response.status_code, 200)
 
-# todo aufteilen in einzelne files ?
-# todo es fehlt bei views: content course coursebook comment(oben angefangen)
+
