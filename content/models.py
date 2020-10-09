@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from base.models import Content
 from content.mixin import GeneratePreviewMixin
 from pdf2image import convert_from_path, convert_from_bytes
+from PIL import Image
 from pdf2image.exceptions import (
     PDFInfoNotInstalledError,
     PDFPageCountError,
@@ -77,7 +78,7 @@ class PdfContent(models.Model, GeneratePreviewMixin):
             os.makedirs(os.path.join(settings.MEDIA_ROOT,preview_folder))
         base_filename = os.path.splitext(os.path.basename(self.pdf.name))[0] + '.jpg'
         # get images for every page
-        pages = convert_from_path(self.pdf.path)
+        pages = convert_from_path(self.pdf.path,last_page=2)
         # save first page to disk
         pages[0].save(os.path.join(settings.MEDIA_ROOT,preview_folder, base_filename))
         return os.path.join(preview_folder, base_filename)
