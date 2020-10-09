@@ -1,0 +1,315 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load i18n %}
+{% load static %}
+{% load fontawesome_5 %}
+
+{# Load CSS and JavaScript #}
+
+{% block title %}{% trans "Edit course structure" %} - Collab Coursebook{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
+{% endblock %}
+{% block content %}
+    <script type="text/javascript" src="{% static 'Nestable2/jquery.nestable.js' %}"></script>
+    <link href="{% static 'collab_coursebook/css/edit_structure.css' %}" type="text/css" rel="stylesheet"/>
+
+    <div><h1>Course Structure
+    </h1></div>
+
+    {# Select Topic #}
+    <div class="container-fluid">
+        <div class="row">
+            1. Select a Topic or create one
+        </div>
+        <div class="row">
+            {% csrf_token %}
+            {{ form }}
+            {{ form.media }}
+
+        </div>
+    </div>
+    <br>
+    {# Structure Editor #}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="cf nestable-lists">
+                <p> 2. Edit the Structure:</p>
+                <p> To create a subtopic intend a topic by dragging it to the right </p>
+                <div class="dd" id="nestable">
+                    <ol class="dd-list" id="dd-list-app-categories-container">
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button onclick="send1()" type="submit" class="btn btn-primary mr-1"> Create</button>
+            <a href="{% url 'frontend:course' course.id %}" class="btn btn-secondary"> Cancel</a><br>
+        </div>
+
+    </div>
+
+{#    Display output for Debugging #}
+  {% comment %} <br>
+    <textarea id="nestable-output"></textarea>{% endcomment %}
+
+    <script>
+        var nestableCount = 0;
+        var listOfTopics = [];
+        var obj = JSON.stringify({{ existing_structure|safe }});
+
+
+        function buildItem(item) {
+
+            var html = "<li class='dd-item dd3-item' data-id='" + item.id + "' id='" + item.id + "' data-value='" + item.value + "' >";
+            html += ' <div class="dd-handle dd3-handle"></div>\n' +
+                '                    <a href="#" class="close close-assoc-file"\n' +
+                '                       data-dismiss="alert" aria-label="close">&times;</a>\n' +
+                '                    <div class="dd3-content">' + item.value + '</div>'
+
+            if (item.children) {
+
+                html += "<ol class='dd-list'>";
+                $.each(item.children, function (index, sub) {
+                    html += buildItem(sub);
+                    listOfTopics.push(item.value);
+                });
+                html += "</ol>";
+
+            }
+
+            html += "</li>";
+            listOfTopics.push(item.value);
+            console.log(nestableCount)
+            nestableCount++
+            console.log(nestableCount)
+
+            return html;
+        }
+
+        // Create Structure if already exist
+        if (obj !== '[null]') {
+            $.each(JSON.parse(obj), function (index, item) {
+
+                $('#dd-list-app-categories-container').append(buildItem(item));
+
+
+            });
+        }
+
+        var updateOutput = function (e) {
+            var list = e.length ? e : $(e.target),
+                output = list.data('output');
+            if (window.JSON) {
+                output.val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+            } else {
+                output.val('JSON browser support required for this demo.');
+            }
+        };
+        // add Topic to Structure when Topic is created or selected
+        $(function () {
+            var editButtonVisibility = function () {
+                var topic_name = document.getElementById('select2-id_topic_name-container').innerText.split("\n")[0]
+
+                // Add Item
+                addToStrucutre();
+                observer.disconnect();
+                {#document.getElementById('select2-id_topic_name-container').innerText = "";#}
+                $('#id_topic_name').val(null).trigger('change');
+                observer.observe($('#select2-id_topic_name-container')[0], {
+                    characterData: true,
+                    childList: true
+                });
+            }
+
+            $('#RiskPostcodeSummary span').on("change", function () {
+                console.log("pew pew");
+            });
+
+            var observer = new MutationObserver(function (e) {
+                editButtonVisibility();
+            });
+
+            observer.observe($('#select2-id_topic_name-container')[0], {
+                characterData: true,
+                childList: true
+            });
+        });
+
+        // FOR ADDING from json
+
+
+        function addToStrucutre() {
+            var topic_name = document.getElementById('select2-id_topic_name-container').innerText.split("\n")[0]
+
+
+            var $newItem = $('<li>', {
+                class: 'dd-item dd3-item',
+                'data-id': ++nestableCount,
+                'data-value': topic_name,
+
+                html: ' <div class="dd-handle dd3-handle"></div>\n' +
+                    '                    <a href="#" class="close close-assoc-file"\n' +
+                    '                       data-dismiss="alert" aria-label="close">&times;</a>\n' +
+                    '                    <div class="dd3-content">' + topic_name + '</div>'
+            });
+            $newItem.find('.close').click(removeOnClick);
+            if (topic_name && !listOfTopics.includes(topic_name)) {
+                $('#dd-list-app-categories-container').append($newItem);
+                listOfTopics.push(topic_name)
+                $newItem = null;
+            } else {
+                alert("Topic does not exist or is already in the Structure")
+            }
+
+        }
+
+        // FOR REMOVING
+        $("#dd-list-app-categories-container .close").on("click", removeOnClick);
+
+        function removeOnClick(event) {
+            // remove from List of Topic
+            topic = $(this).closest('li')[0].getAttribute('data-value');
+            indexoftopic = listOfTopics.indexOf(topic);
+            listOfTopics.splice(indexoftopic);
+            $('#select2').val(null).trigger('change');
+            $(this).closest('li').remove();
+            if (nestableCount > 0) {
+                nestableCount--
+            }
+
+        }
+
+        // FOR EDIT
+        $('#dd-list-app-categories-container').on('dblclick', '#category-item', function () {
+            var $input = $('<input type="text" value="' + $(this).text().trim() + '" />');
+            $(this).html($input);
+            $input.select();
+            $input = null;
+        }).on('blur', 'input', function () {
+            $(this.closest('#category-item')).html($(this).val());
+            $(this).remove();
+        });
+
+        // activate Nestable for list
+        $('#nestable').nestable({
+            maxDepth: 2,
+            {#json: {{ existing_structure|safe }}#}
+        })
+            .on('change', updateOutput);
+        updateOutput($('#nestable').data('output', $('#nestable-output')));
+
+        {# Send to Server #}
+
+        function send1() {
+            var test = $('#nestable').data()
+            console.log("Nestable Data" + test)
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+
+                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                        // Only send the token to relative URLs i.e. locally.
+                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    }
+                }
+            });
+
+            $.ajax({
+                url: '{% url 'frontend:course-edit-structure' course.id %}',//'/course/{{ course.id }}/' + 'edit/structure/',
+                type: 'post',
+                //dataType: 'json',
+                ContentType: 'application/json',
+                success: function (data) {
+                    {#alert(window.JSON.stringify($('#nestable').data('output', $('#nestable-output')).nestable('serialize')))#}
+                    window.location.href = "{% url 'frontend:course' course.id %}"
+
+                },
+                error: function (data) {
+                    alert('Exception: Datenübertragung zum server' + data.status);
+                    alert(window.JSON.stringify($('#nestable').data('output', $('#nestable-output')).nestable('serialize')));
+                },
+                data: {'topic_list': window.JSON.stringify($('#nestable').data('output', $('#nestable-output')).nestable('serialize'))}
+            });
+
+
+        }
+
+        /* This will allow the user to click the question mark */
+        $('abbr').each(function () {
+            $(this).data('title', $(this).attr('title'));
+            $(this).removeAttr('title')
+        });
+
+        $('abbr').mouseover(function () {
+
+            // first remove all existing abbreviation tooltips
+            $('abbr').next('.tooltip').remove();
+
+            // create the tooltip
+            $(this).after('<span class="tooltip">' + $(this).data('title') + '</span>');
+
+            // position the tooltip 4 pixels above and 4 pixels to the left of the abbreviation
+            var left = $(this).position().left + $(this).width() + 4;
+            var top = $(this).position().top - 4;
+            $(this).next().css('left', left);
+            $(this).next().css('top', top);
+
+        });
+
+        $('abbr').click(function () {
+
+            $(this).mouseover();
+
+            // after a slight 2 second fade, fade out the tooltip for 1 second
+            $(this).next().animate({opacity: 0.9}, {
+                duration: 100, complete: function () {
+                    setTimeout(() => {
+                        $(this).fadeOut(1000)
+                    }, 3000)
+
+                }
+            });
+
+        });
+
+        /**
+         * Remove the tooltip on abbreviation mouseout
+         */
+        $('abbr').mouseout(function () {
+
+            $(this).next('.tooltip').remove();
+
+        });
+    </script>
+{% endblock %}
+
+
+
+{% block bottom_script %}
+    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
+    <script>
+        $(function () {
+            $('.chosen-select').chosen();
+        });
+    </script>
+{% endblock %}

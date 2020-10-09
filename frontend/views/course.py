@@ -1,12 +1,16 @@
+import json
+
 from django.contrib.auth import get_user
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin, CreateView, DeleteView, UpdateView
 from django.utils.translation import gettext_lazy as _
+from .json_handler import JsonHandler
 
 from base.models import Course, CourseStructureEntry
 from base.utils import create_topic_and_subtopic_list, check_owner_permission
@@ -24,7 +28,8 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def get_success_message(self, cleaned_data):
         original_course = Course.objects.get(pk=self.get_object().id)
-        return _(f"Course '{cleaned_data['title']}' successfully created. All settings and contents of the course '{original_course.title}' were copied.")
+        return _(
+            f"Course '{cleaned_data['title']}' successfully created. All settings and contents of the course '{original_course.title}' were copied.")
 
     def get_initial(self):
         course_to_duplicate = Course.objects.get(pk=self.get_object().id)
@@ -86,6 +91,60 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
     def get_success_message(self, cleaned_data):
         return _(f"Course '{cleaned_data['title']}' successfully edited")
+
+
+class EditCourseStructureView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    """
+    Edit course Structure
+    """
+    model = Course
+    template_name = 'frontend/course/edit_structure.html'
+    form_class = AddAndEditCourseForm
+
+    def get_success_url(self):
+        course_id = self.get_object().id
+        return reverse('frontend:course', args=(course_id,))
+
+    def get_success_message(self, cleaned_data):
+        return _(f"Course '{cleaned_data['title']}' Structure successfully edited")
+
+def edit_course_structure(request, course_id):
+    """
+    For editing the Course structure. It is displayed in a drag and droppable view.
+    :param HttpRequest request: The given request
+    :param int course_id: the id of the course whose structure should be edited
+    :return: It renders the response if there is no post, if there was it redirects
+    to the course view
+    :rtype: HttpResponse
+    """
+    course = Course.objects.get(pk=course_id)
+    # Topics
+    # create_structure_from_form(request, add_topic_formset, created_course)
+    if get_user(request) not in course.owner.all():
+        messages.error(request, "You don't have permission to do this.",
+                       extra_tags="alert-danger")
+        return HttpResponseRedirect(reverse('view_course', args=(course_id,)))
+    if request.method == 'POST':
+        print(request.POST)
+        json_topic_list = request.POST.get('topic_list')
+
+        data = json.loads(json_topic_list)
+        CourseStructureEntry.objects.filter(course=course).delete()
+        JsonHandler.create_structures_from_json_data(course, data)
+
+        return HttpResponseRedirect(reverse('view_course', args=(course.id,)))
+
+    if request.GET.get('duplicate'):
+        duplicate_course = Course.objects.get(pk=request.GET.get('duplicate'))
+        json_response = JsonHandler.create_json_topics_structure(duplicate_course)
+    else:
+        json_response = JsonHandler.create_json_topics_structure(course)
+
+    course = Course.objects.get(pk=course_id)
+    return render(request, 'course/edit_course_structure.html',
+                  {'course': course, 'form': AddTopicForm(),
+                   'existing_structure': json.dumps(json_response)})
+
 
 
 class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
@@ -150,7 +209,7 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
             # Subtopic
             # Only handle up to one subtopic level
             else:
-                current_topic["subtopics"].append({'subtopic': entry.topic,  'topic_contents': entry.topic
+                current_topic["subtopics"].append({'subtopic': entry.topic, 'topic_contents': entry.topic
                                                   .get_contents(self.sorted_by, self.filtered_by)})
 
         context["structure"] = topics_recursive
@@ -159,7 +218,6 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
             context['sorting'] = self.sorted_by
         if self.filtered_by is not None:
             context['filtering'] = self.filtered_by
-
 
         """# create a list of topics ordered by (sub-)topic and index
         flat_topic_list = create_topic_and_subtopic_list(topics, super().get_object())

@@ -23,6 +23,7 @@ urlpatterns = [
             path('duplicate/', views.course.DuplicateCourseView.as_view(), name='course-duplicate'),
             path('', views.CourseView.as_view(), name='course'),
             path('edit/', views.course.EditCourseView.as_view(), name='course-edit'),
+            path('edit_structure/', views.course.EditCourseStructureView.as_view(), name='course-edit-structure'),
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
             path('coursebook/', generate_coursebook_response, name='coursebook-generate'),
         ])),

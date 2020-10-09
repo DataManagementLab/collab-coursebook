@@ -17,6 +17,7 @@
 
 {% block content %}
     <h1>Edit Course</h1>
+        <a href="{% url 'frontend:course-edit-structure' course.id %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Edit Structure" %}</a>
 
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}

@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'frontend',
     'content',
     'export',
+    'dal',
+    'dal_select2'
+
 ]
 
 MIDDLEWARE = [
