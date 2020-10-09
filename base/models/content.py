@@ -1,3 +1,5 @@
+from time import timezone
+
 from django.conf import settings
 from django.db import models
 from django.db.models import Avg
@@ -69,6 +71,28 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_sorted_topic_list(self):
+        """
+        Sorts the topics
+        :return: the sorted topiclist
+        :rtype: QuerySet
+        """
+        return self.topics.order_by('child_topic__index')
+
+    def add_topic_to_list(self, topic_name, index, user):
+        """
+        creates a structure to an existing topic
+        :param str topic_name: topic name
+        :param int index: index
+        :param User user: user
+        :return: the topic
+        :rtype: topic
+        """
+        topic = Topic.objects.get_or_create(title=topic_name, defaults={  # pylint: disable=no-member
+            'creation_date': timezone.now(), 'author': user})[0]
+        CourseStructureEntry.objects.create(course=self, index=index, topic=topic)  # pylint: disable=no-member
+        return topic
 
 
 class Topic(models.Model):
