@@ -30,7 +30,7 @@ urlpatterns = [
                     TopicAutocomplete.as_view(create_field='name'),
                     name='select_topic'
                 ),
-            path('edit_structure/', views.course.EditCourseStructureView.as_view(), name='course-edit-structure'),
+            path('edit_structure/', views.course.edit_course_structure, name='course-edit-structure'),
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
             path('coursebook/', generate_coursebook_response, name='coursebook-generate'),
         ])),

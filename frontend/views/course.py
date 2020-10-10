@@ -15,6 +15,7 @@ from .json_handler import JsonHandler
 from base.models import Course, CourseStructureEntry
 from base.utils import create_topic_and_subtopic_list, check_owner_permission
 from frontend.forms import AddAndEditCourseForm, FilterAndSortForm
+from ..forms.addtopic import AddTopicForm
 
 
 class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -108,7 +109,7 @@ class EditCourseStructureView(SuccessMessageMixin, LoginRequiredMixin, UpdateVie
     def get_success_message(self, cleaned_data):
         return _(f"Course '{cleaned_data['title']}' Structure successfully edited")
 
-def edit_course_structure(request, course_id):
+def edit_course_structure(request, pk):
     """
     For editing the Course structure. It is displayed in a drag and droppable view.
     :param HttpRequest request: The given request
@@ -117,13 +118,13 @@ def edit_course_structure(request, course_id):
     to the course view
     :rtype: HttpResponse
     """
-    course = Course.objects.get(pk=course_id)
+    course = Course.objects.get(pk=pk)
     # Topics
     # create_structure_from_form(request, add_topic_formset, created_course)
-    if get_user(request) not in course.owner.all():
-        messages.error(request, "You don't have permission to do this.",
-                       extra_tags="alert-danger")
-        return HttpResponseRedirect(reverse('view_course', args=(course_id,)))
+    # if get_user(request) not in course.owner.all():
+    #     messages.error(request, "You don't have permission to do this.",
+    #                    extra_tags="alert-danger")
+    #     return HttpResponseRedirect(reverse('view_course', args=(pk,)))
     if request.method == 'POST':
         print(request.POST)
         json_topic_list = request.POST.get('topic_list')
@@ -140,8 +141,8 @@ def edit_course_structure(request, course_id):
     else:
         json_response = JsonHandler.create_json_topics_structure(course)
 
-    course = Course.objects.get(pk=course_id)
-    return render(request, 'course/edit_course_structure.html',
+    course = Course.objects.get(pk=pk)
+    return render(request, 'frontend/course/edit_structure.html',
                   {'course': course, 'form': AddTopicForm(),
                    'existing_structure': json.dumps(json_response)})
 
@@ -249,6 +250,28 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
 
         return context
 
+# Reads a curse Structure from a TopicFormset and adds it to the database
+def create_structure_from_form(request, edit_form, course_instance):
+    # TODO: remove counter
+    counter = 0
+    for i in range(0, len(edit_form)):
+        topic_form = edit_form[i]
+        # TODO: remove if
+        # skip empty forms
+        if 'topic_name' in topic_form.cleaned_data:
+            # get data from the form
+            topic_title = topic_form.cleaned_data['topic_name']
+            # TODO: remove if
+            # if a user clicks the delete button of a form field only the content is removed -
+            # "not the data in the background"
+            if topic_title is None:
+                continue
+
+            user = get_user(request)
+            # create topic in the database
+            # TODO: replace counter with 'i'
+            course_instance.add_topic_to_list(topic_title, counter, user)
+            counter += 1
 
 class CourseDeleteView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
     """
