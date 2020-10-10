@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.urls import path, re_path, include
 
 from export.views import generate_coursebook_response
@@ -5,6 +6,7 @@ from content.models import CONTENT_TYPES
 from frontend import views
 from frontend.views.search import SearchView
 from frontend.views.coursebook import add_to_coursebook, remove_from_coursebook
+from frontend.views.autocomplete import TopicAutocomplete
 
 app_name = "frontend"
 
@@ -23,6 +25,11 @@ urlpatterns = [
             path('duplicate/', views.course.DuplicateCourseView.as_view(), name='course-duplicate'),
             path('', views.CourseView.as_view(), name='course'),
             path('edit/', views.course.EditCourseView.as_view(), name='course-edit'),
+            url(
+                    r'^topic-autocomplete/$',
+                    TopicAutocomplete.as_view(create_field='name'),
+                    name='select_topic'
+                ),
             path('edit_structure/', views.course.EditCourseStructureView.as_view(), name='course-edit-structure'),
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
             path('coursebook/', generate_coursebook_response, name='coursebook-generate'),

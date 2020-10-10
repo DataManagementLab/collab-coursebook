@@ -11,18 +11,20 @@
 {% block title %}{% trans "Edit course structure" %} - Collab Coursebook{% endblock %}
 
 {% block imports %}
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
+    <link rel="stylesheet" href="{% static 'css/edit_structure.css' %}" >
+    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <script type="text/javascript" src="{% static 'Nestable2/jquery.nestable.js' %}"></script>
-    <link href="{% static 'collab_coursebook/css/edit_structure.css' %}" type="text/css" rel="stylesheet"/>
+    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.js' %}"></script>
 
     <div><h1>Course Structure
     </h1></div>
 
     {# Select Topic #}
-    <div class="container-fluid">
+ {% comment %}   <div class="container-fluid">
         <div class="row">
             1. Select a Topic or create one
         </div>
@@ -32,7 +34,7 @@
             {{ form.media }}
 
         </div>
-    </div>
+    </div>{% endcomment %}
     <br>
     {# Structure Editor #}
     <div class="container-fluid">
@@ -55,8 +57,8 @@
     </div>
 
 {#    Display output for Debugging #}
-  {% comment %} <br>
-    <textarea id="nestable-output"></textarea>{% endcomment %}
+
+    <textarea id="nestable-output"></textarea>
 
     <script>
         var nestableCount = 0;
