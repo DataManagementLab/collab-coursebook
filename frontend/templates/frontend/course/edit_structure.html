@@ -18,7 +18,6 @@
     <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.js' %}"></script>
 
     <div><h1>Course Structure
     </h1></div>
@@ -45,6 +44,27 @@
                 <div class="dd" id="nestable">
                     <ol class="dd-list" id="dd-list-app-categories-container">
 
+            <li class="dd-item" data-id="13">
+                <div class="dd-handle">Item 13</div>
+            </li>
+            <li class="dd-item" data-id="14">
+                <div class="dd-handle">Item 14</div>
+            </li>
+            <li class="dd-item" data-id="15">
+                <div class="dd-handle">Item 15</div>
+                <ol class="dd-list">
+                    <li class="dd-item" data-id="16">
+                        <div class="dd-handle">Item 16</div>
+                    </li>
+                    <li class="dd-item" data-id="17">
+                        <div class="dd-handle">Item 17</div>
+                    </li>
+                    <li class="dd-item" data-id="18">
+                        <div class="dd-handle">Item 18</div>
+                    </li>
+                </ol>
+            </li>
+        </ol>
                     </ol>
                 </div>
             </div>
@@ -60,8 +80,20 @@
 
     <textarea id="nestable-output"></textarea>
 
-    <script>
-        var nestableCount = 0;
+<script>
+        var obj = JSON.stringify({{ existing_structure|safe }});
+    console.log(obj)
+
+</script>
+{% endblock %}
+
+
+
+{% block bottom_script %}
+    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
+    {% comment %}<script>
+
+               var nestableCount = 0;
         var listOfTopics = [];
         var obj = JSON.stringify({{ existing_structure|safe }});
 
@@ -302,16 +334,5 @@
             $(this).next('.tooltip').remove();
 
         });
-    </script>
-{% endblock %}
-
-
-
-{% block bottom_script %}
-    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
-    <script>
-        $(function () {
-            $('.chosen-select').chosen();
-        });
-    </script>
+    </script>{% endcomment %}
 {% endblock %}
