@@ -11,7 +11,7 @@
 {% block title %}{% trans "Edit course structure" %} - Collab Coursebook{% endblock %}
 
 {% block imports %}
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
     <link rel="stylesheet" href="{% static 'css/edit_structure.css' %}" >
@@ -23,7 +23,7 @@
     </h1></div>
 
     {# Select Topic #}
- {% comment %}   <div class="container-fluid">
+    <div class="container-fluid">
         <div class="row">
             1. Select a Topic or create one
         </div>
@@ -33,7 +33,7 @@
             {{ form.media }}
 
         </div>
-    </div>{% endcomment %}
+    </div>
     <br>
     {# Structure Editor #}
     <div class="container-fluid">
@@ -91,7 +91,7 @@
 
 {% block bottom_script %}
     <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
-    {% comment %}<script>
+    <script>
 
                var nestableCount = 0;
         var listOfTopics = [];
@@ -334,5 +334,5 @@
             $(this).next('.tooltip').remove();
 
         });
-    </script>{% endcomment %}
+    </script>
 {% endblock %}

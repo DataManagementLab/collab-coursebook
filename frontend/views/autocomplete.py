@@ -6,13 +6,11 @@ from base.models import content
 # This class is the Autocomplete used in the Topic Form to determine the structure
 class TopicAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            return content.Topic.objects.none()
         qs = content.Topic.objects.all()
-
         if self.q:
+            print("self.q", self.q)
             qs = qs.filter(title__startswith=self.q)
-
+        print("qs", qs)
         return qs
 
     # Creates a new Topic with the given text as title

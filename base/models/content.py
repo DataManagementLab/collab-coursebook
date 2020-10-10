@@ -78,7 +78,10 @@ class Course(models.Model):
         :return: the sorted topiclist
         :rtype: QuerySet
         """
-        return self.topics.order_by('child_topic__index')
+        print(self.topics.order_by('coursestructureentry'))
+        #return self.topics.order_by('child_topic__index')
+        # todo find right child entry structure
+        return self.topics.order_by('coursestructureentry__index')
 
     def add_topic_to_list(self, topic_name, index, user):
         """
