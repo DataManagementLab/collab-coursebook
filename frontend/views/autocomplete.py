@@ -8,9 +8,7 @@ class TopicAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = content.Topic.objects.all()
         if self.q:
-            print("self.q", self.q)
             qs = qs.filter(title__startswith=self.q)
-        print("qs", qs)
         return qs
 
     # Creates a new Topic with the given text as title
