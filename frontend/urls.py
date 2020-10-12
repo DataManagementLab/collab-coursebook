@@ -17,6 +17,7 @@ urlpatterns = [
     path('profile/<int:pk>/', views.ProfileView.as_view(), name="profile"),
     path('profile/edit/', views.ProfileEditView.as_view(), name="profile-edit"),
 
+    url(r'^topic-autocomplete/$', TopicAutocomplete.as_view(create_field='name'), name='select_topic'),
     path('courses/', include([
         re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$',
                 views.CourseListView.as_view(), name='courses-sort'),
@@ -25,11 +26,6 @@ urlpatterns = [
             path('duplicate/', views.course.DuplicateCourseView.as_view(), name='course-duplicate'),
             path('', views.CourseView.as_view(), name='course'),
             path('edit/', views.course.EditCourseView.as_view(), name='course-edit'),
-            url(
-                    r'^topic-autocomplete/$',
-                    TopicAutocomplete.as_view(create_field='name'),
-                    name='select_topic'
-                ),
             path('edit_structure/', views.course.edit_course_structure, name='course-edit-structure'),
             path('delete/', views.CourseDeleteView.as_view(), name='course-delete'),
             path('coursebook/', generate_coursebook_response, name='coursebook-generate'),
