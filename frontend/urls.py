@@ -17,7 +17,7 @@ urlpatterns = [
     path('profile/<int:pk>/', views.ProfileView.as_view(), name="profile"),
     path('profile/edit/', views.ProfileEditView.as_view(), name="profile-edit"),
 
-    url(r'^topic-autocomplete/$', TopicAutocomplete.as_view(create_field='name'), name='select_topic'),
+    path(r'^topic-autocomplete/$', TopicAutocomplete.as_view(create_field='name'), name='select-topic'),
     path('courses/', include([
         re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$',
                 views.CourseListView.as_view(), name='courses-sort'),
