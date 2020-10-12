@@ -125,9 +125,7 @@ def edit_course_structure(request, pk):
     #     messages.error(request, "You don't have permission to do this.",
     #                    extra_tags="alert-danger")
     #     return HttpResponseRedirect(reverse('view_course', args=(pk,)))
-    print(request)
     if request.method == 'POST':
-        print("req.post:", request.POST)
         json_topic_list = request.POST.get('topic_list')
 
         data = json.loads(json_topic_list)
@@ -140,7 +138,6 @@ def edit_course_structure(request, pk):
         duplicate_course = Course.objects.get(pk=request.GET.get('duplicate'))
         json_response = JsonHandler.create_json_topics_structure(duplicate_course)
     else:
-        print("else called")
         # create topic list and call the structure editor with the render command
         json_response = JsonHandler.create_json_topics_structure(course)
 
