@@ -1,22 +1,23 @@
 {% extends 'frontend/base_logged_in.html' %}
-
-{# Load the tag library #}
-{% load bootstrap4 %}
-{% load i18n %}
 {% load static %}
-{% load fontawesome_5 %}
-
-{# Load CSS and JavaScript #}
-
-{% block title %}{% trans "Edit course structure" %} - Collab Coursebook{% endblock %}
-
 {% block imports %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="{% static 'js/Nestable2/jquery.nestable.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-3.5.1.js' %}"></script>
     <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
     <link rel="stylesheet" href="{% static 'css/edit_structure.css' %}" >
-    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.js' %}"></script>
 {% endblock %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load i18n %}
+
+{% load fontawesome_5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+
+{% block title %}Edit - Collab Coursebook{% endblock %}
+
 {% block content %}
 
     <div><h1>Course Structure
@@ -43,8 +44,7 @@
                 <p> To create a subtopic intend a topic by dragging it to the right </p>
                 <div class="dd" id="nestable">
                     <ol class="dd-list" id="dd-list-app-categories-container">
-
-                    </ol>
+   </ol>
                 </div>
             </div>
         </div>
@@ -56,23 +56,20 @@
     </div>
 
 {#    Display output for Debugging #}
-
+   <br>
     <textarea id="nestable-output"></textarea>
 
-<script>
-        var obj = JSON.stringify({{ existing_structure|safe }});
-    console.log(obj)
-
-</script>
-{% endblock %}
-
-
-
-{% block bottom_script %}
-    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
     <script>
+    if (window.jQuery) {
+    // jQuery is available.
 
-               var nestableCount = 0;
+    // Print the jQuery version, e.g. "1.0.0":
+    console.log(window.jQuery.fn.jquery);
+}
+    $(document).ready(function() {
+      console.log($.ajax);
+    });
+        var nestableCount = 0;
         var listOfTopics = [];
         var obj = JSON.stringify({{ existing_structure|safe }});
 
@@ -208,7 +205,6 @@
             $(this.closest('#category-item')).html($(this).val());
             $(this).remove();
         });
-
         // activate Nestable for list
         $('#nestable').nestable({
             maxDepth: 2,
@@ -221,7 +217,6 @@
 
         function send1() {
             var test = $('#nestable').data()
-            console.log("Nestable Data" + test)
             $.ajaxSetup({
                 beforeSend: function (xhr, settings) {
                     function getCookie(name) {
@@ -267,7 +262,7 @@
 
         }
 
-        /* This will allow the user to click the question mark */
+        {% comment %}/* This will allow the user to click the question mark */
         $('abbr').each(function () {
             $(this).data('title', $(this).attr('title'));
             $(this).removeAttr('title')
@@ -312,6 +307,6 @@
 
             $(this).next('.tooltip').remove();
 
-        });
+        });{% endcomment %}
     </script>
 {% endblock %}

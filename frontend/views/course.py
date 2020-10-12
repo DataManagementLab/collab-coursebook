@@ -120,7 +120,7 @@ def edit_course_structure(request, pk):
     """
     course = Course.objects.get(pk=pk)
     # Topics
-    # create_structure_from_form(request, add_topic_formset, created_course)
+    #create_structure_from_form(request, add_topic_formset, created_course)
     # if get_user(request) not in course.owner.all():
     #     messages.error(request, "You don't have permission to do this.",
     #                    extra_tags="alert-danger")
