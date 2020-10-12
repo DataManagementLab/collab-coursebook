@@ -25,13 +25,14 @@ class JsonHandler:
             topic_id = main_topic['id']
             order = str(i + 1)
             topic = content.Topic.objects.get(title=topic_name)
+            print(topic.id, topic)
             content.CourseStructureEntry.objects.create(topic=topic, course=course, index=order)
             if 'children' in main_topic.keys():
                 children = main_topic['children']
                 for j in range(0, len(children)):
                     child = children[j]
                     child_topic_name = child['value']
-                    order = str(i + 1) + "/" + str(j + 1)
+                    order = str(i + 1) + "/" + str(j + 1)  # todo order id klappt nicht
                     # create child structure
                     topic = content.Topic.objects.get(title=child_topic_name)
                     content.CourseStructureEntry.objects.create(topic=topic, course=course, index=order)

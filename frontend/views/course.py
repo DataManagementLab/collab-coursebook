@@ -127,12 +127,13 @@ def edit_course_structure(request, pk):
     #     return HttpResponseRedirect(reverse('view_course', args=(pk,)))
     if request.method == 'POST':
         json_topic_list = request.POST.get('topic_list')
-
+        print("post:", json_topic_list)
         data = json.loads(json_topic_list)
         CourseStructureEntry.objects.filter(course=course).delete()
         JsonHandler.create_structures_from_json_data(course, data)
 
-        return HttpResponseRedirect(reverse('view_course', args=(course.id,)))
+        #return HttpResponseRedirect(reverse('view_course', args=(course.id,)))
+        return HttpResponseRedirect(reverse_lazy('frontend:course', args=(course.id,)))
 
     if request.GET.get('duplicate'):
         duplicate_course = Course.objects.get(pk=request.GET.get('duplicate'))
