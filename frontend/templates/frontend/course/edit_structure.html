@@ -151,11 +151,20 @@
             });
         });
 
+
+        function reverseString(str) {
+         return str.split("").reverse().join("");
+        }
+        function removeCategory(str) {
+        var rev = reverseString(str)
+            var index = rev.indexOf("(")
+            var splitrev = rev.substring(index+2)
+            return reverseString(splitrev)
+        }
         // FOR ADDING from json
-
-
         function addToStrucutre() {
             var topic_name = document.getElementById('select2-id_topic_name-container').innerText.split("\n")[0]
+            topic_name = removeCategory(topic_name)
 
 
             var $newItem = $('<li>', {
