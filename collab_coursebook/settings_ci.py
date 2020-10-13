@@ -1,8 +1,5 @@
-from collab_coursebook.settings import *
-import collab_coursebook.settings_secrets as secrets
-
 DEBUG = False
-SECRET_KEY = secrets.SECRET_KEY
+SECRET_KEY = 'SECRET'
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
