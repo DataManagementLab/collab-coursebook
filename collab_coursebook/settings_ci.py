@@ -2,6 +2,9 @@
 from collab_coursebook.settings import *
 
 DEBUG = False
+
+ALLOWED_HOSTS = []
+
 SECRET_KEY = 'SECRET'
 
 SESSION_COOKIE_SECURE = True
