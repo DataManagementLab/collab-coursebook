@@ -1,3 +1,6 @@
+# noinspection PyUnresolvedReferences
+from collab_coursebook.settings import *
+
 DEBUG = False
 SECRET_KEY = 'SECRET'
 
