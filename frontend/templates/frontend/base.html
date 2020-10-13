@@ -55,7 +55,9 @@
             <a href="{{ FI.impress_url }}">{% trans "Impress" %}</a> &middot;
         {% endif %}
         {% if FI.repo_url %}
-            <a href="{{ FI.repo_url }}">{% trans "This software is open source" %}</a>
+            <a href="{{ FI.repo_url }}">{% trans "This software is open source" %}</a> &middot;
+            <a href="{% url "frontend:privacy-policy" %}">{% trans "Privacy Policy" %}</a>
+
         {% endif %}
     </div>
 

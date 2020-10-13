@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView
 
 from base.models import Period, Category
@@ -17,3 +19,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx["categories"] = Category.objects.all()
         return ctx
 
+
+class PrivacyPolicyView(TemplateView):
+    template_name = "frontend/privacy_policy.html"
