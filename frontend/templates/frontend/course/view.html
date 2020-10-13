@@ -117,7 +117,7 @@
                                 </div>
                                 <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.subtopic.title }} {% if sorting != "None" %}({{ sorting }}) {% endif %}</h4>
                                 {% with subtopic as topic_replace %}
-                                   {% add_content_button user course.id topic_replace.id %}
+                                   {% add_content_button user course.id topic_replace.subtopic.id %}
                                 {%  endwith %}
                                 <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.title }}</h4>
                                 {% with subtopic.contents.all as topic_contents %}
