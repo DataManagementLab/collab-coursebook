@@ -29,7 +29,7 @@ jobs:
       run: |
         python manage.py check
         python manage.py makemigrations --check
-        python manage.py test --settings collab-coursebook.settings_ci
+        python manage.py test --settings collab_coursebook.settings_ci
     - name: Check Deployment
       run : |
         python manage.py check --deploy --settings=collab_coursebook.settings_production
