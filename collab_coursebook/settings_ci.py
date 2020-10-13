@@ -10,12 +10,12 @@ SECRET_KEY = 'SECRET'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'HOST': '127.0.0.1',
-#         'NAME': 'test',
-#         'USER': 'django',
-#         'PASSWORD': 'test'
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': '127.0.0.1',
+        'NAME': 'test',
+        'USER': 'django',
+        'PASSWORD': 'test'
+    }
+}
