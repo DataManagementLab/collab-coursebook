@@ -1,7 +1,9 @@
-from time import timezone
-
+from time import timezone as tz
+import datetime
 from dal import autocomplete
 from base.models import content
+from base.utils import get_user
+
 
 # This class is the Autocomplete used in the Topic Form to determine the structure
 class TopicAutocomplete(autocomplete.Select2QuerySetView):
@@ -9,11 +11,14 @@ class TopicAutocomplete(autocomplete.Select2QuerySetView):
         qs = content.Topic.objects.all()
         if self.q:
             qs = qs.filter(title__startswith=self.q)
+            print("qs", qs)
+            print("q", self.q)
         return qs
 
     # Creates a new Topic with the given text as title
-    # creation_date is the current time and author is the logged in user
     def create_object(self, text):
         """Create an object given a text."""
-        return content.Topic.objects.get_or_create(title=text, creation_date=timezone.now(), author=content.get_user(self.request))[0]
-
+        print("text", text)
+        return content.Topic.objects.get_or_create(title=text,
+                                                   category=content.Category.objects.get_or_create(title="Default")[
+                                                       0])  # todo make change of category possible

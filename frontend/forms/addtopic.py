@@ -10,6 +10,7 @@ class AddTopicForm(forms.Form):
     """
     Form to add a topic. Used in the formset
     """
+    print("TOPIC:",Topic.objects.all())  # return topic and category
     topic_name = forms.ModelChoiceField(required=False, queryset=Topic.objects.all(),  # pylint: disable=no-member
                                         widget=autocomplete.ModelSelect2('frontend:select-topic'), label='')
 
