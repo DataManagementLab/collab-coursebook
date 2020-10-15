@@ -123,3 +123,28 @@ def get_coursebook(user, course):
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
     return coursebook
+
+
+@register.filter
+def check_privacy_policy(user):
+    """
+    check if user accept_privacy_policy model field is None
+    :param user: the user
+    :return: boolean
+    """
+    if user.get_username() != "":  # visitors on the website don't have an account name
+        profile = user.profile
+        if profile.accept_privacy_policy is None:
+            return True
+    return False
+
+
+@register.filter
+def accept_privacy_policy_tag(user):
+    """
+    Get footer info from settings
+    :return: footer info
+    :rtype: dict[str, str]
+    """
+    if user.profile.accept_privacy_policy is None:
+        user.profile.privacy_policy()

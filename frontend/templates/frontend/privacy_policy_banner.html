@@ -1,0 +1,21 @@
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% load cc_frontend_tags %}
+
+<script>
+    function hide(){
+        document.getElementById("pp-container").style.display = 'none';
+    }
+</script>
+
+{% if user|check_privacy_policy %}
+
+    <div id="pp-container" style="position: sticky;bottom: 0%;background: #f6b93b;color: #f5f6fa;padding-top:1em;padding-bottom:3em;" class="container">
+        <div class="float-left" style="  padding: 0.375rem 0.75rem;"> <a> {% trans "In order to use our website please agree with our" %} </a> <a href="{% url "frontend:privacy-policy" %}">{% trans "Privacy Policy" %}</a>
+        </div>
+        <a class="btn btn-danger float-right" onclick="hide();{{ user|accept_privacy_policy_tag }} ">{% trans "Accept" %}</a>
+    </div>
+
+{% endif %}

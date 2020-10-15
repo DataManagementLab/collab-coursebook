@@ -12,8 +12,15 @@ class Profile(models.Model):
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
     stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"), related_name="staring_users")
 
+    accept_privacy_policy = models.BooleanField(verbose_name=_("Privacy Policy"), null=True)
+
     def __str__(self):
         return str(self.user)
+
+    def privacy_policy(self):
+        # update that the user accepted our privacy policy
+        self.accept_privacy_policy = True
+        self.save()
 
 
 @receiver(post_save, sender=User)
