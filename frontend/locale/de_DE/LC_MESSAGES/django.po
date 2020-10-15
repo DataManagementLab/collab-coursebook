@@ -29,6 +29,11 @@ msgstr "Impressum"
 msgid "This software is open source"
 msgstr "Diese Software ist Open Source"
 
+
+#: frontend/templates/frontend/base.html:59
+msgid "Privacy Policy"
+msgstr "Datenschutzerklärung"
+
 #: frontend/templates/frontend/comment/delete_confirm.html:12
 msgid "Are you sure you want to delete the following comment?"
 msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
@@ -324,3 +329,15 @@ msgstr "Profil aktualisiert"
 
 #~ msgid "Course '{original_course.title}' successfully duplicated."
 #~ msgstr "Kurs '{cleaned_data['title']}' erfolgreich dupliziert"
+
+#: frontend/templates/frontend/privacy_policy_banner.html:16
+msgid "In order to use our website please agree with our"
+msgstr "Bitte stimme unserer"
+
+#: frontend/templates/frontend/privacy_policy_banner.html:16
+msgid "Privacy Policy"
+msgstr "Datenschutzerklärung zu"
+
+#: frontend/templates/frontend/privacy_policy_banner.html:16
+msgid "Accept"
+msgstr "Einverstanden"
