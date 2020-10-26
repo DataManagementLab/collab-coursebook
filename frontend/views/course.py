@@ -62,10 +62,13 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pyl
     model = Course
     template_name = 'frontend/course/create.html'
     form_class = AddAndEditCourseForm
-    success_url = reverse_lazy('frontend:dashboard')
 
     def get_success_message(self, cleaned_data):
         return _(f"Course '{cleaned_data['title']}' successfully created")
+
+    def get_success_url(self):
+         course_id = self.object.pk
+         return reverse('frontend:course-edit-structure', args=(course_id,))
 
     def get_initial(self):
         """

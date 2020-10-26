@@ -28,7 +28,7 @@ SECRET_KEY = '_-xt(rpt+&&-c_^5h1bxgx(n63uctron!gi*k)*=4$rgu@nfs!'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 

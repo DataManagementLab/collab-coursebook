@@ -56,7 +56,7 @@
     </div>
 
 {#    Display output for Debugging #}
-   <br>
+    <br>
     <textarea id="nestable-output"></textarea>
 
     <script>
@@ -122,14 +122,14 @@
             }
         };
         // add Topic to Structure when Topic is created or selected
-        $(function () {
+  {% comment %}      $(function () {
             var editButtonVisibility = function () {
                 var topic_name = document.getElementById('select2-id_topic_name-container').innerText.split("\n")[0]
-
+                console.log(topic_name)
                 // Add Item
                 addToStrucutre();
                 observer.disconnect();
-                {#document.getElementById('select2-id_topic_name-container').innerText = "";#}
+                //document.getElementById('select2-id_topic_name-container').innerText = "";
                 $('#id_topic_name').val(null).trigger('change');
                 observer.observe($('#select2-id_topic_name-container')[0], {
                     characterData: true,
@@ -137,9 +137,29 @@
                 });
             }
 
-            $('#RiskPostcodeSummary span').on("change", function () {
-                console.log("pew pew");
+            var observer = new MutationObserver(function (e) {
+                editButtonVisibility();
             });
+
+            observer.observe($('#select2-id_topic_name-container')[0], {
+                characterData: true,
+                childList: true
+            });
+        });{% endcomment %}
+        $(function () {
+            var editButtonVisibility = function () {
+                var topic_name = document.getElementById('select2-id_topic_name-container').innerText.split("\n")[0]
+                console.log(topic_name)
+                // Add Item
+                addToStrucutre();
+                observer.disconnect();
+                //document.getElementById('select2-id_topic_name-container').innerText = "";
+                $('#id_topic_name').val(null).trigger('change');
+                observer.observe($('#select2-id_topic_name-container')[0], {
+                    characterData: true,
+                    childList: true
+                });
+            }
 
             var observer = new MutationObserver(function (e) {
                 editButtonVisibility();
@@ -152,11 +172,12 @@
         });
 
 
-        function reverseString(str) {
+
+        function reverseString (str) {
          return str.split("").reverse().join("");
         }
-        function removeCategory(str) {
-        var rev = reverseString(str)
+        function removeCategory (str) {
+            var rev = reverseString(str);
             var index = rev.indexOf("(")
             var splitrev = rev.substring(index+2)
             return reverseString(splitrev)
