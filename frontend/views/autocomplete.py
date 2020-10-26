@@ -21,4 +21,4 @@ class TopicAutocomplete(autocomplete.Select2QuerySetView):
         print("text", text)
         return content.Topic.objects.get_or_create(title=text,
                                                    category=content.Category.objects.get_or_create(title="Default")[
-                                                       0])  # todo make change of category possible
+                                                       0])[0]  # todo make change of category possible
