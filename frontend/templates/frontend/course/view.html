@@ -50,6 +50,8 @@
         {% endfor %}
     </h5>
 
+
+    <!-- Table of contents -->
     <div class="row"  style="margin-top: 20px;">
         <div class="col-md-4">
             <ol class="list-group" style="font-weight: bold;">
@@ -57,14 +59,15 @@
                 {% for entry in structure %}
                     <li class="list-group-item">
                         {% with forloop.counter as outer_index %}
-                            {{ outer_index }}. {{ entry.topic.title }}
-                            <span class="badge badge-primary badge-pill badge-light">{{ entry.topic.contents.count }}</span>
+                            <a href="#{{ entry.topic.title }}">{{ outer_index }}. {{ entry.topic.title }}
+                            <span class="badge badge-primary badge-pill badge-light">{{ entry.topic.contents.count }}</span></a>
+                            <!-- Show (up to one level of) subtopics in ToC -->
                             {% if entry.subtopics %}
                                 <ol class="list-group">
                                     {% for subtopic in entry.subtopics %}
                                         <li class="list-group-item" style="border: none;">
-                                            {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.title }}
-                                            <span class="badge badge-primary badge-pill badge-light">{{ subtopic.contents.count }}</span>
+                                            {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
+                                            <span class="badge badge-primary badge-pill badge-light">{{ subtopic.topic.contents.count }}</span>
                                         </li>
                                     {% endfor %}
                                 </ol>
@@ -84,27 +87,42 @@
         <!-- TODO Add image? -->
     </div>
 
+    <!-- Display coursebook -->
     {% include 'frontend/course/coursebook.html' %}
 
+    <!-- Display course contents -->
     {% for entry in structure %}
         <div style="margin-top: 30px;">
             {% with forloop.counter as outer_index %}
-                {% with entry.topic as topic_replace %}
-                    {% add_content_button user course.id topic_replace.id %}
-                {% endwith %}
-                <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }}</h3>
+                <!-- Filters, Ordering, Add contents -->
+                <div class="float-right text-right">
+                        <form id="filter+sort" class="form-inline" method="post"
+                          action="{% url 'frontend:course' course.id %}">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% with entry.topic as entry_topic %}
+                                {% add_content_button user course.id entry_topic.id %}
+                            {% endwith %}
+                        </form>
+                </div>
+                <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }} {% if sorting != "None" %}({% trans "sort by:" %} {{ sorting }}){% endif %}</h3>
 
-                {% with entry.topic.contents.all as topic_contents %}
+                {% with entry.topic_contents as topic_contents %}
                     {% include "frontend/course/topic_contents.html" %}
                 {% endwith %}
+
+                <!-- Show subtopics -->
                 {% if entry.subtopics %}
                         {% for subtopic in entry.subtopics %}
                             <div style="margin-top: 15px;">
-                                {% with subtopic as topic_replace %}
-                                   {% add_content_button user course.id topic_replace.id %}
-                                {%  endwith %}
-                                <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.title }}</h4>
-                                {% with subtopic.contents.all as topic_contents %}
+                                <div class="float-right text-right">
+                                    {% with subtopic.topic as subtopic_topic %}
+                                        {% add_content_button user course.id subtopic_topic.id %}
+                                    {%  endwith %}
+                                </div>
+                                <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }} {% if sorting != "None" %}({{ sorting }}) {% endif %}</h4>
+
+                                {% with subtopic.topic_contents as topic_contents %}
                                     {% include "frontend/course/topic_contents.html" %}
                                 {% endwith %}
                             </div>
@@ -113,12 +131,7 @@
             {% endwith %}
         </div>
     {% empty %}
-        <h3>No Topics </h3>
-        <p>This course doesn't have topics at the moment.
-        {% if user in course.owner.all %}You can
-            <a href="{% url 'edit_course_structure' course.id %}">add topics here</a>
-        {% endif %}
-        </p>
+        <h3>{% trans "No Topics" %}</h3>
+        <p>{% trans "This course doesn't have topics at the moment." %}</p>
     {% endfor %}
-
-{% endblock %}
+{% endblock %}s

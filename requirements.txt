@@ -1,8 +1,9 @@
+Django==3.0.7
 pdf2image==1.13.1
-Django==3.0.4
 django-bootstrap4==1.1.1
 django-fontawesome-5==1.0.18
 django-timezone-field==4.0
 django-cas-ng==4.1.1
 django-imagekit==4.0.2
 pillow==7.1.1
+django-debug-toolbar==3.2

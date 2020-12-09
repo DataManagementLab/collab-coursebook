@@ -19,6 +19,7 @@
             </button>
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+
                 <a class="dropdown-item" href="
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
@@ -98,23 +99,26 @@
         {% include content.type|content_view %}
 
         <div class="mt-5">
-            {{ content.description|linebreaks }}
+            {{ content.description|linebreaks }} <!-- resolves to s -->
         </div>
     </div>
-
-    <h5><a name="rating">{% trans "Rating" %}</a></h5>
-    <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
-        {% for i in 5|rev_range %}
-            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
-                   {% if i <= user_rate %}class="active" {% endif %}/>
-            {# TODO Replace with POST action and use proper url reversing #}
-            <label for="star{{ i }}" onclick="window.location.href ='rate/{{ i }}/#rating'"></label>
-        {% endfor %}
-    </div>
-
+    <h5><a name="rating">{% trans "Rating" %}</a>
+        {% if content.get_rate != -1 %}
+            <span class="badge float-right text-right">{{ content.get_rate }}/5</span>
+        {% else %}
+            <span class="badge float-right text-right">No rating yet</span>
+        {% endif %}
+    </h5>
+        <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
+            {% for i in 5|rev_range %}
+                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+                       {% if i <= content.get_rate %}class="active" {% endif %}/>
+                <label for="star{{ i }}" onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
+            {% endfor %}
+        </div>
     <h5 style="margin-top: 30px;"><a name="comments">{% trans "Comments" %}</a></h5>
     {% if user.is_authenticated %}
-        <form action="{% url 'frontend:content' course.id topic.id content.id %}" method="post">
+        <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
 
             {% bootstrap_form comment_form %}

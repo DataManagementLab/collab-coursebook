@@ -25,8 +25,8 @@ class FilterAndSortForm(forms.Form):
     The form for entering filter and sorting Options
     """
 
-    FILTER_CHOICE = [('None', '------')] # + Content.STYLE # TODO Use
-    SORTING_CHOICE = [('None', '-----'), ('creation_date', 'Date')] # , ('rating', 'Rating')]
+    FILTER_CHOICE = [('None', '------')]  # + Content.STYLE
+    SORTING_CHOICE = [('None', '-----'), ('creation_date', 'Date'), ('rating', 'Rating')]
     filter = forms.CharField(label='Filter by',
                              widget=forms.Select(choices=FILTER_CHOICE,
                                                  attrs={'class': 'form-control',

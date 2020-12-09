@@ -8,7 +8,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView
 
-from base.models import Content, Comment, Course, Topic, Favorite
+from base.models import Content, Comment, Course, Topic, Favorite, Rating, Profile
+
 from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
@@ -93,8 +94,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
     """
     model = Content
     template_name = "frontend/content/detail.html"
+
     context_object_name = 'content'
-    #form_class = Comment
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """
@@ -247,3 +248,23 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
             context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
                                 self.request.GET.get('f')
         return context
+
+
+def rate_content(request, course_id, topic_id, content_id, pk):
+    """
+    Let the user rate content
+    :param int topic_id: id of the topic
+    :param HttpRequest request: request
+    :param int course_id: course id
+    :param int content_id: id of the content which gets rated
+    :param int pk: the user rating (should be in [ 1, 2, 3, 4, 5])
+    :return: redirect to content page
+    :rtype: HttpResponse
+    """
+    content = get_object_or_404(Content, pk=content_id)
+    profile = get_user(request)
+    content.rate_content(user=profile, rating=pk)
+
+    return HttpResponseRedirect(
+        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
+        + '#rating')
