@@ -15,6 +15,9 @@ source venv/bin/activate
 pip install --upgrade setuptools pip wheel
 pip install -r requirements.txt
 
+# Install poppler (for pdf2image)
+sudo apt-get install poppler-utils
+
 # Setup database
 python manage.py migrate
 

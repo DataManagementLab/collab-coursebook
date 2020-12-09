@@ -14,7 +14,7 @@ from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 from content.forms import CONTENT_TYPE_FORMS
-
+from content.models import CONTENT_TYPES
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
     """
@@ -71,8 +71,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             # save generic form. Image, YT video etc.
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
-            content_type_data.save()
 
+            content_type_data.save()
+            # generate preview image in 'uploads/contents/'
+            preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
+            content.preview.name = preview
+            content.save()
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
