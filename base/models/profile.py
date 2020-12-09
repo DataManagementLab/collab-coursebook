@@ -5,19 +5,18 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
     stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"), related_name="staring_users")
 
-    accept_privacy_policy = models.BooleanField(verbose_name=_("Privacy Policy"), null=True)
+    accept_privacy_policy = models.BooleanField(verbose_name=_("Privacy Policy"), blank=True, default=False)
 
     def __str__(self):
         return str(self.user)
 
-    def privacy_policy(self):
+    def user_accepted_privacy_policy(self):
         # update that the user accepted our privacy policy
         self.accept_privacy_policy = True
         self.save()

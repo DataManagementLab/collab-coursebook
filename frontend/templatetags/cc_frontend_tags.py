@@ -133,9 +133,7 @@ def check_privacy_policy(user):
     :return: boolean
     """
     if user.get_username() != "":  # visitors on the website don't have an account name
-        profile = user.profile
-        if profile.accept_privacy_policy is None:
-            return True
+        return not user.profile.accept_privacy_policy
     return False
 
 
@@ -146,5 +144,5 @@ def accept_privacy_policy_tag(user):
     :return: footer info
     :rtype: dict[str, str]
     """
-    if user.profile.accept_privacy_policy is None:
-        user.profile.privacy_policy()
+    if not user.profile.accept_privacy_policy:
+        user.profile.user_accepted_privacy_policy()
