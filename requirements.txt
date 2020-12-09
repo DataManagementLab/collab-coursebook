@@ -1,4 +1,4 @@
-Django==3.0.4
+Django==3.0.7
 django-bootstrap4==1.1.1
 django-fontawesome-5==1.0.18
 django-timezone-field==4.0
