@@ -68,3 +68,19 @@ msgstr "Auf YouTube ansehen"
 #: content/templates/content/view/invalid.html:4
 msgid "Invalid type"
 msgstr "Invalider Typ"
+
+#: content/models.py:62
+msgid "Image Attachment"
+msgstr "Bildanhang"
+
+#: content/models.py:63
+msgid "Single Image Attachment"
+msgstr "Einzelner Bildanhang"
+
+#: content/models.py:66
+msgid "Image Attachment in Content"
+msgstr "Bildanhang als Inhalt"
+
+#: content/models.py:67
+msgid "Image Attachments in Content"
+msgstr "Bildanhänge als Inhalt"
