@@ -59,7 +59,7 @@ class ImageContent(models.Model):
 
 
 class ImageAttachment(models.Model):
-    TYPE = "Image"
+    TYPE = "Image Attachment"
     DESC = _("Single Image Attachment")
 
     class Meta:
@@ -68,8 +68,6 @@ class ImageAttachment(models.Model):
 
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     image = models.ImageField(verbose_name=_("Image Attachment"), upload_to='uploads/contents/%Y/%m/%d/')
-    source = models.TextField(verbose_name=_("Source"))
-    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
 
     def __str__(self):
         return f"{self.content}: {self.image}"
@@ -84,6 +82,7 @@ class PdfContent(models.Model, GeneratePreviewMixin):
         verbose_name_plural = _("Pdf Contents")
 
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
+    content = None
     pdf = models.FileField(verbose_name=_("Pdf"), upload_to='uploads/contents/%Y/%m/%d/')
     source = models.TextField(verbose_name=_("Source"))
     license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
