@@ -20,4 +20,4 @@ class PdfContentAdmin(admin.ModelAdmin):
 
 @admin.register(ImageAttachment)
 class ImageAttachmentAdmin(admin.ModelAdmin):
-    exclude = ['source']
+    pass

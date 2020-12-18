@@ -2,7 +2,7 @@
 {% autoescape off %}
 
 \textbf{Image}
-\Image{ {{content.description|tex_escape}} }{% templatetag openbrace %}{{content.imagecontent.image.path}}{% templatetag closebrace%}
+\Image{ {{content.description|tex_escape}} }{% templatetag openbrace %}{{content.imageattachment.image.path}}{% templatetag closebrace%}
 \newline
  {{content.description|tex_escape}}
 \newline

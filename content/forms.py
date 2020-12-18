@@ -17,7 +17,7 @@ class AddContentFormImage(forms.ModelForm):
 class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
         model = ImageAttachment
-        exclude = ['content']
+        exclude = ['content', 'source', 'license']
 
 
 class AddContentFormPdf(forms.ModelForm):

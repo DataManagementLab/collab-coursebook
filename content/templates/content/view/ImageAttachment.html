@@ -1,11 +1,11 @@
 {% load i18n %}
 
-<img src="{{ content.imagecontent.image.url }}" alt="{{ content.description }}" style="width: 100%;margin-bottom: 20px;">
+<img src="{{ content.imageattachment.image.url }}" alt="{{ content.description }}" style="width: 100%;margin-bottom: 20px;">
 
 <b>{% trans "Source" %}:</b>
-<p>{{ content.imagecontent.source }}</p>
+<p>{{ content.imageattachment.source }}</p>
 
-{% if content.imagecontent.license %}
+{% if content.imageattachment.license %}
     <b>{% trans "License" %}:</b>
-    <p>{{ content.imagecontent.license }}</p>
+    <p>{{ content.imageattachment.license }}</p>
 {% endif %}
