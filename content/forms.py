@@ -17,13 +17,13 @@ class AddContentFormImage(forms.ModelForm):
 class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
         model = ImageAttachment
-        exclude = ['content', 'source', 'license']
+        exclude = ['content']
 
 
 class AddContentFormPdf(forms.ModelForm):
     class Meta:
         model = PdfContent
-        exclude = ['content']
+        exclude = ['license', 'content']
 
 
 CONTENT_TYPE_FORMS = {
