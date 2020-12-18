@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-22 14:54+0000\n"
+"POT-Creation-Date: 2020-12-18 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,18 @@ msgstr ""
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
-#: frontend/templates/frontend/base.html:36
+#: frontend/templates/frontend/base.html:27
+#, fuzzy
+#| msgid "Are you sure you want to delete the following comment?"
+msgid ""
+"Are you sure you want to change the language now? This will clear the form!"
+msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
+
+#: frontend/templates/frontend/base.html:55
 msgid "Impress"
 msgstr "Impressum"
 
-#: frontend/templates/frontend/base.html:39
+#: frontend/templates/frontend/base.html:58
 msgid "This software is open source"
 msgstr "Diese Software ist Open Source"
 
@@ -33,6 +40,7 @@ msgstr "Diese Software ist Open Source"
 msgid "Are you sure you want to delete the following comment?"
 msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 
+#: frontend/templates/frontend/content/addattachement.html:22
 #: frontend/templates/frontend/content/addcontent.html:23
 #: frontend/templates/frontend/course/create.html:29
 #: frontend/templates/frontend/course/duplicate.html:29
@@ -40,8 +48,9 @@ msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 msgid "Create"
 msgstr "Erzeugen"
 
+#: frontend/templates/frontend/content/addattachement.html:23
 #: frontend/templates/frontend/content/addcontent.html:24
-#: frontend/templates/frontend/content/detail.html:86
+#: frontend/templates/frontend/content/detail.html:87
 #: frontend/templates/frontend/course/create.html:30
 #: frontend/templates/frontend/course/duplicate.html:30
 #: frontend/templates/frontend/course/edit.html:30
@@ -54,31 +63,31 @@ msgstr "Abbrechen"
 msgid "Actions"
 msgstr "Aktionen"
 
-#: frontend/templates/frontend/content/detail.html:33
-#: frontend/templates/frontend/content/detail.html:35
+#: frontend/templates/frontend/content/detail.html:34
+#: frontend/templates/frontend/content/detail.html:36
 #: frontend/templates/frontend/course/coursebook.html:16
 #, fuzzy
 #| msgid "Courses"
 msgid "Coursebook"
 msgstr "Kurse"
 
-#: frontend/templates/frontend/content/detail.html:49
+#: frontend/templates/frontend/content/detail.html:50
 msgid "Back to course "
 msgstr "Zurück zum Kurs "
 
-#: frontend/templates/frontend/content/detail.html:55
+#: frontend/templates/frontend/content/detail.html:56
 msgid "By"
 msgstr "Von"
 
-#: frontend/templates/frontend/content/detail.html:65
+#: frontend/templates/frontend/content/detail.html:66
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: frontend/templates/frontend/content/detail.html:73
+#: frontend/templates/frontend/content/detail.html:74
 msgid "Delete"
 msgstr "Löschen"
 
-#: frontend/templates/frontend/content/detail.html:77
+#: frontend/templates/frontend/content/detail.html:78
 #, python-format
 msgid ""
 "\n"
@@ -91,20 +100,19 @@ msgstr ""
 "Diese Aktion kann nicht rückgängig gemacht werden.\n"
 "                        "
 
-#: frontend/templates/frontend/content/detail.html:89
+#: frontend/templates/frontend/content/detail.html:90
 msgid "Confirm"
 msgstr "Bestätigen"
 
 #: frontend/templates/frontend/content/detail.html:105
-#: frontend/templates/frontend/course/topic_contents.html:29
 msgid "Rating"
 msgstr "Bewertung"
 
-#: frontend/templates/frontend/content/detail.html:115
+#: frontend/templates/frontend/content/detail.html:119
 msgid "Comments"
 msgstr "Kommentare"
 
-#: frontend/templates/frontend/content/detail.html:121
+#: frontend/templates/frontend/content/detail.html:125
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
 
@@ -144,7 +152,6 @@ msgstr "Inhalte hinzufügen"
 msgid "Duplicate Course"
 msgstr "Kurs duplizieren"
 
-
 #: frontend/templates/frontend/course/edit.html:11
 msgid "Edit course"
 msgstr "Kurs bearbeiten"
@@ -157,9 +164,23 @@ msgstr "Kurs hinzufügen"
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
-#: frontend/templates/frontend/course/view.html:76
+#: frontend/templates/frontend/course/view.html:79
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
+
+#: frontend/templates/frontend/course/view.html:108
+msgid "sort by:"
+msgstr ""
+
+#: frontend/templates/frontend/course/view.html:134
+#, fuzzy
+#| msgid "No topics yet"
+msgid "No Topics"
+msgstr "Bisher keine Themen"
+
+#: frontend/templates/frontend/course/view.html:135
+msgid "This course doesn't have topics at the moment."
+msgstr ""
 
 #: frontend/templates/frontend/course_lists/card_category.html:32
 #: frontend/templates/frontend/course_lists/card_period.html:23
@@ -238,7 +259,11 @@ msgstr "Suche"
 msgid "Admin Menu"
 msgstr "Admin-Menü"
 
-#: frontend/templates/frontend/navbar.html:19
+#: frontend/templates/frontend/navbar.html:24
+msgid "Language"
+msgstr ""
+
+#: frontend/templates/frontend/navbar.html:42
 msgid "Logout"
 msgstr "Logout"
 
@@ -294,11 +319,11 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: frontend/views/content.py:28
+#: frontend/views/content.py:30 frontend/views/content.py:102
 msgid "Content '{cleaned_data['type']}' successfully added"
 msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
 
-#: frontend/views/content.py:35
+#: frontend/views/content.py:37 frontend/views/content.py:109
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 

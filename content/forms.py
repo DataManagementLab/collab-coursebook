@@ -1,5 +1,5 @@
 from django import forms
-from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment
+from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField
 
 
 class AddContentFormYoutubeVideo(forms.ModelForm):
@@ -26,9 +26,16 @@ class AddContentFormPdf(forms.ModelForm):
         exclude = ['license', 'content']
 
 
+class AddTextField(forms.ModelForm):
+    class Meta:
+        model = TextField
+        exclude = ['content']
+
+
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
     ImageContent.TYPE: AddContentFormImage,
     PdfContent.TYPE: AddContentFormPdf,
-    ImageAttachment.TYPE: AddContentFormAttachedImage
+    ImageAttachment.TYPE: AddContentFormAttachedImage,
+    TextField.TYPE: AddTextField
 }

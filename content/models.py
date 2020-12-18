@@ -79,6 +79,20 @@ class ImageAttachment(models.Model):
         return
 
 
+class TextField(models.Model):
+    TYPE = "Textfield"
+    DESC = _("Textfield")
+
+    class Meta:
+        verbose_name = _("Textfield Content")
+        verbose_name_plural = _("Textfield Contents")
+
+    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
+    textfield = models.TextField(verbose_name=_("Content"))
+
+    def __str__(self):
+        return f"{self.content}"
+
 class PdfContent(models.Model, GeneratePreviewMixin):
     TYPE = "Pdf"
     DESC = _("Pdf")
