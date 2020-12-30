@@ -84,3 +84,12 @@ msgstr "Bildanhang als Inhalt"
 #: content/models.py:67
 msgid "Image Attachments in Content"
 msgstr "Bildanhänge als Inhalt"
+
+
+#: content/models.py:87
+msgid "Textfield Content"
+msgstr "Textfeldinhalt"
+
+#: content/models.py:88
+msgid "Textfield Contents"
+msgstr "Textfeldinhalte"
