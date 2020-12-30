@@ -1,5 +1,4 @@
-from base.models import Course, Category, Period, Topic, Content, CourseStructureEntry, Tag, Comment, Rating, Favorite
-from .models import Profile
+from .models import Profile, Course, Category, Period, Topic, Content, CourseStructureEntry, Tag, Comment, Rating, Favorite
 
 from django.contrib import admin
 
@@ -44,6 +43,7 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(CourseStructureEntry)
 class CourseStructureAdmin(admin.ModelAdmin):
     list_display = ['index', 'course', 'topic']
+    list_display_links = ['index', 'course', 'topic']
     list_filter = ['course']
 
 

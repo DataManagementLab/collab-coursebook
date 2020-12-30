@@ -25,6 +25,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
     template_name = 'frontend/content/addcontent.html'
     form_class = AddContentForm
     success_url = reverse_lazy('frontend:dashboard')
+    context_object_name = 'content'
 
     def get_success_message(self, cleaned_data):
         return _(f"Content '{cleaned_data['type']}' successfully added")
@@ -48,6 +49,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
                 return self.handle_error()
         else:
             return self.handle_error()
+
+        # course id for back to course button
+        course_id = self.kwargs['course_id']
+        course = Course.objects.get(pk=course_id)  # pylint: disable=no-member
+        context['course'] = course
+
         return context
 
     def post(self, request, *args, **kwargs):

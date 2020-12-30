@@ -7,6 +7,7 @@
 {% load static %}
 {% load i18n %}
 
+
 {% block imports %}
     <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
@@ -21,7 +22,7 @@
         <div>
 
             <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
-            <a href="{% url 'frontend:dashboard' %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
+            <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
 
     </form>
