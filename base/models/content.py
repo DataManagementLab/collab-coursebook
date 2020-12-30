@@ -160,7 +160,7 @@ class Content(models.Model):
 
     def get_rate_num(self):
         """
-        Returns the average number of ratings and 0 of no ratings occured
+        Returns the average number of ratings and 0 of no ratings occurred
         :return: average number of ratings
         :rtype: float
         """
@@ -207,7 +207,6 @@ class Content(models.Model):
         """
         Rate content
         :param rating: Rating of Content by User
-        :param content: Content
         :param User user: user
         :return: nothing
         """
