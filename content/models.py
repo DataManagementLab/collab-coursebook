@@ -89,9 +89,11 @@ class TextField(models.Model):
 
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     textfield = models.TextField(verbose_name=_("Content"))
+    source = models.TextField(verbose_name=_("Source"))
 
     def __str__(self):
         return f"{self.content}"
+
 
 class PdfContent(models.Model, GeneratePreviewMixin):
     TYPE = "Pdf"
@@ -126,5 +128,6 @@ CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
     PdfContent.TYPE: PdfContent,
-    ImageAttachment.TYPE: ImageAttachment
+    ImageAttachment.TYPE: ImageAttachment,
+    TextField.TYPE: TextField
 }
