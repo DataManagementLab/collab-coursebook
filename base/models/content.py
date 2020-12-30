@@ -230,7 +230,7 @@ class CourseStructureEntry(models.Model):
     """
     Structure Model to save the structure of courses
     course: the course whose structure is meant
-    index: position that is meant (e.g. "1#2" -> second undertopic of the first topic)
+    index: position that is meant (e.g. "1#2" -> second under topic of the first topic)
     topic: topic at specified position/index
     """
 
