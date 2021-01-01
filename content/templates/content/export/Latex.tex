@@ -1,0 +1,24 @@
+{% load cc_export_tags %}
+{% autoescape off %}
+\setlength{\fboxsep}{0.5em}
+\setlength{\fboxrule}{0.7pt}%
+% Indent
+\setlength\parindent{0pt}
+
+{\Large \textbf{Text}}
+
+\vskip .5em
+
+{{content.latex.textfield|tex_escape}}
+
+\vskip .5em
+
+\rule{\linewidth}{0.4pt}
+
+\vskip .5em
+
+{{content.description|tex_escape}}
+
+\vskip 2em
+
+{% endautoescape %}

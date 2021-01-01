@@ -98,6 +98,26 @@ class TextField(models.Model):
         return f"{self.content}"
 
 
+
+class Latex(models.Model):
+    TYPE = "Latex"
+    DESC = _("Latex")
+
+    class Meta:
+        verbose_name = _("Latex Content")
+        verbose_name_plural = _("Latex Contents")
+
+    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
+    textfield = models.TextField(verbose_name=_("Code Body"))
+    source = models.TextField(verbose_name=_("Source"))
+
+    def generate_preview(self):
+        return
+
+    def __str__(self):
+        return f"{self.content}"
+
+
 class PdfContent(models.Model, GeneratePreviewMixin):
     TYPE = "Pdf"
     DESC = _("Pdf")
@@ -132,5 +152,6 @@ CONTENT_TYPES = {
     ImageContent.TYPE: ImageContent,
     PdfContent.TYPE: PdfContent,
     ImageAttachment.TYPE: ImageAttachment,
-    TextField.TYPE: TextField
+    TextField.TYPE: TextField,
+    Latex.TYPE: Latex
 }

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField
+from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField, Latex
 
 
 @admin.register(YTVideoContent)
@@ -24,6 +24,10 @@ class ImageAttachmentAdmin(admin.ModelAdmin):
 
 
 @admin.register(TextField)
+class TextFieldAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Latex)
 class TextFieldAdmin(admin.ModelAdmin):
     pass
 
