@@ -2,19 +2,23 @@
 {% autoescape off %}
 \setlength{\fboxsep}{0.5em}
 \setlength{\fboxrule}{0.7pt}%
+% Indent
+\setlength\parindent{0pt}
 
 {\Large \textbf{Text}}
 
-\vspace{5mm}
+\vskip .5em
 
- \fbox{\parbox{0.95\textwidth}{
-   {{content.textfield.textfield|tex_escape}}
- }}
+{{content.textfield.textfield|tex_escape}}
 
-\vspace{5mm}
+\vskip .5em
+
+\rule{\linewidth}{0.4pt}
+
+\vskip .5em
 
 {{content.description|tex_escape}}
 
-\vspace{10mm}
+\vskip .5em
 
 {% endautoescape %}
