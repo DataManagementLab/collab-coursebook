@@ -127,6 +127,11 @@ class AddImageAttachmentView(SuccessMessageMixin, LoginRequiredMixin, CreateView
                 return self.handle_error()
         else:
             return self.handle_error()
+
+        course_id = self.kwargs['course_id']
+        course = Course.objects.get(pk=course_id)
+        context['course'] = course
+
         return context
 
     def post(self, request, *args, **kwargs):
