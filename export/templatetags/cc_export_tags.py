@@ -38,6 +38,7 @@ def tex_escape(value):
         '\\': r'\textbackslash{}',
         '<': r'\textless{}',
         '>': r'\textgreater{}',
+        '\n': r'\newline '
     }
     regex = re.compile('|'.join(re.escape(key) for key in replacements))
     return regex.sub(lambda match: replacements[match.group()], value)

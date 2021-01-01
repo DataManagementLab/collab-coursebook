@@ -1,0 +1,20 @@
+{% load cc_export_tags %}
+{% autoescape off %}
+\setlength{\fboxsep}{0.5em}
+\setlength{\fboxrule}{0.7pt}%
+
+{\Large \textbf{Text}}
+
+\vspace{5mm}
+
+ \fbox{\parbox{0.95\textwidth}{
+   {{content.textfield.textfield|tex_escape}}
+ }}
+
+\vspace{5mm}
+
+{{content.description|tex_escape}}
+
+\vspace{10mm}
+
+{% endautoescape %}

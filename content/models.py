@@ -88,7 +88,7 @@ class TextField(models.Model):
         verbose_name_plural = _("Textfield Contents")
 
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
-    textfield = models.TextField(verbose_name=_("Content"))
+    textfield = models.TextField(verbose_name=_("Textfield"))
     source = models.TextField(verbose_name=_("Source"))
 
     def generate_preview(self):

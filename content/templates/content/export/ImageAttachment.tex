@@ -1,10 +1,22 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
-\textbf{Image}
-\Image{ {{content.description|tex_escape}} }{% templatetag openbrace %}{{content.imageattachment.image.path}}{% templatetag closebrace%}
-\newline
- {{content.description|tex_escape}}
-\newline
+\textbf{Image Attachment}
+
+\vspace{5mm}
+
+\begin{figure}[H]
+ \centering
+   \includegraphics[scale=0.4]{
+     {{content.imageattachment.image.path|tex_escape}}
+   }
+\end{figure}
+
+
+\vspace{5mm}
+
+
+
+\vspace{10mm}
 
 {% endautoescape %}
