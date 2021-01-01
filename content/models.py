@@ -91,6 +91,9 @@ class TextField(models.Model):
     textfield = models.TextField(verbose_name=_("Content"))
     source = models.TextField(verbose_name=_("Source"))
 
+    def generate_preview(self):
+        return
+
     def __str__(self):
         return f"{self.content}"
 

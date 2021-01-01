@@ -20,7 +20,7 @@
         <div>
 
             <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
-            <a href="{% url 'frontend:dashboard' %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
+            <a href="{% url 'frontend:course' course.id %}" class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
 
     </form>

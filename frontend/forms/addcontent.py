@@ -1,6 +1,5 @@
 from django import forms
 from base.models.content import Content
-from content.models import YTVideoContent, ImageContent
 
 
 class AddContentForm(forms.ModelForm):
