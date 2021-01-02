@@ -1,7 +1,7 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
-{\Large \textbf{Youtube-Video}}
+{\Large \textbf{ {{content.description|tex_escape}} }}
 
 \vskip .5em
 
@@ -9,8 +9,8 @@
 
 \vskip .5em
 
-{{content.description|tex_escape}}
+\rule{\linewidth}{0.4pt}
 
-\vskip 2em
+\vskip 1.5em
 
 {% endautoescape %}

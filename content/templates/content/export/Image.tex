@@ -1,7 +1,7 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
-{\Large \textbf{Image}}
+{\Large \textbf{ {{content.description|tex_escape}} }}
 
 \vspace{5mm}
 
@@ -15,6 +15,10 @@
  }
 \end{figure}
 
-\vskip 2em
+\vskip .5em
+
+\rule{\linewidth}{0.4pt}
+
+\vskip 1.5em
 
 {% endautoescape %}
