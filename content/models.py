@@ -147,6 +147,7 @@ class PdfContent(models.Model, GeneratePreviewMixin):
         return f"{self.content}: {self.pdf}"
 
 
+# All Content Types
 CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
@@ -155,3 +156,10 @@ CONTENT_TYPES = {
     TextField.TYPE: TextField,
     Latex.TYPE: Latex
 }
+
+# Content Types which are not directly accessible via the topics, but embedded into other content types
+EMBEDDED_CONTENT_TYPES = {
+    ImageAttachment.TYPE
+}
+
+

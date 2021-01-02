@@ -16,13 +16,12 @@ class AddContentFormImage(forms.ModelForm):
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
 
-
 class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
         model = ImageAttachment
         exclude = ['content']
         widgets = {
-            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+            'source': forms.Textarea(attrs={'style': 'height: 50px'}),
         }
 
 

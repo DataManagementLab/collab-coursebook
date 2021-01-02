@@ -3,7 +3,7 @@ from django.conf import settings
 
 from base.models import Favorite
 from collab_coursebook.settings import ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE
-from content.models import CONTENT_TYPES
+from content.models import CONTENT_TYPES, EMBEDDED_CONTENT_TYPES
 
 register = template.Library()
 
@@ -115,6 +115,7 @@ def add_content_button(user, course_id, topic_id):
     """
     # generate list of tuple (content type, content verbose name) for add content dropdown
     content_data = [(content_type, content_model.DESC) for content_type, content_model in CONTENT_TYPES.items()]
+    content_data = list(filter(lambda x: x[0] not in EMBEDDED_CONTENT_TYPES, content_data))
     return {'user': user, 'course_id': course_id, 'topic_id': topic_id, 'content_data': content_data}
 
 
