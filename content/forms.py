@@ -45,7 +45,7 @@ class AddTextField(forms.ModelForm):
 class AddLatex(forms.ModelForm):
     class Meta:
         model = Latex
-        exclude = ['content']
+        exclude = ['content', 'pdf']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }

@@ -1,2 +1,2 @@
 
-<div class="card-img-top fit bg-success" style="height: 180px;"></div>
+<img class="card-img-top fit" style="height: 180px;" src="{% if content.preview %}{{content.preview.url}}{% endif %}" alt="{{ content.description }}" width="500" height="600">

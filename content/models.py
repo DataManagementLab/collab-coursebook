@@ -110,12 +110,22 @@ class Latex(models.Model):
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     textfield = models.TextField(verbose_name=_("Code Body"))
     source = models.TextField(verbose_name=_("Source"))
+    pdf = models.FileField(verbose_name=_("Pdf"), upload_to='uploads/contents/%Y/%m/%d/', blank=True)
 
     def generate_preview(self):
-        return
+        preview_folder = 'uploads/previews/'
+        # Check if Folder exists
+        if not os.path.exists(os.path.join(settings.MEDIA_ROOT, preview_folder)):
+            os.makedirs(os.path.join(settings.MEDIA_ROOT, preview_folder))
+        base_filename = os.path.splitext(os.path.basename(self.pdf.name))[0] + '.jpg'
+        # get images for every page
+        pages = convert_from_path(self.pdf.path, last_page=2)
+        # save first page to disk
+        pages[0].save(os.path.join(settings.MEDIA_ROOT, preview_folder, base_filename))
+        return os.path.join(preview_folder, base_filename)
 
     def __str__(self):
-        return f"{self.content}"
+        return f"{self.content}:{self.pdf}"
 
 
 class PdfContent(models.Model, GeneratePreviewMixin):

@@ -1,14 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView
+from export.views import generate_pdf_response
+from django.core.files.base import ContentFile
 
-from base.models import Content, Comment, Course, Topic, Favorite, Rating, Profile
+from base.models import Content, Comment, Course, Topic, Favorite
 
 from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
@@ -79,8 +81,13 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             # save generic form. Image, YT video etc.
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
-
             content_type_data.save()
+
+            if content_type == 'Latex':
+                pdf = generate_pdf_response(get_user(self.request), Course.objects.get(pk=kwargs['course_id']), content)
+                content_type_data.pdf.save("My_File.pdf", ContentFile(pdf))
+                content_type_data.save()
+
             # generate preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview

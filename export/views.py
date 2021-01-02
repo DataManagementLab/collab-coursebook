@@ -32,3 +32,20 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename, conten
     response['Content-Disposition'] = 'attachment; filename=' + filename
     response.write(pdf)
     return response
+
+
+
+def generate_pdf(user, course, content, template="content/export/base.tex", context=None):
+    if context is None:
+        context = {}
+    context['user'] = user
+    context['course'] = course
+    context['contents'] = [content]
+    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
+    return pdf, pdflatex_output, tex_template
+
+
+def generate_pdf_response(user, course, content):
+    """ Generates a PDF file with nametags for students in the queryset """
+    (pdf, pdflatex_output, tex_template) = generate_pdf(user, course, content)
+    return pdf
