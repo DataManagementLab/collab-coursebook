@@ -9,3 +9,6 @@ class AddContentForm(forms.ModelForm):
     class Meta:  # pylint: disable=too-few-public-methods
         model = Content
         exclude = ['topic', 'author', 'creation_date', 'ratings', 'preview', 'type']
+        widgets = {
+            'description': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }

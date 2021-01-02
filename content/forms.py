@@ -12,30 +12,44 @@ class AddContentFormImage(forms.ModelForm):
     class Meta:
         model = ImageContent
         exclude = ['content']
+        widgets = {
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
 
 
 class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
         model = ImageAttachment
         exclude = ['content']
+        widgets = {
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
 
 
 class AddContentFormPdf(forms.ModelForm):
     class Meta:
         model = PdfContent
         exclude = ['license', 'content']
+        widgets = {
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
 
 
 class AddTextField(forms.ModelForm):
     class Meta:
         model = TextField
         exclude = ['content']
-
+        widgets = {
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
 
 class AddLatex(forms.ModelForm):
     class Meta:
         model = Latex
         exclude = ['content']
+        widgets = {
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
 
 
 CONTENT_TYPE_FORMS = {
