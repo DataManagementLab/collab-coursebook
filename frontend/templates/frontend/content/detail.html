@@ -105,10 +105,12 @@
 
     <br>
 
+    {% if content.attachment is not None %}
     <div>
         <h2>Attachments</h2>
         <img src="{{ content.attachment.image.url }}" alt="{{ content.description }}" style="width: 30%; height: 30%; margin-bottom: 20px;">
     </div>
+    {% endif %}
 
     <br>
 
