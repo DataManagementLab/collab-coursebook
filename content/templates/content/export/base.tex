@@ -3,6 +3,7 @@
 
 \documentclass[a4paper]{article}
 
+% Packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
@@ -15,7 +16,7 @@
 %% Generate a latex graphic
 % 1: caption
 % 2: image path
-\newcommand{\Image}[2]{
+\newcommand*{\Image}[2]{
     \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{#2}
@@ -23,7 +24,7 @@
     \end{figure}
 }
 
-    % Indent
+% Indent
 \setlength\parindent{0pt}
 
 \begin{document}
