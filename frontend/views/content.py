@@ -224,7 +224,44 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
         context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
                                                       content=content).count() > 0
+        context['attachment'] = content.attachment
+
         return context
+
+
+class AttachedImageView(DetailView):  # pylint: disable=too-many-ancestors
+    """
+    Displays the content to the user
+    """
+    model = ImageAttachment
+    template_name = "content/view/ImageAttachment.html"
+
+    context_object_name = 'attachment'
+
+    def get_context_data(self, **kwargs):
+        """
+        get context data
+        :param dict kwargs: keyword arguments
+        :return: context
+        :rtype: dict
+        """
+        context = super().get_context_data(**kwargs)
+
+        # course id for back to course button
+        course = Course.objects.get(pk=self.kwargs['course_id'])  # pylint: disable=no-member
+        context['course'] = course
+
+        topic = Topic.objects.get(pk=self.kwargs['topic_id'])
+        context['topic'] = topic
+
+        content = Content.objects.get(pk=self.kwargs['content_id'])
+        context['content'] = content
+
+        context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
+
+        context['translate_form'] = TranslateForm()
+        return context
+
 
 
 class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
