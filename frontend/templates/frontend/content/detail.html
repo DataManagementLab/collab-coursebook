@@ -102,6 +102,16 @@
             {{ content.description|linebreaks }} <!-- resolves to s -->
         </div>
     </div>
+
+    <br>
+
+    <div>
+        <h2>Attachments</h2>
+        <img src="{{ content.attachment.image.url }}" alt="{{ content.description }}" style="width: 30%; height: 30%; margin-bottom: 20px;">
+    </div>
+
+    <br>
+
     <h5><a name="rating">{% trans "Rating" %}</a>
         {% if content.get_rate != -1 %}
             <span class="badge float-right text-right">{{ content.get_rate }}/5</span>

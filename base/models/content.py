@@ -150,6 +150,8 @@ class Content(models.Model):
     public = models.BooleanField(verbose_name=_("Show in public courses?"), help_text=_(
         "May this content be displayed in courses that don't require registration?"), default=False)
 
+    attachment = models.OneToOneField('content.ImageAttachment', verbose_name=_("Attachment"), on_delete=models.CASCADE,
+                                      blank=True, null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"), blank=True, null=True)
 

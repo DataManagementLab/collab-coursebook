@@ -18,6 +18,15 @@
         {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
 
+        <br>
+
+        {% if attachment_allowed %}
+        <section>
+            <h2>Image Attachments</h2>
+            {% bootstrap_form attachment_form %}
+        </section>
+        {% endif %}
+
         {{ form.media }}
         <div>
 

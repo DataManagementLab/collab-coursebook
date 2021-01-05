@@ -4,13 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from base.models import Content
 from content.mixin import GeneratePreviewMixin
-from pdf2image import convert_from_path, convert_from_bytes
-from PIL import Image
-from pdf2image.exceptions import (
-    PDFInfoNotInstalledError,
-    PDFPageCountError,
-    PDFSyntaxError
-)
+from pdf2image import convert_from_path
 
 from django.conf import settings
 
@@ -66,13 +60,12 @@ class ImageAttachment(models.Model):
         verbose_name = _("Image Attachment in Content")
         verbose_name_plural = _("Image Attachments in Content")
 
-    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     image = models.ImageField(verbose_name=_("Image Attachment"), upload_to='uploads/contents/%Y/%m/%d/')
     source = models.TextField(verbose_name=_("Source"))
     license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
 
     def __str__(self):
-        return f"{self.content}:{self.image}"
+        return f"{self.image}"
 
     def generate_preview(self):
         # TODO generate small image previews
@@ -172,4 +165,9 @@ EMBEDDED_CONTENT_TYPES = {
     ImageAttachment.TYPE
 }
 
+# Content Types which allow attachments
+ATTACHMENT_TYPES = {
+    TextField.TYPE,
+    Latex.TYPE
+}
 
