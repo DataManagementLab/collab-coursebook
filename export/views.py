@@ -34,7 +34,6 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename, conten
     return response
 
 
-
 def generate_pdf(user, course, content, template="content/export/base.tex", context=None):
     if context is None:
         context = {}

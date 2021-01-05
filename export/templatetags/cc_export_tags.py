@@ -13,7 +13,8 @@ register = template.Library()
 def export_template(type):
     base_path = os.path.dirname(content.__file__)
     path = base_path + f"/templates/content/export"
-    if type in CONTENT_TYPES.keys():
+    # Error check for latex
+    if type in CONTENT_TYPES.keys() or type == 'error':
         return path + f"/{type}.tex"
     return path + "/invalid.tex"
 

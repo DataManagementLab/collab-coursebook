@@ -9,8 +9,9 @@ from export.templatetags.cc_export_tags import export_template
 
 
 class LaTeX:
-
     encoding = 'utf-8'
+    error_prefix = '!'
+    error_template = 'error'
 
     @staticmethod
     def render(context, template_name, assets, app='export', external_assets=None):
@@ -23,6 +24,7 @@ class LaTeX:
         rendered_tpl = template.render(context).encode(LaTeX.encoding)
         # prerender content templates
         for content in context['contents']:
+            print(content)
             rendered_tpl += LaTeX.pre_render(content)
         rendered_tpl += "\end{document}".encode(LaTeX.encoding)
 
@@ -34,6 +36,19 @@ class LaTeX:
             #         shutil.copy(asset, tempdir)
             process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
             pdflatex_output = process.communicate(rendered_tpl)
+
+            # stdout - log
+            errors = LaTeX.errors(pdflatex_output[0])
+            # Error log
+            if len(errors) != 0:
+
+                rendered_tpl = template.render(context).encode(LaTeX.encoding)
+                # prerender errors templates
+                rendered_tpl += LaTeX.pre_render(errors, LaTeX.error_template)
+                rendered_tpl += "\end{document}".encode(LaTeX.encoding)
+
+                process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
+                pdflatex_output = process.communicate(rendered_tpl)
             try:
                 with open(os.path.join(tempdir, 'texput.pdf'), 'rb') as f:
                     pdf = f.read()
@@ -42,7 +57,23 @@ class LaTeX:
         return pdf, pdflatex_output, rendered_tpl
 
     @staticmethod
-    def pre_render(content):
-        template = get_template(export_template(content.type))
+    def errors(lob):
+        # Decode bytes to string and split the string by the delimiter '\n'
+        lines = lob.decode(LaTeX.encoding).splitlines()
+        errors = []
+        for line in lines:
+            # LaTeX log errors contains '!'
+            index = line.find(LaTeX.error_prefix)
+            if index != -1:
+                tmp = line[index:]
+                errors.append(tmp)
+        return errors
+
+    @staticmethod
+    def pre_render(content, template_type=None):
+        if template_type is None:
+            template = get_template(export_template(content.type))
+        else:
+            template = get_template(export_template(template_type))
         context = {'content': content}
         return template.render(context).encode(LaTeX.encoding)
