@@ -19,28 +19,18 @@ class BaseModel(models.Model):
         return
 
 
-class BaseImageModel(BaseModel):
-    class Meta:
-        abstract = True
-
-    source = models.TextField(verbose_name=_("Source"))
-    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
-
-
-class BaseTextFieldModel(BaseModel):
+class BaseContentModel(BaseModel):
     class Meta:
         abstract = True
 
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
-    textfield = models.TextField(verbose_name=_("Textfield"))
-    source = models.TextField(verbose_name=_("Source"))
 
 
 class BasePDFModel(BaseModel, GeneratePreviewMixin):
     class Meta:
         abstract = True
 
-    pdf = models.FileField(verbose_name=_("Pdf"), upload_to='uploads/contents/%Y/%m/%d/')
+    pdf = models.FileField(verbose_name=_("Pdf"), upload_to='uploads/contents/%Y/%m/%d/', blank=True)
 
     def generate_preview(self):
         preview_folder = 'uploads/previews/'
@@ -55,7 +45,15 @@ class BasePDFModel(BaseModel, GeneratePreviewMixin):
         return os.path.join(preview_folder, base_filename)
 
 
-class YTVideoContent(BaseModel):
+class BaseSourceModel(BaseModel):
+    class Meta:
+        abstract = True
+
+    source = models.TextField(verbose_name=_("Source"))
+    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
+
+
+class YTVideoContent(BaseContentModel):
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
 
@@ -63,7 +61,6 @@ class YTVideoContent(BaseModel):
         verbose_name = _("YouTube Video Content")
         verbose_name_plural = _("YouTube Video Contents")
 
-    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     url = models.URLField(verbose_name=_("Video URL"))
 
     @property
@@ -74,7 +71,7 @@ class YTVideoContent(BaseModel):
         return f"{self.DESC}: {self.url}"
 
 
-class ImageContent(BaseImageModel):
+class ImageContent(BaseContentModel, BaseSourceModel):
     TYPE = "Image"
     DESC = _("Single Image")
 
@@ -82,27 +79,27 @@ class ImageContent(BaseImageModel):
         verbose_name = _("Image Content")
         verbose_name_plural = _("Image Contents")
 
-    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
     image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
 
     def __str__(self):
         return f"{self.content}: {self.image}"
 
 
-class ImageAttachment(BaseImageModel):
+class ImageAttachment(BaseSourceModel):
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")
 
     class Meta:
-        verbose_name = _("Image Attachment in Content")
-        verbose_name_plural = _("Image Attachments in Content")
+        verbose_name = _("Image Attachment")
+        verbose_name_plural = _("Image Attachments")
 
     image = models.ImageField(verbose_name=_("Image Attachment"), upload_to='uploads/contents/%Y/%m/%d/')
 
     def __str__(self):
         return f"{self.image}"
-    
-class TextField(BaseTextFieldModel):
+
+
+class TextField(BaseContentModel):
     TYPE = "Textfield"
     DESC = _("Textfield")
 
@@ -110,11 +107,17 @@ class TextField(BaseTextFieldModel):
         verbose_name = _("Textfield Content")
         verbose_name_plural = _("Textfield Contents")
 
+    textfield = models.TextField(verbose_name=_("Textfield"))
+    source = models.TextField(verbose_name=_("Source"))
+
+    def generate_preview(self):
+        return
+
     def __str__(self):
         return f"{self.content}"
 
 
-class Latex(BaseTextFieldModel, BasePDFModel):
+class Latex(BaseContentModel, BasePDFModel):
     TYPE = "Latex"
     DESC = _("Latex")
 
@@ -122,13 +125,14 @@ class Latex(BaseTextFieldModel, BasePDFModel):
         verbose_name = _("Latex Content")
         verbose_name_plural = _("Latex Contents")
 
-    pdf = models.FileField(verbose_name=_("Pdf"), upload_to='uploads/contents/%Y/%m/%d/', blank=True)
+    textfield = models.TextField(verbose_name=_("Code Body"))
+    source = models.TextField(verbose_name=_("Source"))
 
     def __str__(self):
         return f"{self.content}:{self.pdf}"
 
 
-class PdfContent(BasePDFModel):
+class PdfContent(BaseContentModel, BasePDFModel, BaseSourceModel):
     TYPE = "Pdf"
     DESC = _("Pdf")
 
@@ -136,9 +140,8 @@ class PdfContent(BasePDFModel):
         verbose_name = _("Pdf Content")
         verbose_name_plural = _("Pdf Contents")
 
-    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
-    source = models.TextField(verbose_name=_("Source"))
-    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
+    def __str__(self):
+        return f"{self.content}: {self.pdf}"
 
 
 # All Content Types
