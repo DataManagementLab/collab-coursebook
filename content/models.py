@@ -26,9 +26,6 @@ class BaseImageModel(BaseModel):
     source = models.TextField(verbose_name=_("Source"))
     license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
 
-    def __str__(self):
-        return f"{self.image}"
-
 
 class BaseTextFieldModel(BaseModel):
     class Meta:
@@ -102,7 +99,9 @@ class ImageAttachment(BaseImageModel):
 
     image = models.ImageField(verbose_name=_("Image Attachment"), upload_to='uploads/contents/%Y/%m/%d/')
 
-
+    def __str__(self):
+        return f"{self.image}"
+    
 class TextField(BaseTextFieldModel):
     TYPE = "Textfield"
     DESC = _("Textfield")
