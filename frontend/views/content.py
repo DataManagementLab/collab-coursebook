@@ -15,7 +15,7 @@ from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
-from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, AddContentFormImage
+from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage
 from content.models import CONTENT_TYPES, ATTACHMENT_TYPES, ImageAttachment
 
 
@@ -59,7 +59,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
         context['attachment_allowed'] = content_type in ATTACHMENT_TYPES
         context['attachment_form'] = AddContentFormAttachedImage
-        context['image_form'] = AddContentFormImage
 
         return context
 
@@ -75,7 +74,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             return self.handle_error()
 
         attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
-        image_form = AddContentFormImage(request.POST, request.FILES)
 
         if add_content_form.is_valid() and content_type_form.is_valid():
             # save author etc.
@@ -96,15 +94,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
                 content_type_data.save()
 
             if content_type in ATTACHMENT_TYPES and attachment_form.is_valid():
-                # TODO
-                if image_form.is_valid():
-                    content_attachment_images = image_form.save(commit=False)
-                    content_attachment_images.save()
-                    content.attachment = content_attachment_images
-                else:
-                    content_attachment = attachment_form.save(commit=False)
-                    content_attachment.save()
-                    content.attachment = content_attachment
+                content_attachment = attachment_form.save(commit=False)
+                content_attachment.save()
+                content.attachment = content_attachment
 
             # generate preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
@@ -270,6 +262,7 @@ class AttachedImageView(DetailView):  # pylint: disable=too-many-ancestors
 
         context['translate_form'] = TranslateForm()
         return context
+
 
 
 class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
