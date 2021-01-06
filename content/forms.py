@@ -1,4 +1,5 @@
 from django import forms
+
 from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField, Latex
 
 
@@ -15,6 +16,7 @@ class AddContentFormImage(forms.ModelForm):
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
+
 
 class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
@@ -42,6 +44,7 @@ class AddTextField(forms.ModelForm):
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
+
 
 class AddLatex(forms.ModelForm):
     class Meta:
