@@ -57,9 +57,6 @@ class BasePDFModel(BaseModel, GeneratePreviewMixin):
         pages[0].save(os.path.join(settings.MEDIA_ROOT, preview_folder, base_filename))
         return os.path.join(preview_folder, base_filename)
 
-    def __str__(self):
-        return f"{self.content}: {self.pdf}"
-
 
 class YTVideoContent(BaseModel):
     TYPE = "YouTubeVideo"
