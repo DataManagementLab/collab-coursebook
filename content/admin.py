@@ -27,7 +27,7 @@ class ImageAttachmentAdmin(admin.ModelAdmin):
 class TextFieldAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(Latex)
 class LatexAdmin(admin.ModelAdmin):
     pass
-

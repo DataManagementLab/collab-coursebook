@@ -26,6 +26,13 @@ class BaseContentModel(BaseModel):
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
 
 
+class BaseImageModel(BaseModel):
+    class Meta:
+        abstract = True
+
+    image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
+
+
 class BasePDFModel(BaseModel, GeneratePreviewMixin):
     class Meta:
         abstract = True
@@ -71,15 +78,25 @@ class YTVideoContent(BaseContentModel):
         return f"{self.DESC}: {self.url}"
 
 
-class ImageContent(BaseContentModel, BaseSourceModel):
+class Image(BaseImageModel):
     TYPE = "Image"
     DESC = _("Single Image")
 
     class Meta:
+        verbose_name = _("Image")
+        verbose_name_plural = _("Images")
+
+    def __str__(self):
+        return f" {self.image}"
+
+
+class ImageContent(BaseContentModel, BaseImageModel, BaseSourceModel):
+    TYPE = "Image Content"
+    DESC = _("Single Image Content")
+
+    class Meta:
         verbose_name = _("Image Content")
         verbose_name_plural = _("Image Contents")
-
-    image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
 
     def __str__(self):
         return f"{self.content}: {self.image}"
@@ -93,10 +110,11 @@ class ImageAttachment(BaseSourceModel):
         verbose_name = _("Image Attachment")
         verbose_name_plural = _("Image Attachments")
 
-    image = models.ImageField(verbose_name=_("Image Attachment"), upload_to='uploads/contents/%Y/%m/%d/')
+    # TODO -> Error
+    images = models.ForeignKey(Image, on_delete=models.CASCADE, verbose_name=_("Images"))
 
     def __str__(self):
-        return f"{self.image}"
+        return f"{self.images}"
 
 
 class TextField(BaseContentModel):
@@ -146,6 +164,7 @@ CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
     PdfContent.TYPE: PdfContent,
+    Image.TYPE: Image,
     ImageAttachment.TYPE: ImageAttachment,
     TextField.TYPE: TextField,
     Latex.TYPE: Latex

@@ -21,7 +21,7 @@ class AddContentFormImage(forms.ModelForm):
 class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
         model = ImageAttachment
-        exclude = ['content']
+        exclude = ['content', 'attachment']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 50px'}),
             'image': forms.ClearableFileInput(attrs={'multiple': True})
