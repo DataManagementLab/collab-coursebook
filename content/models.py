@@ -1,12 +1,14 @@
 import os
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from base.models import Content
-from content.mixin import GeneratePreviewMixin
-from pdf2image import convert_from_path
 
-from django.conf import settings
+from base.models import Content
+
+from content.mixin import GeneratePreviewMixin
+
+from pdf2image import convert_from_path
 
 
 class YTVideoContent(models.Model):
@@ -91,7 +93,6 @@ class TextField(models.Model):
         return f"{self.content}"
 
 
-
 class Latex(models.Model):
     TYPE = "Latex"
     DESC = _("Latex")
@@ -170,4 +171,3 @@ ATTACHMENT_TYPES = {
     TextField.TYPE,
     Latex.TYPE
 }
-
