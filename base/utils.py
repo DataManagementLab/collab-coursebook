@@ -47,10 +47,10 @@ def structure_to_tuple(structure):
     :param str structure: the index in the structure
     :return: the structure as a tuple
     """
-    if len(structure.split('/'))<=1:
-        return (int(structure.split('/')[0]), 0)
+    if len(structure.split('/')) <= 1:
+        return int(structure.split('/')[0]), 0
     else:
-        return (int(structure.split('/')[0]) , int(structure.split('/')[1]))
+        return int(structure.split('/')[0]), int(structure.split('/')[1])
 
 
 def create_course_from_form(self, form):
