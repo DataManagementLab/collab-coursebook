@@ -75,7 +75,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
         attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
 
-        if add_content_form.is_valid() and content_type_form.is_valid() and attachment_form.is_valid():
+        if add_content_form.is_valid() and content_type_form.is_valid():
             # save author etc.
             content = add_content_form.save(commit=False)
             content.author = get_user(self.request)
@@ -93,9 +93,10 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
                 content_type_data.pdf.save("My_File.pdf", ContentFile(pdf))
                 content_type_data.save()
 
-            content_attachment = attachment_form.save(commit=False)
-            content_attachment.save()
-            content.attachment = content_attachment
+            if content_type in ATTACHMENT_TYPES and attachment_form.is_valid():
+                content_attachment = attachment_form.save(commit=False)
+                content_attachment.save()
+                content.attachment = content_attachment
 
             # generate preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
