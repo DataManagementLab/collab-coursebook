@@ -20,8 +20,26 @@
 
         <br>
 
+        <script>
+            function change() {
+                var change = document.getElementById("check");
+                var attached = document.getElementById('attached')
+                    if (change.value == "false") {
+                        change.value = "true";
+                        attached.style.display='none'
+                    } else {
+                        change.value = "false";
+                        attached.style.display='block'
+                    }
+            }
+        </script>
+
+        <div align="center">
+         <button type="button" value="false" id="check" onclick="change()"> Add Attachment </button>
+        </div>
+
         {% if attachment_allowed %}
-        <section>
+        <div id="attached">
             <h2>Image Attachments</h2>
             {% bootstrap_form attachment_form %}
             {% bootstrap_form image1_form %}
@@ -29,7 +47,7 @@
             {% bootstrap_form image3_form %}
             {% bootstrap_form image4_form %}
             {% bootstrap_form image5_form %}
-        </section>
+        </div>
         {% endif %}
         <br>
 
