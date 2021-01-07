@@ -85,7 +85,7 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         return f"{self.content}: {self.image}"
 
 
-class SingleImage(BaseModel):
+class SingleImage(BaseSourceModel):
     TYPE = "SingleImage"
     DESC = _("Single Image")
 
@@ -99,8 +99,7 @@ class SingleImage(BaseModel):
         return f"{self.image}"
 
 
-
-class ImageAttachment(BaseSourceModel):
+class ImageAttachment(BaseModel):
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")
 
@@ -108,7 +107,7 @@ class ImageAttachment(BaseSourceModel):
         verbose_name = _("Image Attachment")
         verbose_name_plural = _("Image Attachments")
 
-    images = models.ManyToManyField(SingleImage, verbose_name=_("Images"), related_name='images', blank=True, default=None)
+    images = models.ManyToManyField(SingleImage, verbose_name=_("Images"), related_name='images', blank=True)
 
     def __str__(self):
         return f"{self.images}"

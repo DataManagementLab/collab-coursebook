@@ -53,10 +53,14 @@ class AddLatex(forms.ModelForm):
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
 
+
 class AddSingleImage(forms.ModelForm):
     class Meta:
         model = SingleImage
         exclude = []
+        widgets = {
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
 
 
 CONTENT_TYPE_FORMS = {
