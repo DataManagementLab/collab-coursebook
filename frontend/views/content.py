@@ -15,8 +15,8 @@ from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
-from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage
-from content.models import CONTENT_TYPES, ATTACHMENT_TYPES, ImageAttachment
+from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, AddSingleImage
+from content.models import CONTENT_TYPES, ATTACHMENT_TYPES, SingleImage, ImageAttachment
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -59,6 +59,11 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
         context['attachment_allowed'] = content_type in ATTACHMENT_TYPES
         context['attachment_form'] = AddContentFormAttachedImage
+        context['image1_form'] = AddSingleImage(prefix="i1")
+        context['image2_form'] = AddSingleImage(prefix="i2")
+        context['image3_form'] = AddSingleImage(prefix="i3")
+        context['image4_form'] = AddSingleImage(prefix="i4")
+        context['image5_form'] = AddSingleImage(prefix="i5")
 
         return context
 
@@ -74,6 +79,11 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             return self.handle_error()
 
         attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
+        image1_form = AddSingleImage(request.POST, request.FILES, prefix="i1")
+        image2_form = AddSingleImage(request.POST, request.FILES, prefix="i2")
+        image3_form = AddSingleImage(request.POST, request.FILES, prefix="i3")
+        image4_form = AddSingleImage(request.POST, request.FILES, prefix="i4")
+        image5_form = AddSingleImage(request.POST, request.FILES, prefix="i5")
 
         if add_content_form.is_valid() and content_type_form.is_valid():
             # save author etc.
@@ -97,6 +107,29 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
                 content_attachment = attachment_form.save(commit=False)
                 content_attachment.save()
                 content.attachment = content_attachment
+                imageSet = []
+
+                if image1_form.is_valid():
+                    i1 = image1_form.save(commit=False)
+                    i1.save()
+                    imageSet.append(i1)
+                if image2_form.is_valid():
+                    i2 = image2_form.save(commit=False)
+                    i2.save()
+                    imageSet.append(i2)
+                if image3_form.is_valid():
+                    i3 = image3_form.save(commit=False)
+                    i3.save()
+                    imageSet.append(i3)
+                if image4_form.is_valid():
+                    i4 = image4_form.save(commit=False)
+                    i4.save()
+                    imageSet.append(i4)
+                if image5_form.is_valid():
+                    i5 = image5_form.save(commit=False)
+                    i5.save()
+                    imageSet.append(i5)
+                content.attachment.images.set(imageSet)
 
             # generate preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
@@ -234,10 +267,10 @@ class AttachedImageView(DetailView):  # pylint: disable=too-many-ancestors
     """
     Displays the content to the user
     """
-    model = ImageAttachment
-    template_name = "content/view/ImageAttachment.html"
+    model = SingleImage
+    template_name = "content/view/AttachedImage.html"
 
-    context_object_name = 'attachment'
+    context_object_name = 'SingleImage'
 
     def get_context_data(self, **kwargs):
         """
@@ -257,6 +290,9 @@ class AttachedImageView(DetailView):  # pylint: disable=too-many-ancestors
 
         content = Content.objects.get(pk=self.kwargs['content_id'])
         context['content'] = content
+
+        attachment = ImageAttachment.objects.get(pk=self.kwargs['imageattachment_id'])
+        context['attachment'] = attachment
 
         context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
 

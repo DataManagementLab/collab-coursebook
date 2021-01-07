@@ -1,6 +1,6 @@
 from django import forms
 
-from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField, Latex
+from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField, Latex, SingleImage
 
 
 class AddContentFormYoutubeVideo(forms.ModelForm):
@@ -21,10 +21,9 @@ class AddContentFormImage(forms.ModelForm):
 class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
         model = ImageAttachment
-        exclude = ['content']
+        exclude = ['images', 'content']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 50px'}),
-            'image': forms.ClearableFileInput(attrs={'multiple': True})
         }
 
 
@@ -54,6 +53,11 @@ class AddLatex(forms.ModelForm):
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
 
+class AddSingleImage(forms.ModelForm):
+    class Meta:
+        model = SingleImage
+        exclude = []
+
 
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
@@ -61,5 +65,6 @@ CONTENT_TYPE_FORMS = {
     PdfContent.TYPE: AddContentFormPdf,
     ImageAttachment.TYPE: AddContentFormAttachedImage,
     TextField.TYPE: AddTextField,
-    Latex.TYPE: AddLatex
+    Latex.TYPE: AddLatex,
+    SingleImage.TYPE: AddSingleImage
 }

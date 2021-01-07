@@ -106,10 +106,12 @@
     <br>
 
     {% if content.attachment is not None %}
+    <h2>Attachments</h2>
+    {% for picture in attachment.images.all %}
     <div>
-        <h2>Attachments</h2>
-        <a href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id %}"><img src="{{ content.attachment.image.url }}" alt="{{ content.description }}" style="width: 30%; height: 30%; margin-bottom: 20px;"></a>
+        <a href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}"><img src="{{ picture.image.url }}" alt="{{ content.description }}" style="width: 30%; height: 30%; margin-bottom: 20px;"></a>
     </div>
+    {% endfor %}
     {% endif %}
 
     <br>

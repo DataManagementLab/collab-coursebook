@@ -85,6 +85,21 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         return f"{self.content}: {self.image}"
 
 
+class SingleImage(BaseModel):
+    TYPE = "SingleImage"
+    DESC = _("Single Image")
+
+    class Meta:
+        verbose_name = _("Single Image")
+        verbose_name_plural = _("Single Images")
+
+    image = models.ImageField(verbose_name=_("Attached Image"), upload_to='uploads/contents/%Y/%m/%d/')
+
+    def __str__(self):
+        return f"{self.image}"
+
+
+
 class ImageAttachment(BaseSourceModel):
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")
@@ -93,10 +108,10 @@ class ImageAttachment(BaseSourceModel):
         verbose_name = _("Image Attachment")
         verbose_name_plural = _("Image Attachments")
 
-    image = models.ImageField(verbose_name=_("Image Attachment"), upload_to='uploads/contents/%Y/%m/%d/')
+    images = models.ManyToManyField(SingleImage, verbose_name=_("Images"), related_name='images', blank=True, default=None)
 
     def __str__(self):
-        return f"{self.image}"
+        return f"{self.images}"
 
 
 class TextField(BaseContentModel):
@@ -148,12 +163,14 @@ CONTENT_TYPES = {
     PdfContent.TYPE: PdfContent,
     ImageAttachment.TYPE: ImageAttachment,
     TextField.TYPE: TextField,
-    Latex.TYPE: Latex
+    Latex.TYPE: Latex,
+    SingleImage.TYPE: SingleImage
 }
 
 # Content Types which are not directly accessible via the topics, but embedded into other content types
 EMBEDDED_CONTENT_TYPES = {
-    ImageAttachment.TYPE
+    ImageAttachment.TYPE,
+    SingleImage.TYPE
 }
 
 # Content Types which allow attachments
