@@ -65,7 +65,11 @@ SingleImageFormSet = modelformset_factory(
     SingleImage,
     fields=("source", "license", "image"),
     extra=0,
-    widgets={'source': forms.Textarea(attrs={'style': 'height: 25px'})})
+    widgets={
+        'source': forms.Textarea(attrs={'style': 'height: 25px', 'required': 'true'}),
+        'image': forms.FileInput(attrs={'required': 'true'})
+    }
+)
 
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
