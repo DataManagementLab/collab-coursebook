@@ -21,11 +21,7 @@
         <br>
 
         {% if attachment_allowed %}
-        <div align="center">
-            <button type="button" value="false" id="check" onclick="change()"> Add Attachment </button>
-        </div>
-
-        <div id="attached">
+        <div>
             <h2>Image Attachments</h2>
             {% bootstrap_form attachment_form %}
             {{ item_forms.management_form }}
@@ -37,7 +33,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <a href="#" id="add-item-button" class="btn btn-info add-item">Add another attachment</a>
+            <button id="add-item-button" class="btn add-item">Add another attachment</button>
         </div>
         {% endif %}
 
@@ -49,23 +45,6 @@
         </div>
 
     </form>
-
-    <script>
-        var attached = document.getElementById('attached')
-        attached.style.display="none"
-
-        function change() {
-                var change = document.getElementById("check");
-                var attached = document.getElementById('attached')
-                    if (change.value === 'true') {
-                        change.value = "false";
-                        attached.style.display='none'
-                    } else {
-                        change.value = "true";
-                        attached.style.display='block'
-                    }
-            }
-    </script>
 
     <script>
         $(document).ready(function() {
