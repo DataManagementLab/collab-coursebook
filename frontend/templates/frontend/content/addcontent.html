@@ -20,43 +20,77 @@
 
         <br>
 
-        <script>
-            function change() {
-                var change = document.getElementById("check");
-                var attached = document.getElementById('attached')
-                    if (change.value == "false") {
-                        change.value = "true";
-                        attached.style.display='none'
-                    } else {
-                        change.value = "false";
-                        attached.style.display='block'
-                    }
-            }
-        </script>
-
+        {% if attachment_allowed %}
         <div align="center">
-         <button type="button" value="false" id="check" onclick="change()"> Add Attachment </button>
+            <button type="button" value="false" id="check" onclick="change()"> Add Attachment </button>
         </div>
 
-        {% if attachment_allowed %}
         <div id="attached">
             <h2>Image Attachments</h2>
             {% bootstrap_form attachment_form %}
-            {% bootstrap_form image1_form %}
-            {% bootstrap_form image2_form %}
-            {% bootstrap_form image3_form %}
-            {% bootstrap_form image4_form %}
-            {% bootstrap_form image5_form %}
+            {{ item_forms.management_form }}
+            <div id="items-form-container">
+                {% for item_form in item_forms %}
+                    <div id="item-{{ forloop.counter0 }}">
+                        {{ item_form.id }}
+                        {{ item_form.as_p }}
+                    </div>
+                {% endfor %}
+            </div>
+            <a href="#" id="add-item-button" class="btn btn-info add-item">Add another attachment</a>
         </div>
         {% endif %}
-        <br>
 
+        <br>
         {{ form.media }}
         <div>
-
             <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
             <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
 
     </form>
+
+    <script>
+        var attached = document.getElementById('attached')
+        attached.style.display="none"
+
+        function change() {
+                var change = document.getElementById("check");
+                var attached = document.getElementById('attached')
+                    if (change.value === 'true') {
+                        change.value = "false";
+                        attached.style.display='none'
+                    } else {
+                        change.value = "true";
+                        attached.style.display='block'
+                    }
+            }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.add-item').click(function(ev) {
+                ev.preventDefault();
+                var count = $('#items-form-container').children().length;
+                var tmplMarkup = $('#item-template').html();
+                var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+                $('div#items-form-container').append(compiledTmpl);
+
+                // update form count
+                $('#id_item_items-TOTAL_FORMS').attr('value', count+1);
+
+                // some animate to scroll to view our new form
+                $('html, body').animate({
+                        scrollTop: $("#add-item-button").position().top-200
+                }, 800);
+            });
+        });
+    </script>
+
+    <script type="text/html" id="item-template">
+        <div id="item-__prefix__">
+            {{ item_forms.empty_form }}
+        </div>
+    </script>
+
 {% endblock %}

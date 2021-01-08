@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import modelformset_factory
 
 from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField, Latex, SingleImage
 
@@ -22,9 +23,6 @@ class AddContentFormAttachedImage(forms.ModelForm):
     class Meta:
         model = ImageAttachment
         exclude = ['images', 'content']
-        widgets = {
-            'source': forms.Textarea(attrs={'style': 'height: 50px'}),
-        }
 
 
 class AddContentFormPdf(forms.ModelForm):
@@ -61,6 +59,9 @@ class AddSingleImage(forms.ModelForm):
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
+
+SingleImageFormSet = modelformset_factory(SingleImage, fields=("source", "license", "image"), extra=0, widgets={'source': forms.Textarea(attrs={'style': 'height: 25px'})})
+
 
 
 CONTENT_TYPE_FORMS = {
