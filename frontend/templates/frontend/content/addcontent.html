@@ -34,6 +34,9 @@
                     {% endfor %}
                 </div>
                 <button id="add-item-button" class="btn btn-primary add-item">Add attachment</button>
+                <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">Remove
+                    attachment
+                </button>
             </div>
         {% endif %}
 
@@ -50,35 +53,77 @@
 
     <script>
         $(document).ready(function () {
-            // limiting attachments
-            let limit = 5;
-            // on click
-            $('.add-item').click(function (ev) {
-                ev.preventDefault();
-                const count = $('#items-form-container').children().length;
-                if (limit == count) {
-                    const button = document.getElementById("add-item-button");
-                    button.style.display = button.style.display === "none" ? "block" : "none";
-                } else {
-                    const tmplMarkup = $('#item-template').html();
-                    const compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
+            // Max attachments
+            const max = 5;
 
-                    $('div#items-form-container').append(compiledTmpl);
+            // Add attachment
+            $('.add-item').click(
+                function (event) {
+                    event.preventDefault();
 
-                    // update form count
-                    $('#id_form-TOTAL_FORMS').attr('value', count + 1);
+                    document.getElementById("remove-item-button").style.visibility = "visible";
 
-                    // some animate to scroll to view our new form
-                    $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);
-                    limit++;
-                }
-            });
-        });
+                    // Number of children
+                    const children = $('#items-form-container').children().length;
+
+                    // Update visibility of add attachment button
+                    if (children + 1 === max) {
+                        const button = document.getElementById("add-item-button");
+                        // After this operation we increased the number of children by one
+                        button.style.visibility = "hidden";
+                    }
+
+                    // Add an image attachment form
+                    if (max !== children) {
+                        const tmplMarkup = $('#item-template').html();
+                        const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
+                        // Add form
+                        $('div#items-form-container').append(compiledTmpl);
+                        // Update form count
+                        $('#id_form-TOTAL_FORMS').attr('value', children + 1);
+                        // Some animate to scroll to view our new form
+                        $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);
+                    }
+                });
+
+            // Remove attachment
+            $('.remove-item').click(
+                function (event) {
+                    event.preventDefault();
+
+                    document.getElementById("add-item-button").style.visibility = "visible";
+
+                    // Number of children
+                    const children = $('#items-form-container').children().length;
+
+                    // Update visibility of add attachment button
+                    if (children - 1 === 0) {
+                        const button = document.getElementById("remove-item-button");
+                        // After this operation we decreased the number of children by one
+                        button.style.visibility = "hidden";
+                    }
+
+                    // Add an image attachment form
+                    if (max !== children) {
+                        const tmplMarkup = $('#item-template').html();
+                        // TODO not working
+                        const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
+                        // Add form
+                        $('div#items-form-container').remove(compiledTmpl);
+                        // Update form count
+                        $('#id_form-TOTAL_FORMS').attr('value', children - 1);
+                        // Some animate to scroll to view our new form
+                        $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);
+                    }
+                });
+        })
     </script>
 
     <script type="text/html" id="item-template">
         <div id="item-__prefix__">
-            {{ item_forms.empty_form }}
+            <table class='table table-borderless'>
+                {{ item_forms.empty_form.as_table }}
+            </table>
         </div>
     </script>
 
