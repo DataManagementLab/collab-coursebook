@@ -105,7 +105,7 @@
 
     <br>
 
-    {% if content.attachment.images %}
+    {% if content.attachment.images.count > 0 %}
     <h2>Attachments</h2>
     {% for picture in attachment.images.all %}
     <div>
