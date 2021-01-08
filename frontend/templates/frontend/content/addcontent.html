@@ -21,47 +21,57 @@
         <br>
 
         {% if attachment_allowed %}
-        <div>
-            <h2>Image Attachments</h2>
-            {% bootstrap_form attachment_form %}
-            {{ item_forms.management_form }}
-            <div id="items-form-container">
-                {% for item_form in item_forms %}
-                    <div id="item-{{ forloop.counter0 }}">
-                        {{ item_form.id }}
-                        {{ item_form.as_p }}
-                    </div>
-                {% endfor %}
+            <div>
+                <h2>Image Attachments</h2>
+                {% bootstrap_form attachment_form %}
+                {{ item_forms.management_form }}
+                <div id="items-form-container">
+                    {% for item_form in item_forms %}
+                        <div id="item-{{ forloop.counter0 }}">
+                            {{ item_form.id }}
+                            {{ item_form.as_p }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button id="add-item-button" class="btn btn-primary add-item">Add another attachment</button>
             </div>
-            <button id="add-item-button" class="btn btn-primary add-item">Add another attachment</button>
-        </div>
         {% endif %}
 
         <br>
         {{ form.media }}
         <div>
-            <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
-            <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
+            <button type="submit"
+                    class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
+            <a href='{% url "frontend:course" pk=course.pk %}'
+               class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
 
     </form>
 
     <script>
-        $(document).ready(function() {
-            $('.add-item').click(function(ev) {
+        $(document).ready(function () {
+            // limiting attachments
+            let limit = 5;
+            // on click
+            $('.add-item').click(function (ev) {
                 ev.preventDefault();
-                var count = $('#items-form-container').children().length;
-                var tmplMarkup = $('#item-template').html();
-                var compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
-                $('div#items-form-container').append(compiledTmpl);
+                const count = $('#items-form-container').children().length;
+                if (limit == count) {
+                    const button = document.getElementById("add-item-button");
+                    button.style.display = button.style.display === "none" ? "block" : "none";
+                } else {
+                    const tmplMarkup = $('#item-template').html();
+                    const compiledTmpl = tmplMarkup.replace(/__prefix__/g, count);
 
-                // update form count
-                $('#id_item_items-TOTAL_FORMS').attr('value', count+1);
+                    $('div#items-form-container').append(compiledTmpl);
 
-                // some animate to scroll to view our new form
-                $('html, body').animate({
-                        scrollTop: $("#add-item-button").position().top-200
-                }, 800);
+                    // update form count
+                    $('#id_item_items-TOTAL_FORMS').attr('value', count + 1);
+
+                    // some animate to scroll to view our new form
+                    $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);
+                    limit++;
+                }
             });
         });
     </script>
