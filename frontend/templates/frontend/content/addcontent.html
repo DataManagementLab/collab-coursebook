@@ -27,13 +27,13 @@
                 {{ item_forms.management_form }}
                 <div id="items-form-container">
                     {% for item_form in item_forms %}
-                        <div id="item-{{ forloop.counter0 }}">
+                        <div id="item-{{ forLoop.counter }}">
                             {{ item_form.id }}
                             {{ item_form.as_p }}
                         </div>
                     {% endfor %}
                 </div>
-                <button id="add-item-button" class="btn btn-primary add-item">Add another attachment</button>
+                <button id="add-item-button" class="btn btn-primary add-item">Add attachment</button>
             </div>
         {% endif %}
 
@@ -66,7 +66,7 @@
                     $('div#items-form-container').append(compiledTmpl);
 
                     // update form count
-                    $('#id_item_items-TOTAL_FORMS').attr('value', count + 1);
+                    $('#id_form-TOTAL_FORMS').attr('value', count + 1);
 
                     // some animate to scroll to view our new form
                     $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);

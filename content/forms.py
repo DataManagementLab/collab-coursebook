@@ -60,9 +60,9 @@ class AddSingleImage(forms.ModelForm):
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
 
-SingleImageFormSet = modelformset_factory(SingleImage, fields=("source", "license", "image"), extra=0, widgets={'source': forms.Textarea(attrs={'style': 'height: 25px'})})
 
-
+SingleImageFormSet = modelformset_factory(SingleImage, fields=("source", "license", "image"), extra=0,
+                                          widgets={'source': forms.Textarea(attrs={'style': 'height: 25px'})})
 
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
