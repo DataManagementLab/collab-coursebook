@@ -79,8 +79,10 @@
                         const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
                         // Add form
                         $('div#items-form-container').append(compiledTmpl);
+
                         // Update form count
                         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
+                        
                         // Some animate to scroll to view our new form
                         $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);
                     }
@@ -108,7 +110,8 @@
                         const tmplMarkup = $('#item-template').html();
                         // TODO not working
                         const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
-                        // Add form
+                        // TODO
+                        // Remove form
                         $('div#items-form-container').remove(compiledTmpl);
                         // Update form count
                         $('#id_form-TOTAL_FORMS').attr('value', children - 1);
@@ -122,7 +125,7 @@
     <script type="text/html" id="item-template">
         <div id="item-__prefix__">
             <table class='table table-borderless'>
-                {{ item_forms.empty_form.as_table }}
+                {{ item_forms.empty_form }}
             </table>
         </div>
     </script>
