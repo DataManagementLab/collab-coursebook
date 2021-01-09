@@ -5,7 +5,7 @@ from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
 
-from export.templatetags.cc_export_tags import export_template
+from export.templatetags.cc_export_tags import export_template, tex_escape
 
 
 class LaTeX:
@@ -24,7 +24,6 @@ class LaTeX:
         rendered_tpl = template.render(context).encode(LaTeX.encoding)
         # prerender content templates
         for content in context['contents']:
-            print(content)
             rendered_tpl += LaTeX.pre_render(content)
         rendered_tpl += "\end{document}".encode(LaTeX.encoding)
 
@@ -66,7 +65,9 @@ class LaTeX:
             index = line.find(LaTeX.error_prefix)
             if index != -1:
                 tmp = line[index:]
+                tmp = tex_escape(tmp)
                 errors.append(tmp)
+        print(errors)
         return errors
 
     @staticmethod
