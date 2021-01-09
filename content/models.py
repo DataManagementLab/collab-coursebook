@@ -121,7 +121,7 @@ class TextField(BaseContentModel):
         verbose_name = _("Textfield Content")
         verbose_name_plural = _("Textfield Contents")
 
-    textfield = models.TextField(verbose_name=_("Textfield"))
+    textfield = models.TextField(verbose_name=_("Text"))
     source = models.TextField(verbose_name=_("Source"))
 
     def __str__(self):

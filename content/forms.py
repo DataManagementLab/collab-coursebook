@@ -39,7 +39,18 @@ class AddTextField(forms.ModelForm):
         model = TextField
         exclude = ['content']
         widgets = {
-            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+            'source': forms.Textarea(attrs={'style': 'height: 100px', 'placeholder': 'https://www.uni-bielefeld.de'
+                                                                                     '/lili/forschung/projekte/archiv'
+                                                                                     '/L2-pro/text.html'}),
+            'textfield': forms.Textarea(attrs={'placeholder': 'Den Körper trainieren viele Menschen. Aber wer '
+                                                              'trainiert auch sein Gehirn? „Das Gehirn muss genauso '
+                                                              'trainiert werden wie der Körper“, sagt Professor '
+                                                              'Siegfried Lehrl von der Universität '
+                                                              'Erlangen-Nürnberg. Denn wissenschaftliche '
+                                                              'Untersuchungen haben gezeigt, dass wir die '
+                                                              'Leistungsfähigkeit unseres Gehirns um 10 bis 15% '
+                                                              'steigern können, wenn wir einige Wochen lang täglich '
+                                                              'zehn Minuten unser Gehirn trainieren.'})
         }
 
 
