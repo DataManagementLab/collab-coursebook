@@ -119,14 +119,17 @@
 
     {% if content.attachment.images.count > 0 %}
         <br>
-        <h2>Attachments</h2>
+        <h4>Attachments</h4>
         {% for picture in attachment.images.all %}
-            <div>
-                <a href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}"><img
-                        src="{{ picture.image.url }}" alt="{{ content.description }}"
-                        style="width: 30%; height: 30%; margin-bottom: 20px;"></a>
+            <div class="responsive">
+                <div class="gallery">
+                    <a target="_blank" href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}">
+                        <img src="{{ picture.image.url }}" alt="{{ content.description }}"></a>
+                </div>
             </div>
         {% endfor %}
+        <div class="clearfix"></div>
+        <div style="padding:20px;"></div>
     {% endif %}
 
     <br>
