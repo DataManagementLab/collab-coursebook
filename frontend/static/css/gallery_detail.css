@@ -1,41 +1,32 @@
-div.gallery {
-        border: 1px solid #ccc;
+/* Source: https://www.imarketinx.de/artikel/responsive-image-gallery-with-css-grid.html */
+
+/* First the Grid */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 1.5rem;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-        div.gallery:hover {
-            border: 1px solid #777;
-        }
+/* The Picture Frame */
+.gallery-frame {
+  padding: .5rem;
+  font-size: 1.2rem;
+  text-align: center;
+  background-color: #0a3d62;
+  color: #d9d9d9;
+}
 
-        div.gallery img {
-            width: 100%;
-            height: auto;
-        }
+/* The Images */
+.gallery-img {
+  max-width: 250px;
+  height: 250px;
+  object-fit: cover;
+  transition: opacity 0.25s ease-in-out;
+}
 
-        * {
-            box-sizing: border-box;
-        }
-
-        .responsive {
-            padding: 0 6px;
-            float: left;
-            width: 24.99999%;
-        }
-
-        @media only screen and (max-width: 700px) {
-        .responsive {
-            width: 49.99999%;
-            margin: 6px 0;
-        }
-        }
-
-        @media only screen and (max-width: 500px) {
-        .responsive {
-            width: 100%;
-        }
-        }
-
-        .clearfix:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
+.gallery-img:hover {
+  opacity: .7;
+}

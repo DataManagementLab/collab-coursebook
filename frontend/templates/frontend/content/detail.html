@@ -26,12 +26,22 @@
 
 
 
+
+
+
+
+
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
                     {% if content.type|is_content_editable %}
                         <a class="dropdown-item"
                            href="
+
+
+
+
+
 
 
                                    {#{% url 'edit_md_file' course.id topic.id content.id %}#}">{% fa5_icon 'pencil-alt' 'fas' %}
@@ -57,6 +67,11 @@
     </div>
 
     <a href="
+
+
+
+
+
 
 
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
@@ -121,14 +136,16 @@
     {% if content.attachment.images.count > 0 %}
         <br>
         <h4>Attachments</h4>
-        {% for picture in attachment.images.all %}
-            <div class="responsive">
-                <div class="gallery">
-                    <a target="_blank" href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}">
-                        <img src="{{ picture.image.url }}" alt="{{ content.description }}"></a>
-                </div>
-            </div>
-        {% endfor %}
+        <div class="gallery-grid">
+            {% for picture in attachment.images.all %}
+                <figure class="gallery-frame">
+                    <a target="_blank"
+                       href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}">
+                        <img class="gallery-img" src="{{ picture.image.url }}" alt="{{ content.description }}"></a>
+                </figure>
+            {% endfor %}
+        </div>
+        </div>
         <div class="clearfix"></div>
         <div style="padding:20px;"></div>
     {% endif %}
