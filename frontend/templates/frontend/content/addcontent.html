@@ -82,9 +82,6 @@
 
                         // Update form count
                         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
-                        
-                        // Some animate to scroll to view our new form
-                        $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);
                     }
                 });
 
@@ -105,19 +102,9 @@
                         button.style.visibility = "hidden";
                     }
 
-                    // Add an image attachment form
-                    if (max !== children) {
-                        const tmplMarkup = $('#item-template').html();
-                        // TODO not working
-                        const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
-                        // TODO
-                        // Remove form
-                        $('div#items-form-container').remove(compiledTmpl);
-                        // Update form count
-                        $('#id_form-TOTAL_FORMS').attr('value', children - 1);
-                        // Some animate to scroll to view our new form
-                        $('html, body').animate({scrollTop: $("#add-item-button").position().top - 200}, 800);
-                    }
+                    // Remove last child
+                    const container = document.getElementById('items-form-container');
+                    container.removeChild(container.lastElementChild);
                 });
         })
     </script>
