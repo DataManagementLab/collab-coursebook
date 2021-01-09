@@ -105,6 +105,9 @@
                     // Remove last child
                     const container = document.getElementById('items-form-container');
                     container.removeChild(container.lastElementChild);
+
+                    // Update form count
+                    $('#id_form-TOTAL_FORMS').attr('value', children - 1);
                 });
         })
     </script>
