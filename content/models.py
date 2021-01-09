@@ -130,13 +130,13 @@ class TextField(BaseContentModel):
 
 class Latex(BaseContentModel, BasePDFModel):
     TYPE = "Latex"
-    DESC = _("Latex")
+    DESC = _("Latex Textfield")
 
     class Meta:
         verbose_name = _("Latex Content")
         verbose_name_plural = _("Latex Contents")
 
-    textfield = models.TextField(verbose_name=_("Code Body"))
+    textfield = models.TextField(verbose_name=_("Latex Code"))
     source = models.TextField(verbose_name=_("Source"))
 
     def __str__(self):
