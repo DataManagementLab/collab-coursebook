@@ -30,7 +30,7 @@ urlpatterns = [
 
             re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$', views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/', include([
-                path('attachment/<int:pk>', views.content.AttachedImageView.as_view(), name='attachment'),
+                path('attachment/<int:imageattachment_id>/<int:pk>', views.content.AttachedImageView.as_view(), name='attachment'),
                 path('rate/<int:pk>/', views.rate_content, name='rating'),
                 path('comment/<int:pk>/delete/', views.DeleteComment.as_view(), name='comment-delete'),
                 path('comment/<int:pk>/edit/', views.EditComment.as_view(), name='comment-edit'),

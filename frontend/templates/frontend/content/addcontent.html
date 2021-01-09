@@ -21,19 +21,103 @@
         <br>
 
         {% if attachment_allowed %}
-        <section>
-            <h2>Image Attachments</h2>
-            {% bootstrap_form attachment_form %}
-        </section>
+            <div>
+                <h2>Image Attachments</h2>
+                {% bootstrap_form attachment_form %}
+                {{ item_forms.management_form }}
+                <div id="items-form-container">
+                    {% for item_form in item_forms %}
+                        <div id="item-{{ forLoop.counter }}">
+                            {{ item_form.id }}
+                            {{ item_form.as_p }}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button id="add-item-button" class="btn btn-primary add-item">Add attachment</button>
+                <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">Remove
+                    attachment
+                </button>
+            </div>
         {% endif %}
-        <br>
 
+        <br>
         {{ form.media }}
         <div>
-
-            <button type="submit" class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
-            <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
+            <button type="submit"
+                    class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
+            <a href='{% url "frontend:course" pk=course.pk %}'
+               class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
 
     </form>
+
+    <script>
+        $(document).ready(function () {
+            // Max attachments
+            const max = 5;
+
+            // Add attachment
+            $('.add-item').click(
+                function (event) {
+                    event.preventDefault();
+
+                    document.getElementById("remove-item-button").style.visibility = "visible";
+
+                    // Number of children
+                    const children = $('#items-form-container').children().length;
+
+                    // Update visibility of add attachment button
+                    if (children + 1 === max) {
+                        const button = document.getElementById("add-item-button");
+                        // After this operation we increased the number of children by one
+                        button.style.visibility = "hidden";
+                    }
+
+                    // Add an image attachment form
+                    if (max !== children) {
+                        const tmplMarkup = $('#item-template').html();
+                        const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
+                        // Add form
+                        $('div#items-form-container').append(compiledTmpl);
+
+                        // Update form count
+                        $('#id_form-TOTAL_FORMS').attr('value', children + 1);
+                    }
+                });
+
+            // Remove attachment
+            $('.remove-item').click(
+                function (event) {
+                    event.preventDefault();
+
+                    document.getElementById("add-item-button").style.visibility = "visible";
+
+                    // Number of children
+                    const children = $('#items-form-container').children().length;
+
+                    // Update visibility of add attachment button
+                    if (children - 1 === 0) {
+                        const button = document.getElementById("remove-item-button");
+                        // After this operation we decreased the number of children by one
+                        button.style.visibility = "hidden";
+                    }
+
+                    // Remove last child
+                    const container = document.getElementById('items-form-container');
+                    container.removeChild(container.lastElementChild);
+
+                    // Update form count
+                    $('#id_form-TOTAL_FORMS').attr('value', children - 1);
+                });
+        })
+    </script>
+
+    <script type="text/html" id="item-template">
+        <div id="item-__prefix__">
+            <table class='table table-borderless'>
+                {{ item_forms.empty_form }}
+            </table>
+        </div>
+    </script>
+
 {% endblock %}

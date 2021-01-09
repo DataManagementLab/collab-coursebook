@@ -10,12 +10,12 @@ register = template.Library()
 
 
 @register.filter
-def export_template(type):
+def export_template(type_t):
     base_path = os.path.dirname(content.__file__)
     path = base_path + f"/templates/content/export"
     # Error check for latex
-    if type in CONTENT_TYPES.keys() or type == 'error':
-        return path + f"/{type}.tex"
+    if type_t in CONTENT_TYPES.keys() or type_t == 'error':
+        return path + f"/{type_t}.tex"
     return path + "/invalid.tex"
 
 
