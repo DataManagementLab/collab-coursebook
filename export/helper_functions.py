@@ -78,7 +78,6 @@ class LaTeX:
                     pdf = f.read()
             except FileNotFoundError:
                 pdf = None
-            s = pdf, pdflatex_output, rendered_tpl
         return pdf, pdflatex_output, rendered_tpl
 
     @staticmethod
