@@ -1,11 +1,12 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
+% Description
 {\Large \textbf{ {{content.description|tex_escape}} }}
 
 \vskip .5em
 
-{{content.textfield.textfield|tex_escape}}
+{{ content.textfield.textfield|tex_escape }}
 
 \vskip 3em
 
