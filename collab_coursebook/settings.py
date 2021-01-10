@@ -133,6 +133,16 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
+# For Django to find the translation file
+# https://docs.djangoproject.com/zh-hans/3.0/topics/i18n/translation/
+
+LOCALE_PATHS = [
+    '/base/locale',
+    '/collab_coursebook/locale',
+    '/content/locale',
+    '/frontend/locale'
+]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
