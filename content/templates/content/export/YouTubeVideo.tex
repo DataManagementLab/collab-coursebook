@@ -1,11 +1,12 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
+% Description
 {\Large \textbf{ {{content.description|tex_escape}} }}
 
 \vskip .5em
 
-\url{ {{ content.ytvideocontent.url }} }
+\url{{{content.ytvideocontent.url}}}
 
 \vskip 3em
 

@@ -1,18 +1,16 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
+% Descrption
 {\Large \textbf{ {{content.description|tex_escape}} }}
 
-\skip .5em
+\vskip .5em
 
+% Figure
 \begin{figure}[H]
- \centering
-   \includegraphics[scale=0.4]{
-     {{content.imagecontent.image.path}}
-   }
- \caption{
-  {{content.description|tex_escape}}
- }
+    \centering
+    \includegraphics[scale = 0.4]{{{content.imagecontent.image.path}}}
+    \caption{{{content.description|tex_escape}}}
 \end{figure}
 
 \vskip 3em

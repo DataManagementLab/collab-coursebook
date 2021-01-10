@@ -1,5 +1,8 @@
 {% load i18n %}
 
-<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{{ content.ytvideocontent.id }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<br><br>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/{{ content.ytvideocontent.id }}"
+        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+<br>
+<br>
 <a href="{{ content.ytvideocontent.url }}" target="_blank">{% trans "View on YouTube" %}</a>
