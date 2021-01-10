@@ -16,7 +16,7 @@ from base.utils import get_user
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
-from content.models import CONTENT_TYPES, ATTACHMENT_TYPES, SingleImage, ImageAttachment
+from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES, SingleImage, ImageAttachment
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -43,6 +43,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # retrieve form for content type
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
@@ -52,20 +53,25 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
         else:
             return self.handle_error()
 
-        # course id for back to course button
-        course_id = self.kwargs['course_id']
-        course = Course.objects.get(pk=course_id)  # pylint: disable=no-member
+        # check if attachments are allowed for given content type
+        context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
+
+        # retrieve attachment_form
+        context['attachment_form'] = AddContentFormAttachedImage
+
+        # retrieve parameters
+        course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
-        context['attachment_allowed'] = content_type in ATTACHMENT_TYPES
-        context['attachment_form'] = AddContentFormAttachedImage
+        # setup formset
         formset = SingleImageFormSet(queryset=SingleImage.objects.none())
         context['item_forms'] = formset
 
         return context
 
     def post(self, request, *args, **kwargs):
-        add_content_form = AddContentForm(request.POST)
+
+        # retrieve content type form
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
@@ -75,10 +81,14 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
         else:
             return self.handle_error()
 
+        # read input from all included forms
+        add_content_form = AddContentForm(request.POST)
         attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
         image_formset = SingleImageFormSet(request.POST, request.FILES)
 
+        # check if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
+
             # save author etc.
             content = add_content_form.save(commit=False)
             content.author = get_user(self.request)
@@ -86,34 +96,48 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content.topic = Topic.objects.get(pk=topic_id)
             content.type = content_type
             content.save()
-            # save generic form. Image, YT video etc.
+
+            # evaluate generic form
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
             content_type_data.save()
 
+            # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
                 pdf = generate_pdf_response(get_user(self.request), Course.objects.get(pk=kwargs['course_id']), content)
                 content_type_data.pdf.save("My_File.pdf", ContentFile(pdf))
                 content_type_data.save()
 
-            if content_type in ATTACHMENT_TYPES and attachment_form.is_valid():
-                content_attachment = attachment_form.save(commit=False)
-                content_attachment.save()
-                content.attachment = content_attachment
-                images = []
+            # Check if attachments are allowed for the given content type
+            if content_type in IMAGE_ATTACHMENT_TYPES:
+                if attachment_form.is_valid():
 
-                if image_formset.is_valid():
-                    for f in image_formset:
-                        used_form = f.save(commit=False)
-                        used_form.save()
-                        images.append(used_form)
+                    # evaluate the attachment form
+                    content_attachment = attachment_form.save(commit=False)
+                    content_attachment.save()
+                    content.attachment = content_attachment
+                    images = []
 
-                content.attachment.images.set(images)
+                    # evaluate all forms of the formset and append to image set
+                    if image_formset.is_valid():
+                        for f in image_formset:
+                            used_form = f.save(commit=False)
+                            used_form.save()
+                            images.append(used_form)
+                    else:
+                        return self.form_invalid(image_formset)
+
+                    # store the attached images in DB
+                    content.attachment.images.set(images)
+                else:
+                    return self.form_invalid(attachment_form)
 
             # generate preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview
             content.save()
+
+            # Redirect to content
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
@@ -242,9 +266,9 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
         return context
 
 
-class AttachedImageView(DetailView):  # pylint: disable=too-many-ancestors
+class AttachedImageView(DetailView):
     """
-    Displays the content to the user
+    Displays the attached image to the user
     """
     model = SingleImage
     template_name = "content/view/AttachedImage.html"
@@ -260,8 +284,8 @@ class AttachedImageView(DetailView):  # pylint: disable=too-many-ancestors
         """
         context = super().get_context_data(**kwargs)
 
-        # course id for back to course button
-        course = Course.objects.get(pk=self.kwargs['course_id'])  # pylint: disable=no-member
+        # retrieve parameters
+        course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
         topic = Topic.objects.get(pk=self.kwargs['topic_id'])
@@ -274,8 +298,8 @@ class AttachedImageView(DetailView):  # pylint: disable=too-many-ancestors
         context['attachment'] = attachment
 
         context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
-
         context['translate_form'] = TranslateForm()
+
         return context
 
 
