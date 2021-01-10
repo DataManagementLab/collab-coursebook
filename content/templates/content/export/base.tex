@@ -1,4 +1,4 @@
-\textsl{}{% load cc_export_tags %}
+{% load cc_export_tags %}
 {% autoescape off %}
 
 \documentclass[a4paper]{article}
@@ -11,12 +11,7 @@
 \usepackage{float}
 \usepackage{grffile}
 \usepackage{hyperref}
-\usepackage[
-    left = 1cm,
-    right = 1cm,
-    top = 2cm,
-    bottom = 2cm
-]{geometry}
+\usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
 \usepackage{listings}
 
 %% Generate a latex graphic
@@ -24,22 +19,21 @@
 % 2: image path
 \newcommand*{\Image}[2]{
     \begin{figure}[H]
-        \centering
-        \includegraphics[width = \textwidth]{#2}
-        \caption{#1}
+    \centering
+    \includegraphics[width=\textwidth]{#2}
+    \caption{#1}
     \end{figure}
 }
 
 % Indent
 \setlength\parindent{0pt}
 
-% Title information
-\title{{{ course.title|tex_escape}}}
-\author{{{user|tex_escape}}}
-
 \begin{document}
 
-\maketitle
+    \title{ {{ course.title|tex_escape }} }
+    \author{ {{user|tex_escape}} }
+    \maketitle
+
 
 % \end{document} gets appended in code
 
