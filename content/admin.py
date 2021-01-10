@@ -1,10 +1,17 @@
+"""Purpose of this file
+
+This file describes the available content type in the admin panel. The contents are ordered alphabetically. This can
+be found in the Content section of the admin panel. Contents can be added to or modified for the various content
+types.
+"""
+
 from django.contrib import admin
 
-from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment, TextField, Latex, SingleImage
+from content.models import ImageAttachment, ImageContent, Latex, PDFContent, SingleImage, TextField, YTVideoContent
 
 
-@admin.register(YTVideoContent)
-class YTVideoContentAdmin(admin.ModelAdmin):
+@admin.register(ImageAttachment)
+class ImageAttachmentAdmin(admin.ModelAdmin):
     pass
 
 
@@ -13,13 +20,18 @@ class ImageContentAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(PdfContent)
+@admin.register(Latex)
+class LatexAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(PDFContent)
 class PdfContentAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(ImageAttachment)
-class ImageAttachmentAdmin(admin.ModelAdmin):
+@admin.register(SingleImage)
+class SingleImageAdmin(admin.ModelAdmin):
     pass
 
 
@@ -27,11 +39,7 @@ class ImageAttachmentAdmin(admin.ModelAdmin):
 class TextFieldAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Latex)
-class LatexAdmin(admin.ModelAdmin):
-    pass
 
-@admin.register(SingleImage)
-class ImageAdmin(admin.ModelAdmin):
+@admin.register(YTVideoContent)
+class YTVideoContentAdmin(admin.ModelAdmin):
     pass
-

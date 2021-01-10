@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='PdfContent',
+            name='PDFContent',
             fields=[
                 ('content', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='base.Content', verbose_name='Content')),
                 ('pdf', models.FileField(upload_to='uploads/contents/%Y/%m/%d/', verbose_name='Pdf')),
