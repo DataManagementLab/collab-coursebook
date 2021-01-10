@@ -410,8 +410,8 @@ EMBEDDED_CONTENT_TYPES = {
     SingleImage.TYPE
 }
 
-# Set: Content types which allow attachments, more precisely image attachments
-ATTACHMENT_TYPES = {
+# Set: Content types which allow image attachments
+IMAGE_ATTACHMENT_TYPES = {
     TextField.TYPE,
     Latex.TYPE
 }
