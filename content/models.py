@@ -143,6 +143,7 @@ class ImageContent(BaseContentModel, BaseSourceModel):
     DESC = _("Single Image")
 
     image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
+    date = models.DateField(verbose_name=_("start"))
 
     class Meta:
         """Meta options

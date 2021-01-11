@@ -303,7 +303,6 @@ class AttachedImageView(DetailView):
         return context
 
 
-
 class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
     """
     Displays the content to the user
