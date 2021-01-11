@@ -47,7 +47,7 @@ class BaseContentModel(BaseModel):
     This abstract class forms a basic skeleton for the models that are related to the content.
 
     Attributes:
-        BaseContentModel.content (ForwardOneToOneDescriptor): Describes the content of this model
+        BaseContentModel.content (OneToOneField - Content): Describes the content of this model
     """
 
     content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
@@ -69,7 +69,7 @@ class BasePDFModel(BaseModel, GeneratePreviewMixin):
     This abstract class forms a basic skeleton for the models that are related to PDF.
 
     Attributes:
-        BasePDFModel.pdf (FileDescriptor): Describes the PDF of this model
+        BasePDFModel.pdf (FileField): Describes the PDF of this model
     """
 
     pdf = models.FileField(verbose_name=_("PDF"), upload_to='uploads/contents/%Y/%m/%d/', blank=True)
@@ -111,8 +111,8 @@ class BaseSourceModel(BaseModel):
     This abstract class forms a basic skeleton for the models that are related to source.
 
     Attributes:
-        BaseSourceModel.source (DeferredAttribute): Describes the source of this model
-        BaseSourceModel.license (DeferredAttribute): Describes the license of the source
+        BaseSourceModel.source (TextField): Describes the source of this model
+        BaseSourceModel.license (CharField): Describes the license of the source
     """
 
     source = models.TextField(verbose_name=_("Source"))
@@ -137,7 +137,8 @@ class ImageContent(BaseContentModel, BaseSourceModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.image (ImageFileDescriptor): The image file to store
+        BaseSourceModel.image (ImageField): The image file to store
+        BaseSourceModel.date (DateField): TODO purpose?
     """
     TYPE = "Image"
     DESC = _("Single Image")
@@ -174,8 +175,8 @@ class Latex(BaseContentModel, BasePDFModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.textfield (DeferredAttribute): The LaTeX code of the content
-        BaseSourceModel.source (DeferredAttribute): The source of the content
+        BaseSourceModel.textfield (TextField): The LaTeX code of the content
+        BaseSourceModel.source (TextField): The source of the content
     """
     TYPE = "Latex"
     DESC = _("Latex Textfield")
@@ -245,7 +246,7 @@ class SingleImage(BaseSourceModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.image (ImageFileDescriptor): The image file to store
+        BaseSourceModel.image (ImageField): The image file to store
     """
     TYPE = "SingleImage"
     DESC = _("Single Image")
@@ -281,8 +282,8 @@ class TextField(BaseContentModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.textfield (DeferredAttribute): The text of the content
-        BaseSourceModel.source (DeferredAttribute): The source of the content
+        BaseSourceModel.textfield (TextField): The text of the content
+        BaseSourceModel.source (TextField): The source of the content
     """
     TYPE = "Textfield"
     DESC = _("Textfield")
@@ -319,7 +320,7 @@ class YTVideoContent(BaseContentModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.url (DeferredAttribute): The link of the YouTube video
+        BaseSourceModel.url (URLField): The link of the YouTube video
     """
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
@@ -366,7 +367,7 @@ class ImageAttachment(BaseModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.images (ManyToManyDescriptor): A reference to the single images
+        BaseSourceModel.images (ManyToManyField - SingleImage): A reference to the single images
     """
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")

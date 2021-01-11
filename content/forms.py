@@ -1,3 +1,8 @@
+"""Purpose of this file
+
+This file contains forms associated with the content types.
+"""
+
 from django import forms
 from django.forms import modelformset_factory
 
@@ -5,13 +10,40 @@ from content.models import YTVideoContent, ImageContent, PDFContent, ImageAttach
 
 
 class AddContentFormYoutubeVideo(forms.ModelForm):
+    """Add YouTube video
+
+    This model represents the add form for YouTube videos.
+    """
+
     class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        Attributes:
+            Meta.model (Model): The model to which this form corresponds
+            Meta.exclude (List[str]): Excluding fields
+        """
         model = YTVideoContent
         exclude = ['content']
 
 
 class AddContentFormImage(forms.ModelForm):
+    """Add image content
+
+    This model represents the add form for image contents.
+    """
+
     class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        Attributes:
+            Meta.model (Model): The model to which this form corresponds
+            Meta.exclude (List[str]): Excluding fields
+            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        """
         model = ImageContent
         exclude = ['content']
         widgets = {
@@ -20,13 +52,40 @@ class AddContentFormImage(forms.ModelForm):
 
 
 class AddContentFormAttachedImage(forms.ModelForm):
+    """Add attached image
+
+    This model represents the add form for image attachments
+    """
+
     class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        Attributes:
+            Meta.model (Model): The model to which this form corresponds
+            Meta.exclude (List[str]): Excluding fields
+        """
         model = ImageAttachment
         exclude = ['images', 'content']
 
 
 class AddContentFormPdf(forms.ModelForm):
+    """Add PDF content
+
+    This model represents the add form for PDF contents.
+    """
+
     class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        Attributes:
+            Meta.model (Model): The model to which this form corresponds
+            Meta.exclude (List[str]): Excluding fields
+            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        """
         model = PDFContent
         exclude = ['license', 'content']
         widgets = {
@@ -35,7 +94,21 @@ class AddContentFormPdf(forms.ModelForm):
 
 
 class AddTextField(forms.ModelForm):
+    """Add text field
+
+    This model represents the add form for text fields.
+    """
+
     class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        Attributes:
+            Meta.model (Model): The model to which this form corresponds
+            Meta.exclude (List[str]): Excluding fields
+            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        """
         model = TextField
         exclude = ['content']
         widgets = {
@@ -55,7 +128,21 @@ class AddTextField(forms.ModelForm):
 
 
 class AddLatex(forms.ModelForm):
+    """Add LaTeX
+
+    This model represents the add form for LaTeX code.
+    """
+
     class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        Attributes:
+            Meta.model (Model): The model to which this form corresponds
+            Meta.exclude (List[str]): Excluding fields
+            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        """
         model = Latex
         exclude = ['content', 'pdf']
         widgets = {
@@ -93,7 +180,21 @@ class AddLatex(forms.ModelForm):
 
 
 class AddSingleImage(forms.ModelForm):
+    """Add single image
+
+    This model represents the add form for single images that is used for image attachments.
+    """
+
     class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        Attributes:
+            Meta.model (Model): The model to which this form corresponds
+            Meta.exclude (List[str]): Excluding fields
+            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        """
         model = SingleImage
         exclude = []
         widgets = {
@@ -101,6 +202,7 @@ class AddSingleImage(forms.ModelForm):
         }
 
 
+# SingleImageFormSet: Image attachment form set
 SingleImageFormSet = modelformset_factory(
     SingleImage,
     fields=("source", "license", "image"),
@@ -111,6 +213,7 @@ SingleImageFormSet = modelformset_factory(
     }
 )
 
+# Dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
     ImageContent.TYPE: AddContentFormImage,
