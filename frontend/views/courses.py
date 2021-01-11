@@ -5,7 +5,7 @@ from django.views.generic import ListView
 from base.models import Course, Category, Period
 
 
-class CourseListView(ListView):  # pylint: disable=too-many-ancestors
+class CourseListView(ListView):  # pylint: disable=tooCourseView-many-ancestors
     """
     Displays the courses page with all available course
     """

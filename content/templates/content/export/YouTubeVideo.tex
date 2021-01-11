@@ -1,0 +1,9 @@
+{% load cc_export_tags %}
+{% autoescape off %}
+\textbf{YouTube video}
+\newline
+\href{ {{ content.ytvideocontent.url }} }{ {{ content.ytvideocontent.url }} }
+\newline
+{{content.description|tex_escape}}
+\newline
+{% endautoescape %}
