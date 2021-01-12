@@ -1,10 +1,15 @@
+"""Purpose of this file
+
+This file defines the URL mapping.
+"""
+
 from django.urls import path, re_path, include
 
-from export.views import generate_coursebook_response
 from content.models import CONTENT_TYPES
+from export.views import generate_coursebook_response
 from frontend import views
+from frontend.views.coursebook import add_to_coursebook
 from frontend.views.search import SearchView
-from frontend.views.coursebook import add_to_coursebook, remove_from_coursebook
 
 app_name = "frontend"
 
@@ -28,9 +33,11 @@ urlpatterns = [
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 
-            re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$', views.content.AddContentView.as_view(), name='content-add'),
+            re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$',
+                    views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/', include([
-                path('attachment/<int:imageattachment_id>/<int:pk>', views.content.AttachedImageView.as_view(), name='attachment'),
+                path('attachment/<int:imageattachment_id>/<int:pk>', views.content.AttachedImageView.as_view(),
+                     name='attachment'),
                 path('rate/<int:pk>/', views.rate_content, name='rating'),
                 path('comment/<int:pk>/delete/', views.DeleteComment.as_view(), name='comment-delete'),
                 path('comment/<int:pk>/edit/', views.EditComment.as_view(), name='comment-edit'),
@@ -45,13 +52,13 @@ urlpatterns = [
 
     path('category/<int:pk>/', include([
         re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$', views.CourseListForCategoryView.as_view(),
-            name='category-courses-sort'),
+                name='category-courses-sort'),
         path('', views.CourseListForCategoryView.as_view(), name='category-courses'),
     ])),
 
     path('period/<int:pk>/', include([
         re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$', views.CourseListForPeriodView.as_view(),
-            name='period-courses-sort'),
+                name='period-courses-sort'),
         path('', views.CourseListForPeriodView.as_view(), name='period-courses'),
     ])),
 ]
