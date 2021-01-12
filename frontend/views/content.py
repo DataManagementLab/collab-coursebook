@@ -17,6 +17,7 @@ from frontend.forms.addcontent import AddContentForm
 from content.forms import CONTENT_TYPE_FORMS
 from content.models import CONTENT_TYPES
 
+
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
     """
     Adds a new content to the database
@@ -133,31 +134,40 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
 
-        content_type = self.get_object().type
-        if content_type in CONTENT_TYPE_FORMS:
-            content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
-            context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
-        else:
-            return self.handle_error()
+        # Add form only to context data if not already in it (when passed by post method containing error messages)
+        if not 'content_type_form' in context:
+            content_type = self.get_object().type
+            if content_type in CONTENT_TYPE_FORMS:
+                content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
+                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+            else:
+                return self.handle_error()
         return context
 
-    # TODO: UpdateView - If no new image is uploaded the existing one should be used.
-    #  At the moment the imageview-form is invalid if it is empty.
     def post(self, request, *args, **kwargs):
-        content_type = self.get_object().type
-        if content_type in CONTENT_TYPE_FORMS:
-            content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
-        else:
-            return self.handle_error()
-        # add_content_form (see AddContentView) is handled by django UpdateView in super().post()
-        if content_type_form.is_valid():
-            content_type_add = content_type_form.save(commit=False)
-            content_type_add.pk = self.get_object().pk
-            content_type_add.save()
-            return super().post(request, *args, **kwargs)
-
         self.object = self.get_object()
-        return self.form_invalid(content_type_form)
+        form = self.get_form()
+
+        if self.object.type in CONTENT_TYPE_FORMS:
+            # Bind/init form with existing data
+            content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
+            # Careful: Order is important for file fields (instance first, afterwards form data,
+            # if using kwargs dict as single argument instead, instance information will not be parsed in time)
+            content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object, data=self.request.POST, files=self.request.FILES)
+
+            # Check form validity and update both forms/associated models
+            if form.is_valid() and content_type_form.is_valid():
+                form.save()
+                content_object = content_type_form.save()
+                content_object.generate_preview()
+                messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
+                return HttpResponseRedirect(self.get_success_url())
+
+            # Don't save and render error messages for both forms
+            return self.render_to_response(self.get_context_data(form=form, content_type_form=content_type_form))
+
+        # Redirect to error page (should not happen for valid content types)
+        return self.handle_error()
 
 
 class ContentView(DetailView):  # pylint: disable=too-many-ancestors
