@@ -41,7 +41,8 @@ msgid "Create"
 msgstr "Erzeugen"
 
 #: frontend/templates/frontend/content/addcontent.html:24
-#: frontend/templates/frontend/content/detail.html:86
+#: frontend/templates/frontend/content/detail.html:88
+#: frontend/templates/frontend/content/editcontent.html:24
 #: frontend/templates/frontend/course/create.html:30
 #: frontend/templates/frontend/course/duplicate.html:30
 #: frontend/templates/frontend/course/edit.html:30
@@ -54,31 +55,36 @@ msgstr "Abbrechen"
 msgid "Actions"
 msgstr "Aktionen"
 
-#: frontend/templates/frontend/content/detail.html:33
-#: frontend/templates/frontend/content/detail.html:35
+#: frontend/templates/frontend/content/detail.html:27
+#: frontend/templates/frontend/content/detail.html:29
 #: frontend/templates/frontend/course/coursebook.html:16
 #, fuzzy
 #| msgid "Courses"
 msgid "Coursebook"
 msgstr "Kurse"
 
-#: frontend/templates/frontend/content/detail.html:49
+#: frontend/templates/frontend/content/detail.html:36
+#: frontend/templates/frontend/profile/profile.html:11
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: frontend/templates/frontend/content/detail.html:51
 msgid "Back to course "
 msgstr "Zurück zum Kurs "
 
-#: frontend/templates/frontend/content/detail.html:55
+#: frontend/templates/frontend/content/detail.html:57
 msgid "By"
 msgstr "Von"
 
-#: frontend/templates/frontend/content/detail.html:65
+#: frontend/templates/frontend/content/detail.html:67
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: frontend/templates/frontend/content/detail.html:73
+#: frontend/templates/frontend/content/detail.html:75
 msgid "Delete"
 msgstr "Löschen"
 
-#: frontend/templates/frontend/content/detail.html:77
+#: frontend/templates/frontend/content/detail.html:79
 #, python-format
 msgid ""
 "\n"
@@ -91,22 +97,26 @@ msgstr ""
 "Diese Aktion kann nicht rückgängig gemacht werden.\n"
 "                        "
 
-#: frontend/templates/frontend/content/detail.html:89
+#: frontend/templates/frontend/content/detail.html:91
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: frontend/templates/frontend/content/detail.html:105
+#: frontend/templates/frontend/content/detail.html:107
 #: frontend/templates/frontend/course/topic_contents.html:29
 msgid "Rating"
 msgstr "Bewertung"
 
-#: frontend/templates/frontend/content/detail.html:115
+#: frontend/templates/frontend/content/detail.html:117
 msgid "Comments"
 msgstr "Kommentare"
 
-#: frontend/templates/frontend/content/detail.html:121
+#: frontend/templates/frontend/content/detail.html:123
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
+
+#: frontend/templates/frontend/content/editcontent.html:23
+msgid "Save"
+msgstr "Speichern"
 
 #: frontend/templates/frontend/content/readingmode.html:9
 msgid "Close"
@@ -242,10 +252,6 @@ msgstr "Admin-Menü"
 msgid "Logout"
 msgstr "Logout"
 
-#: frontend/templates/frontend/profile/profile.html:11
-msgid "Edit"
-msgstr "Bearbeiten"
-
 #: frontend/templates/frontend/profile/profile.html:15
 msgid "User"
 msgstr "Benutzer*in"
@@ -294,13 +300,17 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: frontend/views/content.py:28
+#: frontend/views/content.py:29
 msgid "Content '{cleaned_data['type']}' successfully added"
 msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
 
-#: frontend/views/content.py:35
+#: frontend/views/content.py:36 frontend/views/content.py:123
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
+
+#: frontend/views/content.py:112
+msgid "You are not allowed to edit this content"
+msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
 
 #: frontend/views/course.py:27
 msgid ""
