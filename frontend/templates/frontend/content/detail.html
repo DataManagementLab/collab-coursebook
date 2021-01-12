@@ -24,16 +24,12 @@
 
                 <a class="dropdown-item" href="
 
-
-
-
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
-                    {% if content.type|is_content_editable %}
+                    {% if content.type|check_edit_content_permission:content %}
                         <a class="dropdown-item"
                            href="
-
 
 
                                    {#{% url 'edit_md_file' course.id topic.id content.id %}#}">{% fa5_icon 'pencil-alt' 'fas' %}
@@ -67,7 +63,6 @@
     </div>
 
     <a href="
-
 
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
        class="">
