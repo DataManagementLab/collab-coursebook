@@ -48,6 +48,14 @@
                            href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">{% fa5_icon 'plus' 'far' %} {% trans 'Coursebook' %}</a>
                     {% endif %}
 
+                    <div class="dropdown-divider"></div>
+
+                    {% if user|check_edit_content_permission:content %}
+                        <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
+                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit' %}
+                        </a>
+                    {% endif %}
+
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
                            data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} Delete</a>

@@ -6,13 +6,14 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, CreateView
 from export.views import generate_pdf_response
 from django.core.files.base import ContentFile
+from django.views.generic import DetailView, CreateView, UpdateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
 
 from base.utils import get_user
+from content.models import CONTENT_TYPES
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
@@ -147,6 +148,86 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             return self.form_invalid(add_content_form)
         # content_type_form invalid
         return self.form_invalid(content_type_form)
+
+
+class EditContentView(LoginRequiredMixin, UpdateView):
+    model = Content
+    template_name = 'frontend/content/editcontent.html'
+    form_class = AddContentForm
+
+    def get_content_url(self):
+        """
+        get the url of the content page
+        :return: url of the content page
+        """
+        course_id = self.kwargs['course_id']
+        topic_id = self.kwargs['topic_id']
+        content_id = self.get_object().pk
+        return reverse('frontend:content', args=(course_id, topic_id, content_id,))
+
+    def get_success_url(self):
+        return self.get_content_url()
+
+    def dispatch(self, request, *args, **kwargs):
+        user = get_user(request)
+        if self.get_object().readonly:
+            # only admins and the content owner can edit the content
+            if self.get_object().author == user or request.user.is_superuser:
+                return super().dispatch(request, *args, **kwargs)
+            else:
+                messages.error(request, _('You are not allowed to edit this content'))
+                return HttpResponseRedirect(self.get_content_url())
+        else:
+            # everyone can edit the content
+            return super().dispatch(request, *args, **kwargs)
+
+    def handle_error(self):
+        """
+        create error message and return to course page
+        """
+        course_id = self.kwargs['course_id']
+        messages.error(self.request, _('An error occurred while processing the request'))
+        return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+        context['topic_id'] = self.kwargs['topic_id']
+
+        # Add form only to context data if not already in it (when passed by post method containing error messages)
+        if not 'content_type_form' in context:
+            content_type = self.get_object().type
+            if content_type in CONTENT_TYPE_FORMS:
+                content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
+                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+            else:
+                return self.handle_error()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+
+        if self.object.type in CONTENT_TYPE_FORMS:
+            # Bind/init form with existing data
+            content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
+            # Careful: Order is important for file fields (instance first, afterwards form data,
+            # if using kwargs dict as single argument instead, instance information will not be parsed in time)
+            content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object, data=self.request.POST, files=self.request.FILES)
+
+            # Check form validity and update both forms/associated models
+            if form.is_valid() and content_type_form.is_valid():
+                form.save()
+                content_object = content_type_form.save()
+                content_object.generate_preview()
+                messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
+                return HttpResponseRedirect(self.get_success_url())
+
+            # Don't save and render error messages for both forms
+            return self.render_to_response(self.get_context_data(form=form, content_type_form=content_type_form))
+
+        # Redirect to error page (should not happen for valid content types)
+        return self.handle_error()
 
 
 class ContentView(DetailView):  # pylint: disable=too-many-ancestors
