@@ -1,12 +1,23 @@
+"""Purpose of this file
+
+This file contains forms associated with the content.
+"""
+
 from django import forms
+
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Comment
 
 
 class TranslateForm(forms.Form):
-    """
-    The form for translating markdown content
+    """Translate form
+
+    This model represents form for translating markdown content.
+
+    Attributes:
+        TranslateForm.TRANSLATE_CHOICE (List[Tuple[str, str]]): The translation choices
+        TranslateForm.translation (CharField): The field to enter the translation
     """
     TRANSLATE_CHOICE = [('None', 'Translate into'), ('en', 'English'), ('de', 'German')]
     translation = forms.CharField(label='',
