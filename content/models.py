@@ -138,13 +138,11 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
         BaseSourceModel.image (ImageField): The image file to store
-        BaseSourceModel.date (DateField): TODO purpose?
     """
     TYPE = "Image"
     DESC = _("Single Image")
 
     image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
-    date = models.DateField(verbose_name=_("start"))
 
     class Meta:
         """Meta options
