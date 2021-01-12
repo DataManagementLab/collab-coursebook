@@ -8,18 +8,19 @@
 {% block title %}Delete "{{ object.title }}"?{% endblock %}
 
 {% block content %}
-<h1>Delete Comment</h1>
+    <h1>Delete Comment</h1>
     <p>{% trans "Are you sure you want to delete the following comment?" %}</p>
 
     <div class="card border-primary mb-3">
-      <div class="card-body" style="padding: 20px 20px 0 20px;">
-        {% include "frontend/comment/comment.html" with content_id=comment.content.id %}
-      </div>
-</div>
+        <div class="card-body" style="padding: 20px 20px 0 20px;">
+            {% include "frontend/comment/comment.html" with content_id=comment.content.id %}
+        </div>
+    </div>
 
-<form method="post">{% csrf_token %}
-    <button type="submit" class="btn btn-danger float-right">{% fa5_icon 'trash' 'fas' %} Confirm</button>
-    <a href="{% url 'frontend:content' course_id topic.id comment.content.id %}#comments" class="btn btn-secondary">{% fa5_icon 'times' 'fas' %} Cancel</a>
-</form>
+    <form method="post">{% csrf_token %}
+        <button type="submit" class="btn btn-danger float-right">{% fa5_icon 'trash' 'fas' %} Confirm</button>
+        <a href="{% url 'frontend:content' course_id topic.id comment.content.id %}#comments"
+           class="btn btn-secondary">{% fa5_icon 'times' 'fas' %} Cancel</a>
+    </form>
 
 {% endblock %}

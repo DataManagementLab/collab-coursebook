@@ -24,9 +24,11 @@
             </p>
             <div style="margin-top:2em;">
                 {% if not user.is_authenticated %}
-                    <a href="{% url "cas_ng_login" %}" class="btn btn-outline-warning" style="font-size: 2em;">{% trans "Login" %}</a>
+                    <a href="{% url "cas_ng_login" %}" class="btn btn-outline-warning"
+                       style="font-size: 2em;">{% trans "Login" %}</a>
                 {% else %}
-                    <a href="{% url "frontend:dashboard" %}" class="btn btn-outline-warning" style="font-size: 2em;">{% trans "Go to dashboard" %}</a>
+                    <a href="{% url "frontend:dashboard" %}" class="btn btn-outline-warning"
+                       style="font-size: 2em;">{% trans "Go to dashboard" %}</a>
                 {% endif %}
             </div>
         </div>

@@ -20,11 +20,11 @@
     <h3>Courses</h3>
     {% if search_data.courses %}
         <ul style="list-style-type: none;">
-        {% for course in search_data.courses %}
-            <li>{{ forloop.counter }}.
-                <a href="{% url 'frontend:course' course.id %}"><b>{{ course.title }}</b></a>
-            </li>
-        {% endfor %}
+            {% for course in search_data.courses %}
+                <li>{{ forloop.counter }}.
+                    <a href="{% url 'frontend:course' course.id %}"><b>{{ course.title }}</b></a>
+                </li>
+            {% endfor %}
         </ul>
     {% else %}
         <p>{% trans 'No courses found' %}</p>
@@ -33,13 +33,13 @@
     <h3>Topics</h3>
     {% if search_data.course_structure_entries %}
         <ul style="list-style-type: none;">
-        {% for entry in search_data.course_structure_entries %}
-            <li>{{ forloop.counter }}.
-                <a href="{% url 'frontend:course' entry.course.id %}">
-                    {{ entry.course.title }}: <b>{{ entry.topic.title }}</b>
-                </a>
-            </li>
-        {% endfor %}
+            {% for entry in search_data.course_structure_entries %}
+                <li>{{ forloop.counter }}.
+                    <a href="{% url 'frontend:course' entry.course.id %}">
+                        {{ entry.course.title }}: <b>{{ entry.topic.title }}</b>
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     {% else %}
         <p>{% trans 'No topics found' %}</p>

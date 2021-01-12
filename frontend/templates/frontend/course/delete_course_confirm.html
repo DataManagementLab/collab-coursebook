@@ -8,9 +8,11 @@
 
 {% block content %}
     <h1>Delete "{{ object.title }}"?</h1>
-        <p class="text-center">Are you sure you want to delete "{{ object }}"? Only the structure is deleted - the topics are retained</p>
+    <p class="text-center">Are you sure you want to delete "{{ object }}"? Only the structure is deleted - the topics
+        are retained</p>
     <form method="post">{% csrf_token %}
         <button type="submit" class="btn btn-danger float-right">{% fa5_icon 'trash' 'fas' %} Confirm</button>
-        <a href="{% url 'frontend:course' pk=object.id %}" class="btn btn-secondary">{% fa5_icon 'times' 'fas' %} Cancel</a>
+        <a href="{% url 'frontend:course' pk=object.id %}" class="btn btn-secondary">{% fa5_icon 'times' 'fas' %}
+            Cancel</a>
     </form>
 {% endblock %}

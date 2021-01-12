@@ -27,20 +27,12 @@
 
 
 
-
-
-
-
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
                     {% if content.type|is_content_editable %}
                         <a class="dropdown-item"
                            href="
-
-
-
-
 
 
 
@@ -67,11 +59,6 @@
     </div>
 
     <a href="
-
-
-
-
-
 
 
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
@@ -133,6 +120,7 @@
         </div>
     </div>
 
+    <!-- Image attachments -->
     {% if content.attachment.images.count > 0 %}
         <br>
         <h4>Attachments</h4>
@@ -183,6 +171,5 @@
     {% for comment in comments %}
         {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
     {% endfor %}
-
 
 {% endblock %}
