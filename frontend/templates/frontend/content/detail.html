@@ -21,7 +21,6 @@
             </button>
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-
                 <a class="dropdown-item" href="
 
 
@@ -55,7 +54,6 @@
     </div>
 
     <a href="
-
 
 
 
@@ -118,25 +116,12 @@
         </div>
     </div>
 
-    <!-- Image attachments -->
-    {% if content.attachment.images.count > 0 %}
-        <br>
-        <h4>Attachments</h4>
-        <div class="gallery-grid">
-            {% for picture in attachment.images.all %}
-                <figure class="gallery-frame">
-                    <a target="_blank"
-                       href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}">
-                        <img class="gallery-img" src="{{ picture.image.url }}" alt="{{ content.description }}"></a>
-                </figure>
-            {% endfor %}
-        </div>
-        <div class="clearfix"></div>
-        <div style="padding:20px;"></div>
-    {% endif %}
+    <!-- Attachment -->
+    {% include "frontend/content/detail_attachment.html.html" %}
 
     <br>
 
+    <!-- Rating -->
     <h5><a name="rating">{% trans "Rating" %}</a>
         {% if content.get_rate != -1 %}
             <span class="badge float-right text-right">{{ content.get_rate }}/5</span>
@@ -166,6 +151,7 @@
 
     <div class="clearfix mb-4"></div>
 
+    <!-- Comment -->
     {% for comment in comments %}
         {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
     {% endfor %}
