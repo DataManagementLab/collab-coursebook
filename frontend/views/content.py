@@ -105,8 +105,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                pdf = generate_pdf_response(get_user(self.request), Topic.objects.get(pk=kwargs['topic_id']), content)
-                content_type_data.pdf.save("My_File.pdf", ContentFile(pdf))
+                topic = Topic.objects.get(pk=kwargs['topic_id'])
+                pdf = generate_pdf_response(get_user(self.request), topic, content)
+                content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
                 content_type_data.save()
 
             # Check if attachments are allowed for the given content type
