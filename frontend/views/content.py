@@ -105,7 +105,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                pdf = generate_pdf_response(get_user(self.request), Course.objects.get(pk=kwargs['course_id']), content)
+                pdf = generate_pdf_response(get_user(self.request), Topic.objects.get(pk=kwargs['topic_id']), content)
                 content_type_data.pdf.save("My_File.pdf", ContentFile(pdf))
                 content_type_data.save()
 

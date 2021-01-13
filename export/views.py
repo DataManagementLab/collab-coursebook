@@ -34,6 +34,7 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     context['user'] = user
     context['course'] = course
     context['contents'] = [favorite.content for favorite in Favorite.objects.filter(user=user.profile, course=course)]
+    context['export_pdf'] = True
 
     # Perform compilation given context and template
     (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
@@ -81,14 +82,14 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename, conten
     return response
 
 
-def generate_pdf(user, course, content, template="content/export/base.tex", context=None):
+def generate_pdf(user, topic, content, template="content/export/base.tex", context=None):
     """Generate PDF
 
     Generates a PDF file with name tags for students in the queryset.
 
     Parameters:
         user (User): The user of the content
-        course (Course): The course where the content belongs to
+        topic (Topic): The topic the content belongs to
         content (dict): The content
         template (str): The path of the LaTeX template
         context (dict): The context of the content
@@ -101,22 +102,23 @@ def generate_pdf(user, course, content, template="content/export/base.tex", cont
 
     # Set Context
     context['user'] = user
-    context['course'] = course
+    context['topic'] = topic
     context['contents'] = [content]
+    context['export_pdf'] = False
 
     # Performs compilation given context and template
     (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
     return pdf, pdflatex_output, tex_template
 
 
-def generate_pdf_response(user, course, content):
+def generate_pdf_response(user, topic, content):
     """Generate pdf response
 
     Generates a PDF file with name tags for students in the queryset.
 
     Parameters:
         user (User): The user of the content
-        course (Course): The course where the content belongs to
+        topic (Topic): The topic the content belongs to
         content (dict): The content
 
     return: the generated PDF
@@ -124,5 +126,5 @@ def generate_pdf_response(user, course, content):
     """
 
     # Calls the function for generating the pdf and return the pdf
-    (pdf, pdflatex_output, tex_template) = generate_pdf(user, course, content)
+    (pdf, pdflatex_output, tex_template) = generate_pdf(user, topic, content)
     return pdf
