@@ -1,3 +1,8 @@
+"""Purpose of this file
+
+This file describes the configuration of frontend including the templates and tags.
+"""
+
 from django import template
 from django.conf import settings
 
@@ -10,15 +15,16 @@ register = template.Library()
 
 @register.filter
 def message_bootstrap_class(tag):
-    """
-    Translate django message class into bootstrap class
+    """Message bootstrap
 
-    :param tag: django message class
-    :type tag: str
-    :return: bootstrap alert class
-    :rtype: str
+    Translate django message class into bootstrap class.
+
+    Parameters:
+        tag (str): The django message class
+
+    return: The bootstrap alert class
+    rtype: str
     """
-    print(tag)
     if tag == "error":
         return "alert-danger"
     elif tag == "success":
@@ -30,21 +36,27 @@ def message_bootstrap_class(tag):
 
 @register.simple_tag
 def footer_info():
-    """
-    Get footer info from settings
-    :return: footer info
-    :rtype: dict[str, str]
+    """Footer info
+
+    Gets footer info from settings.
+
+    return: The footer info
+    rtype: dict[str, str]
     """
     return settings.FOOTER_INFO
 
 
 @register.filter
 def count_content(topic_queryset):
-    """
-    This method counts the contents of the topuics in a queryset
-    :param QuerySet topic_queryset: the queryset
-    :return: the number of contents
-    :rtype: int
+    """Count content
+
+    This method counts the contents of the topics in a queryset.
+
+    Parameters:
+        topic_queryset (QuerySet): The queryset
+
+    return: The number of contents
+    rtype: int
     """
     count = 0
     for topic in topic_queryset:
@@ -54,64 +66,94 @@ def count_content(topic_queryset):
 
 @register.filter
 def rev_range(arg):
-    """
-    return range of review
-    :param arg: range
-    :return: range of review
+    """Review range
+
+    Returns range of review.
+
+    Parameters:
+        arg (int): The range
+
+    return: range of review
+    rtype: Iterator
     """
     return reversed(range(1, arg + 1))
 
 
 @register.filter
-def content_view(type):
+def content_view(content_type):
+    """Content view
+
+    Gets matching view for type.
+
+    Parameters:
+        content_type (str): The type of the content
+
+    return: The path to the matching view for the type
+    rtype: str
     """
-    Get matching view for type
-    :param type: type of the content
-    :type type: str
-    :return: path to matching view for type
-    :rtype: str
-    """
-    if type in CONTENT_TYPES.keys():
-        return f"content/view/{type}.html"
+    if content_type in CONTENT_TYPES.keys():
+        return f"content/view/{content_type}.html"
     return "content/view/invalid.html"
 
 
 @register.filter
-def content_card(type):
+def content_card(content_type):
+    """Content card
+
+    Gets the matching view for the type.
+
+    Parameters:
+        content_type (str): type of the content
+
+    return: The path to the matching view for the type
+    rtype: str
     """
-    Get matching view for type
-    :param type: type of the content
-    :type type: str
-    :return: path to matching view for type
-    :rtype: str
-    """
-    if type in CONTENT_TYPES.keys():
-        return f"content/cards/{type}.html"
+    if content_type in CONTENT_TYPES.keys():
+        return f"content/cards/{content_type}.html"
     return "content/cards/blank.html"
 
 
 @register.filter
 def check_edit_course_permission(user, course):
-    # either an user is an owner or the course is public and it is allowed to edit public courses
+    """Edit course permission
+
+    Checks if either an user is an owner or the course is public and it is allowed to edit public courses.
+
+    return: True if the course can be edited
+    rtype: bool
+    """
     return (user.profile in course.owners.all()) or (not course.restrict_changes
                                                      and ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE)
 
 
 @register.filter
-def is_content_editable(type):
-    # TODO: implement check
-    return False
+def check_edit_content_permission(user, content):
+    """Edit content permission
+
+    Checks if either an user is an owner or the user is an super user and it is allowed to edit the content.
+
+    return: True if the content can be edited
+    rtype: bool
+    """
+    if content.readonly:
+        return content.author == user or user.is_superuser
+    else:
+        return True
 
 
 @register.inclusion_tag("frontend/course/dropdown_topic.html")
 def add_content_button(user, course_id, topic_id):
-    """
-    generate dropdown-button containing list of available content types
-    :param User user: the user
-    :param int course_id: id of the course
-    :param int topic_id: id of the topic
-    :return: dropdown button as html div
-    :rtype: dict
+    """Content button
+
+    Generates a dropdown-button containing a list of available content types.
+
+    Parameters:
+        user (User): The user
+        course_id (int): The id of the course
+        topic_id (int): The id of the topic
+
+    return: The dropdown button as html div
+    rtype: dict
     """
     # generate list of tuple (content type, content verbose name) for add content dropdown
     content_data = [(content_type, content_model.DESC) for content_type, content_model in CONTENT_TYPES.items()]
@@ -121,6 +163,16 @@ def add_content_button(user, course_id, topic_id):
 
 @register.filter
 def get_coursebook(user, course):
+    """Get coursebook
+
+    Returns the course book from the from the favourites of the user with the given curse.
+
+    Parameters:
+        user (User): The user
+        course (Course): The course
+    return: the coursebook
+    rtype: list
+    """
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
     return coursebook

@@ -21,25 +21,13 @@
             </button>
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-
                 <a class="dropdown-item" href="
-
 
 
 
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
-                    {% if content.type|is_content_editable %}
-                        <a class="dropdown-item"
-                           href="
-
-
-
-                                   {#{% url 'edit_md_file' course.id topic.id content.id %}#}">{% fa5_icon 'pencil-alt' 'fas' %}
-                            Edit</a>
-                    {% endif %}
-
                     {% if favorite %}
                         <a class="dropdown-item"
                            href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'minus' 'far' %} {% trans 'Coursebook' %}</a>
@@ -48,9 +36,17 @@
                            href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">{% fa5_icon 'plus' 'far' %} {% trans 'Coursebook' %}</a>
                     {% endif %}
 
+                    <div class="dropdown-divider"></div>
+
+                    {% if user|check_edit_content_permission:content %}
+                        <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
+                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit' %}
+                        </a>
+                    {% endif %}
+
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
-                           data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} Delete</a>
+                           data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
                     {% endif %}
                 {% endif %}
 
@@ -59,6 +55,8 @@
     </div>
 
     <a href="
+
+
 
 
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
@@ -82,7 +80,7 @@
         <span class="text-muted">{% trans "Created at" %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i></span>
     </h5>
 
-    <!-- Delete inline -->
+    <!-- Delete inline, for 'Delete Confirmation' bootstrap modal-->
     <div class="modal fade" id="deleteContentModal" tabindex="1" role="dialog" aria-labelledby="deleteContentModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -98,13 +96,13 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <form action="{# url 'delete_content' course.id topic.id content.id #}" method="POST" class="mb-0">
+                    <form action="{% url 'frontend:content-delete' course.id topic.id content.id %}" method="post" class="mb-0">
                         {% csrf_token %}
                         <button class="btn btn-secondary" data-dismiss="modal">
                             {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
                         </button>
-                        <button class="btn btn-danger">
-                            {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                        <button
+                           type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
                         </button>
                     </form>
                 </div>
@@ -114,31 +112,18 @@
 
     <div style="margin-top: 50px;margin-bottom: 50px;">
         {% include content.type|content_view %}
-
         <div class="mt-5">
+            <h4>Description</h4>
             {{ content.description|linebreaks }} <!-- resolves to s -->
         </div>
     </div>
 
-    <!-- Image attachments -->
-    {% if content.attachment.images.count > 0 %}
-        <br>
-        <h4>Attachments</h4>
-        <div class="gallery-grid">
-            {% for picture in attachment.images.all %}
-                <figure class="gallery-frame">
-                    <a target="_blank"
-                       href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}">
-                        <img class="gallery-img" src="{{ picture.image.url }}" alt="{{ content.description }}"></a>
-                </figure>
-            {% endfor %}
-        </div>
-        <div class="clearfix"></div>
-        <div style="padding:20px;"></div>
-    {% endif %}
+    <!-- Attachment -->
+    {% include "frontend/content/detail_attachment.html" %}
 
     <br>
 
+    <!-- Rating -->
     <h5><a name="rating">{% trans "Rating" %}</a>
         {% if content.get_rate != -1 %}
             <span class="badge float-right text-right">{{ content.get_rate }}/5</span>
@@ -168,6 +153,7 @@
 
     <div class="clearfix mb-4"></div>
 
+    <!-- Comment -->
     {% for comment in comments %}
         {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
     {% endfor %}

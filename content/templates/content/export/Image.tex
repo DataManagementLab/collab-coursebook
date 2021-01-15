@@ -1,15 +1,17 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
-% Description
-{\Large \textbf{ {{content.description|tex_escape}} }}
+% show topic title when exporting
+{% if export_pdf %}
+{\Large \textbf{ {{content.topic.title}}   }}
+{% endif %}
 
-\vskip .5em
+\vskip 1em
 
 % Figure
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{ {{ content.imagecontent.image.path }} }
+    \includegraphics[width=\textwidth]{ {{content.imagecontent.image.url}} }
     \caption{ {{ content.description|tex_escape }} }
 \end{figure}
 

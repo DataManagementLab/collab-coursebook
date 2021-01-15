@@ -1,0 +1,28 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load cc_frontend_tags %}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+{% block imports %}
+    <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype=multipart/form-data>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% bootstrap_form content_type_form %}
+
+        {{ form.media }}
+        <div>
+            <button type="submit"
+                    class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Save" %}</button>
+            <a href="{% url 'frontend:content' course_id topic_id content.id %}"
+               class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
+        </div>
+    </form>
+{% endblock %}

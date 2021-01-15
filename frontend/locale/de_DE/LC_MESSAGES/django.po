@@ -47,12 +47,13 @@ msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 msgid "Create"
 msgstr "Erzeugen"
 
-#: .\templates\frontend\content\addcontent.html:49
-#: .\templates\frontend\content\detail.html:117
-#: .\templates\frontend\course\create.html:30
-#: .\templates\frontend\course\duplicate.html:30
-#: .\templates\frontend\course\edit.html:30
-#: .\templates\frontend\profile\profile_edit.html:19
+#: .\templates\frontend\content\addcontent.html:48
+#: .\templates\frontend\content\detail.html:112
+#: frontend/templates/frontend/content/editcontent.html:24
+#: frontend/templates/frontend/course/create.html:32
+#: frontend/templates/frontend/course/duplicate.html:32
+#: frontend/templates/frontend/course/edit.html:32
+#: frontend/templates/frontend/profile/profile_edit.html:19
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -61,31 +62,36 @@ msgstr "Abbrechen"
 msgid "Actions"
 msgstr "Aktionen"
 
-#: .\templates\frontend\content\detail.html:53
-#: .\templates\frontend\content\detail.html:56
-#: .\templates\frontend\course\coursebook.html:16
+#: frontend/templates/frontend/content/detail.html:45
+#: frontend/templates/frontend/content/detail.html:48
+#: frontend/templates/frontend/course/coursebook.html:18
 #, fuzzy
 #| msgid "Courses"
 msgid "Coursebook"
 msgstr "Kurse"
 
-#: .\templates\frontend\content\detail.html:79
+#: frontend/templates/frontend/content/detail.html:55
+#: frontend/templates/frontend/profile/profile.html:12
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: frontend/templates/frontend/content/detail.html:74
 msgid "Back to course "
 msgstr "Zurück zum Kurs "
 
-#: .\templates\frontend\content\detail.html:85
+#: frontend/templates/frontend/content/detail.html:80
 msgid "By"
 msgstr "Von"
 
-#: .\templates\frontend\content\detail.html:95
+#: frontend/templates/frontend/content/detail.html:90
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: .\templates\frontend\content\detail.html:104
+#: frontend/templates/frontend/content/detail.html:99
 msgid "Delete"
 msgstr "Löschen"
 
-#: .\templates\frontend\content\detail.html:108
+#: frontend/templates/frontend/content/detail.html:104
 #, python-format
 msgid ""
 "\n"
@@ -98,23 +104,27 @@ msgstr ""
 "Diese Aktion kann nicht rückgängig gemacht werden.\n"
 "                        "
 
-#: .\templates\frontend\content\detail.html:120
+#: frontend/templates/frontend/content/detail.html:115
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: .\templates\frontend\content\detail.html:154
+#: frontend/templates/frontend/content/detail.html:150
 msgid "Rating"
 msgstr "Bewertung"
 
-#: .\templates\frontend\content\detail.html:169
+#: frontend/templates/frontend/content/detail.html:165
 msgid "Comments"
 msgstr "Kommentare"
 
-#: .\templates\frontend\content\detail.html:176
+#: frontend/templates/frontend/content/detail.html:172
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
 
-#: .\templates\frontend\content\readingmode.html:9
+#: frontend/templates/frontend/content/editcontent.html:23
+msgid "Save"
+msgstr "Speichern"
+
+#: frontend/templates/frontend/content/readingmode.html:10
 msgid "Close"
 msgstr "Schließen"
 
@@ -265,11 +275,11 @@ msgstr "Sprache"
 msgid "Logout"
 msgstr "Logout"
 
-#: .\templates\frontend\profile\profile.html:11
+#: .\templates\frontend\profile\profile.html:12
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: .\templates\frontend\profile\profile.html:15
+#: .\templates\frontend\profile\profile.html:16
 msgid "User"
 msgstr "Benutzer*in"
 
@@ -317,15 +327,19 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: .\views\content.py:33
+#: frontend/views/content.py:34
 msgid "Content '{cleaned_data['type']}' successfully added"
 msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
 
-#: .\views\content.py:40
+#: frontend/views/content.py:41
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: .\views\course.py:27
+#: frontend/views/content.py:178
+msgid "You are not allowed to edit this content"
+msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
+
+#: frontend/views/course.py:48
 msgid ""
 "Course '{cleaned_data['title']}' successfully created. All settings and "
 "contents of the course '{original_course.title}' were copied."

@@ -36,7 +36,13 @@
 \setlength\parindent{0pt}
 
 % Title information
+
+{% if export_pdf %}
 \title{ {{ course.title|tex_escape }} }
+{% else %}
+\title{ {{ topic.title|tex_escape }} }
+{% endif %}
+
 \author{ {{user|tex_escape}} }
 
 % Document

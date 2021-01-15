@@ -51,7 +51,7 @@ class LaTeX:
         rendered_tpl = template.render(context).encode(LaTeX.encoding)
         # Prerender content templates
         for content in context['contents']:
-            rendered_tpl += LaTeX.pre_render(content)
+            rendered_tpl += LaTeX.pre_render(content, context['export_pdf'])
         rendered_tpl += "\end{document}".encode(LaTeX.encoding)
 
         with tempfile.TemporaryDirectory() as tempdir:
@@ -67,7 +67,7 @@ class LaTeX:
             if len(errors) != 0:
                 rendered_tpl = template.render(context).encode(LaTeX.encoding)
                 # prerender errors templates
-                rendered_tpl += LaTeX.pre_render(errors, LaTeX.error_template)
+                rendered_tpl += LaTeX.pre_render(errors, context['export_pdf'], LaTeX.error_template)
                 rendered_tpl += "\end{document}".encode(LaTeX.encoding)
 
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
@@ -109,7 +109,7 @@ class LaTeX:
         return errors
 
     @staticmethod
-    def pre_render(content, template_type=None):
+    def pre_render(content, export_flag, template_type=None):
         """Prerender
 
         Prerender the given content and its corresponding template. If there is no template specified, the template
@@ -117,6 +117,7 @@ class LaTeX:
 
         Parameters:
             content (Content): The content to be rendered
+            export_flag (bool): True iff export, False iff simple content compilation
             template_type (str): The type of the template
 
         return: the rendered template
@@ -126,5 +127,9 @@ class LaTeX:
             template = get_template(export_template(content.type))
         else:
             template = get_template(export_template(template_type))
-        context = {'content': content}
+
+        # Set context for rendering
+        context = {'content': content, 'export_pdf': export_flag}
+
+        # Return result of rendering
         return template.render(context).encode(LaTeX.encoding)
