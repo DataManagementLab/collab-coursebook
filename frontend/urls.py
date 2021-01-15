@@ -46,6 +46,7 @@ urlpatterns = [
             ])),
             path('<pk>/', views.ContentView.as_view(), name='content'),
             path('<pk>/edit/', views.content.EditContentView.as_view(), name='content-edit'),
+            path('<pk>/delete/', views.content.DeleteContentView.as_view(), name='content-delete'),
             path('<pk>/read/', views.content.ContentReadingModeView.as_view(), name='content-reading-mode'),
         ])),
         path('add/', views.AddCourseView.as_view(), name='add-course'),

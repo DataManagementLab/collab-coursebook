@@ -46,7 +46,7 @@
 
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
-                           data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} Delete</a>
+                           data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
                     {% endif %}
                 {% endif %}
 
@@ -80,7 +80,7 @@
         <span class="text-muted">{% trans "Created at" %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i></span>
     </h5>
 
-    <!-- Delete inline -->
+    <!-- Delete inline, for 'Delete Confirmation' bootstrap modal-->
     <div class="modal fade" id="deleteContentModal" tabindex="1" role="dialog" aria-labelledby="deleteContentModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -96,13 +96,13 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <form action="{# url 'delete_content' course.id topic.id content.id #}" method="POST" class="mb-0">
+                    <form action="{% url 'frontend:content-delete' course.id topic.id content.id %}" method="post" class="mb-0">
                         {% csrf_token %}
                         <button class="btn btn-secondary" data-dismiss="modal">
                             {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
                         </button>
-                        <button class="btn btn-danger">
-                            {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                        <button
+                           type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
                         </button>
                     </form>
                 </div>

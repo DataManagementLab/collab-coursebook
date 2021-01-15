@@ -8,11 +8,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from export.views import generate_pdf_response
 from django.core.files.base import ContentFile
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
 
-from base.utils import get_user
+from base.utils import get_user, create_topic_and_subtopic_list, check_owner_permission
 from content.models import CONTENT_TYPES
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
@@ -383,6 +383,65 @@ class AttachedImageView(DetailView):
         context['translate_form'] = TranslateForm()
 
         return context
+
+class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
+    """
+    Deletes the content and redirects to course
+    """
+    model = Content
+    template_name = "frontend/content/detail.html"
+
+
+    def get_success_url(self):
+        """
+        Returns the url to return to after successful delete
+        :return: the success url
+        :rtype: str
+        """
+        course_id = self.kwargs['course_id']
+        return reverse_lazy('frontend:course', args=(course_id, ))
+
+   # Check if the user is allowed to view the delete page
+    def dispatch(self, request, *args, **kwargs):
+        """Dispatch
+
+        Overwrites dispatch: Check if a user is allowed to visit the page.
+
+        Parameters:
+
+            request (HttpRequest): The request
+            args: The arguments
+            kwargs (dict): The keyword arguments
+
+        return: the response to redirect to overview of the course if the user is not owner
+        rtype: HttpResponse
+        """
+        user = get_user(request)
+        # only admins and the content owner can delete the content
+        if self.get_object().author == user or request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            messages.error(request, _('You are not allowed to delete this content'))
+            return HttpResponseRedirect(self.get_content_url())
+
+
+    def delete(self, request, *args, **kwargs):
+        """Delete
+
+        Deletes the content when the user clicks the delete button
+
+        Parameters:
+            request (HttpRequest): The request
+            args: The arguments
+            kwargs (dict): The keyword arguments
+
+        return: the redirect to success url (course)
+        rtype: HttpResponse
+        """
+
+        messages.success(request, "Content successfully deleted", extra_tags="alert-success")
+        return super().delete(self, request, *args, **kwargs)
+
 
 
 class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
