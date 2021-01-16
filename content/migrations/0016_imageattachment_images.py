@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='imageattachment',
             name='images',
-            field=models.ManyToManyField(blank=True, default=None, related_name='images', to='content.SingleImage', verbose_name='Images'),
+            field=models.ManyToManyField(blank=True, default=None, related_name='images', to='content.SingleImageAttachment', verbose_name='Images'),
         ),
     ]
