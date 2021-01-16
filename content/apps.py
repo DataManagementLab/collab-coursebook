@@ -13,4 +13,4 @@ class ContenttypesConfig(AppConfig):
     Attributes:
         ContenttypesConfig.name (str): Defines which application the configuration applies to
     """
-    name = 'text'
+    name = 'content'
