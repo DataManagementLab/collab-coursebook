@@ -16,6 +16,8 @@ from content.mixin import GeneratePreviewMixin
 
 from pdf2image import convert_from_path
 
+from content.validator import validate_is_pdf
+
 
 class BaseModel(models.Model):
     """Base model
@@ -72,7 +74,8 @@ class BasePDFModel(BaseModel, GeneratePreviewMixin):
         BasePDFModel.pdf (FileField): Describes the PDF of this model
     """
 
-    pdf = models.FileField(verbose_name=_("PDF"), upload_to='uploads/contents/%Y/%m/%d/', blank=True)
+    pdf = models.FileField(verbose_name=_("PDF"), upload_to='uploads/contents/%Y/%m/%d/', blank=True,
+                           validators=(validate_is_pdf,))
 
     class Meta:
         """Meta options
@@ -236,8 +239,8 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         return f"{self.content}: {self.pdf}"
 
 
-class SingleImage(BaseSourceModel):
-    """Image content
+class SingleImageAttachment(BaseSourceModel):
+    """Single image attachment
 
     This model represents a single image.
 
@@ -246,10 +249,10 @@ class SingleImage(BaseSourceModel):
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
         BaseSourceModel.image (ImageField): The image file to store
     """
-    TYPE = "SingleImage"
-    DESC = _("Single Image")
+    TYPE = "SingleImageAttachment"
+    DESC = _("Single Image Attachment")
 
-    image = models.ImageField(verbose_name=_("Attached Image"), upload_to='uploads/contents/%Y/%m/%d/')
+    image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
 
     class Meta:
         """Meta options
@@ -260,8 +263,9 @@ class SingleImage(BaseSourceModel):
             Meta.verbose_name (__proxy__): A human-readable name for the object in singular
             Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
         """
-        verbose_name = _("Single Image")
-        verbose_name_plural = _("Single Images")
+        # TODO translation
+        verbose_name = _("Single Image Attachment")
+        verbose_name_plural = _("Single Attachments")
 
     def __str__(self):
         """String representation
@@ -365,12 +369,12 @@ class ImageAttachment(BaseModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.images (ManyToManyField - SingleImage): A reference to the single images
+        BaseSourceModel.images (ManyToManyField - SingleImageAttachment): A reference to the single images
     """
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")
 
-    images = models.ManyToManyField(SingleImage, verbose_name=_("Images"), related_name='images', blank=True)
+    images = models.ManyToManyField(SingleImageAttachment, verbose_name=_("Images"), related_name='images', blank=True)
 
     class Meta:
         """Meta options
@@ -401,13 +405,13 @@ CONTENT_TYPES = {
     ImageAttachment.TYPE: ImageAttachment,
     TextField.TYPE: TextField,
     Latex.TYPE: Latex,
-    SingleImage.TYPE: SingleImage
+    SingleImageAttachment.TYPE: SingleImageAttachment
 }
 
 # Set: Content types which are not directly accessible via the topics, but embedded into other content types
 EMBEDDED_CONTENT_TYPES = {
     ImageAttachment.TYPE,
-    SingleImage.TYPE
+    SingleImageAttachment.TYPE
 }
 
 # Set: Content types which allow image attachments
