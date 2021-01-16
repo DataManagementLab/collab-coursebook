@@ -165,7 +165,7 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         return: the string representation of this object.
         rtype: str
         """
-        return f"{self.content}: {self.image}"
+        return f"{self.content}: {self.DESC} - {self.image}"
 
 
 class Latex(BaseContentModel, BasePDFModel):
@@ -203,7 +203,7 @@ class Latex(BaseContentModel, BasePDFModel):
         return: the string representation of this object.
         rtype: str
         """
-        return f"{self.content}:{self.pdf}"
+        return f"{self.content}: {self.DESC} - {self.pdf}"
 
 
 class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
@@ -236,7 +236,7 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         return: the string representation of this object.
         rtype: str
         """
-        return f"{self.content}: {self.pdf}"
+        return f"{self.content}: {self.DESC} - {self.pdf}"
 
 
 class SingleImageAttachment(BaseSourceModel):
@@ -311,7 +311,7 @@ class TextField(BaseContentModel):
         return: the string representation of this object.
         rtype: str
         """
-        return f"{self.content}"
+        return f"{self.content} : {self.DESC} - {self.pk}"
 
 
 class YTVideoContent(BaseContentModel):
@@ -394,7 +394,7 @@ class ImageAttachment(BaseModel):
         return: the string representation of this object.
         rtype: str
         """
-        return f"{self.images.creation_counter}"
+        return f"{self.DESC}: {self.images.creation_counter}"
 
 
 # Dict: Contains all available content types.
