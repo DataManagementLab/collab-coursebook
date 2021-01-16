@@ -140,7 +140,7 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         BaseSourceModel.image (ImageField): The image file to store
     """
     TYPE = "Image"
-    DESC = _("Image")
+    DESC = _("Single Image")
 
     image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
 
@@ -237,7 +237,7 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
 
 
 class SingleImage(BaseSourceModel):
-    """Single image
+    """Image content
 
     This model represents a single image.
 
@@ -249,7 +249,7 @@ class SingleImage(BaseSourceModel):
     TYPE = "SingleImage"
     DESC = _("Single Image")
 
-    image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
+    image = models.ImageField(verbose_name=_("Attached Image"), upload_to='uploads/contents/%Y/%m/%d/')
 
     class Meta:
         """Meta options
