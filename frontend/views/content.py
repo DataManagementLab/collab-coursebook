@@ -71,7 +71,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
         return context
 
     def post(self, request, *args, **kwargs):
-
         # retrieve content type form
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
@@ -214,7 +213,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
             # Careful: Order is important for file fields (instance first, afterwards form data,
             # if using kwargs dict as single argument instead, instance information will not be parsed in time)
-            content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object, data=self.request.POST, files=self.request.FILES)
+            content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
+                                                                         data=self.request.POST,
+                                                                         files=self.request.FILES)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
@@ -384,13 +385,13 @@ class AttachedImageView(DetailView):
 
         return context
 
+
 class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
     """
     Deletes the content and redirects to course
     """
     model = Content
     template_name = "frontend/content/detail.html"
-
 
     def get_success_url(self):
         """
@@ -399,9 +400,9 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
         :rtype: str
         """
         course_id = self.kwargs['course_id']
-        return reverse_lazy('frontend:course', args=(course_id, ))
+        return reverse_lazy('frontend:course', args=(course_id,))
 
-   # Check if the user is allowed to view the delete page
+    # Check if the user is allowed to view the delete page
     def dispatch(self, request, *args, **kwargs):
         """Dispatch
 
@@ -424,7 +425,6 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
             messages.error(request, _('You are not allowed to delete this content'))
             return HttpResponseRedirect(self.get_content_url())
 
-
     def delete(self, request, *args, **kwargs):
         """Delete
 
@@ -441,7 +441,6 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
 
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
         return super().delete(self, request, *args, **kwargs)
-
 
 
 class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
@@ -467,7 +466,8 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
         if self.request.GET.get('coursebook'):
             course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
             contents = [f.content for f in Favorite.objects.filter(course=course,
-                                                                   user=self.request.user.profile)]  # models.get_coursebook_flat(get_user(self.request), course)
+                                                                   user=self.request.user.profile)]  # models
+            # .get_coursebook_flat(get_user(self.request), course)
         else:
             contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))
 

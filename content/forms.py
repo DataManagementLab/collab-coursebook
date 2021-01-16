@@ -90,7 +90,9 @@ class AddContentFormPdf(forms.ModelForm):
         exclude = ['license', 'content']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+            'pdf': forms.FileInput(attrs={'accept': 'application/pdf'}),
         }
+
 
 
 class AddTextField(forms.ModelForm):
