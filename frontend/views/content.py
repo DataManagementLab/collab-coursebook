@@ -17,7 +17,7 @@ from content.models import CONTENT_TYPES
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
-from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES, SingleImageAttachment, ImageAttachment
+from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES, SingleImage, ImageAttachment
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -65,7 +65,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
         context['course'] = course
 
         # setup formset
-        formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
+        formset = SingleImageFormSet(queryset=SingleImage.objects.none())
         context['item_forms'] = formset
 
         return context
@@ -353,10 +353,10 @@ class AttachedImageView(DetailView):
     """
     Displays the attached image to the user
     """
-    model = SingleImageAttachment
+    model = SingleImage
     template_name = "content/view/AttachedImage.html"
 
-    context_object_name = 'SingleImageAttachment'
+    context_object_name = 'SingleImage'
 
     def get_context_data(self, **kwargs):
         """

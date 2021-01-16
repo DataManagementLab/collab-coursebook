@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='imageattachment',
             name='images',
-            field=models.ManyToManyField(blank=True, related_name='images', to='content.SingleImageAttachment', verbose_name='Images'),
+            field=models.ManyToManyField(blank=True, related_name='images', to='content.SingleImage', verbose_name='Images'),
         ),
         migrations.AlterField(
             model_name='singleimage',

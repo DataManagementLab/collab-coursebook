@@ -7,7 +7,7 @@ types.
 
 from django.contrib import admin
 
-from content.models import ImageAttachment, ImageContent, Latex, PDFContent, SingleImageAttachment, TextField, YTVideoContent
+from content.models import ImageAttachment, ImageContent, Latex, PDFContent, SingleImage, TextField, YTVideoContent
 
 
 @admin.register(ImageAttachment)
@@ -30,7 +30,7 @@ class PdfContentAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(SingleImageAttachment)
+@admin.register(SingleImage)
 class SingleImageAdmin(admin.ModelAdmin):
     pass
 

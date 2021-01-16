@@ -11,10 +11,10 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='SingleImageAttachment',
+            name='SingleImage',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='uploads/contents/%Y/%m/%d/', verbose_name='SingleImageAttachment')),
+                ('image', models.ImageField(upload_to='uploads/contents/%Y/%m/%d/', verbose_name='SingleImage')),
             ],
             options={
                 'verbose_name': 'Single Image',

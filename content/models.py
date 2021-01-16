@@ -239,7 +239,7 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         return f"{self.content}: {self.pdf}"
 
 
-class SingleImageAttachment(BaseSourceModel):
+class SingleImage(BaseSourceModel):
     """Image content
 
     This model represents a single image.
@@ -249,8 +249,8 @@ class SingleImageAttachment(BaseSourceModel):
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
         BaseSourceModel.image (ImageField): The image file to store
     """
-    TYPE = "SingleImageAttachment"
-    DESC = _("Single Image Attachment")
+    TYPE = "SingleImage"
+    DESC = _("Single Image")
 
     image = models.ImageField(verbose_name=_("Attached Image"), upload_to='uploads/contents/%Y/%m/%d/')
 
@@ -263,8 +263,8 @@ class SingleImageAttachment(BaseSourceModel):
             Meta.verbose_name (__proxy__): A human-readable name for the object in singular
             Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
         """
-        verbose_name = _("Single Image Attachment")
-        verbose_name_plural = _("Single Image Attachments")
+        verbose_name = _("Single Image")
+        verbose_name_plural = _("Single Images")
 
     def __str__(self):
         """String representation
@@ -368,12 +368,12 @@ class ImageAttachment(BaseModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.images (ManyToManyField - SingleImageAttachment): A reference to the single images
+        BaseSourceModel.images (ManyToManyField - SingleImage): A reference to the single images
     """
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")
 
-    images = models.ManyToManyField(SingleImageAttachment, verbose_name=_("Images"), related_name='images', blank=True)
+    images = models.ManyToManyField(SingleImage, verbose_name=_("Images"), related_name='images', blank=True)
 
     class Meta:
         """Meta options
@@ -404,13 +404,13 @@ CONTENT_TYPES = {
     ImageAttachment.TYPE: ImageAttachment,
     TextField.TYPE: TextField,
     Latex.TYPE: Latex,
-    SingleImageAttachment.TYPE: SingleImageAttachment
+    SingleImage.TYPE: SingleImage
 }
 
 # Set: Content types which are not directly accessible via the topics, but embedded into other content types
 EMBEDDED_CONTENT_TYPES = {
     ImageAttachment.TYPE,
-    SingleImageAttachment.TYPE
+    SingleImage.TYPE
 }
 
 # Set: Content types which allow image attachments
