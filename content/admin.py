@@ -31,7 +31,7 @@ class PdfContentAdmin(admin.ModelAdmin):
 
 
 @admin.register(SingleImageAttachment)
-class SingleImageAdmin(admin.ModelAdmin):
+class SingleImageAttachmentAdmin(admin.ModelAdmin):
     pass
 
 
