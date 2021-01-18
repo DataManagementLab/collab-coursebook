@@ -1,7 +1,8 @@
 """Purpose of this file
 
-This file describes or defines the basic structure of the course book. A class that extends the models.Model class may
-represents a content content of the course book and can be registered in admin.py.
+This file describes or defines the basic structure of the course book.
+A class that extends the models.Model class may represents a content
+content of the course book and can be registered in admin.py.
 """
 
 from django.conf import settings
@@ -23,8 +24,10 @@ class Category(models.Model):
         Category.title (CharField): Describes the title of the category
         Category.DESC (ImageField): The image file of the category
     """
-    title = models.CharField(max_length=150, verbose_name=_("Title"))
-    image = models.ImageField(verbose_name=_("Title Image"), blank=True, upload_to='uploads/categories/')
+    title = models.CharField(max_length=150,
+                             verbose_name=_("Title"))
+    image = models.ImageField(verbose_name=_("Title Image"), blank=True,
+                              upload_to='uploads/categories/')
 
     class Meta:
         """Meta options
@@ -59,7 +62,8 @@ class Period(models.Model):
         Period.start (DateField): The starting date of the period
         Period.end (DateField): The end date of the period
     """
-    title = models.CharField(max_length=150, verbose_name=_("Title"))
+    title = models.CharField(max_length=150,
+                             verbose_name=_("Title"))
     start = models.DateField(verbose_name=_("start"))
     end = models.DateField(verbose_name=_("end"))
 
@@ -97,28 +101,48 @@ class Course(models.Model):
         Course.creation_date (DateTimeField): The creation date of the course
         Course.image (ImageField): The image of the course
         Course.topics (ManyToManyField - Topic): Describes the topic content in the course
-        Course.owners (ManyToManyField): Describes the people that may change the structure of the course
-        Course.restrict_changes (ManyToManyField): Describes the changes of the restriction who can edit it
+        Course.owners (ManyToManyField): Describes the people that may change the structure of
+        the course
+        Course.restrict_changes (ManyToManyField): Describes the changes of the restriction who
+        can edit it
         Course.category (ForeignKey - Category): Describes the category of the course
         Course.period (ForeignKey - Period): Describes the period of the course
     """
-    title = models.CharField(max_length=200, verbose_name="Title", unique=True)
+    title = models.CharField(max_length=200,
+                             verbose_name="Title",
+                             unique=True)
     description = models.TextField(verbose_name=_("Description"))
 
-    creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
+    creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
+                                         auto_now_add=True,
+                                         blank=True)
 
-    image = models.ImageField(verbose_name=_("Title Image"), blank=True, upload_to='uploads/courses/%Y/%m/%d/')
-    topics = models.ManyToManyField("Topic", verbose_name=_("Topics"), through='CourseStructureEntry',
-                                    related_name="courses", blank=True)
+    image = models.ImageField(verbose_name=_("Title Image"),
+                              blank=True,
+                              upload_to='uploads/courses/%Y/%m/%d/')
+    topics = models.ManyToManyField("Topic", verbose_name=_("Topics"),
+                                    through='CourseStructureEntry',
+                                    related_name="courses",
+                                    blank=True)
 
-    owners = models.ManyToManyField(Profile, related_name='owned_courses', verbose_name=_("Owners"))
+    owners = models.ManyToManyField(Profile, related_name='owned_courses',
+                                    verbose_name=_("Owners"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
-                                           help_text=_("Is the course protected and can only be edited by the owners?"),
-                                           blank=True, default=False)
+                                           help_text=_("Is the course protected and "
+                                                       "can only be edited by the owners?"),
+                                           blank=True,
+                                           default=False)
 
-    category = models.ForeignKey(Category, verbose_name=_("Category"), related_name="courses", on_delete=models.CASCADE)
-    period = models.ForeignKey(Period, verbose_name=_("Period"), related_name="courses",
-                               blank=True, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category,
+                                 verbose_name=_("Category"),
+                                 related_name="courses",
+                                 on_delete=models.CASCADE)
+    period = models.ForeignKey(Period,
+                               verbose_name=_("Period"),
+                               related_name="courses",
+                               blank=True,
+                               null=True,
+                               on_delete=models.SET_NULL)
 
     class Meta:
         """Meta options
@@ -152,8 +176,12 @@ class Topic(models.Model):
         Topic.title (CharField): Describes the title of the course
         Topic.category (ForeignKey - Category): Describes in which category the topic belongs to
     """
-    title = models.CharField(verbose_name=_("Title"), max_length=200)
-    category = models.ForeignKey(Category, verbose_name=_("Category"), related_name="topics", on_delete=models.CASCADE)
+    title = models.CharField(verbose_name=_("Title"),
+                             max_length=200)
+    category = models.ForeignKey(Category,
+                                 verbose_name=_("Category"),
+                                 related_name="topics",
+                                 on_delete=models.CASCADE)
 
     class Meta:
         """Meta options
@@ -207,8 +235,11 @@ class Tag(models.Model):
         Tag.title (CharField): Describes the title of the course
         Tag.category (IconField): Describes in which category the topic belongs to
     """
-    title = models.CharField(verbose_name=_("Title"), max_length=200)
-    symbol = IconField(verbose_name=_("Symbol"), help_text=_("Symbol to show with this tag (optional)"), blank=True)
+    title = models.CharField(verbose_name=_("Title"),
+                             max_length=200)
+    symbol = IconField(verbose_name=_("Symbol"),
+                       help_text=_("Symbol to show with this tag (optional)"),
+                       blank=True)
 
     class Meta:
         """Meta options
@@ -241,36 +272,61 @@ class Content(models.Model):
         Content.author (ForeignKey - Profile): The user that created the content
         Content.description (TextField): The description of the content
         Content.type (CharField): Describes the type of the content
-        Content.language (CharField): Describes the language the content in which the content is written
+        Content.language (CharField): Describes the language the content in which the content is
+        written
         Content.tags (ManyToManyField - Tag): Describes the tags of the content
-        Content.readonly (BooleanField): Describes if the content is read only or it can be modified
+        Content.readonly (BooleanField):
+            Describes if the content is read only or it can be modified
         Content.public (BooleanField): Describes the content visibility
-        Content.attachment (OneToOneField - ImageAttachment): Describes the attachment of the content
+        Content.attachment (OneToOneField - ImageAttachment):
+            Describes the attachment of the content
         Content.creation_date (DateTimeField): Describes when the content was created
         Content.preview (ImageField): The preview image of the content
         Content.ratings (ManyToManyField - Profile): Describes the ratings of the content
     """
-    topic = models.ForeignKey(Topic, verbose_name=_("Topic"), related_name='contents', on_delete=models.CASCADE)
-    author = models.ForeignKey("Profile", verbose_name=_("Author"), on_delete=models.CASCADE, related_name='contents')
+    topic = models.ForeignKey(Topic, verbose_name=_("Topic"),
+                              related_name='contents',
+                              on_delete=models.CASCADE)
+    author = models.ForeignKey("Profile", verbose_name=_("Author"),
+                               on_delete=models.CASCADE,
+                               related_name='contents')
 
-    description = models.TextField(verbose_name=_("Description"), blank=True)
+    description = models.TextField(verbose_name=_("Description"),
+                                   blank=True)
 
     type = models.CharField(verbose_name=_("Type"), max_length=30)
 
-    language = models.CharField(verbose_name=_("Language"), max_length=30, choices=settings.LANGUAGES)
-    tags = models.ManyToManyField(Tag, verbose_name=_("Tags"), related_name='contents', blank=True)
+    language = models.CharField(verbose_name=_("Language"),
+                                max_length=30,
+                                choices=settings.LANGUAGES)
+    tags = models.ManyToManyField(Tag,
+                                  verbose_name=_("Tags"),
+                                  related_name='contents',
+                                  blank=True)
 
-    readonly = models.BooleanField(verbose_name=_("Readonly"), help_text=_("Can this content be updated?"),
+    readonly = models.BooleanField(verbose_name=_("Readonly"),
+                                   help_text=_("Can this content be updated?"),
                                    default=False)
-    public = models.BooleanField(verbose_name=_("Show in public courses?"), help_text=_(
-        "May this content be displayed in courses that don't require registration?"), default=False)
+    public = models.BooleanField(verbose_name=_("Show in public courses?"),
+                                 help_text=
+                                 _("May this content be displayed in courses "
+                                   "that don't require registration?"),
+                                 default=False)
 
-    attachment = models.OneToOneField('content.ImageAttachment', verbose_name=_("Attachment"), on_delete=models.CASCADE,
-                                      blank=True, null=True)
-    creation_date = models.DateTimeField(verbose_name=_('Creation Date'), auto_now_add=True, blank=True)
-    preview = models.ImageField(verbose_name=_("Rendered preview"), blank=True, null=True)
+    attachment = models.OneToOneField('content.ImageAttachment',
+                                      verbose_name=_("Attachment"),
+                                      on_delete=models.CASCADE,
+                                      blank=True,
+                                      null=True)
+    creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
+                                         auto_now_add=True,
+                                         blank=True)
+    preview = models.ImageField(verbose_name=_("Rendered preview"),
+                                blank=True,
+                                null=True)
 
-    ratings = models.ManyToManyField("Profile", through='Rating')
+    ratings = models.ManyToManyField("Profile",
+                                     through='Rating')
 
     class Meta:
         """Meta options
@@ -352,7 +408,7 @@ class Content(models.Model):
         rtype: int
         """
         if self.user_already_rated(user):
-            content_id = self.id  # TODO purpose?
+            content_id = self.id
             return self.ratings.get(user=user).rating_set.first().rating
         return 0
 
@@ -392,13 +448,16 @@ class CourseStructureEntry(models.Model):
 
     Attributes:
         CourseStructureEntry.course (ForeignKey - Course): The course whose structure is meant
-        CourseStructureEntry.index (CharField): The position that is meant (e.g. "1#2" -> second under topic of the
-        first topic)
+        CourseStructureEntry.index (CharField): The position that is meant
+        (e.g. "1#2" -> second under topic of the first topic)
         CourseStructureEntry.topic (ForeignKey - Topic): The topic at the specified position/index
     """
-    course = models.ForeignKey(Course, verbose_name=_("Course"), on_delete=models.CASCADE)
-    index = models.CharField(verbose_name=_("Index"), max_length=50)
-    topic = models.ForeignKey(Topic, verbose_name=_("Topic"), on_delete=models.DO_NOTHING)
+    course = models.ForeignKey(Course, verbose_name=_("Course"),
+                               on_delete=models.CASCADE)
+    index = models.CharField(verbose_name=_("Index"),
+                             max_length=50)
+    topic = models.ForeignKey(Topic, verbose_name=_("Topic"),
+                              on_delete=models.DO_NOTHING)
 
     class Meta:
         """Meta options

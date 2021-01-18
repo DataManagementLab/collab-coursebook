@@ -13,7 +13,8 @@ class Rating(models.Model):
     This model represents the user ratings.
 
     Attributes:
-        Rating.CHOICES (List[Tuple[int, str]]): The choices of the ratings which is described as a scala from 1 to 5
+        Rating.CHOICES (List[Tuple[int, str]]): The choices of the ratings
+        which is described as a scala from 1 to 5
         Rating.content (ForeignKey - Content): The content to rate
         Rating.user (ForeignKey - Profile): The user of the rating
         Rating.rating (IntegerField): The rating number
@@ -30,7 +31,8 @@ class Rating(models.Model):
         (5, 'Very Good'),
     ]
 
-    content = models.ForeignKey("Content", verbose_name=_("Rated content"), on_delete=models.CASCADE)
+    content = models.ForeignKey("Content", verbose_name=_("Rated content"),
+                                on_delete=models.CASCADE)
     user = models.ForeignKey("Profile", verbose_name=_("Rating user"), on_delete=models.CASCADE)
     rating = models.IntegerField(choices=CHOICES, verbose_name=_("Rating"))
 
@@ -42,7 +44,8 @@ class Rating(models.Model):
         Attributes:
             Meta.verbose_name (__proxy__): A human-readable name for the object in singular
             Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
-            Meta.unique_together (Tuple[str, str]): Sets of field names that, taken together, must be unique
+            Meta.unique_together (Tuple[str, str]): Sets of field names that, taken together,
+            must be unique
         """
         verbose_name = _("Rating")
         verbose_name_plural = _("Ratings")
@@ -71,11 +74,13 @@ class Comment(models.Model):
     """
     content = models.ForeignKey("Content", verbose_name=_("Comment for"), on_delete=models.CASCADE,
                                 related_name="comments")
-    author = models.ForeignKey("Profile", verbose_name=_("Author"), on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey("Profile", verbose_name=_("Author"),
+                               on_delete=models.CASCADE, related_name="comments")
 
     text = models.TextField(verbose_name=_("Comment Text"))
 
-    creation_date = models.DateTimeField(verbose_name=_('Creation Date'), blank=True, auto_now_add=True)
+    creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
+                                         blank=True, auto_now_add=True)
     last_edit = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:

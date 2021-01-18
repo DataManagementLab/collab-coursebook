@@ -18,7 +18,8 @@ class Favorite(models.Model):
         Favorite.content (ForeignKey - Content): Describes the favourites contents of the user
     """
 
-    user = models.ForeignKey("Profile", verbose_name=_("User"), on_delete=models.CASCADE, related_name="user_favorites")
+    user = models.ForeignKey("Profile", verbose_name=_("User"), on_delete=models.CASCADE,
+                             related_name="user_favorites")
     course = models.ForeignKey("Course", verbose_name=_("Course"), on_delete=models.CASCADE)
     content = models.ForeignKey("Content", verbose_name=_("Content"), on_delete=models.CASCADE)
 

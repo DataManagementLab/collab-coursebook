@@ -24,7 +24,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
-    stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"), related_name="staring_users")
+    stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"),
+                                            related_name="staring_users")
 
     def __str__(self):
         """String representation

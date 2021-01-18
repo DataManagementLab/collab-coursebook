@@ -66,8 +66,7 @@ def structure_to_tuple(structure):
     """
     if len(structure.split('/')) <= 1:
         return int(structure.split('/')[0]), 0
-    else:
-        return int(structure.split('/')[0]), int(structure.split('/')[1])
+    return int(structure.split('/')[0]), int(structure.split('/')[1])
 
 
 def create_course_from_form(self, form):
