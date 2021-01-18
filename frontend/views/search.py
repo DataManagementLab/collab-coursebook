@@ -34,7 +34,8 @@ class SearchView(ListView, LoginRequiredMixin):
         query = self.request.GET.get('q')
         query = query.strip().lower()
         courses = Course.objects.filter(title__icontains=query)
-        course_structure_entries = CourseStructureEntry.objects.filter(topic__title__icontains=query)
+        course_structure_entries = \
+            CourseStructureEntry.objects.filter(topic__title__icontains=query)
         return {'courses': courses, 'course_structure_entries': course_structure_entries}
 
     def get_context_data(self, *, object_list=None, **kwargs):

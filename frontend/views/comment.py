@@ -51,7 +51,10 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(
-                reverse('frontend:content', args=(course_id, topic_id, self.get_object().content.id,)))
+                reverse('frontend:content',
+                        args=(course_id,
+                              topic_id,
+                              self.get_object().content.id,)))
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -65,8 +68,12 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
-        messages.success(self.request, _("Successfully deleted comment."), extra_tags="alert-success")
-        return reverse('frontend:content', args=(course_id, topic_id, self.get_object().content.id,))
+        messages.success(self.request,
+                         _("Successfully deleted comment."),
+                         extra_tags="alert-success")
+        return reverse('frontend:content',
+                       args=(course_id, topic_id,
+                             self.get_object().content.id,))
 
     def get_context_data(self, **kwargs):
         """Context data
@@ -120,9 +127,12 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
         comment.save()
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
-        messages.success(self.request, _("Successfully edited Comment."), extra_tags="alert-success")
-        return HttpResponseRedirect(reverse('frontend:content', args=(course_id, topic_id,
-                                                                      comment.content.id,)))
+        messages.success(self.request,
+                         _("Successfully edited Comment."),
+                         extra_tags="alert-success")
+        return HttpResponseRedirect(reverse('frontend:content',
+                                            args=(course_id, topic_id,
+                                                  comment.content.id,)))
 
     # Checks if user is the author of the comment
     def dispatch(self, request, *args, **kwargs):

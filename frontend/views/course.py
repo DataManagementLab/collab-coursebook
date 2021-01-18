@@ -14,7 +14,7 @@ from django.views.generic.edit import FormMixin, CreateView, DeleteView, UpdateV
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Course, CourseStructureEntry
-from base.utils import create_topic_and_subtopic_list, check_owner_permission
+from base.utils import check_owner_permission
 
 from frontend.forms import AddAndEditCourseForm, FilterAndSortForm
 
@@ -45,7 +45,8 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         """
         original_course = Course.objects.get(pk=self.get_object().id)
         return _(
-            f"Course '{cleaned_data['title']}' successfully created. All settings and contents of the course "
+            f"Course '{cleaned_data['title']}' successfully created. "
+            f"All settings and contents of the course "
             f"'{original_course.title}' were copied.")
 
     def get_initial(self):
@@ -231,7 +232,8 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
         rtype: dict
         """
         context = super().get_context_data(**kwargs)
-        structure_entries = CourseStructureEntry.objects.filter(course=context["course"]).order_by('index')
+        structure_entries = CourseStructureEntry. \
+            objects.filter(course=context["course"]).order_by('index')
 
         topics_recursive = []
         current_topic = None
@@ -240,14 +242,16 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
             # Topic
             if len(index_split) == 1:
                 current_topic = {'topic': entry.topic, 'subtopics': [],
-                                 'topic_contents': entry.topic.get_contents(self.sorted_by, self.filtered_by)}
+                                 'topic_contents': entry.topic.get_contents(self.sorted_by,
+                                                                            self.filtered_by)}
                 topics_recursive.append(current_topic)
             # Subtopic
             # Only handle up to one subtopic level
             else:
                 current_topic["subtopics"].append({'topic': entry.topic,
-                                                   'topic_contents': entry.topic.get_contents(self.sorted_by,
-                                                                                              self.filtered_by)})
+                                                   'topic_contents':
+                                                       entry.topic.
+                                                  get_contents(self.sorted_by, self.filtered_by)})
 
         context["structure"] = topics_recursive
 
@@ -318,7 +322,8 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-m
         rtype: HttpResponse
         """
         if check_owner_permission(request, self.get_object(), messages):
-            return HttpResponseRedirect(reverse_lazy('frontend:course', args=(self.get_object().id,)))
+            return HttpResponseRedirect(reverse_lazy('frontend:course',
+                                                     args=(self.get_object().id,)))
         return super().dispatch(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):

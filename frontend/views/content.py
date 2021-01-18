@@ -1,23 +1,26 @@
+"""Purpose of this file
+
+"""
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.files.base import ContentFile
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from export.views import generate_pdf_response
-from django.core.files.base import ContentFile
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
 from base.models import Content, Comment, Course, Topic, Favorite
-
-from base.utils import get_user, create_topic_and_subtopic_list, check_owner_permission
-from content.models import CONTENT_TYPES
+from base.utils import get_user
+from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
+from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
+from content.models import SingleImageAttachment, ImageAttachment
+from export.views import generate_pdf_response
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
-from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
-from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES, SingleImageAttachment, ImageAttachment
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -75,7 +78,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
-                content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
+                content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST,
+                                                                         request.FILES)
             else:
                 return self.handle_error()
         else:
@@ -121,8 +125,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
                     # evaluate all forms of the formset and append to image set
                     if image_formset.is_valid():
-                        for f in image_formset:
-                            used_form = f.save(commit=False)
+                        for form in image_formset:
+                            used_form = form.save(commit=False)
                             used_form.save()
                             images.append(used_form)
                     else:
@@ -141,7 +145,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             # Redirect to content
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
-            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
+            return HttpResponseRedirect(reverse_lazy('frontend:content',
+                                                     args=(course_id, topic_id, content.id,)))
 
         # add_content_form invalid
         if not add_content_form.is_valid():
@@ -194,12 +199,14 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
 
-        # Add form only to context data if not already in it (when passed by post method containing error messages)
-        if not 'content_type_form' in context:
+        # Add form only to context data if not already in it
+        # (when passed by post method containing error messages)
+        if 'content_type_form' not in context:
             content_type = self.get_object().type
             if content_type in CONTENT_TYPE_FORMS:
                 content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
-                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+                context['content_type_form'] = \
+                    CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
             else:
                 return self.handle_error()
         return context
@@ -212,7 +219,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             # Bind/init form with existing data
             content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
             # Careful: Order is important for file fields (instance first, afterwards form data,
-            # if using kwargs dict as single argument instead, instance information will not be parsed in time)
+            # if using kwargs dict as single argument instead, instance information
+            # will not be parsed in time)
             content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
@@ -226,7 +234,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 return HttpResponseRedirect(self.get_success_url())
 
             # Don't save and render error messages for both forms
-            return self.render_to_response(self.get_context_data(form=form, content_type_form=content_type_form))
+            return self.render_to_response(
+                self.get_context_data(form=form, content_type_form=content_type_form))
 
         # Redirect to error page (should not happen for valid content types)
         return self.handle_error()
@@ -421,9 +430,9 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
         # only admins and the content owner can delete the content
         if self.get_object().author == user or request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
-        else:
-            messages.error(request, _('You are not allowed to delete this content'))
-            return HttpResponseRedirect(self.get_content_url())
+
+        messages.error(request, _('You are not allowed to delete this content'))
+        return HttpResponseRedirect(self.get_content_url())
 
     def delete(self, request, *args, **kwargs):
         """Delete
@@ -465,8 +474,9 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
         topic = Topic.objects.get(pk=topic_id)
         if self.request.GET.get('coursebook'):
             course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
-            contents = [f.content for f in Favorite.objects.filter(course=course,
-                                                                   user=self.request.user.profile)]  # models
+            contents = [f.content for f in Favorite.objects
+                .filter(course=course,
+                        user=self.request.user.profile)]  # models
             # .get_coursebook_flat(get_user(self.request), course)
         else:
             contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))

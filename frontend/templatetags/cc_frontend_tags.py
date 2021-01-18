@@ -117,7 +117,12 @@ def content_card(content_type):
 def check_edit_course_permission(user, course):
     """Edit course permission
 
-    Checks if either an user is an owner or the course is public and it is allowed to edit public courses.
+    Checks if either an user is an owner or the course is public and it is allowed
+    to edit public courses.
+
+    Parameters:
+        user (User): The user to check permission
+        course (Course): The course th check permission
 
     return: True if the course can be edited
     rtype: bool
@@ -130,15 +135,19 @@ def check_edit_course_permission(user, course):
 def check_edit_content_permission(user, content):
     """Edit content permission
 
-    Checks if either an user is an owner or the user is an super user and it is allowed to edit the content.
+    Checks if either an user is an owner or the user is an super user and it is
+    allowed to edit the content.
+
+    Parameters:
+        user (User): The user to check permission
+        content (Content): The content th check permission
 
     return: True if the content can be edited
     rtype: bool
     """
     if content.readonly:
         return content.author == user or user.is_superuser
-    else:
-        return True
+    return True
 
 
 @register.inclusion_tag("frontend/course/dropdown_topic.html")
@@ -156,9 +165,13 @@ def add_content_button(user, course_id, topic_id):
     rtype: dict
     """
     # generate list of tuple (content type, content verbose name) for add content dropdown
-    content_data = [(content_type, content_model.DESC) for content_type, content_model in CONTENT_TYPES.items()]
+    content_data = [(content_type, content_model.DESC)
+                    for content_type, content_model in CONTENT_TYPES.items()]
     content_data = list(filter(lambda x: x[0] not in EMBEDDED_CONTENT_TYPES, content_data))
-    return {'user': user, 'course_id': course_id, 'topic_id': topic_id, 'content_data': content_data}
+    return {'user': user,
+            'course_id': course_id,
+            'topic_id': topic_id,
+            'content_data': content_data}
 
 
 @register.filter

@@ -5,10 +5,6 @@ This file contains forms associated with the content.
 
 from django import forms
 
-from django.utils.translation import gettext_lazy as _
-
-from base.models import Comment
-
 
 class TranslateForm(forms.Form):
     """Translate form

@@ -63,7 +63,7 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return: The success message when the profile was updated
         rtype: __proxy__
         """
-        return _(f"Profile updated")
+        return _("Profile updated")
 
     def get_object(self, queryset=None):
         """Get object
