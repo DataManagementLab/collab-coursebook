@@ -1,4 +1,4 @@
-name: PyLint
+name: PyLint Django
 
 on:
   push:
@@ -29,8 +29,6 @@ jobs:
         pip install -r requirements.txt
     - name: Run PyLint
       run: |
-        pylint base  --load-plugins pylint_django frontend/views
-
         pylint --load-plugins=pylint_django base
         pylint --load-plugins=pylint_django collab_coursebook
         pylint --load-plugins=pylint_django content
