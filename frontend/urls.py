@@ -8,6 +8,8 @@ from django.urls import path, re_path, include
 from content.models import CONTENT_TYPES
 from export.views import generate_coursebook_response
 from frontend import views
+from frontend.views.coursebook import add_to_coursebook
+from frontend.views.search import SearchView
 
 app_name = "frontend"
 
