@@ -25,11 +25,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pylint
+        pip install pylint-django
         pip install -r requirements.txt
     - name: Run PyLint
       run: |
-        pylint base --ignore migrations
-        pylint collab_coursebook
-        pylint content --ignore migrations
-        pylint export --ignore migrations
-        pylint frontend --ignore migrations
+        pylint base  --load-plugins pylint_django frontend/views
+
+        pylint --load-plugins=pylint_django base
+        pylint --load-plugins=pylint_django collab_coursebook
+        pylint --load-plugins=pylint_django content
+        pylint --load-plugins=pylint_django export
+        pylint --load-plugins=pylint_django frontend
