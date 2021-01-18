@@ -1,4 +1,4 @@
-"""Init
+"""Purpose of this file
 
 Marks this directory as Python package directories. This package contains the base models
 of the collab coursebook.
