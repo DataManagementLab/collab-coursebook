@@ -9,3 +9,5 @@ pillow==7.1.1
 django-debug-toolbar==3.2
 python-magic==0.4.20
 python-magic-bin==0.4.14
+django-reversion==3.0.8
+django-reversion-compare==0.12.0
