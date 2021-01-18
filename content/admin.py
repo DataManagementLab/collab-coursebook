@@ -8,6 +8,8 @@ modified for the various content types.
 
 from django.contrib import admin
 
+from reversion_compare.admin import CompareVersionAdmin
+
 from content.models import ImageAttachment, ImageContent, Latex
 from content.models import PDFContent, SingleImageAttachment, TextField
 from content.models import YTVideoContent
@@ -54,7 +56,7 @@ class SingleImageAttachmentAdmin(admin.ModelAdmin):
 
 
 @admin.register(TextField)
-class TextFieldAdmin(admin.ModelAdmin):
+class TextFieldAdmin(CompareVersionAdmin):
     """Text field admin
 
     Represents the text field model in the admin panel.
