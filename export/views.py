@@ -33,7 +33,8 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     # Set Context
     context['user'] = user
     context['course'] = course
-    context['contents'] = [favorite.content for favorite in Favorite.objects.filter(user=user.profile, course=course)]
+    context['contents'] = [
+        favorite.content for favorite in Favorite.objects.filter(user=user.profile, course=course)]
     context['export_pdf'] = True
 
     # Perform compilation given context and template
@@ -60,7 +61,8 @@ def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
     return write_response(request, pdf, pdflatex_output, tex_template, filename)
 
 
-def write_response(request, pdf, pdflatex_output, tex_template, filename, content_type='application/pdf'):
+def write_response(request, pdf, pdflatex_output, tex_template, filename,
+                   content_type='application/pdf'):
     """Write response
 
     Renders a pdf and sends it to the browser.
@@ -74,8 +76,10 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename, conten
         content_type (str): The type of the content
     """
     if not pdf:
-        return render(request, "frontend/coursebook/rendering-error.html",
-                      {"content": pdflatex_output[0].decode("utf-8"), "tex_template": tex_template.decode("utf-8")})
+        return render(request,
+                      "frontend/coursebook/rendering-error.html",
+                      {"content": pdflatex_output[0].decode("utf-8"),
+                       "tex_template": tex_template.decode("utf-8")})
     response = HttpResponse(content_type=content_type)
     response['Content-Disposition'] = 'attachment; filename=' + filename
     response.write(pdf)

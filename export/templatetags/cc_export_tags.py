@@ -1,6 +1,7 @@
 """Purpose of this file
 
-This file describes the configuration of exports including the templates and if necessary the escape characters.
+This file describes the configuration of exports including the templates
+and if necessary the escape characters.
 """
 
 import os
@@ -26,7 +27,7 @@ def export_template(type_t):
     rtype: str
     """
     base_path = os.path.dirname(content.__file__)
-    path = base_path + f"/templates/content/export"
+    path = base_path + "/templates/content/export"
 
     # Type must be a content type or the error type for an invalid latex compilation
     if type_t in CONTENT_TYPES.keys() or type_t == 'error':

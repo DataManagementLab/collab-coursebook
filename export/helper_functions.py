@@ -32,7 +32,8 @@ class LaTeX:
     def render(context, template_name, assets, app='export', external_assets=None):
         """Render
 
-        Renders the LaTeX code with its content and then compiles the code to generate a PDF with its log.
+        Renders the LaTeX code with its content and then compiles the code to generate
+        a PDF with its log.
 
         https://github.com/d120/pyophase/blob/master/ophasebase/helper.py
         Retrieved 10.08.2020
@@ -67,7 +68,8 @@ class LaTeX:
             if len(errors) != 0:
                 rendered_tpl = template.render(context).encode(LaTeX.encoding)
                 # prerender errors templates
-                rendered_tpl += LaTeX.pre_render(errors, context['export_pdf'], LaTeX.error_template)
+                rendered_tpl += LaTeX.pre_render(errors, context['export_pdf'],
+                                                 LaTeX.error_template)
                 rendered_tpl += "\end{document}".encode(LaTeX.encoding)
 
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
@@ -84,8 +86,8 @@ class LaTeX:
     def errors(lob):
         """Error log
 
-        Checks the given log if there are error messages and returns the messages. If there are none, an empty list
-        will be returned.
+        Checks the given log if there are error messages and returns the messages.
+        If there are none, an empty list will be returned.
 
         Parameters:
             lob (List[byte]): A list of bytes representing the code
@@ -112,8 +114,9 @@ class LaTeX:
     def pre_render(content, export_flag, template_type=None):
         """Prerender
 
-        Prerender the given content and its corresponding template. If there is no template specified, the template
-        will associated with the type of the content.
+        Prerender the given content and its corresponding template. If there
+        is no template specified, the template will associated with the type
+        of the content.
 
         Parameters:
             content (Content): The content to be rendered
