@@ -6,7 +6,8 @@ This file contains forms associated with the content types.
 from django import forms
 from django.forms import modelformset_factory
 
-from content.models import YTVideoContent, ImageContent, PDFContent, ImageAttachment, TextField, Latex, SingleImageAttachment
+from content.models import YTVideoContent, ImageContent, PDFContent
+from content.models import ImageAttachment, TextField, Latex, SingleImageAttachment
 
 
 class AddContentFormYoutubeVideo(forms.ModelForm):
@@ -92,7 +93,6 @@ class AddContentFormPdf(forms.ModelForm):
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
             'pdf': forms.FileInput(attrs={'accept': 'application/pdf'}),
         }
-
 
 
 class AddTextField(forms.ModelForm):

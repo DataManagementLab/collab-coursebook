@@ -1,6 +1,6 @@
 """Init
 
-Marks this directory as Python package directories. This package contains the base structure
+Marks this directory as Python package directories. This package contains the base models
 of the collab coursebook.
 """
 

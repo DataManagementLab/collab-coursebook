@@ -1,7 +1,8 @@
 """Purpose of this file
 
-This file describes or defines the basic structure of the content type. A class that extends the models.Model class
-represents a content type and can be registered in admin.py.
+This file describes or defines the basic structure of the content type. A class
+that extends the models.Model class represents a content type and can be
+registered in admin.py.
 """
 
 import os
@@ -10,19 +11,20 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from pdf2image import convert_from_path
+
 from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
 
-from pdf2image import convert_from_path
-
 from content.validator import validate_is_pdf
 
 
-class BaseModel(models.Model):
+class BaseModel(models.Model, GeneratePreviewMixin):
     """Base model
 
-    This abstract class forms a basic skeleton for the models from which content types can be created.
+    This abstract class forms a basic skeleton for the models from which content
+    types can be created.
     """
 
     class Meta:
@@ -34,13 +36,6 @@ class BaseModel(models.Model):
             Meta.abstract (bool): Describes whether this model is an abstract model (class)
         """
         abstract = True
-
-    def generate_preview(self):
-        """Preview
-
-        Generates a preview of this model.
-        """
-        return
 
 
 class BaseContentModel(BaseModel):
@@ -52,7 +47,10 @@ class BaseContentModel(BaseModel):
         BaseContentModel.content (OneToOneField - Content): Describes the content of this model
     """
 
-    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
+    content = models.OneToOneField(Content,
+                                   verbose_name=_("Content"),
+                                   on_delete=models.CASCADE,
+                                   primary_key=True)
 
     class Meta:
         """Meta options
@@ -65,7 +63,7 @@ class BaseContentModel(BaseModel):
         abstract = True
 
 
-class BasePDFModel(BaseModel, GeneratePreviewMixin):
+class BasePDFModel(BaseModel):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to PDF.
@@ -74,7 +72,9 @@ class BasePDFModel(BaseModel, GeneratePreviewMixin):
         BasePDFModel.pdf (FileField): Describes the PDF of this model
     """
 
-    pdf = models.FileField(verbose_name=_("PDF"), upload_to='uploads/contents/%Y/%m/%d/', blank=True,
+    pdf = models.FileField(verbose_name=_("PDF"),
+                           upload_to='uploads/contents/%Y/%m/%d/',
+                           blank=True,
                            validators=(validate_is_pdf,))
 
     class Meta:
@@ -88,7 +88,7 @@ class BasePDFModel(BaseModel, GeneratePreviewMixin):
         abstract = True
 
     def generate_preview(self):
-        """Preview
+        """Generate preview
 
         Generates a preview of this model, more precisely the PDF is generated as a preview.
 
@@ -119,7 +119,9 @@ class BaseSourceModel(BaseModel):
     """
 
     source = models.TextField(verbose_name=_("Source"))
-    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
+    license = models.CharField(verbose_name=_("License"),
+                               blank=True,
+                               max_length=200)
 
     class Meta:
         """Meta options
@@ -145,7 +147,8 @@ class ImageContent(BaseContentModel, BaseSourceModel):
     TYPE = "Image"
     DESC = _("Single Image")
 
-    image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
+    image = models.ImageField(verbose_name=_("Image"),
+                              upload_to='uploads/contents/%Y/%m/%d/')
 
     class Meta:
         """Meta options
@@ -252,7 +255,8 @@ class SingleImageAttachment(BaseSourceModel):
     TYPE = "SingleImageAttachment"
     DESC = _("Single Image Attachment")
 
-    image = models.ImageField(verbose_name=_("Image"), upload_to='uploads/contents/%Y/%m/%d/')
+    image = models.ImageField(verbose_name=_("Image"),
+                              upload_to='uploads/contents/%Y/%m/%d/')
 
     class Meta:
         """Meta options
@@ -263,7 +267,6 @@ class SingleImageAttachment(BaseSourceModel):
             Meta.verbose_name (__proxy__): A human-readable name for the object in singular
             Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
         """
-        # TODO translation
         verbose_name = _("Single Image Attachment")
         verbose_name_plural = _("Single Attachments")
 
@@ -369,12 +372,16 @@ class ImageAttachment(BaseModel):
     Attributes:
         BaseSourceModel.TYPE (str): Describes the content type of this model
         BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.images (ManyToManyField - SingleImageAttachment): A reference to the single images
+        BaseSourceModel.images (ManyToManyField - SingleImageAttachment):
+            A reference to the single images
     """
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")
 
-    images = models.ManyToManyField(SingleImageAttachment, verbose_name=_("Images"), related_name='images', blank=True)
+    images = models.ManyToManyField(SingleImageAttachment,
+                                    verbose_name=_("Images"),
+                                    related_name='images',
+                                    blank=True)
 
     class Meta:
         """Meta options
@@ -408,7 +415,8 @@ CONTENT_TYPES = {
     SingleImageAttachment.TYPE: SingleImageAttachment
 }
 
-# Set: Content types which are not directly accessible via the topics, but embedded into other content types
+# Set: Content types which are not directly accessible via the topics,
+# but embedded into other content types
 EMBEDDED_CONTENT_TYPES = {
     ImageAttachment.TYPE,
     SingleImageAttachment.TYPE
