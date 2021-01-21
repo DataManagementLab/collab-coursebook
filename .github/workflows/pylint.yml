@@ -29,8 +29,8 @@ jobs:
         pip install -r requirements.txt
     - name: Run PyLint
       run: |
-        pylint --load-plugins=pylint_django base
-        pylint --load-plugins=pylint_django collab_coursebook
-        pylint --load-plugins=pylint_django content
-        pylint --load-plugins=pylint_django export
-        pylint --load-plugins=pylint_django frontend
+        pylint --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings base
+        pylint --load-plugins=pylint_django --django-settings-module=collab_coursebook.settingscollab_coursebook
+        pylint --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings content
+        pylint --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings export
+        pylint --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings frontend
