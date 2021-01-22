@@ -46,7 +46,7 @@ class Profile(models.Model):
         return str(self.user)
 
 
-# pylint: disable=W0613:
+# pylint: disable=W0613
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """Create user profile
