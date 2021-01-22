@@ -228,8 +228,20 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
                 form.save()
+                content = form.save()
+                content_type = content.type
                 content_object = content_type_form.save()
-                content_object.generate_preview()
+
+                # If the content type is Latex, compile the Latex Code and store in DB
+                if content_type == 'Latex':
+                    topic = Topic.objects.get(pk=kwargs['topic_id'])
+                    pdf = generate_pdf_response(get_user(self.request), topic, content)
+                    content_object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+                    content_object.save()
+
+                preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
+                content.preview.name = preview
+                content.save()
                 messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
                 return HttpResponseRedirect(self.get_success_url())
 
@@ -401,6 +413,16 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
     """
     model = Content
     template_name = "frontend/content/detail.html"
+
+    def get_content_url(self):
+        """
+        get the url of the content page
+        :return: url of the content page
+        """
+        course_id = self.kwargs['course_id']
+        topic_id = self.kwargs['topic_id']
+        content_id = self.get_object().pk
+        return reverse('frontend:content', args=(course_id, topic_id, content_id,))
 
     def get_success_url(self):
         """
