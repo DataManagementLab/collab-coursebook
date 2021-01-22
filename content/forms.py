@@ -187,8 +187,7 @@ SingleImageFormSet = modelformset_factory(
     fields=("source", "license", "image"),
     extra=0,
     widgets={
-        'source': forms.Textarea(attrs={'style': 'height: 25px', 'required': 'true'}),
-        'image': forms.FileInput(attrs={'required': 'true'})
+        'source': forms.Textarea(attrs={'style': 'height: 100px', 'required': 'true'}),
     }
 )
 
