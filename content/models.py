@@ -32,8 +32,8 @@ class BaseModel(models.Model, GeneratePreviewMixin):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.abstract (bool): Describes whether this model is an abstract model (class)
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
         """
         abstract = True
 
@@ -43,8 +43,9 @@ class BaseContentModel(BaseModel):
 
     This abstract class forms a basic skeleton for the models that are related to the content.
 
-    Attributes:
-        BaseContentModel.content (OneToOneField - Content): Describes the content of this model
+
+    :attr BaseContentModel.content: Describes the content of this model
+    :type BaseContentModel.content: OneToOneField - Content
     """
 
     content = models.OneToOneField(Content,
@@ -57,8 +58,8 @@ class BaseContentModel(BaseModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.abstract (bool): Describes whether this model is an abstract model (class)
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
         """
         abstract = True
 
@@ -68,8 +69,8 @@ class BasePDFModel(BaseModel):
 
     This abstract class forms a basic skeleton for the models that are related to PDF.
 
-    Attributes:
-        BasePDFModel.pdf (FileField): Describes the PDF of this model
+    :attr BasePDFModel.pdf: Describes the PDF file of this model
+    :type BasePDFModel.pdf: FileField
     """
 
     pdf = models.FileField(verbose_name=_("PDF"),
@@ -82,8 +83,8 @@ class BasePDFModel(BaseModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.abstract (bool): Describes whether this model is an abstract model (class)
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
         """
         abstract = True
 
@@ -92,8 +93,8 @@ class BasePDFModel(BaseModel):
 
         Generates a preview of this model, more precisely the PDF is generated as a preview.
 
-        return: The string which represents the concatenated path components.
-        rtype: str
+        :return: the string which represents the concatenated path components.
+        :rtype: str
         """
         # Path of the preview folder
         preview_folder = 'uploads/previews/'
@@ -113,9 +114,10 @@ class BaseSourceModel(BaseModel):
 
     This abstract class forms a basic skeleton for the models that are related to source.
 
-    Attributes:
-        BaseSourceModel.source (TextField): Describes the source of this model
-        BaseSourceModel.license (CharField): Describes the license of the source
+    :attr BaseSourceModel.source: Describes the source of this model
+    :type BaseSourceModel.source: TextField
+    :attr BaseSourceModel.license: Describes the license of the source
+    :type BaseSourceModel.license: CharField
     """
 
     source = models.TextField(verbose_name=_("Source"))
@@ -128,8 +130,8 @@ class BaseSourceModel(BaseModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.abstract (bool): Describes whether this model is an abstract model (class)
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
         """
         abstract = True
 
@@ -139,10 +141,12 @@ class ImageContent(BaseContentModel, BaseSourceModel):
 
     This model represents a content with an image.
 
-    Attributes:
-        BaseSourceModel.TYPE (str): Describes the content type of this model
-        BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.image (ImageField): The image file to store
+    :attr ImageContent.TYPE: Describes the content type of this model
+    :type ImageContent.TYPE: str
+    :attr ImageContent.DESC: Describes the name of this model
+    :type ImageContent.DESC: __proxy__
+    :attr ImageContent.image: The image file of this model
+    :type ImageContent.image: ImageField
     """
     TYPE = "Image"
     DESC = _("Single Image")
@@ -155,9 +159,10 @@ class ImageContent(BaseContentModel, BaseSourceModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Image Content")
         verbose_name_plural = _("Image Contents")
@@ -165,8 +170,10 @@ class ImageContent(BaseContentModel, BaseSourceModel):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.content}: {self.DESC} - {self.image}"
 
@@ -176,11 +183,14 @@ class Latex(BaseContentModel, BasePDFModel):
 
     This model represents a LaTeX based content.
 
-    Attributes:
-        BaseSourceModel.TYPE (str): Describes the content type of this model
-        BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.textfield (TextField): The LaTeX code of the content
-        BaseSourceModel.source (TextField): The source of the content
+    :attr Latex.TYPE: Describes the content type of this model
+    :type Latex.TYPE: str
+    :attr Latex.DESC: Describes the name of this model
+    :type Latex.DESC: __proxy__
+    :attr Latex.textfield: The LaTeX code of the content
+    :type Latex.textfield: TextField
+    :attr Latex.source: The source of this content
+    :type Latex.source: TextField
     """
     TYPE = "Latex"
     DESC = _("Latex Textfield")
@@ -193,9 +203,10 @@ class Latex(BaseContentModel, BasePDFModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Latex Content")
         verbose_name_plural = _("Latex Contents")
@@ -203,8 +214,10 @@ class Latex(BaseContentModel, BasePDFModel):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.content}: {self.DESC} - {self.pdf}"
 
@@ -214,9 +227,10 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
 
     This model represents a PDF based content.
 
-    Attributes:
-        BaseSourceModel.TYPE (str): Describes the content type of this model
-        BaseSourceModel.DESC (__proxy__): Describes the name of this model
+    :attr PDFContent.TYPE: Describes the content type of this model
+    :type PDFContent.TYPE: str
+    :attr PDFContent.DESC: Describes the name of this model
+    :type PDFContent.DESC: __proxy__
     """
     TYPE = "PDF"
     DESC = _("PDF")
@@ -226,9 +240,10 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("PDF Content")
         verbose_name_plural = _("PDF Contents")
@@ -236,8 +251,10 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.content}: {self.DESC} - {self.pdf}"
 
@@ -247,10 +264,12 @@ class SingleImageAttachment(BaseSourceModel):
 
     This model represents a single image.
 
-    Attributes:
-        BaseSourceModel.TYPE (str): Describes the content type of this model
-        BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.image (ImageField): The image file to store
+    :attr SingleImageAttachment.TYPE: Describes the content type of this model
+    :type SingleImageAttachment.TYPE: str
+    :attr SingleImageAttachment.DESC: Describes the name of this model
+    :type SingleImageAttachment.DESC: __proxy__
+    :attr SingleImageAttachment.image: The image file of this model
+    :type SingleImageAttachment.image: ImageField
     """
     TYPE = "SingleImageAttachment"
     DESC = _("Single Image Attachment")
@@ -263,9 +282,10 @@ class SingleImageAttachment(BaseSourceModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Single Image Attachment")
         verbose_name_plural = _("Single Attachments")
@@ -273,8 +293,10 @@ class SingleImageAttachment(BaseSourceModel):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.image}"
 
@@ -284,11 +306,14 @@ class TextField(BaseContentModel):
 
     This model represents a text based content.
 
-    Attributes:
-        BaseSourceModel.TYPE (str): Describes the content type of this model
-        BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.textfield (TextField): The text of the content
-        BaseSourceModel.source (TextField): The source of the content
+    :attr TextField.TYPE: Describes the content type of this model
+    :type TextField.TYPE: str
+    :attr TextField.DESC: Describes the name of this model
+    :type TextField.DESC: __proxy__
+    :attr TextField.textfield: The text of the content
+    :type TextField.textfield: TextField
+    :attr TextField.source: The source of this content
+    :type TextField.source: TextField
     """
     TYPE = "Textfield"
     DESC = _("Textfield")
@@ -301,9 +326,10 @@ class TextField(BaseContentModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Textfield Content")
         verbose_name_plural = _("Textfield Contents")
@@ -311,8 +337,10 @@ class TextField(BaseContentModel):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.content} : {self.DESC} - {self.pk}"
 
@@ -322,10 +350,12 @@ class YTVideoContent(BaseContentModel):
 
     This model represents a content with a YouTube video.
 
-    Attributes:
-        BaseSourceModel.TYPE (str): Describes the content type of this model
-        BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.url (URLField): The link of the YouTube video
+    :attr YTVideoContent.TYPE: Describes the content type of this model
+    :type YTVideoContent.TYPE: str
+    :attr YTVideoContent.DESC: Describes the name of this model
+    :type YTVideoContent.DESC: __proxy__
+    :attr YTVideoContent.url: The link of the YouTube video
+    :type YTVideoContent.url: URLField
     """
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
@@ -337,13 +367,15 @@ class YTVideoContent(BaseContentModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("YouTube Video Content")
         verbose_name_plural = _("YouTube Video Contents")
 
+    # pylint: disable=C0103
     @property
     def id(self):
         """ID
@@ -362,8 +394,10 @@ class YTVideoContent(BaseContentModel):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.DESC}: {self.url}"
 
@@ -373,11 +407,12 @@ class ImageAttachment(BaseModel):
 
     This model represents the image attachment of a content.
 
-    Attributes:
-        BaseSourceModel.TYPE (str): Describes the content type of this model
-        BaseSourceModel.DESC (__proxy__): Describes the name of this model
-        BaseSourceModel.images (ManyToManyField - SingleImageAttachment):
-            A reference to the single images
+    :attr ImageAttachment.TYPE: Describes the content type of this model
+    :type ImageAttachment.TYPE: str
+    :attr ImageAttachment.DESC: Describes the name of this model
+    :type ImageAttachment.DESC: __proxy__
+    :attr ImageAttachment.images: A reference to the single images
+    :type ImageAttachment.images: ManyToManyField - SingleImageAttachment
     """
     TYPE = "ImageAttachment"
     DESC = _("Single Image Attachment")
@@ -392,9 +427,10 @@ class ImageAttachment(BaseModel):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Image Attachment")
         verbose_name_plural = _("Image Attachments")
@@ -402,8 +438,10 @@ class ImageAttachment(BaseModel):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.DESC}: {self.images.creation_counter}"
 

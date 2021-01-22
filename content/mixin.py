@@ -4,12 +4,14 @@ This file describes the generated preview operation.
 """
 
 
+# pylint: disable=R0903
 class GeneratePreviewMixin:
     """Generate preview mixin
 
     Provides method to generate previews.
     """
 
+    # pylint: disable=R0201
     def generate_preview(self):
         """Generate preview
 
