@@ -19,10 +19,12 @@ class LaTeX:
 
     This class takes care of the export and rendering of LaTeX code.
 
-    Attributes:
-        LaTeX.encoding (str): The file encoding
-        LaTeX.error_prefix (str): The error prefix character to find the error message in the logs
-        LaTeX.error_template (str): The name of the error template if the compilation went wrong
+    :attr LaTeX.encoding: The file encoding
+    :type LaTeX.encoding: str
+    :attr LaTeX.error_prefix: The error prefix character to find the error message in the logs
+    :type LaTeX.error_prefix: str
+    :attr LaTeX.error_template: he name of the error template if the compilation went wrong
+    :type LaTeX.error_template: str
     """
     encoding = 'utf-8'
     error_prefix = '!'
