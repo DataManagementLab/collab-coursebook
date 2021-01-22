@@ -12,10 +12,12 @@ class Favorite(models.Model):
 
     Saving the favorites of a User per Course & Content
 
-    Attributes:
-        Favorite.user (ForeignKey - Profile): Describes favourites of the user
-        Favorite.course (ForeignKey - Course): Describes the favourites courses of the user
-        Favorite.content (ForeignKey - Content): Describes the favourites contents of the user
+    :attr Favorite.user: Describes favourites of the user
+    :type Favorite.user: ForeignKey - Profile
+    :attr Favorite.course: Describes the favourites courses of the user
+    :type Favorite.course: ForeignKey - Course
+    :attr Favorite.content: Describes the favourites contents of the user
+    :type Favorite.content: ForeignKey - Content
     """
 
     user = models.ForeignKey("Profile", verbose_name=_("User"), on_delete=models.CASCADE,
@@ -28,9 +30,10 @@ class Favorite(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Favorite")
         verbose_name_plural = _("Favorites")
@@ -38,7 +41,9 @@ class Favorite(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns he string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.user} -> {self.course}: {self.content}"
