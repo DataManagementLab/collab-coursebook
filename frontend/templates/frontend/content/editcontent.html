@@ -21,15 +21,17 @@
             <div>
                 <h2>Image Attachments</h2>
                 {% bootstrap_form attachment_form %}
-                {% bootstrap_form item_forms.management_form %}
+                {{ item_forms.management_form }}
+                <div id="items-form-container">
                     {% for item_form in item_forms %}
                         <div id="item-{{ forLoop.counter }}">
                             {{ item_form.id }}
-                            {% bootstrap_form item_form %}
+                            {{ item_form.as_p }}
                         </div>
                     {% endfor %}
+                </div>
                 <button id="add-item-button" class="btn btn-primary add-item">Add attachment</button>
-                <button id="remove-item-button" class="btn btn-primary remove-item">Remove
+                <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">Remove
                     attachment
                 </button>
             </div>
