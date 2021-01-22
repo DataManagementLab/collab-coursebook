@@ -207,28 +207,30 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
                 context['content_type_form'] = \
                     CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+
+                # check if attachments are allowed for given content type
+                context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
+
+                if content_type in IMAGE_ATTACHMENT_TYPES:
+
+                    # retrieve attachment_form
+                    attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+                    context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
+
+                    # identify pk's of attached pictures
+                    pkset = []
+                    for picture in self.get_object().attachment.images.all():
+                        pkset.append(picture.pk)
+
+                    # setup formset with attached pictures
+                    formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.filter(pk__in=pkset))
+                    context['item_forms'] = formset
+
+                return context
             else:
                 return self.handle_error()
 
-        # check if attachments are allowed for given content type
-        context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
-        if content_type in IMAGE_ATTACHMENT_TYPES:
-
-            # retrieve attachment_form
-            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
-            context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
-
-            # identify pk's of attached pictures
-            pkSet = []
-            for picture in self.get_object().attachment.images.all():
-                pkSet.append(picture.pk)
-
-            # setup formset with attached pictures
-            formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.filter(pk__in=pkSet))
-            context['item_forms'] = formset
-
-        return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
