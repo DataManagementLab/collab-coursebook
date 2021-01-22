@@ -20,12 +20,12 @@ def generate_coursebook(request, primary_key, template="content/export/base.tex"
     :type request: WSGIRequest
     :param primary_key: The primary key of the course
     :type primary_key: int
-    :param template: The template latex path
+    :param template: The path of the LaTeX template to use
     :type template: str
     :param context: The context of the content
     :type context: dict:
 
-    :return: the PDF, PDF LaTeX output and the rendered template
+    :return: the generated coursebook as PDF, PDF LaTeX output and as an rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
     """
 
@@ -75,11 +75,11 @@ def write_response(request, pdf, filename,
 
     :param request: The given request
     :type request: WSGIRequest
-    :param pdf : The PDF, PDF LaTeX output and the rendered template
+    :param pdf : The PDF, PDF LaTeX output and its rendered template
     :type pdf: Tuple[bytes, Tuple[bytes, bytes], str]
     :param filename: The name of the file
     :type filename: str
-    :param content_type: The type of the content
+    :param content_type: The type of the content (file)
     :type content_type: str
 
     :return: the http response of the written file
@@ -107,14 +107,14 @@ def generate_pdf(user, topic, content, template="content/export/base.tex", conte
     :type user: User
     :param topic: The topic the content belongs to
     :type topic: Topic
-    :param content: The content
+    :param content: The content of the PDF
     :type content: dict
-    :param template: The path of the LaTeX template
+    :param template: The path of the LaTeX template to use
     :type template: str
     :param context: The context of the content
     :type context: dict
 
-    :return: the PDF, PDF LaTeX output and the rendered template
+    :return: the generated PDF as PDF, PDF LaTeX output and its rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
     """
     if context is None:
@@ -140,7 +140,7 @@ def generate_pdf_response(user, topic, content):
     :type user: User
     :param topic: The topic the content belongs to
     :type topic: Topic
-    :param content: The content
+    :param content: The content of the pdf
     :type content: dict
 
     :return: the generated PDF
