@@ -18,7 +18,7 @@ class LaTeX:
     """LaTeX Export
 
     This class takes care of the export and rendering of LaTeX code.
-    
+
     Attributes:
         LaTeX.encoding (str): The file encoding
         LaTeX.error_prefix (str): The error prefix character to find the error message in the logs
