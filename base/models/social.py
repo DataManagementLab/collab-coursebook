@@ -54,7 +54,9 @@ class Rating(models.Model):
     def __str__(self):
         """String representation
 
-        :return: the string representation of this object.
+        Returns he string representation of this object.
+
+        :return: the string representation of this object
         :rtype: str
         """
         return f"Rating for {self.content} by {self.user}"
@@ -103,7 +105,9 @@ class Comment(models.Model):
     def __str__(self):
         """String representation
 
-        :return: the string representation of this object.
+        Returns he string representation of this object.
+
+        :return: the string representation of this object
         :rtype: str
         """
         return f'Comment for {self.content} by {self.author}'
