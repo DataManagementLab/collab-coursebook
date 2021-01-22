@@ -18,7 +18,7 @@ class LaTeX:
     """LaTeX Export
 
     This class takes care of the export and rendering of LaTeX code.
-
+    
     Attributes:
         LaTeX.encoding (str): The file encoding
         LaTeX.error_prefix (str): The error prefix character to find the error message in the logs
@@ -29,7 +29,7 @@ class LaTeX:
     error_template = 'error'
 
     @staticmethod
-    def render(context, template_name, assets, app='export', external_assets=None):
+    def render(context, template_name):
         """Render
 
         Renders the LaTeX code with its content and then compiles the code to generate
@@ -38,22 +38,20 @@ class LaTeX:
         https://github.com/d120/pyophase/blob/master/ophasebase/helper.py
         Retrieved 10.08.2020
 
-        Parameters:
-            context (dict): The context of the content
-            template_name (str): The name of the template to use
-            assets (list): TODO
-            app (str): TODO
-            external_assets: TODO
+        :param context: The context of the content to be rendered
+        :type context: dict
+        :param template_name: The name of the template to use
+        :type template_name: str
 
-        return: the PDF, PDF LaTeX output and the rendered template
-        rtype: Tuple[bytes, Tuple[bytes, bytes], str]
+        :return: the rendered LaTeX code as PDF, PDF LaTeX output and its the rendered template
+        :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
         """
         template = get_template(template_name)
         rendered_tpl = template.render(context).encode(LaTeX.encoding)
         # Prerender content templates
         for content in context['contents']:
             rendered_tpl += LaTeX.pre_render(content, context['export_pdf'])
-        rendered_tpl += "\end{document}".encode(LaTeX.encoding)
+        rendered_tpl += r"\end{document}".encode(LaTeX.encoding)
 
         with tempfile.TemporaryDirectory() as tempdir:
 
@@ -70,14 +68,14 @@ class LaTeX:
                 # prerender errors templates
                 rendered_tpl += LaTeX.pre_render(errors, context['export_pdf'],
                                                  LaTeX.error_template)
-                rendered_tpl += "\end{document}".encode(LaTeX.encoding)
+                rendered_tpl += r"\end{document}".encode(LaTeX.encoding)
 
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
                 pdflatex_output = process.communicate(rendered_tpl)
 
             try:
-                with open(os.path.join(tempdir, 'texput.pdf'), 'rb') as f:
-                    pdf = f.read()
+                with open(os.path.join(tempdir, 'texput.pdf'), 'rb') as file:
+                    pdf = file.read()
             except FileNotFoundError:
                 pdf = None
         return pdf, pdflatex_output, rendered_tpl
@@ -90,10 +88,11 @@ class LaTeX:
         If there are none, an empty list will be returned.
 
         Parameters:
-            lob (List[byte]): A list of bytes representing the code
+            :param lob: A list of bytes representing the PDF LaTeX compile log
+            :type lob: List[byte]
 
-        return: the error messages from the log (stdout)
-        rtype: List[str]
+        :return: the error messages from the log (stdout)
+        :rtype: List[str]
         """
         # Decode bytes to string and split the string by the delimiter '\n'
         lines = lob.decode(LaTeX.encoding).splitlines()
@@ -119,12 +118,15 @@ class LaTeX:
         of the content.
 
         Parameters:
-            content (Content): The content to be rendered
-            export_flag (bool): True iff export, False iff simple content compilation
-            template_type (str): The type of the template
+            :param content: The content to be rendered
+            :type content: Content
+            :param export_flag: True if export, False if simple content compilation
+            :type export_flag: bool
+            :param template_type: The type of the template to use
+            :type template_type: str
 
-        return: the rendered template
-        rtype: str
+        :return: the rendered template
+        :rtype: str
         """
         if template_type is None:
             template = get_template(export_template(content.type))
