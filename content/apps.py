@@ -10,7 +10,7 @@ class ContenttypesConfig(AppConfig):
 
     Configures the pluggable application for the content types.
 
-    Attributes:
-        ContenttypesConfig.name (str): Defines which application the configuration applies to
+    :attr ContenttypesConfig.name: Defines which application the configuration applies to
+    :type ContenttypesConfig.name: str
     """
     name = 'content'
