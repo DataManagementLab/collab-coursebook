@@ -42,7 +42,7 @@ def generate_coursebook(request, primary_key, template="content/export/base.tex"
     context['export_pdf'] = True
 
     # Perform compilation given context and template
-    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
+    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template)
     return pdf, pdflatex_output, tex_template
 
 
@@ -127,7 +127,7 @@ def generate_pdf(user, topic, content, template="content/export/base.tex", conte
     context['export_pdf'] = False
 
     # Performs compilation given context and template
-    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
+    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template)
     return pdf, pdflatex_output, tex_template
 
 
