@@ -213,12 +213,20 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         # check if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
-        # retrieve attachment_form
-        context['attachment_form'] = AddContentFormAttachedImage
+        if content_type in IMAGE_ATTACHMENT_TYPES:
 
-        # setup formset
-        formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
-        context['item_forms'] = formset
+            # retrieve attachment_form
+            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+            context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
+
+            # identify pk's of attached pictures
+            pkSet = []
+            for picture in self.get_object().attachment.images.all():
+                pkSet.append(picture.pk)
+
+            # setup formset with attached pictures
+            formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.filter(pk__in=pkSet))
+            context['item_forms'] = formset
 
         return context
 
@@ -237,10 +245,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
-            attachment_form = AddContentFormAttachedImage(data=request.POST,
-                                                          files=request.FILES)
-            image_formset = SingleImageFormSet(data=request.POST,
-                                               files=request.FILES)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
@@ -258,6 +262,15 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
                 # Check if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
+
+                    # Retrieve current state of attachment form and formset
+                    attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+                    attachment_form = AddContentFormAttachedImage(instance=attachment_object,
+                                                                  data=request.POST,
+                                                                  files=request.FILES)
+                    image_formset = SingleImageFormSet(data=request.POST,
+                                                       files=request.FILES)
+
                     if attachment_form.is_valid():
 
                         # evaluate the attachment form
