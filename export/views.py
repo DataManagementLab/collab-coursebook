@@ -10,6 +10,7 @@ from base.models import Course, Favorite
 from export.helper_functions import LaTeX
 
 
+# pylint: disable=C0103
 def generate_coursebook(request, pk, template="content/export/base.tex", context=None):
     """Generate course book
 
@@ -66,6 +67,7 @@ def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
     return write_response(request, pdf, pdflatex_output, tex_template, filename)
 
 
+# pylint: disable=R0913
 def write_response(request, pdf, pdflatex_output, tex_template, filename,
                    content_type='application/pdf'):
     """Write response
