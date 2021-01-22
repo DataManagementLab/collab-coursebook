@@ -24,7 +24,7 @@ class AddAndEditCourseForm(forms.ModelForm):
 
         :attr Meta.model (Model): The model to which this form corresponds
         :type Meta.model: Model
-        :attr Meta.exclude: Including fields in the form
+        :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
         """
         model = Course
