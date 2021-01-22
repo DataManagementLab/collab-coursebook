@@ -174,6 +174,7 @@ class AddSingleImage(forms.ModelForm):
             Meta.exclude (List[str]): Excluding fields
             Meta.widgets (Dict[str, Textarea]): Customization of the model form
         """
+
         model = SingleImageAttachment
         exclude = []
         widgets = {
