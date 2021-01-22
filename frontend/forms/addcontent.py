@@ -18,13 +18,15 @@ class AddContentForm(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
-            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: Dict[str, Model field]
         """
         model = Content
-        exclude = ['attachment', 'topic', 'author', 'creation_date', 'ratings', 'preview', 'type']
+        fields = ['description', 'language', 'tags', 'readonly', 'public']
         widgets = {
             'description': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
