@@ -15,11 +15,10 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
 
     Generates a PDF file with name tags for students in the queryset.
 
-<<<<<<< HEAD
     :param request: The given request
     :type request: WSGIRequest
-    :param primary_key: The primary key of the course
-    :type primary_key: int
+    :param pk: The primary key of the course
+    :type pk: int
     :param template: The path of the LaTeX template to use
     :type template: str
     :param context: The context of the content
@@ -27,16 +26,6 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
 
     :return: the generated coursebook as PDF, PDF LaTeX output and as an rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
-=======
-    Parameters:
-        request (WSGIRequest): TODO
-        pk (TODO):
-        template (str): The template latex path
-        context (dict): The context of the content
-
-    return: the PDF, PDF LaTeX output and the rendered template
-    rtype: Tuple[bytes, Tuple[bytes, bytes], str]
->>>>>>> parent of 0e6991e... Update views.py
     """
 
     if context is None:
@@ -61,13 +50,15 @@ def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
 
     Generates a PDF file with name tags for students in the queryset and sends it to the browser.
 
-    Parameters:
-        request (WSGIRequest): TODO
-        pk (TODO):
-        filename (str): The name of the file
+    :param request: The given request
+    :type request: WSGIRequest
+    :param pk: The primary key of the course
+    :type pk: int
+    :param filename: The name of the file
+    :type filename: str
 
-    return: the http response of the generated PDF file
-    rtype: HttpResponse
+    :return: the http response of the generated PDF file
+    :rtype: HttpResponse
     """
 
     # Call the method for coursebook generation and write the output afterwards
@@ -81,11 +72,14 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
 
     Renders a pdf and sends it to the browser.
 
-<<<<<<< HEAD
     :param request: The given request
     :type request: WSGIRequest
-    :param pdf : The PDF, PDF LaTeX output and its rendered template
-    :type pdf: Tuple[bytes, Tuple[bytes, bytes], str]
+    :param pdf: The PDF
+    :type pdf: bytes
+    :param pdflatex_output: The PDF LaTeX output
+    :type pdflatex_output: Tuple[bytes, bytes]
+    :param tex_template: The rendered template
+    :type tex_template: str
     :param filename: The name of the file
     :type filename: str
     :param content_type: The type of the content (file)
@@ -93,15 +87,6 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
 
     :return: the http response of the written file
     :rtype: HttpResponse
-=======
-    Parameters:
-        request (WSGIRequest): TODO
-        pdf : The PDF
-        pdflatex_output : PDF LaTeX output
-        tex_template (str): The rendered template
-        filename (str): The name of the file
-        content_type (str): The type of the content
->>>>>>> parent of 0e6991e... Update views.py
     """
     if not pdf:
         return render(request,
@@ -119,7 +104,6 @@ def generate_pdf(user, topic, content, template="content/export/base.tex", conte
 
     Generates a PDF file with name tags for students in the queryset.
 
-<<<<<<< HEAD
     :param user: The user of the content
     :type user: User
     :param topic: The topic the content belongs to
@@ -133,17 +117,6 @@ def generate_pdf(user, topic, content, template="content/export/base.tex", conte
 
     :return: the generated PDF as PDF, PDF LaTeX output and its rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
-=======
-    Parameters:
-        user (User): The user of the content
-        topic (Topic): The topic the content belongs to
-        content (dict): The content
-        template (str): The path of the LaTeX template
-        context (dict): The context of the content
-
-    return: the PDF, PDF LaTeX output and the rendered template
-    rtype: Tuple[bytes, Tuple[bytes, bytes], str]
->>>>>>> parent of 0e6991e... Update views.py
     """
     if context is None:
         context = {}
@@ -164,24 +137,17 @@ def generate_pdf_response(user, topic, content):
 
     Generates a PDF file with name tags for students in the queryset.
 
-<<<<<<< HEAD
     :param user: The user of the content
     :type user: User
     :param topic: The topic the content belongs to
     :type topic: Topic
     :param content: The content of the pdf
     :type content: dict
-=======
-    Parameters:
-        user (User): The user of the content
-        topic (Topic): The topic the content belongs to
-        content (dict): The content
->>>>>>> parent of 0e6991e... Update views.py
 
     return: the generated PDF
     rtype: bytes
     """
 
     # Calls the function for generating the pdf and return the pdf
-    (pdf, pdflatex_output, tex_template) = generate_pdf(user, topic, content)
+    pdf = generate_pdf(user, topic, content)[0]
     return pdf
