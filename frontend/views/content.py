@@ -209,6 +209,17 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
             else:
                 return self.handle_error()
+
+        # check if attachments are allowed for given content type
+        context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
+
+        # retrieve attachment_form
+        context['attachment_form'] = AddContentFormAttachedImage
+
+        # setup formset
+        formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
+        context['item_forms'] = formset
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -216,14 +227,20 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         form = self.get_form()
 
         if self.object.type in CONTENT_TYPE_FORMS:
+
             # Bind/init form with existing data
             content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
+
             # Careful: Order is important for file fields (instance first, afterwards form data,
             # if using kwargs dict as single argument instead, instance information
             # will not be parsed in time)
             content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
+            attachment_form = AddContentFormAttachedImage(data=request.POST,
+                                                          files=request.FILES)
+            image_formset = SingleImageFormSet(data=request.POST,
+                                               files=request.FILES)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
@@ -238,6 +255,30 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     pdf = generate_pdf_response(get_user(self.request), topic, content)
                     content_object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
                     content_object.save()
+
+                # Check if attachments are allowed for the given content type
+                if content_type in IMAGE_ATTACHMENT_TYPES:
+                    if attachment_form.is_valid():
+
+                        # evaluate the attachment form
+                        content_attachment = attachment_form.save(commit=False)
+                        content_attachment.save()
+                        content.attachment = content_attachment
+                        images = []
+
+                        # evaluate all forms of the formset and append to image set
+                        if image_formset.is_valid():
+                            for form in image_formset:
+                                used_form = form.save(commit=False)
+                                used_form.save()
+                                images.append(used_form)
+                        else:
+                            return self.form_invalid(image_formset)
+
+                        # store the attached images in DB
+                        content.attachment.images.set(images)
+                    else:
+                        return self.form_invalid(attachment_form)
 
                 preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
                 content.preview.name = preview
