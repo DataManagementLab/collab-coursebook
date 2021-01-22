@@ -1,23 +1,33 @@
 <script>
+    // Max attachments
+    const max = 20;
+
+    const add = document.getElementById("add-item-button")
+    const remove = document.getElementById("remove-item-button")
+
+    // Number of children
+    const children = $('#items-form-container').children().length;
+
+    // Beginning Visibility
+    add.style.visibility = children < max ? "visible" : "hidden";
+    remove.style.visibility = children === 0 ? "hidden" : "visible";
+
     $(document).ready(function () {
-        // Max attachments
-        const max = 20;
 
         // Add attachment
         $('.add-item').click(
             function (event) {
                 event.preventDefault();
 
-                document.getElementById("remove-item-button").style.visibility = "visible";
+                remove.style.visibility = "visible";
 
                 // Number of children
                 const children = $('#items-form-container').children().length;
 
                 // Update visibility of add attachment button
                 if (children + 1 === max) {
-                    const button = document.getElementById("add-item-button");
                     // After this operation we increased the number of children by one
-                    button.style.visibility = "hidden";
+                    add.style.visibility = "hidden";
                 }
 
                 // Add an image attachment form
@@ -37,16 +47,15 @@
             function (event) {
                 event.preventDefault();
 
-                document.getElementById("add-item-button").style.visibility = "visible";
+                add.style.visibility = "visible";
 
                 // Number of children
                 const children = $('#items-form-container').children().length;
 
                 // Update visibility of add attachment button
                 if (children - 1 === 0) {
-                    const button = document.getElementById("remove-item-button");
                     // After this operation we decreased the number of children by one
-                    button.style.visibility = "hidden";
+                    remove.style.visibility = "hidden";
                 }
 
                 // Remove last child
