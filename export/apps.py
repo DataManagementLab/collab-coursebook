@@ -11,7 +11,7 @@ class ExportConfig(AppConfig):
 
     Configures the pluggable application for the export.
 
-    :attr ContenttypesConfig.name: Defines which application the configuration applies to
-    :type ContenttypesConfig.name: str
+    :attr ExportConfig.name: Defines which application the configuration applies to
+    :type ExportConfig.name: str
     """
     name = 'export'
