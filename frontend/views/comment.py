@@ -20,10 +20,12 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
 
     This model represents the deletion of a comment and redirects to course list.
 
-    Attributes:
-        DeleteComment.model (Model): The model of the view
-        DeleteComment.template_name (str): The path to the html template
-        DeleteComment.context_object_name (str): The context object name
+    :attr DeleteComment.model: The model of the view
+    :type DeleteComment.model: Model
+    :attr DeleteComment.template_name: The path to the html template
+    :type DeleteComment.template_name: str
+    :attr DeleteComment.context_object_name: The context object name
+    :type DeleteComment.context_object_name: str
     """
     model = Comment
     template_name = 'frontend/comment/delete_confirm.html'
@@ -35,14 +37,16 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
 
         Checks whether a user has permission to view the delete page.
 
-        Parameters:
-            request (HttpRequest): The given request
-            args: The arguments
-            kwargs (dict): The additional arguments
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :tyüe args: ANY
+        :param kwargs: The additional arguments
+        :type kwargs: dict
 
-        return: If user has no permission he will be redirected to the no permission page
+        :return: if user has no permission he will be redirected to the no permission page
         otherwise the dispatch from DeleteView is called and the result is returned
-        rtype: HttpResponse
+        :rtype: HttpResponse
         """
         if self.get_object().author != request.user.profile and not request.user.is_superuser:
             # Back url for no permission page
@@ -62,9 +66,9 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
 
         Returns the url for successful delete.
 
-        return: The url of the content to which the deleted argument
+        :return: the url of the content to which the deleted argument
         belonged with tag to the comment section
-        rtype: str
+        :rtype: str
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
@@ -80,11 +84,11 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
 
         Gets the context data and adds course id to it
 
-        Parameters:
-            kwargs (dict): The arguments
+        :param kwargs: The additional arguments
+        :type kwargs: dict
 
-        return: The context data to which the course_id was added
-        rtype: dict
+        :return: the context data to which the course_id was added
+        :rtype: dict
         """
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
@@ -99,11 +103,14 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
 
     This model represents the editing of a comment in the database.
 
-    Attributes:
-        EditComment.model (Model): The model of the view
-        EditComment.template_name (str): The path to the html template
-        EditComment.context_object_name (str): The context object name
-        EditComment.form_class (ModelForm): THe form of the view
+    :attr EditComment.model: The model of the view
+    :type EditComment.model: Model
+    :attr EditComment.template_name: The path to the html template
+    :type EditComment.template_name: str
+    :attr EditComment.context_object_name: The context object name
+    :type EditComment.context_object_name: str
+    :attr EditComment.form_class: THe form of the view
+    :type EditComment.form_class: ModelForm
     """
     model = Comment
     template_name = 'frontend/comment/edit.html'
@@ -115,11 +122,11 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
 
         Checks whether the form is valid. And saves the entered comment.
 
-        Parameters:
-            form (CommentForm): The form that should be checked
+        :param form: The form that should be checked
+        :type form: CommentForm
 
-        return: The user is redirected to the content page at the comment section
-        rtype: HttpResponse
+        :return: the user is redirected to the content page at the comment section
+        :rtype: HttpResponse
         """
         comment = form.save(commit=False)
         comment.text = form.cleaned_data['text']
@@ -134,20 +141,25 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
                                             args=(course_id, topic_id,
                                                   comment.content.id,)))
 
+    # pylint: disable=W0511
+    # pylint: disable=R1725
+    # TODO
     # Checks if user is the author of the comment
     def dispatch(self, request, *args, **kwargs):
         """Dispatch
 
         Checks if the user is the author and therefore has permission to change the comment.
 
-        Parameters:
-            request (HttpRequest): THe given request
-            args: The arguments
-            kwargs (dict): The keyword arguments
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: ANY
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: If the user is the author the dispatch from UpdateView is called, otherwise the
+        :return: if the user is the author the dispatch from UpdateView is called, otherwise the
         no permission page will be displayed
-        rtype: HttpResponse
+        :rtype: HttpResponse
         """
         comment = self.get_object()
         if comment.author != self.request.user.profile:
@@ -164,10 +176,10 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
 
         Gets context data and adds the course_id
 
-        Parameters:
-             kwargs (dict): The keyword arguments
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: The context data with added course_id
+        :return: the context data with added course_id
         :rtype: dict
         """
         context = super().get_context_data(**kwargs)
