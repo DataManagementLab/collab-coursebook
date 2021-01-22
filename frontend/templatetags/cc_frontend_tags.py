@@ -19,11 +19,11 @@ def message_bootstrap_class(tag):
 
     Translate django message class into bootstrap class.
 
-    Parameters:
-        tag (str): The django message class
+    :param tag: The django message class
+    :type tag: str
 
-    return: The bootstrap alert class
-    rtype: str
+    :return: the bootstrap alert class
+    :rtype: str
     """
     if tag == "error":
         return "alert-danger"
@@ -40,8 +40,8 @@ def footer_info():
 
     Gets footer info from settings.
 
-    return: The footer info
-    rtype: dict[str, str]
+    :return: the footer info
+    :rtype: dict[str, str]
     """
     return settings.FOOTER_INFO
 
@@ -52,11 +52,11 @@ def count_content(topic_queryset):
 
     This method counts the contents of the topics in a queryset.
 
-    Parameters:
-        topic_queryset (QuerySet): The queryset
+    :param topic_queryset: The queryset
+    :type topic_queryset: QuerySet
 
-    return: The number of contents
-    rtype: int
+    :return: the number of contents
+    :rtype: int
     """
     count = 0
     for topic in topic_queryset:
@@ -70,11 +70,11 @@ def rev_range(arg):
 
     Returns range of review.
 
-    Parameters:
-        arg (int): The range
+    :param arg: The range
+    :type arg: int
 
-    return: range of review
-    rtype: Iterator
+    :return: the range of review
+    :rtype: Iterator
     """
     return reversed(range(1, arg + 1))
 
@@ -85,11 +85,11 @@ def content_view(content_type):
 
     Gets matching view for type.
 
-    Parameters:
-        content_type (str): The type of the content
+    :param content_type: The type of the content
+    :type content_type: str
 
-    return: The path to the matching view for the type
-    rtype: str
+    :return: the path to the matching view for the type
+    :rtype: str
     """
     if content_type in CONTENT_TYPES.keys():
         return f"content/view/{content_type}.html"
@@ -102,11 +102,11 @@ def content_card(content_type):
 
     Gets the matching view for the type.
 
-    Parameters:
-        content_type (str): type of the content
+    :param content_type: type of the content
+    :type content_type: str
 
-    return: The path to the matching view for the type
-    rtype: str
+    :return: the path to the matching view for the type
+    :rtype: str
     """
     if content_type in CONTENT_TYPES.keys():
         return f"content/cards/{content_type}.html"
@@ -120,12 +120,13 @@ def check_edit_course_permission(user, course):
     Checks if either an user is an owner or the course is public and it is allowed
     to edit public courses.
 
-    Parameters:
-        user (User): The user to check permission
-        course (Course): The course th check permission
+    :param user: The user to check permission
+    :type user: User
+    :param course: The course to check permission
+    :type course: Course
 
-    return: True if the course can be edited
-    rtype: bool
+    :return: true if the course can be edited
+    :rtype: bool
     """
     return (user.profile in course.owners.all()) or (not course.restrict_changes
                                                      and ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE)
@@ -138,12 +139,13 @@ def check_edit_content_permission(user, content):
     Checks if either an user is an owner or the user is an super user and it is
     allowed to edit the content.
 
-    Parameters:
-        user (User): The user to check permission
-        content (Content): The content th check permission
+    :param user: The user to check permission
+    :type user: User
+    :param content: The content to check permission
+    :type content: Content
 
-    return: True if the content can be edited
-    rtype: bool
+    :return: true if the content can be edited
+    :rtype: bool
     """
     if content.readonly:
         return content.author == user or user.is_superuser
@@ -156,13 +158,15 @@ def add_content_button(user, course_id, topic_id):
 
     Generates a dropdown-button containing a list of available content types.
 
-    Parameters:
-        user (User): The user
-        course_id (int): The id of the course
-        topic_id (int): The id of the topic
+    :param user: The user to check permission
+    :type user: User
+    :param course_id: The id of the course
+    :type course_id: int
+    :param topic_id: The id of the topic
+    :type topic_id: int
 
-    return: The dropdown button as html div
-    rtype: dict
+    :return: The dropdown button as html div
+    :rtype: dict
     """
     # generate list of tuple (content type, content verbose name) for add content dropdown
     content_data = [(content_type, content_model.DESC)
@@ -180,11 +184,13 @@ def get_coursebook(user, course):
 
     Returns the course book from the from the favourites of the user with the given curse.
 
-    Parameters:
-        user (User): The user
-        course (Course): The course
-    return: the coursebook
-    rtype: list
+    :param user: The user
+    :type user: User
+    :param course: The course
+    :type course: Course
+
+    :return: the coursebook
+    :rtype: list
     """
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
