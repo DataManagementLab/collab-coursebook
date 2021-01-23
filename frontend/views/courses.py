@@ -80,6 +80,7 @@ class CourseListView(ListView):
                 context['sort'] = "oldest"
         return context
 
+
 # pylint: disable=too-many-ancestors
 class CourseListForCategoryView(CourseListView):
     """Course list for category view
@@ -135,6 +136,7 @@ class CourseListForCategoryView(CourseListView):
         ctx = super().get_context_data(object_list=object_list, **kwargs)
         ctx["category"] = self.category
         return ctx
+
 
 # pylint: disable=too-many-ancestors
 class CourseListForPeriodView(CourseListView):
