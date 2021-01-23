@@ -9,6 +9,7 @@ import re
 
 from django import template
 from django.template.defaultfilters import stringfilter
+from collab_coursebook.settings import BASE_DIR
 
 from content.models import CONTENT_TYPES
 
@@ -33,6 +34,21 @@ def export_template(type_t):
     if type_t in CONTENT_TYPES.keys() or type_t == 'error':
         return path + f"/{type_t}.tex"
     return path + "/invalid.tex"
+
+
+@register.filter
+def ret_path(value):
+    """Return path to image
+
+        returns the correct path to the image in media directory
+
+        Parameters:
+            value
+        """
+
+    # Compute the path to the image and escape \ for Latex
+    path = os.path.join(os.path.abspath(BASE_DIR), value[1:])
+    return path.replace('\\', '/')
 
 
 @register.filter

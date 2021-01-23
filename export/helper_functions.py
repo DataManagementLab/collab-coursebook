@@ -4,7 +4,7 @@ This file contains utility functions related to exporting and rendering files.
 """
 
 import os
-
+import re
 import tempfile
 
 from subprocess import Popen, PIPE
@@ -138,5 +138,7 @@ class LaTeX:
         # Set context for rendering
         context = {'content': content, 'export_pdf': export_flag}
 
-        # Return result of rendering
-        return template.render(context).encode(LaTeX.encoding)
+        # render the template and use escape for triple angular brackets
+        rendered_tpl = template.render(context)
+        rendered_tpl = re.sub(r'\{~', '{', rendered_tpl).encode(LaTeX.encoding)
+        return rendered_tpl

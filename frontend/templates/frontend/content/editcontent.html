@@ -31,9 +31,9 @@
                     {% endfor %}
                 </div>
                 <button id="add-item-button" class="btn btn-primary add-item">Add attachment</button>
-                <!--<button id="remove-item-button" class="btn btn-primary remove-item">Remove
+                <button id="remove-item-button" class="btn btn-primary remove-item">Remove
                     attachment
-                </button>-->
+                </button>
             </div>
         {% endif %}
 
@@ -46,7 +46,9 @@
                class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
     </form>
+
     {% if attachment_allowed %}
         {% include "frontend/content/dynamic_attachment.html" %}
     {% endif %}
+
 {% endblock %}
