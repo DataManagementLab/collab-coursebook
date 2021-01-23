@@ -22,8 +22,8 @@ def add_to_coursebook(request, *args, **kwargs):
     :param kwargs: The keyword arguments
     :type kwargs: dict
 
-    return: the redirection to the page after the request was added to the course book
-    rtype: HttpResponseRedirect
+    :return: the redirection to the page after the request was added to the course book
+    :rtype: HttpResponseRedirect
     """
     user = request.user.profile
     course = get_object_or_404(Course, pk=kwargs['course_id'])
@@ -47,8 +47,8 @@ def remove_from_coursebook(request, *args, **kwargs):
     :param kwargs: The keyword arguments
     :type kwargs: dict
 
-    return: the redirection to the page after the request was removed from the course book
-    rtype: HttpResponseRedirect
+    :return: the redirection to the page after the request was removed from the course book
+    :rtype: HttpResponseRedirect
     """
     user = request.user.profile
     course = get_object_or_404(Course, pk=kwargs['course_id'])
