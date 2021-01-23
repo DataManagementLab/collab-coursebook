@@ -17,10 +17,12 @@ class ProfileView(LoginRequiredMixin, DetailView):
 
     This model represents the profiles view of the user.
 
-    Attributes:
-        ProfileView.model (Model): The model of the view
-        ProfileView.template_name (str): The path to the html template
-        ProfileView.context_object_name (str): The context object name
+    :attr ProfileView.model: The model of the view
+    :type ProfileView.model: Model
+    :attr ProfileView.template_name: The path to the html template
+    :type ProfileView.template_name: str
+    :attr ProfileView.context_object_name: The context object name
+    ProfileView.context_object_name: str
     """
     model = Profile
     template_name = "frontend/profile/profile.html"
@@ -32,10 +34,12 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     This model represents the editing profiles view of the user.
 
-    Attributes:
-        ProfileView.model (Model): The model of the view
-        ProfileView.template_name (str): The path to the html template
-        ProfileView.fields (List[str]): TODO
+    :attr ProfileEditView.model: The model of the view
+    :type ProfileEditView.model: Model
+    :attr ProfileEditView.template_name: The path to the html template
+    :type ProfileEditView.template_name: str
+    :attr ProfileEditView.fields: Including fields into the form
+    :type ProfileEditView.fields: List[str]
     """
     model = Profile
     template_name = "frontend/profile/profile_edit.html"
@@ -46,9 +50,9 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
         Returns the url for successful delete.
 
-        return: The url of the content to which the deleted argument
+        :return: the url of the content to which the deleted argument
         belonged with tag to the comment section
-        rtype: str
+        :rtype: str
         """
         return reverse_lazy('frontend:profile', kwargs={'pk': self.request.user.pk})
 
@@ -57,11 +61,11 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
         Returns the success message when the profile was updated
 
-        Parameters:
-            cleaned_data (TODO):
+        :param cleaned_data: The cleaned data
+        :type cleaned_data: dict
 
-        return: The success message when the profile was updated
-        rtype: __proxy__
+        :return: the success message when the profile was updated
+        :rtype: __proxy__
         """
         return _("Profile updated")
 
@@ -70,7 +74,7 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
         Returns the profile object of this user.
 
-        return: the profile object of this user
-        rtype: Profile
+        :return: the profile object of this user
+        :rtype: Profile
         """
         return Profile.objects.get(user=self.request.user)
