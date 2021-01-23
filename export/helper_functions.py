@@ -30,8 +30,9 @@ class LaTeX:
     error_prefix = '!'
     error_template = 'error'
 
+    # TODO documentation parameters
     @staticmethod
-    def render(context, template_name):
+    def render(context, template_name, assets, app='export', external_assets=None):
         """Render
 
         Renders the LaTeX code with its content and then compiles the code to generate
@@ -44,6 +45,12 @@ class LaTeX:
         :type context: dict
         :param template_name: The name of the template to use
         :type template_name: str
+        :param assets:
+        :type assets:
+        :param app:
+        :type: str
+        :param external_assets:
+        :type external_assets:
 
         :return: the rendered LaTeX code as PDF, PDF LaTeX output and its the rendered template
         :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
@@ -63,12 +70,12 @@ class LaTeX:
             pdflatex_output = process.communicate(rendered_tpl)
 
             # Filter error messages in log (stdout)
-            errors = LaTeX.errors(pdflatex_output[0])
+            error_log = LaTeX.errors(pdflatex_output[0])
             # Error log
-            if len(errors) != 0:
+            if len(error_log) != 0:
                 rendered_tpl = template.render(context).encode(LaTeX.encoding)
-                # prerender errors templates
-                rendered_tpl += LaTeX.pre_render(errors, context['export_pdf'],
+                # Prerender errors templates
+                rendered_tpl += LaTeX.pre_render(error_log, context['export_pdf'],
                                                  LaTeX.error_template)
                 rendered_tpl += r"\end{document}".encode(LaTeX.encoding)
 
@@ -98,18 +105,18 @@ class LaTeX:
         """
         # Decode bytes to string and split the string by the delimiter '\n'
         lines = lob.decode(LaTeX.encoding).splitlines()
-        errors = []
+        found = []
         for line in lines:
             # LaTeX log errors contains '!'
             index = line.find(LaTeX.error_prefix)
             if index != -1:
                 tmp = line[index:]
                 # Do not add duplicates
-                if errors.__contains__(tmp):
+                if found.__contains__(tmp):
                     continue
                 tmp = tex_escape(tmp)
-                errors.append(tmp)
-        return errors
+                found.append(tmp)
+        return found
 
     @staticmethod
     def pre_render(content, export_flag, template_type=None):

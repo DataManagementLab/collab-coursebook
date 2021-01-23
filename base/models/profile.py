@@ -4,11 +4,6 @@ This file describes or defines the user in the course book.
 """
 
 from django.db import models
-
-# pylint: disable=W0511
-# TODO Error import pylint
-
-# pylint: disable=E5142
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -46,7 +41,6 @@ class Profile(models.Model):
         return str(self.user)
 
 
-# pylint: disable=W0613
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     """Create user profile
@@ -79,5 +73,5 @@ def save_user_profile(sender, instance, **kwargs):
     :param kwargs: The keyword arguments
     :type kwargs: ANY
     """
-    # pylint: disable=W0511
-    instance.profile.save()  # TODO undefined reference?
+    # TODO Undefined reference?
+    instance.profile.save()

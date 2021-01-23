@@ -15,7 +15,8 @@ class CommentForm(forms.ModelForm):
     This model represents form for entering comments.
     """
 
-    class Meta:  # pylint: disable=too-few-public-methods
+    # pylint: disable=too-few-public-methods
+    class Meta:
         """Meta options
 
         This class handles all possible meta options that you can give to this model.
@@ -31,8 +32,6 @@ class CommentForm(forms.ModelForm):
             'text': forms.Textarea(attrs={'rows': 3, 'cols': 15}),
         }
 
-    # pylint: disable=W0511
-    # pylint: disable=R1725
     def __init__(self, *args, **kwargs):
         # TODO
         super(CommentForm, self).__init__(*args, **kwargs)

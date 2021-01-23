@@ -375,7 +375,6 @@ class YTVideoContent(BaseContentModel):
         verbose_name = _("YouTube Video Content")
         verbose_name_plural = _("YouTube Video Contents")
 
-    # pylint: disable=C0103
     @property
     def id(self):
         """ID
@@ -388,8 +387,7 @@ class YTVideoContent(BaseContentModel):
         split_url = self.url.split("=")
         if len(split_url) == 2:
             return self.url.split("=")[1]
-        else:
-            return self.url.split("=")[1].split("&")[0]
+        return self.url.split("=")[1].split("&")[0]
 
     def __str__(self):
         """String representation

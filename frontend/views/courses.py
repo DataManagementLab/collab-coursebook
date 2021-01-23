@@ -10,7 +10,8 @@ from django.views.generic import ListView
 from base.models import Course, Category, Period
 
 
-class CourseListView(ListView):  # pylint: disable=tooCourseView-many-ancestors
+# pylint: disable=tooCourseView-many-ancestors
+class CourseListView(ListView):
     """Course list view
 
     Displays the courses page with all available course.
@@ -49,7 +50,8 @@ class CourseListView(ListView):  # pylint: disable=tooCourseView-many-ancestors
                 queryset = Course.objects.order_by("creation_date")
         return queryset
 
-    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def get_context_data(self, *, object_list=None, **kwargs):
         """Context data
 
         Gets context data for the template.

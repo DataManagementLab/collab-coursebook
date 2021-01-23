@@ -15,7 +15,8 @@ from base.models import Comment, Topic
 from frontend.forms import CommentForm
 
 
-class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class DeleteComment(LoginRequiredMixin, DeleteView):
     """Delete comment
 
     This model represents the deletion of a comment and redirects to course list.
@@ -98,7 +99,8 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
         return context
 
 
-class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class EditComment(LoginRequiredMixin, UpdateView):
     """Edit comment
 
     This model represents the editing of a comment in the database.
@@ -141,9 +143,6 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
                                             args=(course_id, topic_id,
                                                   comment.content.id,)))
 
-    # pylint: disable=W0511
-    # pylint: disable=R1725
-    # TODO
     # Checks if user is the author of the comment
     def dispatch(self, request, *args, **kwargs):
         """Dispatch

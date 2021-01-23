@@ -31,11 +31,12 @@ def create_topic_and_subtopic_list(topics, course):
         if topic in already_checked_topics:
             continue
         already_checked_topics.append(topic)
+        # pylint: disable=no-member
         # Get all structures (even if the same topic is part of the course more than one time)
         for structure in CourseStructureEntry.objects.filter(
                 topic=topic,
                 course=course
-        ).order_by('index'):  # pylint: disable=no-member
+        ).order_by('index'):
             # 0 if main topic - 1 if subtopic
             is_subtopic = 0
             # for easy use in html template: (is_subtopic, topic)
@@ -116,8 +117,8 @@ def check_owner_permission(request, course, messages):
     :type request: HttpRequest
     :param course: The course for which it should be checked
     :type course: Course
-    :param message: The messages to be able to set an error message
-    :type message: TreeWalker
+    :param messages: The messages to be able to set an error message
+    :type messages: TreeWalker
 
     :return: true if the owner has no permission and a message should be displayed
     :rtype: bool

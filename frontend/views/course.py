@@ -89,7 +89,8 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add course view
 
     Adds a new course to the database
@@ -165,7 +166,8 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         return _(f"Course '{cleaned_data['title']}' successfully edited")
 
 
-class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class CourseView(DetailView, FormMixin):
     """Course list view
 
     Displays the course detail page
@@ -186,7 +188,8 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
         self.filtered_by = 'None'
         super().__init__()
 
-    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def post(self, request, *args, **kwargs):
         """Post
 
         Defines what happens after form is posted. Sets object and the checks if form is valid
@@ -291,7 +294,8 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
         return context
 
 
-class CourseDeleteView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class CourseDeleteView(LoginRequiredMixin, DeleteView):
     """
     Deletes the user and redirects to course list
     """

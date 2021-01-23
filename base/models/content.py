@@ -400,7 +400,6 @@ class Content(models.Model):
         :return: the average number of ratings
         :rtype: float
         """
-        # pylint: disable=W0511
         if self.get_rate() is None:  # TODO How can it returns none?
             return 0
         return self.get_rate()
@@ -426,7 +425,8 @@ class Content(models.Model):
         :return: the total count of ratings
         :rtype: int
         """
-        return self.ratings.count()  # pylint: disable=no-member
+        # pylint: disable=no-member
+        return self.ratings.count()
 
     def user_already_rated(self, user):
         """Already rated
@@ -439,7 +439,8 @@ class Content(models.Model):
         :return: true if an user already rated a content
         :rtype: bool
         """
-        return self.ratings.filter(user_id=user.pk).count() > 0  # pylint: disable=no-member
+        # pylint: disable=no-member
+        return self.ratings.filter(user_id=user.pk).count() > 0
 
     def get_user_rate(self, user):
         """User rating

@@ -23,7 +23,8 @@ from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 
 
-class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """
     Adds a new content to the database
     """
@@ -253,7 +254,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return self.handle_error()
 
 
-class ContentView(DetailView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class ContentView(DetailView):
     """
     Displays the content to the user
     """
@@ -262,7 +264,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
     context_object_name = 'content'
 
-    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def post(self, request, *args, **kwargs):
         """
         create comment in database
         :param HttpResponse request: request
@@ -275,9 +278,10 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
         translate_form = TranslateForm(request.POST)
         self.object = self.get_object()  # line required
 
+        # pylint: disable=no-member
         if comment_form.is_valid():
             text = comment_form.cleaned_data['text']
-            Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),  # pylint: disable=no-member
+            Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),
                                    author=request.user.profile, text=text)
         elif translate_form.is_valid():
             language = translate_form.cleaned_data['translation']
@@ -329,7 +333,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
         # course id for back to course button
         course_id = self.kwargs['course_id']
-        course = Course.objects.get(pk=course_id)  # pylint: disable=no-member
+        # pylint: disable=no-member
+        course = Course.objects.get(pk=course_id)
         context['course'] = course
 
         topic = Topic.objects.get(pk=self.kwargs['topic_id'])
@@ -350,7 +355,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
         """
 
         context['comment_form'] = CommentForm()
-        context['comments'] = Comment.objects.filter(content=self.get_object()  # pylint: disable=no-member
+        # pylint: disable=no-member
+        context['comments'] = Comment.objects.filter(content=self.get_object()
                                                      ).order_by('-creation_date')
         context['translate_form'] = TranslateForm()
 
@@ -407,7 +413,8 @@ class AttachedImageView(DetailView):
         return context
 
 
-class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class DeleteContentView(LoginRequiredMixin, DeleteView):
     """
     Deletes the content and redirects to course
     """
@@ -474,7 +481,8 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
         return super().delete(self, request, *args, **kwargs)
 
 
-class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class ContentReadingModeView(LoginRequiredMixin, DetailView):
     """
     Displays the content to the user
     """

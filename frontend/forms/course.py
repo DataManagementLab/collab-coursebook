@@ -17,7 +17,8 @@ class AddAndEditCourseForm(forms.ModelForm):
     # Default value is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
 
-    class Meta:  # pylint: disable=too-few-public-methods
+    # pylint: disable=too-few-public-methods
+    class Meta:
         """Meta options
 
         This class handles all possible meta options that you can give to this model.
