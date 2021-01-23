@@ -14,8 +14,8 @@ class StartView(TemplateView):
 
     This model represents the start view.
 
-    Attributes:
-        StartView.template_name (str): The path to the html template
+    :attr StartView.template_name: The path to the html template
+    :type StartView.template_name: str
     """
     template_name = "frontend/index.html"
 
@@ -25,8 +25,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     This model represents the dash board view.
 
-    Attributes:
-        DashboardView.template_name (str): The path to the html template
+    :attr DashboardView.template_name: The path to the html template
+    :type DashboardView.template_name: str
     """
     template_name = "frontend/dashboard.html"
 
@@ -35,11 +35,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         Gets the context data.
 
-        Parameters:
-            kwargs (dict): The arguments
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: The context data
-        rtype: dict
+        :return: the context data
+        :rtype: dict
         """
         ctx = super().get_context_data(**kwargs)
         ctx["periods"] = Period.objects.all()
