@@ -24,7 +24,7 @@ class ImageAttachmentAdmin(admin.ModelAdmin):
 
 
 @admin.register(ImageContent)
-class ImageContentAdmin(admin.ModelAdmin):
+class ImageContentAdmin(CompareVersionAdmin):
     """Image content admin
 
     Represents the image content model in the admin panel.
@@ -32,7 +32,7 @@ class ImageContentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Latex)
-class LatexAdmin(admin.ModelAdmin):
+class LatexAdmin(CompareVersionAdmin):
     """LaTeX admin
 
     Represents the LaTeX model in the admin panel.
@@ -40,7 +40,7 @@ class LatexAdmin(admin.ModelAdmin):
 
 
 @admin.register(PDFContent)
-class PDFContentAdmin(admin.ModelAdmin):
+class PDFContentAdmin(CompareVersionAdmin):
     """PDF content admin
 
     Represents the PDF content model in the admin panel.
@@ -64,7 +64,7 @@ class TextFieldAdmin(CompareVersionAdmin):
 
 
 @admin.register(YTVideoContent)
-class YTVideoContentAdmin(admin.ModelAdmin):
+class YTVideoContentAdmin(CompareVersionAdmin):
     """YouTube video content
 
     Represents the YouTube video content model in the admin panel.

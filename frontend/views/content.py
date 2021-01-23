@@ -1,7 +1,7 @@
 """Purpose of this file
 
 """
-
+import reversion
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -16,11 +16,13 @@ from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
-from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
-from content.models import SingleImageAttachment, ImageAttachment
+from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES, YTVideoContent, ImageContent, PDFContent, Latex
+from content.models import SingleImageAttachment, ImageAttachment, TextField
 from export.views import generate_pdf_response
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
+
+from reversion_compare.views import HistoryCompareDetailView
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -225,6 +227,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
 
+
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
                 form.save()
@@ -393,6 +396,46 @@ class AttachedImageView(DetailView):
         context['translate_form'] = TranslateForm()
 
         return context
+
+
+class TextfieldHistoryCompareView(HistoryCompareDetailView):
+    """
+        Displays history of this content to the user
+    """
+    model = TextField
+    template_name = "frontend/content/history.html"
+
+
+class YTVideoHistoryCompareView(HistoryCompareDetailView):
+    """
+        Displays history of this content to the user
+    """
+    model = YTVideoContent
+    template_name = "frontend/content/history.html"
+
+
+class ImageHistoryCompareView(HistoryCompareDetailView):
+    """
+        Displays history of this content to the user
+    """
+    model = ImageContent
+    template_name = "frontend/content/history.html"
+
+
+class PdfHistoryCompareView(HistoryCompareDetailView):
+    """
+        Displays history of this content to the user
+    """
+    model = PDFContent
+    template_name = "frontend/content/history.html"
+
+
+class LatexHistoryCompareView(HistoryCompareDetailView):
+    """
+        Displays history of this content to the user
+    """
+    model = Latex
+    template_name = "frontend/content/history.html"
 
 
 class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
