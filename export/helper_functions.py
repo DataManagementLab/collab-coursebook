@@ -140,5 +140,5 @@ class LaTeX:
 
         # render the template and use escape for triple angular brackets
         rendered_tpl = template.render(context)
-        rendered_tpl = re.sub(r'\{~', '{', rendered_tpl).encode(LaTeX.encoding)
+        rendered_tpl = re.sub(r'\{~~', '{', rendered_tpl).encode(LaTeX.encoding)
         return rendered_tpl
