@@ -62,8 +62,6 @@ class SomeTest(TestCase):
         :param data: The data of the content to be created used for the post request
         :type data: dict
         """
-        print(type(path))
-        print(type(data))
         response = self.client.post(path, data)
         self.assertEqual(response.status_code, 302)
         response_path = reverse('frontend:content', kwargs={
