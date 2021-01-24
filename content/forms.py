@@ -92,7 +92,7 @@ class AddContentFormPdf(forms.ModelForm):
         exclude = ['license', 'content']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
-            'pdf': forms.ClearableFileInput(attrs={'accept': 'application/pdf'}),
+            'pdf': ModifiedClearableFileInput(attrs={'accept': 'application/pdf'}),
         }
 
 
