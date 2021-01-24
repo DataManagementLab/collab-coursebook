@@ -5,9 +5,10 @@ This file contains forms associated with the content types.
 
 from django import forms
 from django.forms import modelformset_factory
-
 from content.models import YTVideoContent, ImageContent, PDFContent
 from content.models import ImageAttachment, TextField, Latex, SingleImageAttachment
+from content.widgets import ModifiedClearableFileInput
+
 
 
 class AddContentFormYoutubeVideo(forms.ModelForm):
@@ -189,6 +190,7 @@ SingleImageFormSet = modelformset_factory(
     extra=0,
     widgets={
         'source': forms.Textarea(attrs={'style': 'height: 100px', 'required': 'true'}),
+        'image': ModifiedClearableFileInput(attrs={'required':'true'})
     }
 )
 
