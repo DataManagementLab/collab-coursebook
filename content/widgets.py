@@ -12,6 +12,11 @@ class ModifiedClearableFileInput(ClearableFileInput):
     This model is an alternative widget for clearable file inputs in formset
     """
 
+    clear_checkbox_label = ('Clear')
+    initial_text = ('Current')
+    input_text = ('Change')
+    template_name = 'frontend/widgets/modified_clearable_file_input.html'
+
     def get_context(self, name, value, attrs):
         ctx = super(ModifiedClearableFileInput, self).get_context(name, value, attrs)
 
