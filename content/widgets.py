@@ -13,7 +13,7 @@ class ModifiedClearableFileInput(ClearableFileInput):
     """
 
     clear_checkbox_label = ('Clear')
-    initial_text = ('Current')
+    initial_text = ('Currently')
     input_text = ('Change')
     template_name = 'frontend/widgets/modified_clearable_file_input.html'
 
