@@ -13,12 +13,21 @@ MEDIA_ROOT = tempfile.mkdtemp()
 
 
 # Create your tests here.
-def generate_image_file(i):
+def generate_image_file(image_file_number):
+    """ Generate image file
+    Generates an image file which can be uses for testing
+
+    :param image_file_number: number of the image file to be generated
+    :type image_file_number: int
+
+    :return: the generated image file
+    :rtype: io.BytesIO
+    """
     # https://gist.github.com/guillaumepiot/817a70706587da3bd862835c59ef584e
     file = io.BytesIO()
     image = Image.new('RGBA', size=(100, 100), color=(155, 0, 0))
     image.save(file, 'png')
-    file.name = f'test{i}.png'
+    file.name = f'test{image_file_number}.png'
     file.seek(0)
     return file
 
@@ -26,6 +35,9 @@ def generate_image_file(i):
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class SomeTest(TestCase):
     def setUp(self):
+        """
+        Sets up the test database
+        """
         User.objects.create_superuser("admin")
         cat = Category.objects.create(title="Category")
         Course.objects.create(title="Course", description="description", category=cat)
@@ -34,10 +46,24 @@ class SomeTest(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        """
+        Deletes the generated files after running the tests.
+        """
         shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
 
     def post_redirects_to_content(self, path, data):
+        """
+        Tests that the Post request with the given path and data redirects to the content page of the newly
+        created Content
+
+        :param path: The path used for the POST request
+        :type path: str
+        :param data: The data of the content to be created used for the post request
+        :type data: dict
+        """
+        print(type(path))
+        print(type(data))
         response = self.client.post(path, data)
         self.assertEqual(response.status_code, 302)
         response_path = reverse('frontend:content', kwargs={
@@ -46,6 +72,11 @@ class SomeTest(TestCase):
         self.assertEqual(response.url, response_path)
 
     def test_add_TextField(self):
+        """Test add TextField
+
+        Tests that a Textfield gets created and saved properly after sending a POST request to content-add
+        and that the POST request redirects to the content page.
+        """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
         })
@@ -62,6 +93,11 @@ class SomeTest(TestCase):
         self.assertEqual(content.textfield, "Lorem ipsum")
 
     def test_add_Latex(self):
+        """Test add Latex
+
+        Tests that a Latex Content gets created and saved properly after sending a POST request to content-add
+        and that the POST request redirects to the content page.
+        """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Latex'
         })
@@ -79,6 +115,11 @@ class SomeTest(TestCase):
         self.assertTrue(bool(content.pdf))
 
     def test_attachments(self):
+        """Test add Latex
+
+        Tests that Image Attachments get created and saved properly after sending a POST request to content-add
+        and that the POST request redirects to the content page.
+        """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
         })
