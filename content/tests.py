@@ -1,19 +1,30 @@
-from django.test import TestCase, override_settings
+"""Purpose of this file
+
+This file contains the test cases for this package.
+"""
+
 import io
-from base.models.content import Category, Course, Topic
-from django.contrib.auth.models import User
-from django.urls import reverse
-from content.models import ImageAttachment
-import tempfile
 import shutil
+import tempfile
+
 from PIL import Image
 
+# pylint: disable=imported-auth-user
+from django.contrib.auth.models import User
+from django.test import TestCase, override_settings
+from django.urls import reverse
+
+from base.models.content import Category, Course, Topic
+
+import content.models as model
+
+# Media directory for testing purpose
 MEDIA_ROOT = tempfile.mkdtemp()
 
 
-# Create your tests here.
 def generate_image_file():
     """ Generate image file
+
     Generates an image file which can be uses for testing
 
     :return: the generated image file
@@ -29,10 +40,17 @@ def generate_image_file():
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class SomeTest(TestCase):
+class ImageAttachmentTestCase(TestCase):
+    """Image attachment test case
+
+    This test case tests model ImageAttachment.
+    """
+
     def setUp(self):
-        """
-        Sets up the test database
+        """Setup
+
+        Sets up the test database.
+
         """
         User.objects.create_superuser("admin")
         cat = Category.objects.create(title="Category")
@@ -42,16 +60,18 @@ class SomeTest(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """
+        """Deletion
+
         Deletes the generated files after running the tests.
         """
         shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
 
     def post_redirects_to_content(self, path, data):
-        """
-        Tests that the Post request with the given path and data redirects to the content page of the newly
-        created Content
+        """Post redirects to content
+
+        Tests that the Post request with the given path and data redirects
+        to the content page of the newly created Content.
 
         :param path: The path used for the POST request
         :type path: str
@@ -65,11 +85,12 @@ class SomeTest(TestCase):
         })
         self.assertEqual(response.url, response_path)
 
-    def test_add_ImageAttachment(self):
+    def test_image_attachment_add(self):
         """Test add ImageAttachment
 
-        Tests that an ImageAttachment gets created and saved properly after sending a POST request to content-add
-        and that the POST request redirects to the content page.
+        Tests that an ImageAttachment gets created and saved properly after
+        sending a POST request to content-add and that the POST request
+        redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'ImageAttachment'
@@ -81,7 +102,7 @@ class SomeTest(TestCase):
             'source': 'src',
         }
         self.post_redirects_to_content(path, data)
-        self.assertEqual(ImageAttachment.objects.count(), 1)
-        content = ImageAttachment.objects.first()
+        self.assertEqual(model.ImageAttachment.objects.count(), 1)
+        content = model.ImageAttachment.objects.first()
         self.assertTrue(bool(content.image))
         self.assertEqual(content.source, "src")
