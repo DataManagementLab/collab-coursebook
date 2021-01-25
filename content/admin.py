@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from content.models import YTVideoContent, ImageContent, PdfContent
+from content.models import YTVideoContent, ImageContent, PdfContent, ImageAttachment
 
 
 @admin.register(YTVideoContent)
@@ -15,4 +15,9 @@ class ImageContentAdmin(admin.ModelAdmin):
 
 @admin.register(PdfContent)
 class PdfContentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ImageAttachment)
+class ImageAttachmentAdmin(admin.ModelAdmin):
     pass

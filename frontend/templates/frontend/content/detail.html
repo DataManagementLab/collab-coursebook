@@ -24,18 +24,16 @@
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
+                    {% if content.type|is_content_editable %}
+                        <a class="dropdown-item"
+                           href="{#{% url 'edit_md_file' course.id topic.id content.id %}#}">{% fa5_icon 'pencil-alt' 'fas' %}
+                            Edit</a>
+                    {% endif %}
+
                     {% if favorite %}
                         <a class="dropdown-item" href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'minus' 'far' %} {% trans 'Coursebook' %}</a>
                     {% else %}
                         <a class="dropdown-item" href="{% url 'frontend:coursebook-add' course.id topic.id content.id  %}">{% fa5_icon 'plus' 'far' %} {% trans 'Coursebook' %}</a>
-                    {% endif %}
-
-                    <div class="dropdown-divider"></div>
-
-                    {% if user|check_edit_content_permission:content %}
-                        <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
-                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit' %}
-                        </a>
                     {% endif %}
 
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}

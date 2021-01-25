@@ -28,6 +28,7 @@ urlpatterns = [
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 
+            path('add/ImageAttachment/', views.content.AddImageAttachmentView.as_view(), name='attachment-add'),
             re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$', views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/', include([
                 path('rate/<int:pk>/', views.rate_content, name='rating'),
@@ -37,7 +38,6 @@ urlpatterns = [
                 path('coursebook/remove/', views.coursebook.remove_from_coursebook, name='coursebook-remove'),
             ])),
             path('<pk>/', views.ContentView.as_view(), name='content'),
-            path('<pk>/edit/', views.content.EditContentView.as_view(), name='content-edit'),
             path('<pk>/read/', views.content.ContentReadingModeView.as_view(), name='content-reading-mode'),
         ])),
         path('add/', views.AddCourseView.as_view(), name='add-course'),
