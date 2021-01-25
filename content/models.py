@@ -58,6 +58,27 @@ class ImageContent(models.Model):
         return
 
 
+class ImageAttachment(models.Model):
+    TYPE = "ImageAttachment"
+    DESC = _("Single Image Attachment")
+
+    class Meta:
+        verbose_name = _("Image Attachment in Content")
+        verbose_name_plural = _("Image Attachments in Content")
+
+    content = models.OneToOneField(Content, verbose_name=_("Content"), on_delete=models.CASCADE, primary_key=True)
+    image = models.ImageField(verbose_name=_("Image Attachment"), upload_to='uploads/contents/%Y/%m/%d/')
+    source = models.TextField(verbose_name=_("Source"))
+    license = models.CharField(verbose_name=_("License"), blank=True, max_length=200)
+
+    def __str__(self):
+        return f"{self.content}:{self.image}"
+
+    def generate_preview(self):
+        # TODO generate small image previews
+        return
+
+
 class PdfContent(models.Model, GeneratePreviewMixin):
     TYPE = "Pdf"
     DESC = _("Pdf")
@@ -74,13 +95,13 @@ class PdfContent(models.Model, GeneratePreviewMixin):
     def generate_preview(self):
         preview_folder = 'uploads/previews/'
         # Check if Folder exists
-        if not os.path.exists(os.path.join(settings.MEDIA_ROOT,preview_folder)):
-            os.makedirs(os.path.join(settings.MEDIA_ROOT,preview_folder))
+        if not os.path.exists(os.path.join(settings.MEDIA_ROOT, preview_folder)):
+            os.makedirs(os.path.join(settings.MEDIA_ROOT, preview_folder))
         base_filename = os.path.splitext(os.path.basename(self.pdf.name))[0] + '.jpg'
         # get images for every page
         pages = convert_from_path(self.pdf.path, last_page=2)
         # save first page to disk
-        pages[0].save(os.path.join(settings.MEDIA_ROOT,preview_folder, base_filename))
+        pages[0].save(os.path.join(settings.MEDIA_ROOT, preview_folder, base_filename))
         return os.path.join(preview_folder, base_filename)
 
     def __str__(self):
@@ -90,5 +111,6 @@ class PdfContent(models.Model, GeneratePreviewMixin):
 CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
-    PdfContent.TYPE: PdfContent
+    PdfContent.TYPE: PdfContent,
+    ImageAttachment.TYPE: ImageAttachment
 }
