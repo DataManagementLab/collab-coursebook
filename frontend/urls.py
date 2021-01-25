@@ -28,6 +28,7 @@ urlpatterns = [
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 
+            path('add/ImageAttachment/', views.content.AddImageAttachmentView.as_view(), name='attachment-add'),
             re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$', views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/', include([
                 path('rate/<int:pk>/', views.rate_content, name='rating'),

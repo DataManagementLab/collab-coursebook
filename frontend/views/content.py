@@ -14,8 +14,8 @@ from base.utils import get_user
 from content.models import CONTENT_TYPES
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
-from content.forms import CONTENT_TYPE_FORMS
-from content.models import CONTENT_TYPES
+from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage
+from content.models import CONTENT_TYPES, ImageAttachment
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
@@ -121,6 +121,19 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             # everyone can edit the content
             return super().dispatch(request, *args, **kwargs)
 
+
+class AddImageAttachmentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+    """
+    Adds a new content to the database
+    """
+    model = ImageAttachment
+    template_name = 'frontend/content/addattachement.html'
+    form_class = AddContentFormAttachedImage
+    success_url = reverse_lazy('frontend:dashboard')
+
+    def get_success_message(self, cleaned_data):
+        return _(f"Content '{cleaned_data['type']}' successfully added")
+
     def handle_error(self):
         """
         create error message and return to course page
@@ -131,6 +144,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
 
@@ -153,7 +167,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
             # Careful: Order is important for file fields (instance first, afterwards form data,
             # if using kwargs dict as single argument instead, instance information will not be parsed in time)
-            content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object, data=self.request.POST, files=self.request.FILES)
+            content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
+                                                                         data=self.request.POST,
+                                                                         files=self.request.FILES)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
@@ -168,6 +184,40 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         # Redirect to error page (should not happen for valid content types)
         return self.handle_error()
+
+        if True:
+            content_type = ImageAttachment.TYPE
+            if content_type in CONTENT_TYPE_FORMS:
+                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
+            else:
+                return self.handle_error()
+        else:
+            return self.handle_error()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        content_type_form = CONTENT_TYPE_FORMS.get(ImageAttachment.TYPE)(request.POST, request.FILES)
+
+        if content_type_form.is_valid():
+            # save author etc.
+            content = Content()
+            content.author = get_user(self.request)
+            topic_id = self.kwargs['topic_id']
+            content.topic = Topic.objects.get(pk=topic_id)
+            content.type = ImageAttachment.TYPE
+            content.save()
+            # save generic form. Image, YT video etc.
+            content_type_data = content_type_form.save(commit=False)
+            content_type_data.content = content
+
+            content_type_data.save()
+            # generate preview image in 'uploads/contents/'
+            preview = CONTENT_TYPES.get(ImageAttachment.TYPE).objects.get(pk=content.pk).generate_preview()
+            content.preview.name = preview
+            content.save()
+            course_id = self.kwargs['course_id']
+            topic_id = self.kwargs['topic_id']
+            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
 
 
 class ContentView(DetailView):  # pylint: disable=too-many-ancestors
