@@ -9,10 +9,10 @@ import tempfile
 import shutil
 from PIL import Image
 
+# Temporary media directory
 MEDIA_ROOT = tempfile.mkdtemp()
 
 
-# Create your tests here.
 def generate_image_file(image_file_number):
     """ Generate image file
     Generates an image file which can be uses for testing
