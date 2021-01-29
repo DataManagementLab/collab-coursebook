@@ -21,7 +21,11 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Dependencies
+      - name: Install LaTeX/PDF Dependencies
+        run: |
+          sudo apt-get install texlive-full
+          sudo apt-get install poppler-utils
+      - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
