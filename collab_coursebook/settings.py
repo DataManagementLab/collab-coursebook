@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'content',
     'export',
     'debug_toolbar',
+    'reversion',  # https://github.com/etianen/django-reversion
+    'reversion_compare',  # https://github.com/jedie/django-reversion-compare
 ]
 
 MIDDLEWARE = [
@@ -60,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'reversion.middleware.RevisionMiddleware',
 ]
 
 ROOT_URLCONF = 'collab_coursebook.urls'
@@ -184,3 +187,9 @@ FOOTER_INFO = {
 }
 
 ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE = True
+
+# Add reversion models to admin interface:
+ADD_REVERSION_ADMIN=True
+# optional settings:
+REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID=False
+REVERSION_COMPARE_IGNORE_NOT_REGISTERED=False

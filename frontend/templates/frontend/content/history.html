@@ -1,0 +1,43 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load cc_frontend_tags %}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+
+
+{% block content %}
+
+<a href="javascript:history.go(-1)"
+   class="btn btn-secondary">{% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Back" %}</a>
+
+<h2 style="font-weight: bold" align="center"> {% trans "History" %} </h2>
+
+<!-- Source: https://pypi.org/project/django-reversion-compare/  -->
+<style type="text/css">
+/* minimal style for the diffs */
+
+pre.highlight {
+    max-width: 900px;
+    white-space: pre-line;
+}
+del, ins {
+    color: #000;
+    text-decoration: none;
+}
+del { background-color: #ffe6e6; }
+ins { background-color: #e6ffe6; }
+sup.follow { color: #5555ff; }
+</style>
+
+
+{% include "reversion-compare/action_list_partial.html"  %}
+{% if request.GET.version_id1 %}
+    {% include "reversion-compare/compare_partial.html"  %}
+    {% include "reversion-compare/compare_links_partial.html"  %}
+{% endif %}
+
+{% endblock content %}

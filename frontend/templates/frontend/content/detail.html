@@ -44,6 +44,39 @@
                         </a>
                     {% endif %}
 
+                    <!-- Who are allowed to view the history?  -->
+                    {% if content.type == 'Textfield' %}
+                        <a class="dropdown-item" href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'YouTubeVideo' %}
+                        <a class="dropdown-item" href="{% url 'frontend:ytvideo-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'Image' %}
+                        <a class="dropdown-item" href="{% url 'frontend:image-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'PDF' %}
+                        <a class="dropdown-item" href="{% url 'frontend:pdf-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'Latex' %}
+                        <a class="dropdown-item" href="{% url 'frontend:latex-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+
+
                     {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
                            data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
