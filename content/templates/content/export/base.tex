@@ -3,19 +3,30 @@
 
 \documentclass[a4paper]{article}
 
+% Packages
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[ngerman]{babel}
-\usepackage{graphicx}
-\usepackage{float}
 \usepackage{grffile}
 \usepackage{hyperref}
 \usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
+% Graphics
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{tikz}
+% Listing
+\usepackage{listings}
+% Math
+\usepackage{mathtools, amssymb}
+\usepackage{array}
+\usepackage{xcolor}
+% Table
+\usepackage{booktabs}
 
 %% Generate a latex graphic
 % 1: caption
 % 2: image path
-\newcommand{\Image}[2]{
+\newcommand*{\Image}[2]{
     \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{#2}
@@ -23,11 +34,23 @@
     \end{figure}
 }
 
+% Indent
+\setlength\parindent{0pt}
+
+% Title information
+
+{% if export_pdf %}
+\title{ {{ course.title|tex_escape }} }
+{% else %}
+\title{ {{ topic.title|tex_escape }} }
+{% endif %}
+
+\author{ {{user|tex_escape}} }
+
+% Document
 \begin{document}
 
-    \title{ {{ course.title|tex_escape }} }
-    \author{ {{user|tex_escape}} }
-    \maketitle
+\maketitle
 
 % \end{document} gets appended in code
 

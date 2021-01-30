@@ -15,22 +15,26 @@
 {% block content %}
     <div class="row mt-3">
         <div class="col-md">
-            <h1>{% trans "All Courses" %}{% if sort %} ({{ sort }}){% endif %} {% trans "for Category" %} {{ category.title }}</h1>
+            <h1>{% trans "All Courses" %}{% if sort %} ({{ sort }}
+                ){% endif %} {% trans "for Category" %} {{ category.title }}</h1>
         </div>
         <div class="col-md-auto my-auto">
-                <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sort by: {{ sort }}
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{% url 'frontend:category-courses-sort' sort='date-new' pk=category.pk %}">Date (newest)</a>
-                    <a class="dropdown-item" href="{% url 'frontend:category-courses-sort' sort='date-old' pk=category.pk %}">Date (oldest)</a>
-                    <a class="dropdown-item" href="{% url 'frontend:category-courses-sort' sort='title-a' pk=category.pk %}">Title (A-Z)</a>
-                    <a class="dropdown-item" href="{% url 'frontend:category-courses-sort' sort='title-z' pk=category.pk %}">Title (Z-A)</a>
-                </div>
+            <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sort by: {{ sort }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item"
+                   href="{% url 'frontend:category-courses-sort' sort='date-new' pk=category.pk %}">Date (newest)</a>
+                <a class="dropdown-item"
+                   href="{% url 'frontend:category-courses-sort' sort='date-old' pk=category.pk %}">Date (oldest)</a>
+                <a class="dropdown-item"
+                   href="{% url 'frontend:category-courses-sort' sort='title-a' pk=category.pk %}">Title (A-Z)</a>
+                <a class="dropdown-item"
+                   href="{% url 'frontend:category-courses-sort' sort='title-z' pk=category.pk %}">Title (Z-A)</a>
+            </div>
         </div>
     </div>
-
 
     {% include "frontend/course_lists/course_cards_paginated.html" %}
 {% endblock %}

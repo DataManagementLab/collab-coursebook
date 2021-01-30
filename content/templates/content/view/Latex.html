@@ -1,0 +1,10 @@
+{% load i18n %}
+
+<div class="row">
+    <div class="col">
+        <embed src="{{ content.latex.pdf.url }}" type="application/pdf" height="700px" width="100%">
+    </div>
+</div>
+
+<b>{% trans "Source" %}:</b>
+<p>{{ content.latex.source }}</p>

@@ -1,18 +1,36 @@
+"""Purpose of this file
+
+This file contains forms associated with the course.
+"""
+
 from django import forms
 
 from base.models import Course
 
 
 class AddAndEditCourseForm(forms.ModelForm):
-    """
-    The Form for adding and editing a course
-    """
-    # default value is -1: if this value gets overwritten the form
-    # edits the existing course with the title in the database
+    """Add and edit course form
 
-    class Meta:  # pylint: disable=too-few-public-methods
+    This model represents the add form for adding and editing a course.
+    """
+
+    # Default value is -1: if this value gets overwritten the form
+    # Edits the existing course with the title in the database
+
+    # pylint: disable=too-few-public-methods
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model (Model): The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
+        """
         model = Course
-        exclude = ['creation_date', 'topics']
+        fields = ['title', 'description', 'image', 'owners',
+                  'restrict_changes', 'category', 'period']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,8 +39,18 @@ class AddAndEditCourseForm(forms.ModelForm):
 
 
 class FilterAndSortForm(forms.Form):
-    """
-    The form for entering filter and sorting Options
+    """Filter and sort form
+
+    This model represents the add form for entering filter and sorting options.
+
+    :attr FilterAndSortForm.FILTER_CHOICE: The filter choices
+    :type FilterAndSortForm.FILTER_CHOICE: List[Tuple[str, str]]
+    :attr FilterAndSortForm.SORTING_CHOICE: The sorting choices
+    :type FilterAndSortForm.SORTING_CHOICE: List[Tuple[str, str]]
+    :attr FilterAndSortForm.filter: The field to enter the filter choices
+    :type FilterAndSortForm.filter: CharField
+    :attr FilterAndSortForm.sort: The field to enter the sort choices
+    :type FilterAndSortForm.sort: CharField
     """
 
     FILTER_CHOICE = [('None', '------')]  # + Content.STYLE

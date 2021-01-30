@@ -1,10 +1,20 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
-\textbf{Image}
-\Image{ {{content.description|tex_escape}} }{% templatetag openbrace %}{{content.imagecontent.image.path}}{% templatetag closebrace%}
-\newline
- {{content.description|tex_escape}}
-\newline
+% show topic title when exporting
+{% if export_pdf %}
+{\Large \textbf{ {{content.topic.title}}   }}
+{% endif %}
+
+\vskip 1em
+
+% Figure
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{ {{content.imagecontent.image.url}} }
+    \caption{ {{ content.description|tex_escape }} }
+\end{figure}
+
+\vskip 3em
 
 {% endautoescape %}

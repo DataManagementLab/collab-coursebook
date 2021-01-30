@@ -1,24 +1,30 @@
+"""Purpose of this file
+
+"""
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
+from django.core.files.base import ContentFile
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
-from base.models import Content, Comment, Course, Topic, Favorite, Rating, Profile
-
+from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
-from content.models import CONTENT_TYPES
+from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
+from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
+from content.models import SingleImageAttachment, ImageAttachment
+from export.views import generate_pdf_response
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
-from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage
-from content.models import CONTENT_TYPES, ImageAttachment
 
 
-class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """
     Adds a new content to the database
     """
@@ -42,6 +48,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # retrieve form for content type
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
@@ -51,25 +58,42 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
         else:
             return self.handle_error()
 
-        # course id for back to course button
-        course_id = self.kwargs['course_id']
-        course = Course.objects.get(pk=course_id)  # pylint: disable=no-member
+        # check if attachments are allowed for given content type
+        context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
+
+        # retrieve attachment_form
+        context['attachment_form'] = AddContentFormAttachedImage
+
+        # retrieve parameters
+        course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
+
+        # setup formset
+        formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
+        context['item_forms'] = formset
 
         return context
 
     def post(self, request, *args, **kwargs):
-        add_content_form = AddContentForm(request.POST)
+        # retrieve content type form
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
-                content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST, request.FILES)
+                content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST,
+                                                                         request.FILES)
             else:
                 return self.handle_error()
         else:
             return self.handle_error()
 
+        # read input from all included forms
+        add_content_form = AddContentForm(request.POST)
+        attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
+        image_formset = SingleImageFormSet(request.POST, request.FILES)
+
+        # check if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
+
             # save author etc.
             content = add_content_form.save(commit=False)
             content.author = get_user(self.request)
@@ -77,18 +101,53 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
             content.topic = Topic.objects.get(pk=topic_id)
             content.type = content_type
             content.save()
-            # save generic form. Image, YT video etc.
+
+            # evaluate generic form
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
-
             content_type_data.save()
+
+            # If the content type is Latex, compile the Latex Code and store in DB
+            if content_type == 'Latex':
+                topic = Topic.objects.get(pk=kwargs['topic_id'])
+                pdf = generate_pdf_response(get_user(self.request), topic, content)
+                content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+                content_type_data.save()
+
+            # Check if attachments are allowed for the given content type
+            if content_type in IMAGE_ATTACHMENT_TYPES:
+                if attachment_form.is_valid():
+
+                    # evaluate the attachment form
+                    content_attachment = attachment_form.save(commit=False)
+                    content_attachment.save()
+                    content.attachment = content_attachment
+                    images = []
+
+                    # evaluate all forms of the formset and append to image set
+                    if image_formset.is_valid():
+                        for form in image_formset:
+                            used_form = form.save(commit=False)
+                            used_form.save()
+                            images.append(used_form)
+                    else:
+                        return self.form_invalid(image_formset)
+
+                    # store the attached images in DB
+                    content.attachment.images.set(images)
+                else:
+                    return self.form_invalid(attachment_form)
+
             # generate preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview
             content.save()
+
+            # Redirect to content
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
-            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
+            return HttpResponseRedirect(reverse_lazy('frontend:content',
+                                                     args=(course_id, topic_id, content.id,)))
 
         # add_content_form invalid
         if not add_content_form.is_valid():
@@ -98,14 +157,28 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
 
 class EditContentView(LoginRequiredMixin, UpdateView):
+    """Edit content view
+
+    This model represents the edit of a content view.
+
+    :attr EditContentView.model: The model of the view
+    :type EditContentView.model: Model
+    :attr EditContentView.template_name: The path to the html template
+    :type EditContentView.template_name: str
+    :attr EditContentView.form_class: The form class of the view
+    :type EditContentView.form_class: Form
+    """
     model = Content
     template_name = 'frontend/content/editcontent.html'
     form_class = AddContentForm
 
     def get_content_url(self):
-        """
-        get the url of the content page
+        """Content url
+
+        Gets the url of the content page.
+
         :return: url of the content page
+        :rtype: Optional[str]
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
@@ -113,54 +186,75 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return reverse('frontend:content', args=(course_id, topic_id, content_id,))
 
     def get_success_url(self):
+        """Success URL
+
+        Returns the url for successful editing.
+
+        :return: the url of the edited content
+        :rtype: str
+        """
         return self.get_content_url()
 
     def dispatch(self, request, *args, **kwargs):
+        """Dispatch
+
+        Dispatches the edit content view.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection page of the dispatch
+        :rtype: HttpResponse
+        """
         user = get_user(request)
         if self.get_object().readonly:
             # only admins and the content owner can edit the content
             if self.get_object().author == user or request.user.is_superuser:
                 return super().dispatch(request, *args, **kwargs)
-            else:
-                messages.error(request, _('You are not allowed to edit this content'))
-                return HttpResponseRedirect(self.get_content_url())
-        else:
-            # everyone can edit the content
-            return super().dispatch(request, *args, **kwargs)
-
-
-class AddImageAttachmentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
-    """
-    Adds a new content to the database
-    """
-    model = ImageAttachment
-    template_name = 'frontend/content/addattachement.html'
-    form_class = AddContentFormAttachedImage
-    success_url = reverse_lazy('frontend:dashboard')
-
-    def get_success_message(self, cleaned_data):
-        return _(f"Content '{cleaned_data['type']}' successfully added")
+            messages.error(request, _('You are not allowed to edit this content'))
+            return HttpResponseRedirect(self.get_content_url())
+        # everyone can edit the content
+        return super().dispatch(request, *args, **kwargs)
 
     def handle_error(self):
-        """
-        create error message and return to course page
+        """Handle error
+
+        Create error message and return to course page.
+
+        :return: the http response redirect of the error handling
+        :rtype: HttpResponseRedirect
         """
         course_id = self.kwargs['course_id']
         messages.error(self.request, _('An error occurred while processing the request'))
         return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        """Context data
 
+        Returns the context data of the editing.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data of the search
+        :rtype: Dict[str, Any]
+        """
+        context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
 
-        # Add form only to context data if not already in it (when passed by post method containing error messages)
-        if not 'content_type_form' in context:
+        # Add form only to context data if not already in it
+        # (when passed by post method containing error messages)
+        if 'content_type_form' not in context:
             content_type = self.get_object().type
             if content_type in CONTENT_TYPE_FORMS:
                 content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
-                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+                context['content_type_form'] = \
+                    CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
             else:
                 return self.handle_error()
         return context
@@ -173,7 +267,8 @@ class AddImageAttachmentView(SuccessMessageMixin, LoginRequiredMixin, CreateView
             # Bind/init form with existing data
             content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
             # Careful: Order is important for file fields (instance first, afterwards form data,
-            # if using kwargs dict as single argument instead, instance information will not be parsed in time)
+            # if using kwargs dict as single argument instead, instance information
+            # will not be parsed in time)
             content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
@@ -181,77 +276,74 @@ class AddImageAttachmentView(SuccessMessageMixin, LoginRequiredMixin, CreateView
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
                 form.save()
+                content = form.save()
+                content_type = content.type
                 content_object = content_type_form.save()
-                content_object.generate_preview()
+
+                # If the content type is Latex, compile the Latex Code and store in DB
+                if content_type == 'Latex':
+                    topic = Topic.objects.get(pk=kwargs['topic_id'])
+                    pdf = generate_pdf_response(get_user(self.request), topic, content)
+                    content_object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+                    content_object.save()
+
+                preview = CONTENT_TYPES.get(content_type). \
+                    objects.get(pk=content.pk).generate_preview()
+                content.preview.name = preview
+                content.save()
                 messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
                 return HttpResponseRedirect(self.get_success_url())
 
             # Don't save and render error messages for both forms
-            return self.render_to_response(self.get_context_data(form=form, content_type_form=content_type_form))
+            return self.render_to_response(
+                self.get_context_data(form=form, content_type_form=content_type_form))
 
         # Redirect to error page (should not happen for valid content types)
         return self.handle_error()
 
-        if True:
-            content_type = ImageAttachment.TYPE
-            if content_type in CONTENT_TYPE_FORMS:
-                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
-            else:
-                return self.handle_error()
-        else:
-            return self.handle_error()
-        return context
 
-    def post(self, request, *args, **kwargs):
-        content_type_form = CONTENT_TYPE_FORMS.get(ImageAttachment.TYPE)(request.POST, request.FILES)
+# pylint: disable=too-many-ancestors
+class ContentView(DetailView):
+    """Content view
 
-        if content_type_form.is_valid():
-            # save author etc.
-            content = Content()
-            content.author = get_user(self.request)
-            topic_id = self.kwargs['topic_id']
-            content.topic = Topic.objects.get(pk=topic_id)
-            content.type = ImageAttachment.TYPE
-            content.save()
-            # save generic form. Image, YT video etc.
-            content_type_data = content_type_form.save(commit=False)
-            content_type_data.content = content
-
-            content_type_data.save()
-            # generate preview image in 'uploads/contents/'
-            preview = CONTENT_TYPES.get(ImageAttachment.TYPE).objects.get(pk=content.pk).generate_preview()
-            content.preview.name = preview
-            content.save()
-            course_id = self.kwargs['course_id']
-            topic_id = self.kwargs['topic_id']
-            return HttpResponseRedirect(reverse_lazy('frontend:content', args=(course_id, topic_id, content.id,)))
-
-
-class ContentView(DetailView):  # pylint: disable=too-many-ancestors
-    """
     Displays the content to the user
+
+    :attr ContentView.model: The model of the view
+    :type ContentView.model: Model
+    :attr ContentView.template_name: The path to the html template
+    :type ContentView.template_name: str
+    :attr ContentView.context_object_name: The name of the context variable
+    :type ContentView.context_object_name: str
     """
     model = Content
     template_name = "frontend/content/detail.html"
 
     context_object_name = 'content'
 
-    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        """
-        create comment in database
-        :param HttpResponse request: request
-        :param args: args
-        :param dict kwargs: keyword arguments
-        :return: redirect to content page
+    # pylint: disable=unused-argument
+    def post(self, request, *args, **kwargs):
+        """Post
+
+        Creates comment in database.
+
+        :param request: The given request
+        :type request: HttpResponse
+        :param args: The arguments
+        :type: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection to the content page
         :rtype: HttpResponse
         """
         comment_form = CommentForm(request.POST)
         translate_form = TranslateForm(request.POST)
         self.object = self.get_object()  # line required
 
+        # pylint: disable=no-member
         if comment_form.is_valid():
             text = comment_form.cleaned_data['text']
-            Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),  # pylint: disable=no-member
+            Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),
                                    author=request.user.profile, text=text)
         elif translate_form.is_valid():
             language = translate_form.cleaned_data['translation']
@@ -289,10 +381,14 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
             + '#comments')
 
     def get_context_data(self, **kwargs):
-        """
-        get context data
-        :param dict kwargs: keyword arguments
-        :return: context
+        """Context data
+
+        Gets the context data.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data
         :rtype: dict
         """
         context = super().get_context_data(**kwargs)
@@ -303,7 +399,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
         # course id for back to course button
         course_id = self.kwargs['course_id']
-        course = Course.objects.get(pk=course_id)  # pylint: disable=no-member
+        # pylint: disable=no-member
+        course = Course.objects.get(pk=course_id)
         context['course'] = course
 
         topic = Topic.objects.get(pk=self.kwargs['topic_id'])
@@ -324,7 +421,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
         """
 
         context['comment_form'] = CommentForm()
-        context['comments'] = Comment.objects.filter(content=self.get_object()  # pylint: disable=no-member
+        # pylint: disable=no-member
+        context['comments'] = Comment.objects.filter(content=self.get_object()
                                                      ).order_by('-creation_date')
         context['translate_form'] = TranslateForm()
 
@@ -339,20 +437,164 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
         context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
                                                       content=content).count() > 0
+        context['attachment'] = content.attachment
+
         return context
 
 
-class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
+class AttachedImageView(DetailView):
+    """Attached image view
+
+    Displays the attached image to the user.
+
+    :attr AttachedImageView.model: The model of the view
+    :type AttachedImageView.model: Model
+    :attr AttachedImageView.template_name: The path to the html template
+    :type AttachedImageView.template_name: str
+    :attr AttachedImageView.context_object_name: The name of the context variable
+    :type AttachedImageView.context_object_name: str
     """
-    Displays the content to the user
+    model = SingleImageAttachment
+    template_name = "content/view/AttachedImage.html"
+
+    context_object_name = 'SingleImageAttachment'
+
+    def get_context_data(self, **kwargs):
+        """Context data
+
+        Gets the context data.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data
+        :rtype: dict
+        """
+        context = super().get_context_data(**kwargs)
+
+        # retrieve parameters
+        course = Course.objects.get(pk=self.kwargs['course_id'])
+        context['course'] = course
+
+        topic = Topic.objects.get(pk=self.kwargs['topic_id'])
+        context['topic'] = topic
+
+        content = Content.objects.get(pk=self.kwargs['content_id'])
+        context['content'] = content
+
+        attachment = ImageAttachment.objects.get(pk=self.kwargs['imageattachment_id'])
+        context['attachment'] = attachment
+
+        context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
+        context['translate_form'] = TranslateForm()
+
+        return context
+
+
+# pylint: disable=too-many-ancestors
+class DeleteContentView(LoginRequiredMixin, DeleteView):
+    """Delete content view
+
+    Deletes the content and redirects to course.
+
+    :attr DeleteContentView.model: The model of the view
+    :type DeleteContentView.model: Model
+    :attr DeleteContentView.template_name: The path to the html template
+    :type DeleteContentView.template_name: str
+    """
+    model = Content
+    template_name = "frontend/content/detail.html"
+
+    def get_content_url(self):
+        """Content url
+
+        Gets the url of the content page.
+
+        :return: the url of the content page
+        :rtype: optional[str]
+        """
+        course_id = self.kwargs['course_id']
+        topic_id = self.kwargs['topic_id']
+        content_id = self.get_object().pk
+        return reverse('frontend:content', args=(course_id, topic_id, content_id,))
+
+    def get_success_url(self):
+        """Success URL
+
+        Returns the url to return to after successful delete
+
+        :return: the url of the edited content
+        :rtype: str
+        """
+        course_id = self.kwargs['course_id']
+        return reverse_lazy('frontend:course', args=(course_id,))
+
+    # Check if the user is allowed to view the delete page
+    def dispatch(self, request, *args, **kwargs):
+        """Dispatch
+
+        Overwrites dispatch: Check if a user is allowed to visit the page.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the response to redirect to overview of the course if the user is not owner
+        :rtype: HttpResponse
+        """
+        user = get_user(request)
+        # only admins and the content owner can delete the content
+        if self.get_object().author == user or request.user.is_superuser:
+            return super().dispatch(request, *args, **kwargs)
+
+        messages.error(request, _('You are not allowed to delete this content'))
+        return HttpResponseRedirect(self.get_content_url())
+
+    def delete(self, request, *args, **kwargs):
+        """Delete
+
+        Deletes the content when the user clicks the delete button
+
+        :param request: The given request
+        :attr request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirect to success url (course)
+        :rtype: HttpResponse
+        """
+
+        messages.success(request, "Content successfully deleted", extra_tags="alert-success")
+        return super().delete(self, request, *args, **kwargs)
+
+
+# pylint: disable=too-many-ancestors
+class ContentReadingModeView(LoginRequiredMixin, DetailView):
+    """Content reading mode view
+
+    Displays the content to the user.
+
+    :attr ContentReadingModeView.model: The model of the view
+    :type ContentReadingModeView.model: Model
+    :attr ContentReadingModeView.template_name: The path to the html template
+    :type ContentReadingModeView.template_name: str
     """
     model = Content
     template_name = "frontend/content/readingmode.html"
 
     def get_context_data(self, **kwargs):
-        """
-        gets the context data for the response
-        :param dict kwargs: keyword arguments
+        """Context data
+
+        Gets the context data for the response.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
         :return: the context
         :rtype: dict
         """
@@ -364,8 +606,11 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
         topic = Topic.objects.get(pk=topic_id)
         if self.request.GET.get('coursebook'):
             course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
-            contents = [f.content for f in Favorite.objects.filter(course=course,
-                                                                   user=self.request.user.profile)]  # models.get_coursebook_flat(get_user(self.request), course)
+            contents = [
+                f.content for f in Favorite.objects.filter(
+                    course=course,
+                    user=self.request.user.profile)]  # models
+            # .get_coursebook_flat(get_user(self.request), course)
         else:
             contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))
 
@@ -390,14 +635,23 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
 
 
 def rate_content(request, course_id, topic_id, content_id, pk):
-    """
-    Let the user rate content
-    :param int topic_id: id of the topic
-    :param HttpRequest request: request
-    :param int course_id: course id
-    :param int content_id: id of the content which gets rated
-    :param int pk: the user rating (should be in [ 1, 2, 3, 4, 5])
-    :return: redirect to content page
+    """Rate content
+
+    Let the user rate content.
+
+    :param topic_id: The id of the topic
+    :type topic_id: int
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: course id
+    :type course_id: int
+    :param content_id: id of the content which gets rated
+    :type content_id: int
+    :param pk: the user rating (should be in [ 1, 2, 3, 4, 5])
+    :type pk: Any
+
+
+    :return: the redirect to content page
     :rtype: HttpResponse
     """
     content = get_object_or_404(Content, pk=content_id)

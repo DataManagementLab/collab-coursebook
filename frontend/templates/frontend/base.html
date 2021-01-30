@@ -8,7 +8,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-        <title>{% block title %}Collab Coursebook{% endblock %}</title>
+    <title>{% block title %}Collab Coursebook{% endblock %}</title>
 
     {# Load Bootstrap CSS and JavaScript as well as font awesome #}
     {% bootstrap_css %}
@@ -17,49 +17,51 @@
 
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
-    <script type='text/javascript'>
-        var changed_form = false;
 
-         $(document).ready(function() {
+    <script type='text/javascript'>
+        let changed_form = false;
+
+        $(document).ready(function () {
             // Ask before changing language if user changed main form on page
-            $("#language-switcher").submit(function(e){
-                if(changed_form) {
-                    if(!confirm("{% trans 'Are you sure you want to change the language now? This will clear the form!' %}"))
+            $("#language-switcher").submit(function (e) {
+                if (changed_form) {
+                    if (!confirm("{% trans 'Are you sure you want to change the language now? This will clear the form!' %}"))
                         e.preventDefault(e);
                 }
             });
 
             // Remember any main form edits/changes
-            $("form.post-form :input").change(function(){
-                if($(this).val() != '')
+            $("form.post-form :input").change(function () {
+                if ($(this).val() !== '')
                     changed_form = true;
             });
         });
     </script>
 
     {% block imports %}{% endblock %}
+
 </head>
 <body>
 
-    {% block general_content %}
+{% block general_content %}
+{% endblock %}
+
+<div class="container" style="padding-top:1em;padding-bottom: 1em;">
+    {% block footer_custom %}
     {% endblock %}
+    {% footer_info as FI %}
+    {% if FI.impress_text %}
+        {{ FI.impress_text }} &middot;
+    {% endif %}
+    {% if FI.impress_url %}
+        <a href="{{ FI.impress_url }}">{% trans "Impress" %}</a> &middot;
+    {% endif %}
+    {% if FI.repo_url %}
+        <a href="{{ FI.repo_url }}">{% trans "This software is open source" %}</a>
+    {% endif %}
+</div>
 
-    <div class="container" style="padding-top:1em;padding-bottom: 1em;">
-        {% block footer_custom %}
-        {% endblock %}
-        {% footer_info as FI %}
-        {% if FI.impress_text %}
-            {{ FI.impress_text }} &middot;
-        {% endif %}
-        {% if FI.impress_url %}
-            <a href="{{ FI.impress_url }}">{% trans "Impress" %}</a> &middot;
-        {% endif %}
-        {% if FI.repo_url %}
-            <a href="{{ FI.repo_url }}">{% trans "This software is open source" %}</a>
-        {% endif %}
-    </div>
-
-    {%  block bottom_script %}{% endblock %}
+{% block bottom_script %}{% endblock %}
 
 </body>
 </html>

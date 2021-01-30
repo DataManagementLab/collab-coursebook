@@ -1,0 +1,23 @@
+{% load cc_export_tags %}
+{% autoescape off %}
+
+% show topic title when exporting
+{% if export_pdf %}
+{\Large \textbf{ {{content.topic.title}}   }}
+{% endif %}
+
+\vskip 1em
+
+% show textfield
+{{ content.textfield.textfield|tex_escape }}
+
+\vskip 1em
+
+% show description when exporting
+{% if export_pdf %}
+\textit{Description:} {{content.description|tex_escape}}
+{% endif %}
+
+\vskip 3em
+
+{% endautoescape %}

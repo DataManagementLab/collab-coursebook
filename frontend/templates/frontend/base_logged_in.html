@@ -1,15 +1,14 @@
 {% extends "frontend/base.html" %}
 
-
 {% block general_content %}
-<div class="container-fluid" style="background-color: #0a3d62;padding-top:2em;padding-bottom:2em;color:#ffffff;">
-    <div class="container" style="border-top: 0.5em solid #ffffff;padding-top:2em;">
-        {% include "frontend/navbar.html" %}
+    <div class="container-fluid" style="background-color: #0a3d62;padding-top:2em;padding-bottom:2em;color:#ffffff;">
+        <div class="container" style="border-top: 0.5em solid #ffffff;padding-top:2em;">
+            {% include "frontend/navbar.html" %}
+        </div>
     </div>
-</div>
-<div class="container" style="padding-top: 2em;min-height:75vh;margin-bottom:50px;">
-    {% include "frontend/messages.html" %}
-    {% block content %}
-    {% endblock %}
-</div>
+    <div class="container" style="padding-top: 2em;min-height:75vh;margin-bottom:50px;">
+        {% include "frontend/messages.html" %}
+        {% block content %}
+        {% endblock %}
+    </div>
 {% endblock %}
