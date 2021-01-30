@@ -271,6 +271,16 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     image_formset = SingleImageFormSet(data=request.POST,
                                                        files=request.FILES)
 
+                    # Remove images from database
+                    clear_counter = attachment_object.images.count() - image_formset.total_form_count()
+                    if clear_counter > 0:
+                        remove_source = attachment_object.images.order_by('id').reverse()[:clear_counter]
+                        for remove_object in remove_source:
+                            SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
+                            remove_object.delete()
+
+
+
                     if attachment_form.is_valid():
 
                         # evaluate the attachment form
