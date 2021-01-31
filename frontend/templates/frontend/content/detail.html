@@ -46,19 +46,22 @@
 
                     <!-- Who are allowed to view the history?  -->
                     {% if content.type == 'Textfield' %}
-                        <a class="dropdown-item" href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
                             {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
                     {% endif %}
 
                     {% if content.type == 'YouTubeVideo' %}
-                        <a class="dropdown-item" href="{% url 'frontend:ytvideo-history' course.id topic.id content.id %}">
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:ytvideo-history' course.id topic.id content.id %}">
                             {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
                     {% endif %}
 
                     {% if content.type == 'Image' %}
-                        <a class="dropdown-item" href="{% url 'frontend:image-history' course.id topic.id content.id %}">
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:image-history' course.id topic.id content.id %}">
                             {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
                     {% endif %}
@@ -70,7 +73,8 @@
                     {% endif %}
 
                     {% if content.type == 'Latex' %}
-                        <a class="dropdown-item" href="{% url 'frontend:latex-history' course.id topic.id content.id %}">
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:latex-history' course.id topic.id content.id %}">
                             {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
                     {% endif %}
@@ -88,6 +92,8 @@
     </div>
 
     <a href="
+
+
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
        class="">
         {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
@@ -125,13 +131,14 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <form action="{% url 'frontend:content-delete' course.id topic.id content.id %}" method="post" class="mb-0">
+                    <form action="{% url 'frontend:content-delete' course.id topic.id content.id %}" method="post"
+                          class="mb-0">
                         {% csrf_token %}
                         <button class="btn btn-secondary" data-dismiss="modal">
                             {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
                         </button>
                         <button
-                           type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
                         </button>
                     </form>
                 </div>
