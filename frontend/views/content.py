@@ -1,7 +1,8 @@
 """Purpose of this file
 
+This file describes the frontend views related to content types.
 """
-import reversion
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -13,16 +14,20 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
+from reversion_compare.views import HistoryCompareDetailView
+
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
+
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
-from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES, YTVideoContent, ImageContent, PDFContent, Latex
+from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
+from content.models import ImageContent, Latex, PDFContent, YTVideoContent
 from content.models import SingleImageAttachment, ImageAttachment, TextField
+
 from export.views import generate_pdf_response
+
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
-
-from reversion_compare.views import HistoryCompareDetailView
 
 
 # pylint: disable=too-many-ancestors
@@ -275,7 +280,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
 
-
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
                 form.save()
@@ -353,7 +357,7 @@ class ContentView(DetailView):
             context = self.get_context_data(**kwargs)
             # get original content
             content = self.object
-            """
+            r"""
             with content.file.open() as file:
                 html = markdown(file.read().decode('utf-8'), safe_mode=True,
                                 extras=["tables"])
@@ -492,46 +496,6 @@ class AttachedImageView(DetailView):
         context['translate_form'] = TranslateForm()
 
         return context
-
-
-class TextfieldHistoryCompareView(HistoryCompareDetailView):
-    """
-        Displays history of this content to the user
-    """
-    model = TextField
-    template_name = "frontend/content/history.html"
-
-
-class YTVideoHistoryCompareView(HistoryCompareDetailView):
-    """
-        Displays history of this content to the user
-    """
-    model = YTVideoContent
-    template_name = "frontend/content/history.html"
-
-
-class ImageHistoryCompareView(HistoryCompareDetailView):
-    """
-        Displays history of this content to the user
-    """
-    model = ImageContent
-    template_name = "frontend/content/history.html"
-
-
-class PdfHistoryCompareView(HistoryCompareDetailView):
-    """
-        Displays history of this content to the user
-    """
-    model = PDFContent
-    template_name = "frontend/content/history.html"
-
-
-class LatexHistoryCompareView(HistoryCompareDetailView):
-    """
-        Displays history of this content to the user
-    """
-    model = Latex
-    template_name = "frontend/content/history.html"
 
 
 # pylint: disable=too-many-ancestors
@@ -677,6 +641,7 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
         return context
 
 
+# pylint: disable=invalid-name
 def rate_content(request, course_id, topic_id, content_id, pk):
     """Rate content
 
@@ -704,3 +669,81 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
+
+
+class BaseHistoryCompareView(HistoryCompareDetailView):
+    """Base history compare view
+
+      This detail view represents the base history compare view. It defines the default
+      template and needed information for all other compare views.
+
+      :attr BaseHistoryCompareView.template_name: The path to the html template
+      :type BaseHistoryCompareView.template_name: str
+      """
+    template_name = "frontend/content/history.html"
+
+    # pylint: disable=too-few-public-methods
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
+        """
+        abstract = True
+
+
+class ImageHistoryCompareView(BaseHistoryCompareView):
+    """Image history compare view
+
+    Displays history of this content to the user.
+
+    :attr ImageHistoryCompareView.model: The model of the view
+    :type ImageHistoryCompareView.model: Model
+    """
+    model = ImageContent
+
+
+class LatexHistoryCompareView(BaseHistoryCompareView):
+    """LaTeX history compare view
+
+    Displays history of this content to the user
+
+    :attr LatexHistoryCompareView.model: The model of the view
+    :type LatexHistoryCompareView.model: Model
+    """
+    model = Latex
+
+
+class PdfHistoryCompareView(BaseHistoryCompareView):
+    """PDF history compare view
+
+    Displays history of this content to the user.
+
+    :attr PdfHistoryCompareView.model: The model of the view
+    :type PdfHistoryCompareView.model: Model
+    """
+    model = PDFContent
+
+
+class TextfieldHistoryCompareView(BaseHistoryCompareView):
+    """Text field history compare view
+
+    Displays history of this content to the user.
+
+    :attr TextfieldHistoryCompareView.model: The model of the view
+    :type TextfieldHistoryCompareView.model: Model
+    """
+    model = TextField
+
+
+class YTVideoHistoryCompareView(BaseHistoryCompareView):
+    """YouTube history compare view
+
+    Displays history of this content to the user.
+
+    :attr YTVideoHistoryCompareView.model: The model of the view
+    :type YTVideoHistoryCompareView.model: Model
+    """
+    model = YTVideoContent
