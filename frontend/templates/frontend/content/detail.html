@@ -41,7 +41,7 @@
                         </a>
                     {% endif %}
 
-                    {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
+                    {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
                            data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
                     {% endif %}

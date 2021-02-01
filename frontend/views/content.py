@@ -387,7 +387,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
         """
         context = super().get_context_data(**kwargs)
         context['search_result'] = self.request.GET.get('q')
-        content = super().get_object()
+        content = self.get_object()
+        context['user'] = self.request.user
         context['count'] = content.get_rate_count()
         context['rate'] = round(content.get_rate(), 2)
 
