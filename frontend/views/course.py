@@ -254,6 +254,7 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
                                                   get_contents(self.sorted_by, self.filtered_by)})
 
         context["structure"] = topics_recursive
+        context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()
 
         if self.sorted_by is not None:
             context['sorting'] = self.sorted_by
