@@ -146,7 +146,7 @@ def check_edit_content_permission(user, content):
     rtype: bool
     """
     if content.readonly:
-        return content.author == user or user.is_superuser
+        return content.author.pk == user.pk or user.is_superuser
     return True
 
 
