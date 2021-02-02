@@ -535,7 +535,19 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
         rtype: HttpResponse
         """
 
+        # Send success message
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
+
+        if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
+            # Retrieve the attachment
+            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+
+            # Remove the images in the attachment from DB
+            for remove_object in attachment_object.images.all():
+                SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
+                remove_object.delete()
+
+        # Remove the content from DB
         return super().delete(self, request, *args, **kwargs)
 
 
