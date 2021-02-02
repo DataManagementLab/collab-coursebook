@@ -539,7 +539,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
 
         if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
-            
+
             # Retrieve the attachment
             attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
 
