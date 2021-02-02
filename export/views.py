@@ -10,7 +10,6 @@ from base.models import Course, Favorite
 from export.helper_functions import LaTeX
 
 
-# pylint: disable=C0103
 def generate_coursebook(request, pk, template="content/export/base.tex", context=None):
     """Generate course book
 
@@ -42,7 +41,7 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     context['export_pdf'] = True
 
     # Perform compilation given context and template
-    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template)
+    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
     return pdf, pdflatex_output, tex_template
 
 
@@ -67,7 +66,6 @@ def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
     return write_response(request, pdf, pdflatex_output, tex_template, filename)
 
 
-# pylint: disable=R0913
 def write_response(request, pdf, pdflatex_output, tex_template, filename,
                    content_type='application/pdf'):
     """Write response
@@ -123,14 +121,14 @@ def generate_pdf(user, topic, content, template="content/export/base.tex", conte
     if context is None:
         context = {}
 
-    # Set Context
+        # Set Context
     context['user'] = user
     context['topic'] = topic
     context['contents'] = [content]
     context['export_pdf'] = False
 
     # Performs compilation given context and template
-    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template)
+    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
     return pdf, pdflatex_output, tex_template
 
 

@@ -15,11 +15,14 @@ class Profile(models.Model):
 
     This model represents the profile of the user.
 
-    Attributes:
-        Profile.user (User): The user of the profile
-        Profile.bio (TextField): The biography of the user
-        Profile.pic (ImageField): The profile picture of the user
-        Profile.stared_courses (ManyToManyField - Course): The courses that the user stared
+    :attr Profile.user: The user of the profile
+    :type Profile.user: User
+    :attr Profile.bio: The biography of the user
+    :type Profile.bio: TextField
+    :attr Profile.pic: The profile picture of the user
+    :type Profile.pic: ImageField
+    :attr Profile.stared_courses: The courses that the user stared
+    :type Profile.stared_courses: ManyToManyField - Course
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
@@ -30,8 +33,10 @@ class Profile(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns he string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return str(self.user)
 
@@ -42,11 +47,14 @@ def create_user_profile(sender, instance, created, **kwargs):
 
     Creates a user profile
 
-    Parameters:
-        sender (TODO):
-        instance (TODO):
-        created (TODO):
-        kwargs (TODO):
+    :param sender: The user of the profile
+    :type sender: User
+    :param instance: The user instance to be created
+    :type instance: User
+    :param created: True if the profile was created
+    :type created: bool
+    :param kwargs: The keyword arguments
+    :type kwargs: ANY
     """
     if created:
         Profile.objects.create(user=instance)
@@ -58,9 +66,12 @@ def save_user_profile(sender, instance, **kwargs):
 
     Saves the user profile.
 
-    Parameters:
-        sender (TODO):
-        instance (profile): TODO
-        kwargs (TODO):
+    :param sender: The user of the profile
+    :type sender: User
+    :param instance: THe user instance to be saved
+    :type instance: User
+    :param kwargs: The keyword arguments
+    :type kwargs: ANY
     """
-    instance.profile.save()  # TODO undefined reference?
+    # TODO Undefined reference?
+    instance.profile.save()

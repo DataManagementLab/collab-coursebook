@@ -10,16 +10,20 @@ from django.views.generic import ListView
 from base.models import Course, Category, Period
 
 
-class CourseListView(ListView):  # pylint: disable=tooCourseView-many-ancestors
+# pylint: disable=too-many-ancestors
+class CourseListView(ListView):
     """Course list view
 
     Displays the courses page with all available course.
 
-    Attributes:
-        CourseListView.model (Model): The model of the view
-        CourseListView.template_name (str): The path to the html template
-        CourseListView.paginate_by (int):  Paginate the displayed list
-        CourseListView.context_object_name (str): The context object name
+    :attr CourseListView.model: The model of the view
+    :type CourseListView.model: Model
+    :attr CourseListView.template_name: The path to the html template
+    :type CourseListView.template_name: str
+    :attr CourseListView.paginate_by:  Paginate the displayed list
+    :type CourseListView.paginate_by: int
+    :attr CourseListView.context_object_name: The context object name
+    :type CourseListView.context_object_name: str
     """
     model = Course
     template_name = 'frontend/course_lists/courses.html'
@@ -32,8 +36,8 @@ class CourseListView(ListView):  # pylint: disable=tooCourseView-many-ancestors
 
         Returns the list of courses sorted with sorting if a value is given
 
-        return: the list of courses
-        rtype: QuerySet
+        :return: the list of courses
+        :rtype: QuerySet
         """
         queryset = super().get_queryset()
 
@@ -49,17 +53,19 @@ class CourseListView(ListView):  # pylint: disable=tooCourseView-many-ancestors
                 queryset = Course.objects.order_by("creation_date")
         return queryset
 
-    def get_context_data(self, *, object_list=None, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def get_context_data(self, *, object_list=None, **kwargs):
         """Context data
 
         Gets context data for the template.
 
-        Parameters:
-            object_list (List): The django object list
-            kwargs: The django kwargs
+        :param object_list: The django object list
+        :type object_list: List
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: The context
-        rtype: dict
+        :return: the context
+        :rtype: dict
         """
         context = super(CourseListView, self).get_context_data()
         if "sort" in self.kwargs:
@@ -75,13 +81,14 @@ class CourseListView(ListView):  # pylint: disable=tooCourseView-many-ancestors
         return context
 
 
+# pylint: disable=too-many-ancestors
 class CourseListForCategoryView(CourseListView):
     """Course list for category view
 
     Displays the courses list for category page.
 
-    Attributes:
-        CourseListView.template_name (str): The path to the html template
+    :attr CourseListForCategoryView.template_name: The path to the html template
+    :type CourseListForCategoryView.template_name: str
     """
     template_name = "frontend/course_lists/courses_category.html"
 
@@ -90,13 +97,15 @@ class CourseListForCategoryView(CourseListView):
 
         Dispatches the course list for category.
 
-        Parameters:
-            request (HttpRequest): The given request
-            args: The arguments
-            kwargs (dict): The additional arguments
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: the redirection page of the dispatch
-        rtype: HttpResponse
+        :return: the redirection page of the dispatch
+        :rtype: HttpResponse
         """
         self.category = get_object_or_404(Category, pk=self.kwargs['pk'])
         return super().dispatch(request, *args, **kwargs)
@@ -106,8 +115,8 @@ class CourseListForCategoryView(CourseListView):
 
         Returns the list of courses with the category.
 
-        return: the list of courses
-        rtype: QuerySet
+        :return: the list of courses
+        :rtype: QuerySet
         """
         return super().get_queryset().filter(category=self.category)
 
@@ -116,25 +125,27 @@ class CourseListForCategoryView(CourseListView):
 
         Gets context data for the template.
 
-        Parameters:
-            object_list (List): The django object list
-            kwargs: The django kwargs
+        :param object_list: The django object list
+        :type object_list: List
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: The context
-        rtype: dict
+        :return: the context
+        :rtype: dict
         """
         ctx = super().get_context_data(object_list=object_list, **kwargs)
         ctx["category"] = self.category
         return ctx
 
 
+# pylint: disable=too-many-ancestors
 class CourseListForPeriodView(CourseListView):
     """Course list for category view
 
     Displays the courses list for period page.
 
-    Attributes:
-        CourseListView.template_name (str): The path to the html template
+    :attr CourseListForPeriodView.template_name: The path to the html template
+    :type CourseListForPeriodView.template_name: str
     """
     template_name = "frontend/course_lists/courses_period.html"
 
@@ -143,13 +154,15 @@ class CourseListForPeriodView(CourseListView):
 
         Dispatches the course list for period.
 
-        Parameters:
-            request (HttpRequest): The given request
-            args: The arguments
-            kwargs (dict): The additional arguments
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: the redirection page of the dispatch
-        rtype: HttpResponse
+        :return: the redirection page of the dispatch
+        :rtype: HttpResponse
         """
         self.period = get_object_or_404(Period, pk=self.kwargs['pk'])
         return super().dispatch(request, *args, **kwargs)
@@ -157,10 +170,10 @@ class CourseListForPeriodView(CourseListView):
     def get_queryset(self):
         """Query set
 
-        Returns the list of courses with the pariod.
+        Returns the list of courses with the period.
 
-        return: the list of courses
-        rtype: QuerySet
+        :return: the list of courses
+        :rtype: QuerySet
         """
         return super().get_queryset().filter(period=self.period)
 
@@ -169,12 +182,13 @@ class CourseListForPeriodView(CourseListView):
 
         Gets context data for the template.
 
-        Parameters:
-            object_list (List): The django object list
-            kwargs: The django kwargs
+        :param object_list: The django object list
+        :type object_list: List
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: The context
-        rtype: dict
+        :return: the context
+        :rtype: dict
         """
         ctx = super().get_context_data(object_list=object_list, **kwargs)
         ctx["period"] = self.period

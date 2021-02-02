@@ -13,9 +13,10 @@ def create_topic_and_subtopic_list(topics, course):
 
     Creates an ordered list of (sub-)topics.
 
-    Parameters:
-        topics (list): The used topics
-        course (Course): The course
+    :param topics: The used topics
+    :type topics: list
+    :param course: The course
+    :type course: Course
 
     :return: a sorted list of topics
     :rtype: List[Tuple[Any, int, Any, str]]
@@ -30,11 +31,12 @@ def create_topic_and_subtopic_list(topics, course):
         if topic in already_checked_topics:
             continue
         already_checked_topics.append(topic)
+        # pylint: disable=no-member
         # Get all structures (even if the same topic is part of the course more than one time)
         for structure in CourseStructureEntry.objects.filter(
                 topic=topic,
                 course=course
-        ).order_by('index'):  # pylint: disable=no-member
+        ).order_by('index'):
             # 0 if main topic - 1 if subtopic
             is_subtopic = 0
             # for easy use in html template: (is_subtopic, topic)
@@ -58,8 +60,8 @@ def structure_to_tuple(structure):
 
     Returns the structure as a tuple.
 
-    Parameters:
-        structure (str): The index in the structure
+    :param structure: The index in the structure
+    :type structure: str
 
     return: the structure as a tuple
     rtype: Tuple[int, int]
@@ -74,9 +76,10 @@ def create_course_from_form(self, form):
 
     Creates a new course in the database from the form.
 
-    Parameters:
-        self: request
-        form (TODO):
+    :param self: The given request
+    :type self: request
+    :param form: The form
+    :type form: Form
 
     :return: the course object
     :rtype: Course
@@ -85,7 +88,6 @@ def create_course_from_form(self, form):
     course.creation_date = timezone.now()
     course.image = form.cleaned_data['image']
     course.author = get_user(self.request)
-    print(type(self))
     course.save()
     for owner in form.cleaned_data['owner']:
         course.owner.add(owner)
@@ -96,8 +98,9 @@ def get_user(request):
     """User
 
     Returns the current user.
-    Parameters:
-        request (HttpRequest): request
+
+    :param request: The given request
+    :type request: HttpRequest
 
     :return: the user of the request
     :rtype: user
@@ -110,10 +113,12 @@ def check_owner_permission(request, course, messages):
 
     Checks if the logged in user is the owner of the course and returns an according boolean.
 
-    Parameters:
-        request (HttpRequest): The given request
-        course (Course): The course for which it should be checked
-        message (TreeWalker): The messages to be able to set an error message
+    :param request: The given request
+    :type request: HttpRequest
+    :param course: The course for which it should be checked
+    :type course: Course
+    :param messages: The messages to be able to set an error message
+    :type messages: TreeWalker
 
     :return: true if the owner has no permission and a message should be displayed
     :rtype: bool

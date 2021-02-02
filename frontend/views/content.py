@@ -1,5 +1,6 @@
 """Purpose of this file
 
+This file describes the frontend views related to content types.
 """
 
 from django.contrib import messages
@@ -13,17 +14,24 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
+from reversion_compare.views import HistoryCompareDetailView
+
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
+
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
 from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
-from content.models import SingleImageAttachment, ImageAttachment
+from content.models import ImageContent, Latex, PDFContent, YTVideoContent
+from content.models import SingleImageAttachment, ImageAttachment, TextField
+
 from export.views import generate_pdf_response
+
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 
 
-class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """
     Adds a new content to the database
     """
@@ -156,14 +164,28 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # py
 
 
 class EditContentView(LoginRequiredMixin, UpdateView):
+    """Edit content view
+
+    This model represents the edit of a content view.
+
+    :attr EditContentView.model: The model of the view
+    :type EditContentView.model: Model
+    :attr EditContentView.template_name: The path to the html template
+    :type EditContentView.template_name: str
+    :attr EditContentView.form_class: The form class of the view
+    :type EditContentView.form_class: Form
+    """
     model = Content
     template_name = 'frontend/content/editcontent.html'
     form_class = AddContentForm
 
     def get_content_url(self):
-        """
-        get the url of the content page
+        """Content url
+
+        Gets the url of the content page.
+
         :return: url of the content page
+        :rtype: Optional[str]
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
@@ -171,30 +193,63 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return reverse('frontend:content', args=(course_id, topic_id, content_id,))
 
     def get_success_url(self):
+        """Success URL
+
+        Returns the url for successful editing.
+
+        :return: the url of the edited content
+        :rtype: str
+        """
         return self.get_content_url()
 
     def dispatch(self, request, *args, **kwargs):
+        """Dispatch
+
+        Dispatches the edit content view.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection page of the dispatch
+        :rtype: HttpResponse
+        """
         user = get_user(request)
         if self.get_object().readonly:
             # only admins and the content owner can edit the content
             if self.get_object().author == user or request.user.is_superuser:
                 return super().dispatch(request, *args, **kwargs)
-            else:
-                messages.error(request, _('You are not allowed to edit this content'))
-                return HttpResponseRedirect(self.get_content_url())
-        else:
-            # everyone can edit the content
-            return super().dispatch(request, *args, **kwargs)
+            messages.error(request, _('You are not allowed to edit this content'))
+            return HttpResponseRedirect(self.get_content_url())
+        # everyone can edit the content
+        return super().dispatch(request, *args, **kwargs)
 
     def handle_error(self):
-        """
-        create error message and return to course page
+        """Handle error
+
+        Create error message and return to course page.
+
+        :return: the http response redirect of the error handling
+        :rtype: HttpResponseRedirect
         """
         course_id = self.kwargs['course_id']
         messages.error(self.request, _('An error occurred while processing the request'))
         return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
 
     def get_context_data(self, **kwargs):
+        """Context data
+
+        Returns the context data of the editing.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data of the search
+        :rtype: Dict[str, Any]
+        """
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
@@ -317,38 +372,55 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return self.handle_error()
 
 
-class ContentView(DetailView):  # pylint: disable=too-many-ancestors
-    """
+# pylint: disable=too-many-ancestors
+class ContentView(DetailView):
+    """Content view
+
     Displays the content to the user
+
+    :attr ContentView.model: The model of the view
+    :type ContentView.model: Model
+    :attr ContentView.template_name: The path to the html template
+    :type ContentView.template_name: str
+    :attr ContentView.context_object_name: The name of the context variable
+    :type ContentView.context_object_name: str
     """
     model = Content
     template_name = "frontend/content/detail.html"
 
     context_object_name = 'content'
 
-    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        """
-        create comment in database
-        :param HttpResponse request: request
-        :param args: args
-        :param dict kwargs: keyword arguments
-        :return: redirect to content page
+    # pylint: disable=unused-argument
+    def post(self, request, *args, **kwargs):
+        """Post
+
+        Creates comment in database.
+
+        :param request: The given request
+        :type request: HttpResponse
+        :param args: The arguments
+        :type: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection to the content page
         :rtype: HttpResponse
         """
         comment_form = CommentForm(request.POST)
         translate_form = TranslateForm(request.POST)
         self.object = self.get_object()  # line required
 
+        # pylint: disable=no-member
         if comment_form.is_valid():
             text = comment_form.cleaned_data['text']
-            Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),  # pylint: disable=no-member
+            Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),
                                    author=request.user.profile, text=text)
         elif translate_form.is_valid():
             language = translate_form.cleaned_data['translation']
             context = self.get_context_data(**kwargs)
             # get original content
             content = self.object
-            """
+            r"""
             with content.file.open() as file:
                 html = markdown(file.read().decode('utf-8'), safe_mode=True,
                                 extras=["tables"])
@@ -379,10 +451,14 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
             + '#comments')
 
     def get_context_data(self, **kwargs):
-        """
-        get context data
-        :param dict kwargs: keyword arguments
-        :return: context
+        """Context data
+
+        Gets the context data.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data
         :rtype: dict
         """
         context = super().get_context_data(**kwargs)
@@ -394,7 +470,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
         # course id for back to course button
         course_id = self.kwargs['course_id']
-        course = Course.objects.get(pk=course_id)  # pylint: disable=no-member
+        # pylint: disable=no-member
+        course = Course.objects.get(pk=course_id)
         context['course'] = course
 
         topic = Topic.objects.get(pk=self.kwargs['topic_id'])
@@ -415,7 +492,8 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
         """
 
         context['comment_form'] = CommentForm()
-        context['comments'] = Comment.objects.filter(content=self.get_object()  # pylint: disable=no-member
+        # pylint: disable=no-member
+        context['comments'] = Comment.objects.filter(content=self.get_object()
                                                      ).order_by('-creation_date')
         context['translate_form'] = TranslateForm()
 
@@ -436,8 +514,16 @@ class ContentView(DetailView):  # pylint: disable=too-many-ancestors
 
 
 class AttachedImageView(DetailView):
-    """
-    Displays the attached image to the user
+    """Attached image view
+
+    Displays the attached image to the user.
+
+    :attr AttachedImageView.model: The model of the view
+    :type AttachedImageView.model: Model
+    :attr AttachedImageView.template_name: The path to the html template
+    :type AttachedImageView.template_name: str
+    :attr AttachedImageView.context_object_name: The name of the context variable
+    :type AttachedImageView.context_object_name: str
     """
     model = SingleImageAttachment
     template_name = "content/view/AttachedImage.html"
@@ -445,10 +531,14 @@ class AttachedImageView(DetailView):
     context_object_name = 'SingleImageAttachment'
 
     def get_context_data(self, **kwargs):
-        """
-        get context data
-        :param dict kwargs: keyword arguments
-        :return: context
+        """Context data
+
+        Gets the context data.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data
         :rtype: dict
         """
         context = super().get_context_data(**kwargs)
@@ -472,17 +562,27 @@ class AttachedImageView(DetailView):
         return context
 
 
-class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
-    """
-    Deletes the content and redirects to course
+# pylint: disable=too-many-ancestors
+class DeleteContentView(LoginRequiredMixin, DeleteView):
+    """Delete content view
+
+    Deletes the content and redirects to course.
+
+    :attr DeleteContentView.model: The model of the view
+    :type DeleteContentView.model: Model
+    :attr DeleteContentView.template_name: The path to the html template
+    :type DeleteContentView.template_name: str
     """
     model = Content
     template_name = "frontend/content/detail.html"
 
     def get_content_url(self):
-        """
-        get the url of the content page
-        :return: url of the content page
+        """Content url
+
+        Gets the url of the content page.
+
+        :return: the url of the content page
+        :rtype: optional[str]
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
@@ -490,9 +590,11 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
         return reverse('frontend:content', args=(course_id, topic_id, content_id,))
 
     def get_success_url(self):
-        """
+        """Success URL
+
         Returns the url to return to after successful delete
-        :return: the success url
+
+        :return: the url of the edited content
         :rtype: str
         """
         course_id = self.kwargs['course_id']
@@ -504,14 +606,15 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
 
         Overwrites dispatch: Check if a user is allowed to visit the page.
 
-        Parameters:
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-            request (HttpRequest): The request
-            args: The arguments
-            kwargs (dict): The keyword arguments
-
-        return: the response to redirect to overview of the course if the user is not owner
-        rtype: HttpResponse
+        :return: the response to redirect to overview of the course if the user is not owner
+        :rtype: HttpResponse
         """
         user = get_user(request)
         # only admins and the content owner can delete the content
@@ -526,13 +629,15 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
 
         Deletes the content when the user clicks the delete button
 
-        Parameters:
-            request (HttpRequest): The request
-            args: The arguments
-            kwargs (dict): The keyword arguments
+        :param request: The given request
+        :attr request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: the redirect to success url (course)
-        rtype: HttpResponse
+        :return: the redirect to success url (course)
+        :rtype: HttpResponse
         """
 
         # Send success message
@@ -558,17 +663,28 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-
         return super().delete(self, request, *args, **kwargs)
 
 
-class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable=too-many-ancestors
-    """
-    Displays the content to the user
+# pylint: disable=too-many-ancestors
+class ContentReadingModeView(LoginRequiredMixin, DetailView):
+    """Content reading mode view
+
+    Displays the content to the user.
+
+    :attr ContentReadingModeView.model: The model of the view
+    :type ContentReadingModeView.model: Model
+    :attr ContentReadingModeView.template_name: The path to the html template
+    :type ContentReadingModeView.template_name: str
     """
     model = Content
     template_name = "frontend/content/readingmode.html"
 
     def get_context_data(self, **kwargs):
-        """
-        gets the context data for the response
-        :param dict kwargs: keyword arguments
+        """Context data
+
+        Gets the context data for the response.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
         :return: the context
         :rtype: dict
         """
@@ -580,9 +696,10 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
         topic = Topic.objects.get(pk=topic_id)
         if self.request.GET.get('coursebook'):
             course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
-            contents = [f.content for f in Favorite.objects
-                .filter(course=course,
-                        user=self.request.user.profile)]  # models
+            contents = [
+                f.content for f in Favorite.objects.filter(
+                    course=course,
+                    user=self.request.user.profile)]  # models
             # .get_coursebook_flat(get_user(self.request), course)
         else:
             contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))
@@ -607,15 +724,25 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):  # pylint: disable
         return context
 
 
+# pylint: disable=invalid-name
 def rate_content(request, course_id, topic_id, content_id, pk):
-    """
-    Let the user rate content
-    :param int topic_id: id of the topic
-    :param HttpRequest request: request
-    :param int course_id: course id
-    :param int content_id: id of the content which gets rated
-    :param int pk: the user rating (should be in [ 1, 2, 3, 4, 5])
-    :return: redirect to content page
+    """Rate content
+
+    Let the user rate content.
+
+    :param topic_id: The id of the topic
+    :type topic_id: int
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: course id
+    :type course_id: int
+    :param content_id: id of the content which gets rated
+    :type content_id: int
+    :param pk: the user rating (should be in [ 1, 2, 3, 4, 5])
+    :type pk: Any
+
+
+    :return: the redirect to content page
     :rtype: HttpResponse
     """
     content = get_object_or_404(Content, pk=content_id)
@@ -625,3 +752,81 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
+
+
+class BaseHistoryCompareView(HistoryCompareDetailView):
+    """Base history compare view
+
+      This detail view represents the base history compare view. It defines the default
+      template and needed information for all other compare views.
+
+      :attr BaseHistoryCompareView.template_name: The path to the html template
+      :type BaseHistoryCompareView.template_name: str
+      """
+    template_name = "frontend/content/history.html"
+
+    # pylint: disable=too-few-public-methods
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
+        """
+        abstract = True
+
+
+class ImageHistoryCompareView(BaseHistoryCompareView):
+    """Image history compare view
+
+    Displays history of this content to the user.
+
+    :attr ImageHistoryCompareView.model: The model of the view
+    :type ImageHistoryCompareView.model: Model
+    """
+    model = ImageContent
+
+
+class LatexHistoryCompareView(BaseHistoryCompareView):
+    """LaTeX history compare view
+
+    Displays history of this content to the user
+
+    :attr LatexHistoryCompareView.model: The model of the view
+    :type LatexHistoryCompareView.model: Model
+    """
+    model = Latex
+
+
+class PdfHistoryCompareView(BaseHistoryCompareView):
+    """PDF history compare view
+
+    Displays history of this content to the user.
+
+    :attr PdfHistoryCompareView.model: The model of the view
+    :type PdfHistoryCompareView.model: Model
+    """
+    model = PDFContent
+
+
+class TextfieldHistoryCompareView(BaseHistoryCompareView):
+    """Text field history compare view
+
+    Displays history of this content to the user.
+
+    :attr TextfieldHistoryCompareView.model: The model of the view
+    :type TextfieldHistoryCompareView.model: Model
+    """
+    model = TextField
+
+
+class YTVideoHistoryCompareView(BaseHistoryCompareView):
+    """YouTube history compare view
+
+    Displays history of this content to the user.
+
+    :attr YTVideoHistoryCompareView.model: The model of the view
+    :type YTVideoHistoryCompareView.model: Model
+    """
+    model = YTVideoContent

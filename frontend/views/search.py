@@ -9,15 +9,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from base.models import Course, CourseStructureEntry
 
 
+# pylint: disable=too-many-ancestors
 class SearchView(ListView, LoginRequiredMixin):
     """Search view
 
     This model represents the search for course and topic titles.
 
-    Attributes:
-        SearchView.model (Model): The model of the view
-        SearchView.template_name (str): The path to the html template
-        SearchView.context_object_name (str): The context object name
+    :attr SearchView.model: The model of the view
+    :type SearchView.model: Model
+    :attr SearchView.template_name: The path to the html template
+    :type SearchView.template_name: str
+    :attr SearchView.context_object_name: The context object name
+    :type SearchView.context_object_name: str
     """
     model = Course
     template_name = 'frontend/search.html'
@@ -28,8 +31,8 @@ class SearchView(ListView, LoginRequiredMixin):
 
         Returns the query set of the search.
 
-        return: The query set of the search
-        rtype: Dict[str, CourseStructureEntry]
+        :return: The query set of the search
+        :rtype: Dict[str, CourseStructureEntry]
         """
         query = self.request.GET.get('q')
         query = query.strip().lower()
@@ -43,11 +46,13 @@ class SearchView(ListView, LoginRequiredMixin):
 
         Returns the context data of the search.
 
-        Parameters:
-            object_list (TODO):
-            kwargs (dict): The keyword arguments
-        return: the context data of the search
-        rtype: Dict[str, Any]
+        :param object_list: The object list
+        :type object_list: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data of the search
+        :rtype: Dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('q')

@@ -8,6 +8,8 @@ modified for the various content types.
 
 from django.contrib import admin
 
+from reversion_compare.admin import CompareVersionAdmin
+
 from content.models import ImageAttachment, ImageContent, Latex
 from content.models import PDFContent, SingleImageAttachment, TextField
 from content.models import YTVideoContent
@@ -22,7 +24,7 @@ class ImageAttachmentAdmin(admin.ModelAdmin):
 
 
 @admin.register(ImageContent)
-class ImageContentAdmin(admin.ModelAdmin):
+class ImageContentAdmin(CompareVersionAdmin):
     """Image content admin
 
     Represents the image content model in the admin panel.
@@ -30,7 +32,7 @@ class ImageContentAdmin(admin.ModelAdmin):
 
 
 @admin.register(Latex)
-class LatexAdmin(admin.ModelAdmin):
+class LatexAdmin(CompareVersionAdmin):
     """LaTeX admin
 
     Represents the LaTeX model in the admin panel.
@@ -38,7 +40,7 @@ class LatexAdmin(admin.ModelAdmin):
 
 
 @admin.register(PDFContent)
-class PDFContentAdmin(admin.ModelAdmin):
+class PDFContentAdmin(CompareVersionAdmin):
     """PDF content admin
 
     Represents the PDF content model in the admin panel.
@@ -54,7 +56,7 @@ class SingleImageAttachmentAdmin(admin.ModelAdmin):
 
 
 @admin.register(TextField)
-class TextFieldAdmin(admin.ModelAdmin):
+class TextFieldAdmin(CompareVersionAdmin):
     """Text field admin
 
     Represents the text field model in the admin panel.
@@ -62,7 +64,7 @@ class TextFieldAdmin(admin.ModelAdmin):
 
 
 @admin.register(YTVideoContent)
-class YTVideoContentAdmin(admin.ModelAdmin):
+class YTVideoContentAdmin(CompareVersionAdmin):
     """YouTube video content
 
     Represents the YouTube video content model in the admin panel.

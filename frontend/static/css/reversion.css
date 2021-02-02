@@ -1,0 +1,25 @@
+/*
+ * Minimal style for the diffs
+ * Source: https://pypi.org/project/django-reversion-compare/
+ */
+pre.highlight {
+    max-width: 900px;
+    white-space: pre-line;
+}
+
+del, ins {
+    color: #000;
+    text-decoration: none;
+}
+
+del {
+    background-color: #ffe6e6;
+}
+
+ins {
+    background-color: #e6ffe6;
+}
+
+sup.follow {
+    color: #5555ff;
+}

@@ -15,13 +15,15 @@ def add_to_coursebook(request, *args, **kwargs):
 
     Adds the given request to the coursebook.
 
-        Parameters:
-        request (HttpRequest): The given request
-        args: The arguments
-        kwargs (dict): The additional arguments
+    :param request: The given request
+    :type request: HttpRequest
+    :param args: The arguments
+    :type args: Any
+    :param kwargs: The keyword arguments
+    :type kwargs: dict
 
-    return: the redirection to the page after the request was added to the course book
-    rtype: HttpResponseRedirect
+    :return: the redirection to the page after the request was added to the course book
+    :rtype: HttpResponseRedirect
     """
     user = request.user.profile
     course = get_object_or_404(Course, pk=kwargs['course_id'])
@@ -36,17 +38,17 @@ def add_to_coursebook(request, *args, **kwargs):
 
 
 def remove_from_coursebook(request, *args, **kwargs):
-    """Add to course book
+    """Remove from course book
 
     Remove the given request to the coursebook.
 
-        Parameters:
-        request (HttpRequest): The given request
-        args: The arguments
-        kwargs (dict): The additional arguments
+    :param request: The given request
+    :type request: HttpRequest
+    :param kwargs: The keyword arguments
+    :type kwargs: dict
 
-    return: the redirection to the page after the request was removed from the course book
-    rtype: HttpResponseRedirect
+    :return: the redirection to the page after the request was removed from the course book
+    :rtype: HttpResponseRedirect
     """
     user = request.user.profile
     course = get_object_or_404(Course, pk=kwargs['course_id'])

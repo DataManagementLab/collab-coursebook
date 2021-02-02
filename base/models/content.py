@@ -20,9 +20,10 @@ class Category(models.Model):
 
     This model represents the category of a course book.
 
-    Attributes:
-        Category.title (CharField): Describes the title of the category
-        Category.DESC (ImageField): The image file of the category
+    :attr Category.title: Describes the title of the category
+    :type Category.title: CharField
+    :attr Category.DESC: The image file of the category
+    :type Category.DESC: ImageField
     """
     title = models.CharField(max_length=150,
                              verbose_name=_("Title"))
@@ -34,10 +35,12 @@ class Category(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
-            Meta.ordering (List[str]): The default ordering for the object
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        :attr Meta.ordering: The default ordering for the object
+        :type Meta.ordering: List[str]
         """
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
@@ -46,8 +49,10 @@ class Category(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return self.title
 
@@ -57,10 +62,12 @@ class Period(models.Model):
 
     This model represents the period of a course book.
 
-    Attributes:
-        Period.title (CharField): Describes the title of the period
-        Period.start (DateField): The starting date of the period
-        Period.end (DateField): The end date of the period
+    :attr Period.title: Describes the title of the period
+    :type Period.title: CharField
+    :attr Period.start: The starting date of the period
+    :type Period.start: DateField
+    :attr Period.end: The end date of the period
+    :type Period.end: DateField
     """
     title = models.CharField(max_length=150,
                              verbose_name=_("Title"))
@@ -72,10 +79,12 @@ class Period(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
-            Meta.ordering (List[str]): The default ordering for the object
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        :attr Meta.ordering: The default ordering for the object
+        :type Meta.ordering: List[str]
         """
         verbose_name = _("Period")
         verbose_name_plural = _("Periods")
@@ -84,8 +93,10 @@ class Period(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return self.title
 
@@ -95,18 +106,26 @@ class Course(models.Model):
 
     This model represents the course of a course book.
 
-    Attributes:
-        Course.title (CharField): Describes the title of the course
-        Course.description (TextField): The description of the course
-        Course.creation_date (DateTimeField): The creation date of the course
-        Course.image (ImageField): The image of the course
-        Course.topics (ManyToManyField - Topic): Describes the topic content in the course
-        Course.owners (ManyToManyField): Describes the people that may change the structure of
-        the course
-        Course.restrict_changes (ManyToManyField): Describes the changes of the restriction who
-        can edit it
-        Course.category (ForeignKey - Category): Describes the category of the course
-        Course.period (ForeignKey - Period): Describes the period of the course
+    :attr Course.title: Describes the title of the course
+    :type Course.title: CharField
+    :attr Course.description: The description of the course
+    :type Course.description: TextField
+    :attr Course.creation_date: The creation date of the course
+    :type Course.creation_date: DateTimeField
+    :attr Course.image: The image of the course
+    :type Course.image: ImageField
+    :attr Course.topics: Describes the topic content in the course
+    :type Course.topics: ManyToManyField - Topic
+    :attr Course.owners: Describes the people that may change the structure of
+    the course
+    :type Course.owners: ManyToManyField - Profile
+    :attr Course.restrict_changes: Describes the changes of the restriction who
+    can edit it
+    :type Course.restrict_changes: BooleanField
+    :attr Course.category: Describes the category of the course
+    :type Course.category: ForeignKey - Category
+    :attr Course.period: Describes the period of the course
+    :type Course.period: ForeignKey - Period
     """
     title = models.CharField(max_length=200,
                              verbose_name="Title",
@@ -149,10 +168,12 @@ class Course(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
-            Meta.ordering (List[str]): The default ordering for the object
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        :attr Meta.ordering: The default ordering for the object
+        :type Meta.ordering: List[str]
         """
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
@@ -161,8 +182,10 @@ class Course(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return self.title
 
@@ -172,9 +195,10 @@ class Topic(models.Model):
 
     This model represents the tag to identify or specify a specific topic of a course book.
 
-    Attributes:
-        Topic.title (CharField): Describes the title of the course
-        Topic.category (ForeignKey - Category): Describes in which category the topic belongs to
+    :attr Topic.title: Describes the title of the course
+    :type Topic.title: CharField
+    :attr Topic.category: Describes in which category the topic belongs to
+    :type Topic.category: ForeignKey - Category
     """
     title = models.CharField(verbose_name=_("Title"),
                              max_length=200)
@@ -188,9 +212,10 @@ class Topic(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Topic")
         verbose_name_plural = _("Topics")
@@ -198,8 +223,10 @@ class Topic(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.title} ({self.category})"
 
@@ -208,12 +235,13 @@ class Topic(models.Model):
 
         Returns all contents belonging to the topic.
 
-        Parameters:
-            sorted_by (str): By what attribute the results should be sorted
-            filtered_by (str): By what style the results should be filtered
+        :param sorted_by: By what attribute the results should be sorted
+        :type sorted_by: str
+        :param filtered_by: By what style the results should be filtered
+        :type filtered_by: str
 
-        return: the sorted and filtered contents
-        rtype: QuerySet
+        :return: the sorted and filtered contents
+        :rtype: QuerySet
         """
         contents = self.contents.all()
         if filtered_by != 'None' and filtered_by is not None:
@@ -231,9 +259,10 @@ class Tag(models.Model):
 
     This model represents the topic of a course book.
 
-    Attributes:
-        Tag.title (CharField): Describes the title of the course
-        Tag.category (IconField): Describes in which category the topic belongs to
+    :attr Tag.title: Describes the title of the course
+    :type Tag.title: CharField
+    :attr Tag.category: Describes in which category the topic belongs to
+    :type Tag.category: IconField
     """
     title = models.CharField(verbose_name=_("Title"),
                              max_length=200)
@@ -246,9 +275,10 @@ class Tag(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Tag")
         verbose_name_plural = _("Tags")
@@ -256,8 +286,10 @@ class Tag(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return self.title
 
@@ -267,22 +299,31 @@ class Content(models.Model):
 
     This model represents the content of a course book.
 
-    Attributes:
-        Content.topic (ForeignKey - Topic): Describes the topics in the content
-        Content.author (ForeignKey - Profile): The user that created the content
-        Content.description (TextField): The description of the content
-        Content.type (CharField): Describes the type of the content
-        Content.language (CharField): Describes the language the content in which the content is
-        written
-        Content.tags (ManyToManyField - Tag): Describes the tags of the content
-        Content.readonly (BooleanField):
-            Describes if the content is read only or it can be modified
-        Content.public (BooleanField): Describes the content visibility
-        Content.attachment (OneToOneField - ImageAttachment):
-            Describes the attachment of the content
-        Content.creation_date (DateTimeField): Describes when the content was created
-        Content.preview (ImageField): The preview image of the content
-        Content.ratings (ManyToManyField - Profile): Describes the ratings of the content
+    :attr Content.topic: Describes the topics in the content
+    :type Content.topic: ForeignKey - Topic
+    :attr Content.author: The user that created the content
+    :type Content.author: ForeignKey - Profile
+    :attr Content.description: The description of the content
+    :type Content.description: TextField
+    :attr Content.type: Describes the type of the content
+    :type Content.type: CharField
+    :attr Content.language: Describes the language the content in which the content is
+    written
+    :type Content.language: CharField
+    :attr Content.tags: Describes the tags of the content
+    :type Content.tags: ManyToManyField - Tag
+    :attr Content.readonly: Describes if the content is read only or it can be modified
+    :type Content.readonly: BooleanField
+    :attr Content.public BooleanField: Describes the content visibility
+    :type Content.public: BooleanField
+    :attr Content.attachment: Describes the attachment of the content
+    :type Content.attachment: OneToOneField - ImageAttachment
+    :attr Content.creation_date: Describes when the content was created
+    :type Content.creation_date: DateTimeField
+    :attr Content.preview: The preview image of the content
+    :type Content.preview: ImageField
+    :attr Content.ratings: Describes the ratings of the content
+    :type Content.ratings: ManyToManyField - Profile
     """
     topic = models.ForeignKey(Topic, verbose_name=_("Topic"),
                               related_name='contents',
@@ -333,9 +374,10 @@ class Content(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Content")
         verbose_name_plural = _("Contents")
@@ -343,8 +385,10 @@ class Content(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.type} for {self.topic} by {self.author}"
 
@@ -353,8 +397,8 @@ class Content(models.Model):
 
         Returns the average number of ratings and 0 if there are no ratings presents.
 
-        return: the average number of ratings
-        rtype: float
+        :return: the average number of ratings
+        :rtype: float
         """
         if self.get_rate() is None:  # TODO How can it returns none?
             return 0
@@ -365,8 +409,8 @@ class Content(models.Model):
 
         Returns the average number of ratings and -1 if there are no ratings presents.
 
-        return: the average number of ratings
-        rtype: float
+        :return: the average number of ratings
+        :rtype: float
         """
         rating = Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
         if rating is not None:
@@ -378,35 +422,38 @@ class Content(models.Model):
 
         Returns the total count of ratings.
 
-        return: the total count of ratings
-        rtype: int
+        :return: the total count of ratings
+        :rtype: int
         """
-        return self.ratings.count()  # pylint: disable=no-member
+        # pylint: disable=no-member
+        return self.ratings.count()
 
     def user_already_rated(self, user):
         """Already rated
 
         Checks if an user already rated.
 
-        Parameters:
-            user (User): The user to check
+        :param user: The user to check
+        :type user: User
 
-        return: true if an user already rated a content
-        rtype: bool
+        :return: true if an user already rated a content
+        :rtype: bool
         """
-        return self.ratings.filter(user_id=user.pk).count() > 0  # pylint: disable=no-member
+        # pylint: disable=no-member
+        return self.ratings.filter(user_id=user.pk).count() > 0
 
     def get_user_rate(self, user):
         """User rating
 
         Returns the rating of an user.
 
-        Parameters:
-            user (User): The user to retrieve the rating
+        :param user: The user to retrieve the rating
+        :type user: User
 
-        return: rating of an user
-        rtype: int
+        :return: the rating of an user
+        :rtype: int
         """
+        # pylint: disable=W0612
         if self.user_already_rated(user):
             content_id = self.id
             return self.ratings.get(user=user).rating_set.first().rating
@@ -417,9 +464,10 @@ class Content(models.Model):
 
         Returns the rate content by the user.
 
-        Parameters:
-            rating (Rating): The rating of content by the user
-            user (User) The user of the rating
+        :param rating: The rating of content by the user
+        :type rating: Rating
+        :param user: The user of the rating
+        :type user: User
         """
         Rating.objects.filter(user_id=user.user.id, content_id=self.id).delete()
         rating = Rating.objects.create(user=user, content=self, rating=rating)  # user = profile
@@ -432,11 +480,11 @@ class Content(models.Model):
 
         Returns the index of the parent topic in the course structure.
 
-        Parameters:
-            course (Course): The course in which the topic should be searched
+        :param course: The course in which the topic should be searched
+        :type course: Course
 
-        return: the index in the structure
-        rtype: str
+        :return: the index in the structure
+        :rtype: str
         """
         return CourseStructureEntry.objects.get(course=course, topic=self.topic).index
 
@@ -446,11 +494,13 @@ class CourseStructureEntry(models.Model):
 
     This model represents the structure of the courses.
 
-    Attributes:
-        CourseStructureEntry.course (ForeignKey - Course): The course whose structure is meant
-        CourseStructureEntry.index (CharField): The position that is meant
-        (e.g. "1#2" -> second under topic of the first topic)
-        CourseStructureEntry.topic (ForeignKey - Topic): The topic at the specified position/index
+    :attr CourseStructureEntry.course: The course whose structure is meant
+    :type CourseStructureEntry.course: ForeignKey - Course
+    :attr CourseStructureEntry.index: The position that is meant (e.g. "1#2" -> second under topic
+    of the first topic)
+    :type CourseStructureEntry.index: CharField
+    :attr CourseStructureEntry.topic: The topic at the specified position/index
+    :type CourseStructureEntry.topic: ForeignKey - Topic
     """
     course = models.ForeignKey(Course, verbose_name=_("Course"),
                                on_delete=models.CASCADE)
@@ -464,9 +514,10 @@ class CourseStructureEntry(models.Model):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.verbose_name (__proxy__): A human-readable name for the object in singular
-            Meta.verbose_name_plural (__proxy__): A human-readable name for the object in plural
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Course Structure Entry")
         verbose_name_plural = _("Course Structure Entries")
@@ -474,7 +525,9 @@ class CourseStructureEntry(models.Model):
     def __str__(self):
         """String representation
 
-        return: the string representation of this object.
-        rtype: str
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
         """
         return f"{self.course} -> {self.index}. {self.topic}"

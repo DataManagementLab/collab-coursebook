@@ -24,11 +24,14 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
      Duplicates a course.
 
-    Attributes:
-        AddCourseView.model (Model): The model of the view
-        AddCourseView.template_name (str): The path to the html template
-        AddCourseView.form_class (Form):  The form class of the view
-        AddCourseView.success_url (__proxy__): Redirection of a successful url
+    :attr DuplicateCourseView.model: The model of the view
+    :type DuplicateCourseView.model: Model
+    :attr DuplicateCourseView.template_name: The path to the html template
+    :type DuplicateCourseView.template_name: str
+    :attr DuplicateCourseView.form_class: The form class of the view
+    :type DuplicateCourseView.form_class: Form
+    :attr DuplicateCourseView.success_url: Redirection of a successful url
+    :type DuplicateCourseView.success_url: __proxy__
     """
     model = Course
     template_name = 'frontend/course/duplicate.html'
@@ -40,8 +43,11 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         Returns the success message after the duplicating of a new course was successful.
 
-        return: the success message
-        rtype: __proxy__
+        :param cleaned_data: The cleaned data
+        :type cleaned_data: dict
+
+        :return: the success message
+        :rtype: __proxy__
         """
         original_course = Course.objects.get(pk=self.get_object().id)
         return _(
@@ -54,8 +60,8 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         Returns the current user to the initial of the owner field.
 
-        return: the initial data
-        rtype: dict
+        :return: the initial data
+        :rtype: dict
         """
         course_to_duplicate = Course.objects.get(pk=self.get_object().id)
         data = course_to_duplicate.__dict__
@@ -72,11 +78,11 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         Saves the filters and sorting from the form.
 
-        Parameters:
-            form (FilterAndSortForm): The form that contains the filter and the sorting
+        :param form: The form that contains the filter and the sorting
+        :type form: FilterAndSortForm
 
-        return: Itself rendered to a response
-        rtype: HttpResponse
+        :return: Itself rendered to a response
+        :rtype: HttpResponse
         """
         duplicated_course = form.save()
         original_course = Course.objects.get(pk=self.get_object().id)
@@ -89,16 +95,20 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add course view
 
     Adds a new course to the database
 
-    Attributes:
-        AddCourseView.model (Model): The model of the view
-        AddCourseView.template_name (str): The path to the html template
-        AddCourseView.form_class (Form):  The form class of the view
-        AddCourseView.success_url (__proxy__): Redirection of a successful url
+    :attr AddCourseView.model: The model of the view
+    :type AddCourseView.model: Model
+    :attr AddCourseView.template_name: The path to the html template
+    :type AddCourseView.template_name: str
+    :attr AddCourseView.form_class: The form class of the view
+    :type AddCourseView.form_class: Form
+    :attr AddCourseView.success_url: Redirection of a successful url
+    :type AddCourseView.success_url: __proxy__
     """
     model = Course
     template_name = 'frontend/course/create.html'
@@ -110,8 +120,11 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pyl
 
         Returns the success message after the addition of a new course was successful.
 
-        return: the success message
-        rtype: __proxy__
+        :param cleaned_data: The cleaned data
+        :type cleaned_data: dict
+
+        :return: the success message
+        :rtype: __proxy__
         """
         return _(f"Course '{cleaned_data['title']}' successfully created")
 
@@ -120,8 +133,8 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):  # pyl
 
         Returns the current user to the initial of the owner field.
 
-        return: the initial data
-        rtype: dict
+        :return: the initial data
+        :rtype: dict
         """
         initial = super().get_initial()
         initial['owners'] = get_user(self.request).profile
@@ -133,10 +146,12 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
     Displays the edit course page
 
-    Attributes:
-        EditCourseView.model (Model): The model of the view
-        EditCourseView.template_name (str): The path to the html template
-        EditCourseView.form_class (Form):  The form class of the view
+    :attr EditCourseView.model: The model of the view
+    :type EditCourseView.model: Model
+    :attr EditCourseView.template_name: The path to the html template
+    :type EditCourseView.template_name: str
+    :attr EditCourseView.form_class: The form class of the view
+    :type EditCourseView.form_class: Form
     """
     model = Course
     template_name = 'frontend/course/edit.html'
@@ -147,9 +162,9 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
         Returns the url for successful editing.
 
-        return: The url of the content to which the edited argument
+        :return: The url of the content to which the edited argument
         belonged
-        rtype: str
+        :rtype: str
         """
         course_id = self.get_object().id
         return reverse('frontend:course', args=(course_id,))
@@ -159,22 +174,29 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
         Returns the success message after the editing was successful.
 
+        :param cleaned_data: The cleaned data
+        :type cleaned_data: dict
+
         return: the success message
         rtype: __proxy__
         """
         return _(f"Course '{cleaned_data['title']}' successfully edited")
 
 
-class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
+# pylint: disable=too-many-ancestors
+class CourseView(DetailView, FormMixin):
     """Course list view
 
     Displays the course detail page
 
-    Attributes:
-        CourseView.model (Model): The model of the view
-        CourseView.template_name (str): The path to the html template
-        CourseView.form_class (Form):  The form class of the view
-        CourseView.context_object_name (str): The context object name
+    :attr CourseView.model: The model of the view
+    :type CourseView.model: Model
+    :attr CourseView.template_name: The path to the html template
+    :type CourseView.template_name:str
+    :attr CourseView.form_class: The form class of the view
+    :type CourseView.form_class: Form
+    :attr CourseView.context_object_name: The context object name
+    :type CourseView.context_object_name: str
     """
     template_name = 'frontend/course/view.html'
     model = Course
@@ -186,18 +208,21 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
         self.filtered_by = 'None'
         super().__init__()
 
-    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def post(self, request, *args, **kwargs):
         """Post
 
         Defines what happens after form is posted. Sets object and the checks if form is valid
 
-        Parameters:
-            request (HttpRequest): the given request
-            args: The arguments
-            kwargs (dict): The key word arguments
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: The result from form_valid / form_invalid depending on the result from is_valid
-        rtype: TemplateResponse
+        :return: The result from form_valid / form_invalid depending on the result from is_valid
+        :rtype: TemplateResponse
         """
         self.object = self.get_object()
         form = self.get_form()
@@ -210,11 +235,11 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
 
         Saves the filters and sorting from the form.
 
-        Parameters:
-            form (FilterAndSortForm): The form that contains the filter and the sorting
+        :param form: The form that contains the filter and the sorting
+        :type form: FilterAndSortForm
 
-        return: Itself rendered to a response
-        rtype: HttpResponse
+        :return: Itself rendered to a response
+        :rtype: HttpResponse
         """
         self.sorted_by = form.cleaned_data['sort']
         self.filtered_by = form.cleaned_data['filter']
@@ -225,11 +250,11 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
 
         Gets the  context data for the page.
 
-        Parameters:
-            kwargs (dict): The keyword arguments
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: The context
-        rtype: dict
+        :return: The context
+        :rtype: dict
         """
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
@@ -292,16 +317,25 @@ class CourseView(DetailView, FormMixin):  # pylint: disable=too-many-ancestors
         return context
 
 
-class CourseDeleteView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
-    """
+# pylint: disable=too-many-ancestors
+class CourseDeleteView(LoginRequiredMixin, DeleteView):
+    """Course delete view
+
     Deletes the user and redirects to course list
+
+    :attr CourseDeleteView.model: The model of the view
+    :type CourseDeleteView.model: Model
+    :attr CourseDeleteView.template_name: The path to the html template
+    :type CourseDeleteView.template_name: str
     """
     model = Course
     template_name = 'frontend/course/delete_course_confirm.html'
 
     def get_success_url(self):
-        """
+        """Success url
+
         Returns the url to return to after successful delete
+
         :return: the success url
         :rtype: str
         """
@@ -313,14 +347,15 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-m
 
         Overwrites dispatch: Check if a user is allowed to visit the page.
 
-        Parameters:
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-            request (HttpRequest): The request
-            args: The arguments
-            kwargs (dict): The keyword arguments
-
-        return: the response to redirect to overview of the course if the user is not owner
-        rtype: HttpResponse
+        :return: the response to redirect to overview of the course if the user is not owner
+        :rtype: HttpResponse
         """
         if check_owner_permission(request, self.get_object(), messages):
             return HttpResponseRedirect(reverse_lazy('frontend:course',
@@ -332,13 +367,15 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):  # pylint: disable=too-m
 
         Deletes the course when the user clicks the delete button
 
-        Parameters:
-            request (HttpRequest): The request
-            args: The arguments
-            kwargs (dict): The keyword arguments
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
 
-        return: the redirect to success url (course list)
-        rtype: HttpResponse
+        :return: the redirect to success url (course list)
+        :rtype: HttpResponse
         """
 
         messages.success(request, "Course '" + self.get_object().title +

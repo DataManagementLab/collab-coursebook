@@ -11,9 +11,10 @@ class TranslateForm(forms.Form):
 
     This model represents form for translating markdown content.
 
-    Attributes:
-        TranslateForm.TRANSLATE_CHOICE (List[Tuple[str, str]]): The translation choices
-        TranslateForm.translation (CharField): The field to enter the translation
+    :attr TranslateForm.TRANSLATE_CHOICE: The translation choices
+    :type TranslateForm.TRANSLATE_CHOICE: List[Tuple[str, str]]
+    :attr TranslateForm.translation: The field to enter the translation
+    :type TranslateForm.translation: CharField
     """
     TRANSLATE_CHOICE = [('None', 'Translate into'), ('en', 'English'), ('de', 'German')]
     translation = forms.CharField(label='',

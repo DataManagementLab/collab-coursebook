@@ -11,7 +11,7 @@ class BaseConfig(AppConfig):
 
     Configures the pluggable application for the base.
 
-    Attributes:
-        ContenttypesConfig.name (str): Defines which application the configuration applies to
+    :attr BaseConfig.name: Defines which application the configuration applies to
+    :type BaseConfig.name: str
     """
     name = 'base'
