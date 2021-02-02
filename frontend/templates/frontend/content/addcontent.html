@@ -24,9 +24,9 @@
                 {{ item_forms.management_form }}
                 <div id="items-form-container">
                     {% for item_form in item_forms %}
-                        <div id="item-{{ forLoop.counter }}">
+                        <div id="item-{{ forloop.counter0 }}">
                             {{ item_form.id }}
-                            {{ item_form.as_p }}
+                            {% bootstrap_form item_form %}
                         </div>
                     {% endfor %}
                 </div>

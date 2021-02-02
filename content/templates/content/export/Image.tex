@@ -8,10 +8,11 @@
 
 \vskip 1em
 
+
 % Figure
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{ {{content.imagecontent.image.url}} }
+    \includegraphics[width=\textwidth]{~~{{content.imagecontent.image.url|ret_path}}}
     \caption{ {{ content.description|tex_escape }} }
 \end{figure}
 

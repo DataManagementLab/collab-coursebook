@@ -16,7 +16,28 @@
         {% csrf_token %}
         {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
+        <br>
+        {% if attachment_allowed %}
+            <div>
+                <h2>Image Attachments</h2>
+                {% bootstrap_form attachment_form %}
+                {{ item_forms.management_form }}
+                <div id="items-form-container">
+                    {% for item_form in item_forms %}
+                        <div id="item-{{ forloop.counter0 }}">
+                            {{ item_form.id }}
+                            {% bootstrap_form item_form %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button id="add-item-button" class="btn btn-primary add-item">Add attachment</button>
+                <button id="remove-item-button" class="btn btn-primary remove-item">Remove
+                    attachment
+                </button>
+            </div>
+        {% endif %}
 
+        <br>
         {{ form.media }}
         <div>
             <button type="submit"
@@ -25,4 +46,9 @@
                class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
         </div>
     </form>
+
+    {% if attachment_allowed %}
+        {% include "frontend/content/dynamic_attachment.html" %}
+    {% endif %}
+
 {% endblock %}

@@ -5,9 +5,10 @@ This file contains forms associated with the content types.
 
 from django import forms
 from django.forms import modelformset_factory
-
 from content.models import YTVideoContent, ImageContent, PDFContent
 from content.models import ImageAttachment, TextField, Latex, SingleImageAttachment
+from content.widgets import ModifiedClearableFileInput
+
 
 
 class AddContentFormYoutubeVideo(forms.ModelForm):
@@ -91,7 +92,7 @@ class AddContentFormPdf(forms.ModelForm):
         exclude = ['license', 'content']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
-            'pdf': forms.FileInput(attrs={'accept': 'application/pdf'}),
+            'pdf': ModifiedClearableFileInput(attrs={'accept': 'application/pdf', 'required':'true'}),
         }
 
 
@@ -174,6 +175,7 @@ class AddSingleImage(forms.ModelForm):
             Meta.exclude (List[str]): Excluding fields
             Meta.widgets (Dict[str, Textarea]): Customization of the model form
         """
+
         model = SingleImageAttachment
         exclude = []
         widgets = {
@@ -187,8 +189,8 @@ SingleImageFormSet = modelformset_factory(
     fields=("source", "license", "image"),
     extra=0,
     widgets={
-        'source': forms.Textarea(attrs={'style': 'height: 25px', 'required': 'true'}),
-        'image': forms.FileInput(attrs={'required': 'true'})
+        'source': forms.Textarea(attrs={'style': 'height: 100px', 'required': 'true'}),
+        'image': ModifiedClearableFileInput(attrs={'required':'true'})
     }
 )
 

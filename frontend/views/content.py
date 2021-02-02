@@ -264,6 +264,25 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
             else:
                 return self.handle_error()
+
+        # check if attachments are allowed for given content type
+        context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
+
+        if content_type in IMAGE_ATTACHMENT_TYPES:
+
+            # retrieve attachment_form
+            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+            context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
+
+            # identify pk's of attached pictures
+            pkSet = []
+            for picture in self.get_object().attachment.images.all():
+                pkSet.append(picture.pk)
+
+            # setup formset with attached pictures
+            formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.filter(pk__in=pkSet))
+            context['item_forms'] = formset
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -271,8 +290,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         form = self.get_form()
 
         if self.object.type in CONTENT_TYPE_FORMS:
+
             # Bind/init form with existing data
             content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
+
             # Careful: Order is important for file fields (instance first, afterwards form data,
             # if using kwargs dict as single argument instead, instance information
             # will not be parsed in time)
@@ -294,8 +315,50 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     content_object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
                     content_object.save()
 
-                preview = CONTENT_TYPES.get(content_type). \
-                    objects.get(pk=content.pk).generate_preview()
+                # Check if attachments are allowed for the given content type
+                if content_type in IMAGE_ATTACHMENT_TYPES:
+
+                    # Retrieve current state of attachment form and formset
+                    attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+                    attachment_form = AddContentFormAttachedImage(instance=attachment_object,
+                                                                  data=request.POST,
+                                                                  files=request.FILES)
+                    image_formset = SingleImageFormSet(data=request.POST,
+                                                       files=request.FILES)
+
+                    # Remove images from database
+                    clear_counter = attachment_object.images.count() - image_formset.total_form_count()
+                    if clear_counter > 0:
+                        remove_source = attachment_object.images.order_by('id').reverse()[:clear_counter]
+                        for remove_object in remove_source:
+                            SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
+                            remove_object.delete()
+
+
+
+                    if attachment_form.is_valid():
+
+                        # evaluate the attachment form
+                        content_attachment = attachment_form.save(commit=False)
+                        content_attachment.save()
+                        content.attachment = content_attachment
+                        images = []
+
+                        # evaluate all forms of the formset and append to image set
+                        if image_formset.is_valid():
+                            for form in image_formset:
+                                used_form = form.save(commit=False)
+                                used_form.save()
+                                images.append(used_form)
+                        else:
+                            return self.form_invalid(image_formset)
+
+                        # store the attached images in DB
+                        content.attachment.images.set(images)
+                    else:
+                        return self.form_invalid(attachment_form)
+
+                preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
                 content.preview.name = preview
                 content.save()
                 messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
@@ -400,7 +463,8 @@ class ContentView(DetailView):
         """
         context = super().get_context_data(**kwargs)
         context['search_result'] = self.request.GET.get('q')
-        content = super().get_object()
+        content = self.get_object()
+        context['user'] = self.request.user
         context['count'] = content.get_rate_count()
         context['rate'] = round(content.get_rate(), 2)
 
@@ -576,7 +640,26 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         :rtype: HttpResponse
         """
 
+        # Send success message
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
+
+        if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
+            
+            # Retrieve the attachment
+            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+
+            # Remove the images in the attachment from DB
+            for remove_object in attachment_object.images.all():
+                SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
+                remove_object.delete()
+
+            # Retrieve the success url, then delete the corresponding attachment
+            success_url = super().delete(self, request, *args, **kwargs)
+            ImageAttachment.objects.filter(pk=attachment_object.pk).delete()
+            attachment_object.delete()
+            return success_url
+
+
         return super().delete(self, request, *args, **kwargs)
 
 

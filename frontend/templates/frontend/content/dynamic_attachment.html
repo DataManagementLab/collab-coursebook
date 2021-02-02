@@ -1,68 +1,112 @@
-<script>
-    $(document).ready(function () {
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load cc_frontend_tags %}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+    <script>
         // Max attachments
         const max = 20;
 
-        // Add attachment
-        $('.add-item').click(
-            function (event) {
-                event.preventDefault();
+        // Restore deleted values
+        let stack = [];
 
-                document.getElementById("remove-item-button").style.visibility = "visible";
+        const add = document.getElementById("add-item-button")
+        const remove = document.getElementById("remove-item-button")
 
-                // Number of children
-                const children = $('#items-form-container').children().length;
+        // Number of children
+        const children = $('#items-form-container').children().length;
 
-                // Update visibility of add attachment button
-                if (children + 1 === max) {
-                    const button = document.getElementById("add-item-button");
-                    // After this operation we increased the number of children by one
-                    button.style.visibility = "hidden";
-                }
+        // Beginning Visibility
+        add.style.visibility = children < max ? "visible" : "hidden";
+        remove.style.visibility = children === 0 ? "hidden" : "visible";
 
-                // Add an image attachment form
-                if (max !== children) {
-                    const tmplMarkup = $('#item-template').html();
-                    const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
-                    // Add form
-                    $('div#items-form-container').append(compiledTmpl);
+        $(document).ready(function () {
+
+            // Add attachment
+            $('.add-item').click(
+                function (event) {
+                    event.preventDefault();
+
+                    remove.style.visibility = "visible";
+
+                    // Number of children
+                    const children = $('#items-form-container').children().length;
+
+                    // Update visibility of add attachment button
+                    if (children + 1 === max) {
+                        // After this operation we increased the number of children by one
+                        add.style.visibility = "hidden";
+                    }
+
+                    // Add an image attachment form
+                    if (max !== children) {
+                        const tmplMarkup = $('#item-template').html();
+                        const compiledTmpl = tmplMarkup.replace(/__prefix__/g, children);
+
+                        // Add form
+                        $('div#items-form-container').append(compiledTmpl);
+
+                        if (stack.length > 0) {
+                            const value = stack.pop();
+                            const id = document.getElementById('id_form-' + children + '-id');
+                            id.setAttribute('value', value);
+                        }
+
+                        // Restore value
+                        if (stack.length > 0) {
+                            const id = document.getElementById('id_form-' + (children - 1) + '-id');
+                            id.setAttribute('value', stack.pop());
+                        }
+
+                        // Update form count
+                        $('#id_form-TOTAL_FORMS').attr('value', children + 1);
+                    }
+                });
+
+            // Remove attachment
+            $('.remove-item').click(
+                function (event) {
+                    event.preventDefault();
+
+                    add.style.visibility = "visible";
+
+                    // Number of children
+                    const children = $('#items-form-container').children().length;
+
+                    // Update visibility of add attachment button
+                    if (children - 1 === 0) {
+                        // After this operation we decreased the number of children by one
+                        remove.style.visibility = "hidden";
+                    }
+
+                    // Revert option
+                    const id = document.getElementById('id_form-' + (children - 1) + '-id');
+                    const value = id.getAttribute('value');
+
+                    if (value !== null) {
+                        stack.push(value);
+                    }
+
+                    // Remove last child
+                    const container = document.getElementById('items-form-container');
+
+                    container.removeChild(container.lastElementChild);
 
                     // Update form count
-                    $('#id_form-TOTAL_FORMS').attr('value', children + 1);
-                }
-            });
+                    $('#id_form-TOTAL_FORMS').attr('value', children - 1);
+                });
+        })
+    </script>
 
-        // Remove attachment
-        $('.remove-item').click(
-            function (event) {
-                event.preventDefault();
+    <script type="text/html" id="item-template">
+        <div id="item-__prefix__">
+            <table class='table table-borderless'>
+                {% bootstrap_form item_forms.empty_form %}
+            </table>
+        </div>
+    </script>
 
-                document.getElementById("add-item-button").style.visibility = "visible";
-
-                // Number of children
-                const children = $('#items-form-container').children().length;
-
-                // Update visibility of add attachment button
-                if (children - 1 === 0) {
-                    const button = document.getElementById("remove-item-button");
-                    // After this operation we decreased the number of children by one
-                    button.style.visibility = "hidden";
-                }
-
-                // Remove last child
-                const container = document.getElementById('items-form-container');
-                container.removeChild(container.lastElementChild);
-
-                // Update form count
-                $('#id_form-TOTAL_FORMS').attr('value', children - 1);
-            });
-    })
-</script>
-
-<script type="text/html" id="item-template">
-    <div id="item-__prefix__">
-        <table class='table table-borderless'>
-            {{ item_forms.empty_form }}
-        </table>
-    </div>
-</script>
+{% endblock %}
