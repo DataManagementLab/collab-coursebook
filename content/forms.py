@@ -9,6 +9,40 @@ from content.models import YTVideoContent, ImageContent, PDFContent
 from content.models import ImageAttachment, TextField, Latex, SingleImageAttachment
 from content.widgets import ModifiedClearableFileInput
 
+# str: Relative directory path of the forms examples
+FORMS_EXAMPLES_DIRECTORY = 'content/templates/form/examples/'
+
+# str: File type of the forms examples
+FORMS_EXAMPLES_FILE_TYPE = '.txt'
+
+
+def get_placeholder(content_type, widget):
+    """Get placeholder
+
+    Reads the the file which represents placeholder of the corresponding
+    widget of the specified content type. If the file could not be read,
+    return an empty string.
+    The path of the file structured as follows:
+    directory + content type + _ + widget name + file type
+
+    :param content_type: the type of the content of the placeholder
+    :type content_type: str
+    :param widget: the widget of the placeholder
+    :type widget: str
+
+    :return: the placeholder value
+    :rtype: str
+    """
+    try:
+        with open(FORMS_EXAMPLES_DIRECTORY +
+                  content_type +
+                  '_' +
+                  widget
+                  + FORMS_EXAMPLES_FILE_TYPE) as file:
+            return file.read()
+    # If file does not exists, return an empty string - no place holder value
+    except FileNotFoundError:
+        return ''
 
 
 class AddContentFormYoutubeVideo(forms.ModelForm):
@@ -22,12 +56,13 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
         """
         model = YTVideoContent
-        exclude = ['content']
+        fields = ['url']
 
 
 class AddContentFormImage(forms.ModelForm):
@@ -41,13 +76,13 @@ class AddContentFormImage(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
-            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
         """
         model = ImageContent
-        exclude = ['content']
+        fields = ['image', 'source', 'license']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
@@ -64,12 +99,13 @@ class AddContentFormAttachedImage(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
         """
         model = ImageAttachment
-        exclude = ['images', 'content']
+        fields = []
 
 
 class AddContentFormPdf(forms.ModelForm):
@@ -83,16 +119,17 @@ class AddContentFormPdf(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
-            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
         """
         model = PDFContent
-        exclude = ['license', 'content']
+        fields = ['pdf', 'source']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
-            'pdf': ModifiedClearableFileInput(attrs={'accept': 'application/pdf', 'required':'true'}),
+            'pdf': ModifiedClearableFileInput(attrs={'accept': 'application/pdf',
+                                                     'required': 'true'}),
         }
 
 
@@ -107,24 +144,21 @@ class AddTextField(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
-            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
         """
         model = TextField
-        exclude = ['content']
+        fields = ['textfield', 'source']
         widgets = {
-            'source': forms.Textarea(attrs={'style': 'height: 100px', 'placeholder': 'https://www.lipsum.com/'}),
-            'textfield': forms.Textarea(attrs={'placeholder': 'Lorem ipsum dolor sit amet, consectetur adipiscing '
-                                                              'elit, sed do eiusmod tempor incididunt ut labore et '
-                                                              'dolore magna aliqua. Ut enim ad minim veniam, '
-                                                              'quis nostrud exercitation ullamco laboris nisi ut '
-                                                              'aliquip ex ea commodo consequat. Duis aute irure dolor '
-                                                              'in reprehenderit in voluptate velit esse cillum dolore '
-                                                              'eu fugiat nulla pariatur. Excepteur sint occaecat '
-                                                              'cupidatat non proident, sunt in culpa qui officia '
-                                                              'deserunt mollit anim id est laborum.'})
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(TextField.TYPE, 'source')}),
+            'textfield': forms.Textarea(
+                attrs={
+                    'placeholder': get_placeholder(TextField.TYPE, 'textfield')})
         }
 
 
@@ -139,23 +173,20 @@ class AddLatex(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
-            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
         """
         model = Latex
-        exclude = ['content', 'pdf']
+        fields = ['textfield', 'source']
         widgets = {
-            'source': forms.Textarea(attrs={'style': 'height: 100px', 'placeholder': 'https://ctan.org/pkg/lipsum'}),
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(Latex.TYPE, 'source')}),
             'textfield': forms.Textarea(
-                attrs={'placeholder': 'This is a matrix \\\\ \n '
-                                      '$ M = \\begin{pmatrix} 1 & 2 & 3\\\\ a & b & c \\end{ pmatrix}$ \\\\ \n'
-                                      'This is a table \\\\ \n '
-                                      '\\begin{center} \n \\begin{tabular} {||c c c c||} \n \\hline'
-                                      'Col1 & Col2 & Col2 & Col3 \\\\ [0.5ex] \n \\hline \n \\hline \n '
-                                      '1 & 6 & 87837 & 787 \\\\ \n \\hline \n'
-                                      '\\end{tabular} \n \\end{center}'})
+                attrs={'placeholder': get_placeholder(Latex.TYPE, 'textfield')})
         }
 
 
@@ -170,27 +201,27 @@ class AddSingleImage(forms.ModelForm):
 
         This class handles all possible meta options that you can give to this model.
 
-        Attributes:
-            Meta.model (Model): The model to which this form corresponds
-            Meta.exclude (List[str]): Excluding fields
-            Meta.widgets (Dict[str, Textarea]): Customization of the model form
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: List[str]
         """
 
         model = SingleImageAttachment
-        exclude = []
+        fields = ['image', 'source', 'license']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
 
 
-# SingleImageFormSet: Image attachment form set
+# BaseModelFormset: Image attachment form set
 SingleImageFormSet = modelformset_factory(
     SingleImageAttachment,
     fields=("source", "license", "image"),
     extra=0,
     widgets={
         'source': forms.Textarea(attrs={'style': 'height: 100px', 'required': 'true'}),
-        'image': ModifiedClearableFileInput(attrs={'required':'true'})
+        'image': ModifiedClearableFileInput(attrs={'required': 'true'})
     }
 )
 
