@@ -280,7 +280,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 pkSet.append(picture.pk)
 
             # setup formset with attached pictures
-            formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.filter(pk__in=pkSet))
+            formset = SingleImageFormSet(
+                queryset=SingleImageAttachment.objects.filter(pk__in=pkSet))
             context['item_forms'] = formset
 
         return context
@@ -319,22 +320,23 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 if content_type in IMAGE_ATTACHMENT_TYPES:
 
                     # Retrieve current state of attachment form and formset
-                    attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
-                    attachment_form = AddContentFormAttachedImage(instance=attachment_object,
-                                                                  data=request.POST,
-                                                                  files=request.FILES)
-                    image_formset = SingleImageFormSet(data=request.POST,
-                                                       files=request.FILES)
+                    attachment_object = ImageAttachment.objects.get(
+                        pk=self.get_object().attachment.pk)
+                    attachment_form = AddContentFormAttachedImage(
+                        instance=attachment_object,
+                        data=request.POST,
+                        files=request.FILES)
+                    image_formset = SingleImageFormSet(
+                        data=request.POST,
+                        files=request.FILES)
 
                     # Remove images from database
-                    clear_counter = attachment_object.images.count() - image_formset.total_form_count()
-                    if clear_counter > 0:
-                        remove_source = attachment_object.images.order_by('id').reverse()[:clear_counter]
+                    clean = attachment_object.images.count() - image_formset.total_form_count()
+                    if clean > 0:
+                        remove_source = attachment_object.images.order_by('id').reverse()[:clean]
                         for remove_object in remove_source:
                             SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
                             remove_object.delete()
-
-
 
                     if attachment_form.is_valid():
 
@@ -644,7 +646,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
 
         if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
-            
+
             # Retrieve the attachment
             attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
 
@@ -658,7 +660,6 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
             ImageAttachment.objects.filter(pk=attachment_object.pk).delete()
             attachment_object.delete()
             return success_url
-
 
         return super().delete(self, request, *args, **kwargs)
 
