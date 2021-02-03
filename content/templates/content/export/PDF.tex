@@ -15,8 +15,9 @@
 
 \vskip 1em
 
-% show latex content
-{{ content.latex.textfield }}
+% show pdf content
+\includepdf[pages=-]{~~{{content.pdfcontent.pdf.url|ret_path}}}
+
 
 \vskip 3em
 
