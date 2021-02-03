@@ -75,7 +75,7 @@ class LaTeX:
             if len(error_log) != 0:
                 rendered_tpl = template.render(context).encode(LaTeX.encoding)
                 # Prerender errors templates
-                rendered_tpl += LaTeX.pre_render(error_log, context['export_pdf'],
+                rendered_tpl += LaTeX.pre_render(len(error_log), context['export_pdf'],
                                                  LaTeX.error_template)
                 rendered_tpl += r"\end{document}".encode(LaTeX.encoding)
 
@@ -128,7 +128,7 @@ class LaTeX:
 
         Parameters:
             :param content: The content to be rendered
-            :type content: Content
+            :type content: any
             :param export_flag: True if export, False if simple content compilation
             :type export_flag: bool
             :param template_type: The type of the template to use
