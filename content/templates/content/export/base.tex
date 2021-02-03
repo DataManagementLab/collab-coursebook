@@ -3,42 +3,59 @@
 
 \documentclass[a4paper]{article}
 
-% Packages
+%%% Packages
+%% Encoding
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[ngerman]{babel}
+
+%% Language
+\usepackage[english, main = ngerman]{babel}
+\usepackage[babel]{csquotes}
+
+%% Graphics
 \usepackage{grffile}
-\usepackage{hyperref}
-\usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
 \usepackage{pdfpages}
-% Graphics
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{tikz}
+
+%%  Document dimensions
+\usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
+
+%% Hypertext
+\usepackage{hyperref}
+
 % Listing
 \usepackage{listings}
+
 % Math
-\usepackage{mathtools, amssymb}
-\usepackage{array}
+\usepackage{mathtools, amssymb, amsmath}
+
+
+% Colors
 \usepackage{xcolor}
+
 % Table
 \usepackage{booktabs}
+\usepackage{array}
+
+%%% Settings
 
 %% Generate a latex graphic
 % 1: caption
 % 2: image path
 \newcommand*{\Image}[2]{
     \begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{#2}
-    \caption{#1}
+    	\centering
+    	\includegraphics[width=\textwidth]{#2}
+    	\caption{#1}
     \end{figure}
 }
 
-% Indent
+%% Indent
 \setlength\parindent{0pt}
 
-% Title information
+%%% Title information
 
 {% if export_pdf %}
 \title{ {{ course.title|tex_escape }} }
@@ -53,6 +70,6 @@
 
 \maketitle
 
-% \end{document} gets appended in code
+%\end{document} gets appended in code
 
 {% endautoescape %}
