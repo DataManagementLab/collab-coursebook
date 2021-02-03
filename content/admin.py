@@ -23,6 +23,7 @@ class ImageAttachmentAdmin(admin.ModelAdmin):
     """
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(ImageContent)
 class ImageContentAdmin(CompareVersionAdmin):
     """Image content admin
@@ -31,6 +32,7 @@ class ImageContentAdmin(CompareVersionAdmin):
     """
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(Latex)
 class LatexAdmin(CompareVersionAdmin):
     """LaTeX admin
@@ -39,6 +41,7 @@ class LatexAdmin(CompareVersionAdmin):
     """
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(PDFContent)
 class PDFContentAdmin(CompareVersionAdmin):
     """PDF content admin
@@ -47,6 +50,7 @@ class PDFContentAdmin(CompareVersionAdmin):
     """
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(SingleImageAttachment)
 class SingleImageAttachmentAdmin(admin.ModelAdmin):
     """Singe Image attachment admin
@@ -55,6 +59,7 @@ class SingleImageAttachmentAdmin(admin.ModelAdmin):
     """
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(TextField)
 class TextFieldAdmin(CompareVersionAdmin):
     """Text field admin
@@ -63,6 +68,7 @@ class TextFieldAdmin(CompareVersionAdmin):
     """
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(YTVideoContent)
 class YTVideoContentAdmin(CompareVersionAdmin):
     """YouTube video content

@@ -1,13 +1,24 @@
-from django.test import TestCase, override_settings
+"""Purpose of this file
+
+This file contains the test cases for this package.
+"""
+
 import io
-from base.models.content import Category, Course, Topic
-from django.contrib.auth.models import User
-from django.urls import reverse
-from base.models import Content
-from content.models import TextField, Latex, SingleImageAttachment
-import tempfile
+
 import shutil
+
+import tempfile
+
 from PIL import Image
+
+# pylint: disable=imported-auth-user
+from django.contrib.auth.models import User
+from django.test import TestCase, override_settings
+from django.urls import reverse
+
+from base.models import Content, Category, Course, Topic
+
+import content.models as model
 
 # Temporary media directory
 MEDIA_ROOT = tempfile.mkdtemp()
@@ -33,7 +44,12 @@ def generate_image_file(image_file_number):
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class SomeTest(TestCase):
+class ContentTypesTestCase(TestCase):
+    """Image attachment test case
+
+    This test case tests model ImageAttachment.
+    """
+
     def setUp(self):
         """
         Sets up the test database
@@ -54,12 +70,13 @@ class SomeTest(TestCase):
 
     def post_redirects_to_content(self, path, data):
         """
-        Tests that the Post request with the given path and data redirects to the content page of the newly
-        created Content
+        Tests that the Post request with the given path and data redirects to
+        the content page of the newly created Content
 
         :param path: The path used for the POST request
         :type path: str
-        :param data: The data of the content to be created used for the post request
+        :param data: The data of the content to be created used for the post
+        request
         :type data: dict
         """
         response = self.client.post(path, data)
@@ -69,11 +86,11 @@ class SomeTest(TestCase):
         })
         self.assertEqual(response.url, response_path)
 
-    def test_add_TextField(self):
+    def test_add_textfield(self):
         """Test add TextField
 
-        Tests that a Textfield gets created and saved properly after sending a POST request to content-add
-        and that the POST request redirects to the content page.
+        Tests that a Textfield gets created and saved properly after sending a POST request
+        to content-add and that the POST request redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
@@ -86,15 +103,15 @@ class SomeTest(TestCase):
             'form-INITIAL_FORMS': '0'
         }
         self.post_redirects_to_content(path, data)
-        self.assertEqual(TextField.objects.count(), 1)
-        content = TextField.objects.first()
+        self.assertEqual(model.TextField.objects.count(), 1)
+        content = model.TextField.objects.first()
         self.assertEqual(content.textfield, "Lorem ipsum")
 
-    def test_add_Latex(self):
+    def test_add_latex(self):
         """Test add Latex
 
-        Tests that a Latex Content gets created and saved properly after sending a POST request to content-add
-        and that the POST request redirects to the content page.
+        Tests that a Latex Content gets created and saved properly after sending a POST
+        request to content-add and that the POST request redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Latex'
@@ -107,16 +124,16 @@ class SomeTest(TestCase):
             'form-INITIAL_FORMS': '0'
         }
         self.post_redirects_to_content(path, data)
-        self.assertEqual(Latex.objects.count(), 1)
-        content = Latex.objects.first()
+        self.assertEqual(model.Latex.objects.count(), 1)
+        content = model.Latex.objects.first()
         self.assertEqual(content.textfield, '\\textbf{Test}')
         self.assertTrue(bool(content.pdf))
 
     def test_attachments(self):
         """Test add Latex
 
-        Tests that Image Attachments get created and saved properly after sending a POST request to content-add
-        and that the POST request redirects to the content page.
+        Tests that Image Attachments get created and saved properly after sending a POST
+        request to content-add and that the POST request redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
@@ -135,10 +152,10 @@ class SomeTest(TestCase):
             'form-INITIAL_FORMS': '0'
         }
         self.post_redirects_to_content(path, data)
-        self.assertEqual(TextField.objects.count(), 1)
-        text = TextField.objects.get(pk=1)
+        self.assertEqual(model.TextField.objects.count(), 1)
+        text = model.TextField.objects.get(pk=1)
         self.assertEqual(text.textfield, "Lorem ipsum")
-        self.assertEqual(SingleImageAttachment.objects.count(), 2)
+        self.assertEqual(model.SingleImageAttachment.objects.count(), 2)
         content = Content.objects.first()
         self.assertEqual(content.attachment.images.count(), 2)
         for image_attachment in content.attachment.images.all():

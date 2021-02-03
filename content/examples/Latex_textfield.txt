@@ -1,0 +1,11 @@
+This is a table\\
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccc}
+    \toprule
+    Col1 & Col2 & Col2 & Col3\\
+    \midrule
+    1 & 6 & 87837 & 787\\
+    \bottomrule
+    \end{tabular}
+\end{table}
