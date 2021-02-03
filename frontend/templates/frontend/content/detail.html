@@ -22,6 +22,8 @@
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="
+
+
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
                     Reading Mode</a>
                 {% if user.is_authenticated %}
@@ -76,8 +78,6 @@
                         </a>
                     {% endif %}
 
-
-
                     {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
                            data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
@@ -89,6 +89,7 @@
     </div>
 
     <a href="
+
 
 
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
