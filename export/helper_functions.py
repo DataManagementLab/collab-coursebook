@@ -145,7 +145,8 @@ class LaTeX:
         # Set context for rendering
         context = {'content': content, 'export_pdf': export_flag}
 
-        # render the template and use escape for triple angular brackets
+        # render the template and use escape for triple braces with escape character ~~
+        # this is relevant when using triple braces for file paths in tex data
         rendered_tpl = template.render(context)
         rendered_tpl = re.sub(r'\{~~', '{', rendered_tpl).encode(LaTeX.encoding)
         return rendered_tpl
