@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='Latex',
             fields=[
                 ('content', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='base.Content', verbose_name='Content')),
-                ('pdf', models.FileField(blank=True, upload_to='uploads/contents/%Y/%m/%d/', validators=[content.validator.validate_is_pdf], verbose_name='PDF')),
+                ('pdf', models.FileField(blank=True, upload_to='uploads/contents/%Y/%m/%d/', validators=[content.validator.validate_pdf], verbose_name='PDF')),
                 ('textfield', models.TextField(verbose_name='Latex Code')),
                 ('source', models.TextField(verbose_name='Source')),
             ],
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='pdfcontent',
             name='pdf',
-            field=models.FileField(blank=True, upload_to='uploads/contents/%Y/%m/%d/', validators=[content.validator.validate_is_pdf], verbose_name='PDF'),
+            field=models.FileField(blank=True, upload_to='uploads/contents/%Y/%m/%d/', validators=[content.validator.validate_pdf], verbose_name='PDF'),
         ),
         migrations.CreateModel(
             name='ImageAttachment',

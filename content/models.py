@@ -17,7 +17,7 @@ from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
 
-from content.validator import validate_is_pdf
+from content.validator import validate_pdf
 
 
 class BaseModel(models.Model, GeneratePreviewMixin):
@@ -76,7 +76,7 @@ class BasePDFModel(BaseModel):
     pdf = models.FileField(verbose_name=_("PDF"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True,
-                           validators=(validate_is_pdf,))
+                           validators=(validate_pdf,))
 
     class Meta:
         """Meta options
