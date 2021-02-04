@@ -32,8 +32,18 @@ from frontend.forms.addcontent import AddContentForm
 
 # pylint: disable=too-many-ancestors
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
-    """
-    Adds a new content to the database
+    """Add content view
+
+    Adds a new content to the database.
+
+    :attr AddContentView.model: The model to which this view corresponds
+    :type AddContentView.model: Model
+    :attr AddContentView.template_name: The path to the html template
+    :type AddContentView.template_name: str
+    :attr AddContentView.success_url: Redirection of a successful url
+    :type AddContentView.success_url: __proxy__
+    :attr AddContentView.context_object_name: The context object name
+    :type AddContentView.context_object_name: str
     """
     model = Content
     template_name = 'frontend/content/addcontent.html'
@@ -42,6 +52,16 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     context_object_name = 'content'
 
     def get_success_message(self, cleaned_data):
+        """Success message
+
+        Returns the success message when the profile was updated
+
+        :param cleaned_data: The cleaned data
+        :type cleaned_data: dict
+
+        :return: the success message when the profile was updated
+        :rtype: __proxy__
+        """
         return _(f"Content '{cleaned_data['type']}' successfully added")
 
     def handle_error(self):
@@ -53,6 +73,18 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
 
     def get_context_data(self, **kwargs):
+        """Context data
+
+        Returns the context data of the addition of content. If something went wrong,
+        redirect to the invalid page.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data of the addition of the content or if something went wrong,
+        redirect to the invalid page
+        :rtype: Dict[str, Any] | HttpResponseRedirect
+         """
         context = super().get_context_data(**kwargs)
 
         # retrieve form for content type
@@ -81,9 +113,78 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         return context
 
+    def validate_latex(self, content, content_type_data, pk):
+        """Validate LaTeX
+
+        Validates LateX and compiles the LaTeX code and stores its pdf into the database.
+
+        :param content: The content of the pdf
+        :type content: dict
+        :param content_type_data: The data of the content type
+        :type content_type_data: any
+        :param pk: The primary key of the topic
+        :type pk: dict
+        """
+        topic = Topic.objects.get(pk=pk)
+        pdf = generate_pdf_response(get_user(self.request), topic, content)
+        content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+        content_type_data.save()
+
+    def validate_attachment(self, request, content):
+        """Validate attachment
+
+        Validates the image attachments and stores them into the database.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param content: The content
+        :type content: dict
+
+        :return: the redirection to the invalid page if the image form set or
+        the attachment form is not valid
+        :rtype: None | HttpResponseRedirect
+        """
+        # Reads input from all forms
+        attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
+        image_formset = SingleImageFormSet(request.POST, request.FILES)
+        if attachment_form.is_valid():
+            # Evaluates the attachment form
+            content_attachment = attachment_form.save(commit=False)
+            content_attachment.save()
+            content.attachment = content_attachment
+            images = []
+            # Evaluates all forms of the formset and append to image set
+            if image_formset.is_valid():
+                for form in image_formset:
+                    used_form = form.save(commit=False)
+                    used_form.save()
+                    images.append(used_form)
+            else:
+                return self.form_invalid(image_formset)
+
+            # Stores the attached images in DB
+            content.attachment.images.set(images)
+        else:
+            return self.form_invalid(attachment_form)
+
     def post(self, request, *args, **kwargs):
-        # retrieve content type form
-        if "type" in self.kwargs:
+        """Post
+
+        Submits the form and its uploaded files to store it into the database.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection to the content page after the submitting or
+        to the invalid page if something wrong occurs
+        :rtype: HttpResponseRedirect
+        """
+        # Retrieves content type form
+        if 'type' in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
                 content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST,
@@ -93,15 +194,13 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         else:
             return self.handle_error()
 
-        # read input from all included forms
+        # Reads input from included forms
         add_content_form = AddContentForm(request.POST)
-        attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
-        image_formset = SingleImageFormSet(request.POST, request.FILES)
 
-        # check if content forms are valid
+        # Checks if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
 
-            # save author etc.
+            # Saves author etc.
             content = add_content_form.save(commit=False)
             content.author = get_user(self.request)
             topic_id = self.kwargs['topic_id']
@@ -109,52 +208,34 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content.type = content_type
             content.save()
 
-            # evaluate generic form
+            # Evaluates generic form
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
             content_type_data.save()
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                topic = Topic.objects.get(pk=kwargs['topic_id'])
-                pdf = generate_pdf_response(get_user(self.request), topic, content)
-                content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-                content_type_data.save()
+                self.validate_latex(content, content_type_data, pk=kwargs['topic_id'])
 
-            # Check if attachments are allowed for the given content type
+            # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
-                if attachment_form.is_valid():
+                redirect = self.validate_attachment(request, content)
+                if redirect is not None:
+                    return redirect
 
-                    # evaluate the attachment form
-                    content_attachment = attachment_form.save(commit=False)
-                    content_attachment.save()
-                    content.attachment = content_attachment
-                    images = []
-
-                    # evaluate all forms of the formset and append to image set
-                    if image_formset.is_valid():
-                        for form in image_formset:
-                            used_form = form.save(commit=False)
-                            used_form.save()
-                            images.append(used_form)
-                    else:
-                        return self.form_invalid(image_formset)
-
-                    # store the attached images in DB
-                    content.attachment.images.set(images)
-                else:
-                    return self.form_invalid(attachment_form)
-
-            # generate preview image in 'uploads/contents/'
+            # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview
             content.save()
 
-            # Redirect to content
+            # Redirects to content
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
-            return HttpResponseRedirect(reverse_lazy('frontend:content',
-                                                     args=(course_id, topic_id, content.id,)))
+            return HttpResponseRedirect(reverse_lazy(
+                'frontend:content',
+                args=(course_id,
+                      topic_id,
+                      content.id)))
 
         # add_content_form invalid
         if not add_content_form.is_valid():
@@ -304,7 +385,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
-                form.save()
                 content = form.save()
                 content_type = content.type
                 content_object = content_type_form.save()
@@ -360,7 +440,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     else:
                         return self.form_invalid(attachment_form)
 
-                preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
+                preview = CONTENT_TYPES.get(content_type) \
+                    .objects.get(pk=content.pk).generate_preview()
                 content.preview.name = preview
                 content.save()
                 messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
