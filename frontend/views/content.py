@@ -30,6 +30,84 @@ from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 
 
+def clean_attachment(attachment_object, image_formset):
+    """Clean attachment
+
+    Cleans the attachment from the database if the attachments
+    were removed from the form.
+
+    :param attachment_object: The attachment object
+    :type attachment_object: ManyToManyField - SingleImageAttachment
+    :param image_formset: The image form set
+    :type image_formset: BaseModelFormSet
+    """
+    clean = attachment_object.images.count() - image_formset.total_form_count()
+    if clean > 0:
+        remove_source = attachment_object.images.order_by('id').reverse()[:clean]
+        for remove_object in remove_source:
+            SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
+            remove_object.delete()
+
+
+def validate_latex(view, content, content_type_data, pk):
+    """Validate LaTeX
+
+    Validates LateX and compiles the LaTeX code and stores its pdf into the database.
+
+    :param view: The view that wants to validate the data
+    :type view: View
+    :param content: The content of the pdf
+    :type content: dict
+    :param content_type_data: The data of the content type
+    :type content_type_data: any
+    :param pk: The primary key of the topic
+    :type pk: dict
+    """
+    topic = Topic.objects.get(pk=pk)
+    pdf = generate_pdf_response(get_user(view.request), topic, content)
+    content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+    content_type_data.save()
+
+
+def validate_attachment(view, attachment_form, image_formset, content):
+    """Validate attachment
+
+    Validates the image attachments and stores them into the database.
+
+    :param view: The view that wants to validate the data
+    :type view: View
+    :param attachment_form: The attachment form
+    :type attachment_form: ModelForm
+    :param image_formset: The image form set
+    :type image_formset: BaseModelFormSet
+    :param content: The content
+    :type content: dict
+
+    :return: the redirection to the invalid page if the image form set or
+    the attachment form is not valid
+    :rtype: None | HttpResponseRedirect
+    """
+    if attachment_form.is_valid():
+        # Evaluates the attachment form
+        content_attachment = attachment_form.save(commit=False)
+        content_attachment.save()
+        content.attachment = content_attachment
+        images = []
+        # Evaluates all forms of the formset and append to image set
+        if image_formset.is_valid():
+            for form in image_formset:
+                used_form = form.save(commit=False)
+                used_form.save()
+                images.append(used_form)
+        else:
+            return view.form_invalid(image_formset)
+
+        # Stores the attached images in DB
+        content.attachment.images.set(images)
+    else:
+        return view.form_invalid(attachment_form)
+
+
 # pylint: disable=too-many-ancestors
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add content view
@@ -113,60 +191,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         return context
 
-    def validate_latex(self, content, content_type_data, pk):
-        """Validate LaTeX
-
-        Validates LateX and compiles the LaTeX code and stores its pdf into the database.
-
-        :param content: The content of the pdf
-        :type content: dict
-        :param content_type_data: The data of the content type
-        :type content_type_data: any
-        :param pk: The primary key of the topic
-        :type pk: dict
-        """
-        topic = Topic.objects.get(pk=pk)
-        pdf = generate_pdf_response(get_user(self.request), topic, content)
-        content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-        content_type_data.save()
-
-    def validate_attachment(self, request, content):
-        """Validate attachment
-
-        Validates the image attachments and stores them into the database.
-
-        :param request: The given request
-        :type request: HttpRequest
-        :param content: The content
-        :type content: dict
-
-        :return: the redirection to the invalid page if the image form set or
-        the attachment form is not valid
-        :rtype: None | HttpResponseRedirect
-        """
-        # Reads input from all forms
-        attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
-        image_formset = SingleImageFormSet(request.POST, request.FILES)
-        if attachment_form.is_valid():
-            # Evaluates the attachment form
-            content_attachment = attachment_form.save(commit=False)
-            content_attachment.save()
-            content.attachment = content_attachment
-            images = []
-            # Evaluates all forms of the formset and append to image set
-            if image_formset.is_valid():
-                for form in image_formset:
-                    used_form = form.save(commit=False)
-                    used_form.save()
-                    images.append(used_form)
-            else:
-                return self.form_invalid(image_formset)
-
-            # Stores the attached images in DB
-            content.attachment.images.set(images)
-        else:
-            return self.form_invalid(attachment_form)
-
     def post(self, request, *args, **kwargs):
         """Post
 
@@ -215,11 +239,16 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                self.validate_latex(content, content_type_data, pk=kwargs['topic_id'])
+                validate_latex(self, content, content_type_data, pk=kwargs['topic_id'])
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
-                redirect = self.validate_attachment(request, content)
+                # Reads input from all forms
+                attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
+                image_formset = SingleImageFormSet(request.POST, request.FILES)
+
+                # Validates attachments
+                redirect = validate_attachment(self, attachment_form, image_formset, content)
                 if redirect is not None:
                     return redirect
 
@@ -335,7 +364,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
 
-        # Add form only to context data if not already in it
+        # Adds the form only to context data if not already in it
         # (when passed by post method containing error messages)
         if 'content_type_form' not in context:
             content_type = self.get_object().type
@@ -346,28 +375,43 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             else:
                 return self.handle_error()
 
-        # check if attachments are allowed for given content type
+        # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
         if content_type in IMAGE_ATTACHMENT_TYPES:
 
-            # retrieve attachment_form
+            # Retrieves attachment_form
             attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
             context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
 
-            # identify pk's of attached pictures
-            pkSet = []
+            # Identifies the pk's of attached images
+            pk_set = []
             for picture in self.get_object().attachment.images.all():
-                pkSet.append(picture.pk)
+                pk_set.append(picture.pk)
 
-            # setup formset with attached pictures
+            # Setups the formset with attached images
             formset = SingleImageFormSet(
-                queryset=SingleImageAttachment.objects.filter(pk__in=pkSet))
+                queryset=SingleImageAttachment.objects.filter(pk__in=pk_set))
             context['item_forms'] = formset
 
         return context
 
     def post(self, request, *args, **kwargs):
+        """Post
+
+        Submits the form and its uploaded files to store it into the database.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection to the content page after the submitting or
+        to the invalid page if something wrong occurs
+        :rtype: HttpResponseRedirect
+        """
         self.object = self.get_object()
         form = self.get_form()
 
@@ -387,19 +431,16 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             if form.is_valid() and content_type_form.is_valid():
                 content = form.save()
                 content_type = content.type
-                content_object = content_type_form.save()
+                content_type_data = content_type_form.save()
 
                 # If the content type is Latex, compile the Latex Code and store in DB
                 if content_type == 'Latex':
-                    topic = Topic.objects.get(pk=kwargs['topic_id'])
-                    pdf = generate_pdf_response(get_user(self.request), topic, content)
-                    content_object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-                    content_object.save()
+                    validate_latex(self, content, content_type_data, pk=kwargs['topic_id'])
 
-                # Check if attachments are allowed for the given content type
+                # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
 
-                    # Retrieve current state of attachment form and formset
+                    # Retrieves current state of attachment form and formset
                     attachment_object = ImageAttachment.objects.get(
                         pk=self.get_object().attachment.pk)
                     attachment_form = AddContentFormAttachedImage(
@@ -410,40 +451,20 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                         data=request.POST,
                         files=request.FILES)
 
-                    # Remove images from database
-                    clean = attachment_object.images.count() - image_formset.total_form_count()
-                    if clean > 0:
-                        remove_source = attachment_object.images.order_by('id').reverse()[:clean]
-                        for remove_object in remove_source:
-                            SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
-                            remove_object.delete()
+                    # Removes images from database
+                    clean_attachment(attachment_object, image_formset)
 
-                    if attachment_form.is_valid():
+                    # Validates attachments
+                    redirect = validate_attachment(self, attachment_form, image_formset, content)
+                    if redirect is not None:
+                        return redirect
 
-                        # evaluate the attachment form
-                        content_attachment = attachment_form.save(commit=False)
-                        content_attachment.save()
-                        content.attachment = content_attachment
-                        images = []
-
-                        # evaluate all forms of the formset and append to image set
-                        if image_formset.is_valid():
-                            for form in image_formset:
-                                used_form = form.save(commit=False)
-                                used_form.save()
-                                images.append(used_form)
-                        else:
-                            return self.form_invalid(image_formset)
-
-                        # store the attached images in DB
-                        content.attachment.images.set(images)
-                    else:
-                        return self.form_invalid(attachment_form)
-
+                # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \
                     .objects.get(pk=content.pk).generate_preview()
                 content.preview.name = preview
                 content.save()
+
                 messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
                 return HttpResponseRedirect(self.get_success_url())
 
