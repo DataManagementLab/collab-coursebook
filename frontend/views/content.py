@@ -79,24 +79,24 @@ def rate_content(request, course_id, topic_id, content_id, pk):
         + '#rating')
 
 
-def validate_latex(view, content, content_type_data, pk):
+def validate_latex(user, content, latex_content, topic_id):
     """Validate LaTeX
 
     Validates LateX and compiles the LaTeX code and stores its pdf into the database.
 
-    :param view: The view that wants to validate the data
-    :type view: View
+    :param user: The current user
+    :type user: User
     :param content: The content of the pdf
-    :type content: dict
-    :param content_type_data: The data of the content type
-    :type content_type_data: any
-    :param pk: The primary key of the topic
-    :type pk: dict
+    :type content: Content
+    :param latex_content: The data of the content type
+    :type latex_content: Latex
+    :param topic_id: The primary key of the topic
+    :type topic_id: int
     """
-    topic = Topic.objects.get(pk=pk)
-    pdf = generate_pdf_response(get_user(view.request), topic, content)
-    content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-    content_type_data.save()
+    topic = Topic.objects.get(pk=topic_id)
+    pdf = generate_pdf_response(user, topic, content)
+    latex_content.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+    latex_content.save()
 
 
 def validate_attachment(view, attachment_form, image_formset, content):
@@ -269,7 +269,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                validate_latex(self, content, content_type_data, pk=kwargs['topic_id'])
+                validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -465,7 +465,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
                 # If the content type is Latex, compile the Latex Code and store in DB
                 if content_type == 'Latex':
-                    validate_latex(self, content, content_type_data, pk=kwargs['topic_id'])
+                    validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
