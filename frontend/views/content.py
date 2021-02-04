@@ -49,6 +49,36 @@ def clean_attachment(attachment_object, image_formset):
             remove_object.delete()
 
 
+# pylint: disable=invalid-name
+def rate_content(request, course_id, topic_id, content_id, pk):
+    """Rate content
+
+    Let the user rate content.
+
+    :param topic_id: The id of the topic
+    :type topic_id: int
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: course id
+    :type course_id: int
+    :param content_id: id of the content which gets rated
+    :type content_id: int
+    :param pk: the user rating (should be in [ 1, 2, 3, 4, 5])
+    :type pk: Any
+
+
+    :return: the redirect to content page
+    :rtype: HttpResponse
+    """
+    content = get_object_or_404(Content, pk=content_id)
+    profile = get_user(request)
+    content.rate_content(user=profile, rating=pk)
+
+    return HttpResponseRedirect(
+        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
+        + '#rating')
+
+
 def validate_latex(view, content, content_type_data, pk):
     """Validate LaTeX
 
@@ -825,36 +855,6 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
             context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
                                 self.request.GET.get('f')
         return context
-
-
-# pylint: disable=invalid-name
-def rate_content(request, course_id, topic_id, content_id, pk):
-    """Rate content
-
-    Let the user rate content.
-
-    :param topic_id: The id of the topic
-    :type topic_id: int
-    :param request: The given request
-    :type request: HttpRequest
-    :param course_id: course id
-    :type course_id: int
-    :param content_id: id of the content which gets rated
-    :type content_id: int
-    :param pk: the user rating (should be in [ 1, 2, 3, 4, 5])
-    :type pk: Any
-
-
-    :return: the redirect to content page
-    :rtype: HttpResponse
-    """
-    content = get_object_or_404(Content, pk=content_id)
-    profile = get_user(request)
-    content.rate_content(user=profile, rating=pk)
-
-    return HttpResponseRedirect(
-        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
-        + '#rating')
 
 
 class BaseHistoryCompareView(HistoryCompareDetailView):
