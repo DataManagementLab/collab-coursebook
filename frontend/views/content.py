@@ -14,6 +14,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
+import reversion
 from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Content, Comment, Course, Topic, Favorite
@@ -27,7 +28,7 @@ from content.models import SingleImageAttachment, ImageAttachment, TextField
 from export.views import generate_pdf_response
 
 from frontend.forms import CommentForm, TranslateForm
-from frontend.forms.addcontent import AddContentForm
+from frontend.forms.addcontent import AddContentForm, EditContentForm
 
 
 def clean_attachment(attachment_object, image_formset):
@@ -77,6 +78,23 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
+
+
+def update_comment(request):
+    """Update reversion comment
+
+    Gets the comment from the form and updates the comment for the reversion.
+
+    :param request: The given request
+    :type request: HttpRequest
+    """
+    # Reversion comment
+    change_log = request.POST.get('change_log')
+
+    # Changes log is not empty set it as comment in reversion,
+    # else the default comment message will be used
+    if change_log:
+        reversion.set_comment(change_log)
 
 
 def validate_latex(user, content, latex_content, topic_id):
@@ -195,7 +213,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
          """
         context = super().get_context_data(**kwargs)
 
-        # retrieve form for content type
+        # Retrieves the form for content type
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
@@ -205,13 +223,13 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         else:
             return self.handle_error()
 
-        # check if attachments are allowed for given content type
+        # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
-        # retrieve attachment_form
+        # Retrieves attachment_form
         context['attachment_form'] = AddContentFormAttachedImage
 
-        # retrieve parameters
+        # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
@@ -261,7 +279,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content.topic = Topic.objects.get(pk=topic_id)
             content.type = content_type
             content.save()
-
             # Evaluates generic form
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
@@ -317,7 +334,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
     """
     model = Content
     template_name = 'frontend/content/editcontent.html'
-    form_class = AddContentForm
+    form_class = EditContentForm
 
     def get_content_url(self):
         """Content url
@@ -457,6 +474,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
 
+            # Reversion comment
+            update_comment(request)
+
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
                 content = form.save()
@@ -465,7 +485,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
                 # If the content type is Latex, compile the Latex Code and store in DB
                 if content_type == 'Latex':
-                    validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
+                    validate_latex(get_user(request),
+                                   content,
+                                   content_type_data,
+                                   kwargs['topic_id'])
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
