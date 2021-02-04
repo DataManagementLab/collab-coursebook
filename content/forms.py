@@ -190,29 +190,6 @@ class AddLatex(forms.ModelForm):
         }
 
 
-class AddSingleImage(forms.ModelForm):
-    """Add single image
-
-    This model represents the add form for single images that is used for image attachments.
-    """
-
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.model: The model to which this form corresponds
-        :type Meta.model: Model
-        :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
-        """
-
-        model = SingleImageAttachment
-        fields = ['image', 'source', 'license']
-        widgets = {
-            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
-        }
-
 
 # BaseModelFormset: Image attachment form set
 SingleImageFormSet = modelformset_factory(
@@ -230,8 +207,6 @@ CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
     ImageContent.TYPE: AddContentFormImage,
     PDFContent.TYPE: AddContentFormPdf,
-    ImageAttachment.TYPE: AddContentFormAttachedImage,
     TextField.TYPE: AddTextField,
     Latex.TYPE: AddLatex,
-    SingleImageAttachment.TYPE: AddSingleImage
 }
