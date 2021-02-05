@@ -21,7 +21,7 @@ class HelperFunctionsTest(TestCase):
         test_utility.setup_database()
 
     def test_errors(self):
-        path = os.path.dirname(__file__) + '/resources/log.log'
+        path = os.path.dirname(__file__) + '/resources/log'
         log = open(path, mode='rb').read()
         errors = LaTeX.errors(log)
         self.assertEqual(2, len(errors))

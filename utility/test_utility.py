@@ -40,4 +40,4 @@ def setup_database():
                                      description='this is a descrieption')
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
-    validate_latex(user, content, latex)
+    validate_latex(user, content, latex, topic_id=topic.pk)
