@@ -85,6 +85,7 @@ class AddContentFormImage(forms.ModelForm):
         fields = ['image', 'source', 'license']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+            'image': ModifiedClearableFileInput(attrs={'required': 'true'})
         }
 
 
