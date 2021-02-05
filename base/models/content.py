@@ -9,6 +9,9 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Avg
 from django.utils.translation import gettext_lazy as _
+
+import reversion
+
 from fontawesome_5.fields import IconField
 
 from base.models import Profile
@@ -531,3 +534,8 @@ class CourseStructureEntry(models.Model):
         :rtype: str
         """
         return f"{self.course} -> {self.index}. {self.topic}"
+
+
+# Register models for reversion
+reversion.register(Course, exclude=['creation_date'])
+reversion.register(Content, exclude=['creation_date', 'topic', 'type', 'preview', 'ratings'])
