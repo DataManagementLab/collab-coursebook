@@ -11,11 +11,14 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+import reversion
+
 from pdf2image import convert_from_path
 
 from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
+
 
 from content.validator import validate_pdf
 
@@ -467,3 +470,9 @@ IMAGE_ATTACHMENT_TYPES = {
     TextField.TYPE,
     Latex.TYPE
 }
+
+# Register models for reversion
+reversion.register(ImageContent)
+reversion.register(Latex, exclude=['pdf'])
+reversion.register(PDFContent)
+reversion.register(YTVideoContent)
