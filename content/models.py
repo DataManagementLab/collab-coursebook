@@ -288,7 +288,7 @@ class SingleImageAttachment(BaseSourceModel):
         :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Single Image Attachment")
-        verbose_name_plural = _("Single Attachments")
+        verbose_name_plural = _("Single Image Attachments")
 
     def __str__(self):
         """String representation

@@ -1,9 +1,10 @@
 {# Load the tag library #}
 {% load static %}
+{% load i18n %}
 
 {% if content.attachment.images.count > 0 %}
     <br>
-    <h4>Attachments</h4>
+    <h4> {% trans "Attachments" %} </h4>
     <div class="gallery-grid">
         {% for picture in attachment.images.all %}
             <figure class="gallery-frame">
