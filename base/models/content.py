@@ -536,6 +536,6 @@ class CourseStructureEntry(models.Model):
         return f"{self.course} -> {self.index}. {self.topic}"
 
 
-# Register models for reversion
+# Register models for reversion if it is not already done in admin, else we can specify configuration
 reversion.register(Course, exclude=['creation_date'])
 reversion.register(Content, exclude=['creation_date', 'topic', 'type', 'preview', 'ratings'])
