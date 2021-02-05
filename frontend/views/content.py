@@ -117,7 +117,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
                 topic = Topic.objects.get(pk=kwargs['topic_id'])
-                pdf = generate_pdf_response(get_user(self.request), topic, content)
+                pdf = generate_pdf_response(get_user(self.request), content)
                 content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
                 content_type_data.save()
 
@@ -312,7 +312,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 # If the content type is Latex, compile the Latex Code and store in DB
                 if content_type == 'Latex':
                     topic = Topic.objects.get(pk=kwargs['topic_id'])
-                    pdf = generate_pdf_response(get_user(self.request), topic, content)
+                    pdf = generate_pdf_response(get_user(self.request), content)
                     content_object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
                     content_object.save()
 
