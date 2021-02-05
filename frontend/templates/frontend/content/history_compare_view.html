@@ -1,0 +1,53 @@
+{# Load the tag library #}
+{% load i18n %}
+{% load fontawesome_5 %}
+
+{% if request.GET.version_id1 %}
+    <!-- Show fields differences -->
+    {% for field_diff in compare_data %}
+        <h3>
+            {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
+            {% if field_diff.is_related and not field_diff.follow %}
+                <sup class="follow">
+                    *
+                </sup>
+            {% endif %}
+        </h3>
+        {% if field_diff.field.help_text %}
+            <p class="help">
+                {{ field_diff.field.help_text }}
+            </p>
+        {% endif %}
+        <div class="module">
+            {{ field_diff.diff }}
+        </div>
+    {% empty %}
+        <div class="module">
+            <p>
+                <strong>
+                    {% trans "There are no differences." %}
+                </strong>
+            </p>
+        </div>
+    {% endfor %}
+
+    <!-- Show comment -->
+    <h4>
+        {% trans "Edit comment:" %}
+    </h4>
+    <blockquote>
+        {{ version2.revision.comment|default:_("(no comment exists)") }}
+    </blockquote>
+
+    {% if prev_url %}
+        <button onclick="location.href='{{ prev_url }}'" class="btn btn-primary add-item">
+            {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "previous" %}
+        </button>
+    {% endif %}
+
+    {% if next_url %}
+        <button onclick="location.href='{{ next_url }}'" class="btn btn-primary add-item">
+            {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans "next" %}
+        </button>
+    {% endif %}
+{% endif %}
