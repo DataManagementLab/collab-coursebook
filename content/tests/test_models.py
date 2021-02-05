@@ -1,6 +1,6 @@
 """Purpose of this file
 
-This file contains the test cases for this /content/models.py
+This file contains the test cases for /content/models.py
 """
 import os
 import shutil
@@ -20,7 +20,7 @@ class ModelsTest(TestCase):
         """
         Sets up the test database
         """
-        test_utility.setUp_database()
+        test_utility.setup_database()
 
     @classmethod
     def tearDownClass(cls):

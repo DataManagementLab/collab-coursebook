@@ -31,11 +31,13 @@ def generate_image_file(image_file_number):
     file.seek(0)
     return file
 
-def setUp_database():
+
+def setup_database():
     user = User.objects.create()
     cat = Category.objects.create(title="Category")
     topic = Topic.objects.create(title="Topic", category=cat)
-    content = Content.objects.create(author=user.profile, topic=topic)
+    content = Content.objects.create(author=user.profile, topic=topic, type=model.Latex.TYPE,
+                                     description='this is a descrieption')
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
-    validate_latex(user, content, latex, topic.pk)
+    validate_latex(user, content, latex)

@@ -22,7 +22,7 @@ class ValidatorTest(TestCase):
         """
         Sets up the test database
         """
-        test_utility.setUp_database()
+        test_utility.setup_database()
 
     @classmethod
     def tearDownClass(cls):
