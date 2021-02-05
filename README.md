@@ -54,7 +54,7 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 1. install python requirements ``pip install -r requirements.txt``
 1. if you are using Windows, install python magic-bin ``pip install python-magic-bin`` (skip, if you are using Linux)
 1. setup necessary database tables etc. ``python manage.py migrate``
-1. prepare static files (can be omitted for dev setups) ``python manage.py collectstatic``
+1. prepare static files (can be omitted for dev setups) ``python manage.py collectstatic`` (you may have to install gettext, if you are using Windows)
 1. compile translations ``python manage.py compilemessages``
 1. create a priviledged user, credentials are entered interactively on CLI ``python manage.py createsuperuser``
 1. deactivate virtualenv ``deactivate``
