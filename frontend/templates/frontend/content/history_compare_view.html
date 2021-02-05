@@ -4,32 +4,34 @@
 
 {% if request.GET.version_id1 %}
     <!-- Show fields differences -->
-    {% for field_diff in compare_data %}
-        <h3>
-            {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
-            {% if field_diff.is_related and not field_diff.follow %}
-                <sup class="follow">
-                    *
-                </sup>
+    {% if content.type in  'LaTeX' or 'Textfield' %}
+        {% for field_diff in compare_data %}
+            <h3>
+                {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
+                {% if field_diff.is_related and not field_diff.follow %}
+                    <sup class="follow">
+                        *
+                    </sup>
+                {% endif %}
+            </h3>2
+            {% if field_diff.field.help_text %}
+                <p class="help">
+                    {{ field_diff.field.help_text }}
+                </p>
             {% endif %}
-        </h3>
-        {% if field_diff.field.help_text %}
-            <p class="help">
-                {{ field_diff.field.help_text }}
-            </p>
-        {% endif %}
-        <div class="module">
-            {{ field_diff.diff }}
-        </div>
-    {% empty %}
-        <div class="module">
-            <p>
-                <strong>
-                    {% trans "There are no differences." %}
-                </strong>
-            </p>
-        </div>
-    {% endfor %}
+            <div class="module">
+                {{ field_diff.diff }}
+            </div>
+        {% empty %}
+            <div class="module">
+                <p>
+                    <strong>
+                        {% trans "There are no differences." %}
+                    </strong>
+                </p>
+            </div>
+        {% endfor %}
+    {% endif %}
 
     <!-- Show comment -->
     <h4>
@@ -39,6 +41,20 @@
         {{ version2.revision.comment|default:_("(no comment exists)") }}
     </blockquote>
 
+    <!-- Unfollowed fields note -->
+    {% if has_unfollowed_fields %}
+        <h4 class="follow">
+            {% trans "Note:" %}
+        </h4>
+        <p class="follow">
+            {% blocktrans %}
+                Fields/entries marked with <sup class="follow">*</sup> are not under reversion control.
+                It may be that not all marked information are correct.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+
+    <!-- Buttons for previous and next compare -->
     {% if prev_url %}
         <button onclick="location.href='{{ prev_url }}'" class="btn btn-primary add-item">
             {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "previous" %}
