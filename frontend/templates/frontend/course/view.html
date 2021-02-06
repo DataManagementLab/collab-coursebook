@@ -40,6 +40,8 @@
                     {% if user|check_edit_course_permission:course %}
                         <a href="{% url 'frontend:course-edit' pk=course.pk %}"
                            class="dropdown-item">{% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Course" %}</a>
+                        <a href="{% url 'frontend:course-history' pk=course.pk %}"
+                           class="dropdown-item">{% fa5_icon "history" "fas" %} {% trans "View History" %}</a>
                         <a href="{% url 'frontend:course-delete' pk=course.pk %}"
                            class="dropdown-item">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}</a>
                     {% endif %}
