@@ -15,7 +15,7 @@
 
 {% block content %}
 
-    <button onclick="javascript:history.back()" class="btn btn-primary add-item">
+    <button onclick="location.href='{{ back_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Back" %}
     </button>
 
@@ -23,8 +23,8 @@
         {% trans "History" %}
     </h2>
 
-    {% include "frontend/content/history_compare_header.html" %}
+    {% include "frontend/history/history_compare_header.html" %}
 
-    {% include "frontend/content/history_compare_view.html" %}
+    {% include "frontend/history/history_compare_view.html" %}
 
 {% endblock content %}
