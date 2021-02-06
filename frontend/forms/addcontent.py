@@ -43,7 +43,7 @@ class EditContentForm(forms.ModelForm):
     change_log = forms.CharField(
         required=True,
         widget=forms.Textarea(
-            attrs={'style': 'height: 100px'}))
+            attrs={'style': 'height: 35px'}))
 
     # pylint: disable=too-few-public-methods
     class Meta:
