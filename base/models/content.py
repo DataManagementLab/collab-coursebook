@@ -248,7 +248,18 @@ class Topic(models.Model):
         """
         contents = self.contents.all()
         if filtered_by != 'None' and filtered_by is not None:
-            contents = contents.filter(style=filtered_by)
+            if filtered_by == 'textfield':
+                contents = contents.filter(textfield__isnull=False)
+            elif filtered_by == 'latex':
+                contents = contents.filter(latex__isnull=False)
+            elif filtered_by == 'imagecontent':
+                contents = contents.filter(imagecontent__isnull=False)
+            elif filtered_by == 'ytvideocontent':
+                contents = contents.filter(ytvideocontent__isnull=False)
+            elif filtered_by == 'pdfcontent':
+                contents = contents.filter(pdfcontent__isnull=False)
+            else:
+                contents = contents.filter()
         if sorted_by != 'None' and sorted_by is not None:
             if sorted_by == 'rating':
                 contents = sorted(contents, key=lambda x: x.get_rate(), reverse=True)
