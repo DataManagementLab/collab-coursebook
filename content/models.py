@@ -19,7 +19,6 @@ from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
 
-
 from content.validator import validate_pdf
 
 
@@ -416,7 +415,7 @@ class ImageAttachment(BaseModel):
     :type ImageAttachment.images: ManyToManyField - SingleImageAttachment
     """
     TYPE = "ImageAttachment"
-    DESC = _("Single Image Attachment")
+    DESC = _("Image Attachment")
 
     images = models.ManyToManyField(SingleImageAttachment,
                                     verbose_name=_("Images"),
@@ -472,7 +471,20 @@ IMAGE_ATTACHMENT_TYPES = {
 }
 
 # Register models for reversion if it is not already done in admin, else we can specify configuration
-reversion.register(ImageContent)
-reversion.register(Latex, exclude=['pdf'])
-reversion.register(PDFContent)
-reversion.register(YTVideoContent)
+reversion.register(ImageContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(Latex,
+                   fields=['textfield', 'source'],
+                   follow=['content'])
+reversion.register(PDFContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(YTVideoContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(SingleImageAttachment,
+                   fields=None)
+reversion.register(ImageAttachment,
+                   fields=None,
+                   follow=['images'])

@@ -16,7 +16,7 @@ from content.models import YTVideoContent
 
 
 @admin.register(ImageAttachment)
-class ImageAttachmentAdmin(admin.ModelAdmin):
+class ImageAttachmentAdmin(CompareVersionAdmin):
     """Image attachment admin
 
     Represents the image attachment model in the admin panel.

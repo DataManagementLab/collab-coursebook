@@ -537,5 +537,10 @@ class CourseStructureEntry(models.Model):
 
 
 # Register models for reversion if it is not already done in admin, else we can specify configuration
-reversion.register(Course, exclude=['creation_date'])
-reversion.register(Content, exclude=['creation_date', 'topic', 'type', 'preview', 'ratings'])
+reversion.register(Course,
+                   fields=['title', 'description', 'image', 'topics',
+                           'owners', 'restrict_changes', 'category', 'period'])
+
+reversion.register(Content,
+                   fields=['author', 'description', 'language',
+                           'tags', 'readonly', 'public', 'attachment'])
