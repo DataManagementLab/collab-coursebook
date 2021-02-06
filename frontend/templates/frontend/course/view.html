@@ -59,10 +59,14 @@
         {% endfor %}
     </h5>
 
+
+
+    <img class="img-thumbnail" style="width: 30%;" src="{{ course.image.url }}" alt="{{ course.description }}">
+
+
     <div class="row" style="margin-top: 20px;">
-        <p><img src="{{ course.image.url }}" alt="{{ course.description }}"
-        style="max-width: 50%; margin-bottom: 20px;"></p>
         <div class="col-md-8">
+                <h2>{% trans "Description" %}</h2>
                 {{ course.description | linebreaks }}
         </div>
     </div>
@@ -119,7 +123,8 @@
                     </form>
                 </div>
                 <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }} {% if sorting != "None" %}(
-                    {% trans "sort by:" %} {{ sorting }}){% endif %}</h3>
+                    {% trans "sort by: " %} {{ sorting }}){% endif %}{% if filtering != "None" %}(
+                    {% trans "filter by: " %} {{ filtering }}){% endif %}</h3>
 
                 {% with entry.topic_contents as topic_contents %}
                     {% include "frontend/course/topic_contents.html" %}
