@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Edit Course</h1>
+    <h1>{% trans "Edit course" %}</h1>
 
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}

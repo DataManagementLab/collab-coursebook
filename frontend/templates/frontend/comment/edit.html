@@ -3,8 +3,9 @@
 {# Load the tag library #}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
+{% load i18n %}
 
-{% block title %}Edit comment{% endblock %}
+{% block title %}{% trans "Edit comment" %}{% endblock %}
 
 {% block content %}
     <h1>Edit comment</h1>
@@ -12,8 +13,8 @@
         {% csrf_token %}
 
         {% bootstrap_form form %}
-        <button type="submit" class="btn btn-success float-right">{% fa5_icon 'check' 'fas' %} Submit</button>
+        <button type="submit" class="btn btn-success float-right">{% fa5_icon 'check' 'fas' %}{% trans "Submit" %}</button>
         <a href="{% url 'frontend:content' course_id topic.id comment.content.id %}#comments"
-           class="btn btn-secondary">{% fa5_icon 'times' 'fas' %} Cancel</a>
+           class="btn btn-secondary">{% fa5_icon 'times' 'fas' %}{% trans "Cancel" %}</a>
     </form>
 {% endblock %}

@@ -29,10 +29,10 @@
                 {% if user.is_authenticated %}
                     {% if favorite %}
                         <a class="dropdown-item"
-                           href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'minus' 'fas' %} {% trans 'Coursebook' %}</a>
+                           href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'minus' 'fas' %}Coursebook</a>
                     {% else %}
                         <a class="dropdown-item"
-                           href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">{% fa5_icon 'plus' 'fas' %} {% trans 'Coursebook' %}</a>
+                           href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">{% fa5_icon 'plus' 'fas' %}Coursebook</a>
                     {% endif %}
 
                     <div class="dropdown-divider"></div>
@@ -147,7 +147,7 @@
     <div style="margin-top: 50px;margin-bottom: 50px;">
         {% include content.type|content_view %}
         <div class="mt-5">
-            <h4>Description</h4>
+            <h4> {% trans "Description" %}</h4>
             {{ content.description|linebreaks }} <!-- resolves to s -->
         </div>
     </div>
@@ -162,7 +162,7 @@
         {% if content.get_rate != -1 %}
             <span class="badge float-right text-right">{{ content.get_rate }}/5</span>
         {% else %}
-            <span class="badge float-right text-right">No rating yet</span>
+            <span class="badge float-right text-right">{% trans "No rating yet" %}</span>
         {% endif %}
     </h5>
     <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
