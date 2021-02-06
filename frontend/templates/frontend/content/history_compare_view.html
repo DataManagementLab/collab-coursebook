@@ -10,7 +10,6 @@
     </p>
 
     <!-- Show fields differences -->
-    {% if content.type == 'LaTeX'  or  content.type == 'Textfield' %}
         {% for field_diff in compare_data %}
             <h3>
                 {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
@@ -37,7 +36,6 @@
                 </p>
             </div>
         {% endfor %}
-    {% endif %}
 
     <!-- Show comment -->
     <h4>
