@@ -3,6 +3,12 @@
 {% load fontawesome_5 %}
 
 {% if request.GET.version_id1 %}
+    <p class="help">
+        {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") date2=version2.revision.date_created|date:_("DATETIME_FORMAT") %}
+            Compare <strong>{{ date1 }}</strong> with <strong>{{ date2 }}</strong>:
+        {% endblocktrans %}
+    </p>
+
     <!-- Show fields differences -->
     {% if content.type in  'LaTeX' or 'Textfield' %}
         {% for field_diff in compare_data %}
@@ -66,4 +72,14 @@
             {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans "next" %}
         </button>
     {% endif %}
+
+    <button onclick="location.href='{{ save_url }}" class="btn btn-primary add-item">
+        {% fa5_icon 'history' %} {% trans "Revert to this version" %}
+    </button>
+
+    <br><br>
+
+    <button onclick="location.href='{{ history_url }}" class="btn btn-primary add-item">
+        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Go back to history list" %}
+    </button>
 {% endif %}
