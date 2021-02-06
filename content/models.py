@@ -413,7 +413,7 @@ class ImageAttachment(BaseModel):
     :type ImageAttachment.images: ManyToManyField - SingleImageAttachment
     """
     TYPE = "ImageAttachment"
-    DESC = _("Single Image Attachment")
+    DESC = _("Image Attachment")
 
     images = models.ManyToManyField(SingleImageAttachment,
                                     verbose_name=_("Images"),
