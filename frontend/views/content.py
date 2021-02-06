@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.files.base import ContentFile
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -15,6 +15,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
 import reversion
+from reversion.models import Version
+from reversion_compare.forms import SelectDiffForm
 from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Content, Comment, Course, Topic, Favorite
@@ -901,6 +903,55 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         :type Meta.abstract: bool
         """
         abstract = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
+        if self.request.GET:
+            form = SelectDiffForm(self.request.GET)
+            if not form.is_valid():
+                msg = "Wrong version IDs."
+                raise Http404(msg)
+
+            # Versions for compare
+            version_id1 = form.cleaned_data["version_id1"]
+            version_id2 = form.cleaned_data["version_id2"]
+
+            if version_id1 > version_id2:
+                # Compare always the newest one (#2) with the older one (#1)
+                version_id1, version_id2 = version_id2, version_id1
+
+            # Get revision_id for the related queries
+            revision_id1 = Version.objects.filter(id=version_id1).values('revision_id')[0]['revision_id']
+            revision_id2 = Version.objects.filter(id=version_id2).values('revision_id')[0]['revision_id']
+
+            # Queries to compare
+            queryset1 = Version.objects.filter(revision_id=revision_id1)
+            queryset2 = Version.objects.filter(revision_id=revision_id2)
+
+            obj = self.get_object()
+            queryset = Version.objects.get_for_object(obj)
+            next_version = queryset.filter(pk__gt=version_id2).last()
+            prev_version = queryset.filter(pk__lt=version_id1).first()
+            compares = []
+
+            # Compare data
+            for version1, version2 in zip(queryset1, queryset2):
+                # TODO does not work since obj is not a content or image attachment.
+                # Need to fix that somehow th get the corresponding object
+                compares.append(self.compare(obj, version1, version2))
+
+            print(compares)
+
+            # Next, previous versions
+            if next_version:
+                next_url = f"?version_id1={version2.id:d}&version_id2={next_version.id:d}"
+                context.update({"next_url": next_url})
+            if prev_version:
+                prev_url = f"?version_id1={prev_version.id:d}&version_id2={version1.id:d}"
+                context.update({"prev_url": prev_url})
+
+        return context
 
 
 class ImageHistoryCompareView(BaseHistoryCompareView):
