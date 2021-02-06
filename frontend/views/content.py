@@ -37,7 +37,7 @@ def clean_attachment(attachment_object, image_formset):
     were removed from the form.
 
     :param attachment_object: The attachment object
-    :type attachment_object: ManyToManyField - SingleImageAttachment
+    :type attachment_object: ImageAttachment
     :param image_formset: The image form set
     :type image_formset: BaseModelFormSet
     """
@@ -111,7 +111,7 @@ def validate_attachment(view, attachment_form, image_formset, content):
     :param image_formset: The image form set
     :type image_formset: BaseModelFormSet
     :param content: The content
-    :type content: dict
+    :type content: Content
 
     :return: the redirection to the invalid page if the image form set or
     the attachment form is not valid
