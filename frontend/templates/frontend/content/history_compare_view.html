@@ -10,7 +10,7 @@
     </p>
 
     <!-- Show fields differences -->
-    {% if content.type in  'LaTeX' or 'Textfield' %}
+    {% if content.type == 'LaTeX'  or  content.type == 'Textfield' %}
         {% for field_diff in compare_data %}
             <h3>
                 {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
@@ -73,13 +73,13 @@
         </button>
     {% endif %}
 
-    <button onclick="location.href='{{ save_url }}" class="btn btn-primary add-item">
+    <button onclick="location.href='{{ save_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'history' %} {% trans "Revert to this version" %}
     </button>
 
     <br><br>
 
-    <button onclick="location.href='{{ history_url }}" class="btn btn-primary add-item">
+    <button onclick="location.href='{{ history_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Go back to history list" %}
     </button>
 {% endif %}
