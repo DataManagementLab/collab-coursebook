@@ -59,6 +59,14 @@
         {% endfor %}
     </h5>
 
+    <div class="row" style="margin-top: 20px;">
+        <p><img src="{{ course.image.url }}" alt="{{ course.description }}"
+        style="max-width: 50%; margin-bottom: 20px;"></p>
+        <div class="col-md-8">
+                {{ course.description | linebreaks }}
+        </div>
+    </div>
+
 
     <!-- Table of contents -->
     <div class="row" style="margin-top: 20px;">
@@ -90,10 +98,6 @@
                 {% endfor %}
             </ol>
         </div>
-        <div class="col-md-8">
-            {{ course.description | linebreaks }}
-        </div>
-        <!-- TODO Add image? -->
     </div>
 
     <!-- Display coursebook -->

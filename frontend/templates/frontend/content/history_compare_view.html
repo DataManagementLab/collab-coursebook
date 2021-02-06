@@ -11,6 +11,7 @@
 
     <!-- Show fields differences -->
         {% for field_diff in compare_data %}
+            {{ compare_data }}
             <h3>
                 {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
                 {% if field_diff.is_related and not field_diff.follow %}
@@ -53,7 +54,7 @@
         <p class="follow">
             {% blocktrans %}
                 Fields/entries marked with <sup class="follow">*</sup> are not under reversion control.
-                It may be that not all marked information are correct.
+                It may be that not all marked information is correct.
             {% endblocktrans %}
         </p>
     {% endif %}
