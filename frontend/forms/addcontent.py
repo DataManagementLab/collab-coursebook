@@ -64,3 +64,5 @@ class EditContentForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'style': 'height: 100px'}),
             'comment': forms.Textarea
         }
+
+    field_order = ['change_log', 'description', 'language''tags', 'readonly', 'public', 'description', 'comment']
