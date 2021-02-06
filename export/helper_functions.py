@@ -135,7 +135,7 @@ class LaTeX:
             :type template_type: str
 
         :return: the rendered template
-        :rtype: str
+        :rtype: bytes
         """
         if template_type is None:
             template = get_template(export_template(content.type))
