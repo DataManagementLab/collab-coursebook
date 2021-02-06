@@ -32,21 +32,42 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         abstract = True
 
     def __init__(self, back_url, history_url):
+        """Init
+
+        Constructor. Initialize the back and history url to redirect to the
+        page corresponding to the model.
+
+        :param back_url: The url to the main page
+        :type back_url: str
+        :param history_url:  The url to the main history page
+        :type history_url: str
+        """
+        super(BaseHistoryCompareView, self).__init__()
         self.back_url = back_url
         self.history_url = history_url
 
     def get_context_data(self, **kwargs):
+        """Context data
+
+        Returns the context data of the history.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data of the history
+        :rtype: Dict[str, Any]
+        """
         context = super().get_context_data()
-        context['back_url'] = self.get_content_url(self.back_url)
-        context['history_url'] = self.get_content_url(self.history_url)
+        context['back_url'] = self.get_url(self.back_url)
+        context['history_url'] = self.get_url(self.history_url)
         return context
 
-    def get_content_url(self, value):
+    def get_url(self, value):
         """Content url
 
-        Gets the url of the content page.
+        Gets the url to the page related to the given value.
 
-        :return: url of the content page
+        :return: url of the page related to the given value
         :rtype: Optional[str]
         """
         course_id = self.kwargs['course_id']

@@ -406,7 +406,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :param kwargs: The keyword arguments
         :type kwargs: dict
 
-        :return: the context data of the search
+        :return: the context data of the editing
         :rtype: Dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
