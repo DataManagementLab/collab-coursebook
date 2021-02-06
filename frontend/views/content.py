@@ -880,5 +880,3 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
             context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
                                 self.request.GET.get('f')
         return context
-
-
