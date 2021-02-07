@@ -416,9 +416,9 @@ class Content(models.Model):
         :return: the average number of ratings
         :rtype: float
         """
-        if self.get_rate() is None:  # TODO How can it returns none?
+        if self.get_rate() is -1:
             return 0
-        return self.get_rate()
+        return Rating.objects.count()
 
     def get_rate(self):
         """Ratings
