@@ -248,21 +248,23 @@ class Topic(models.Model):
         """
         contents = self.contents.all()
         if filtered_by != 'None' and filtered_by is not None:
-            if filtered_by == 'textfield':
+            if filtered_by == 'Text':
                 contents = contents.filter(textfield__isnull=False)
-            elif filtered_by == 'latex':
+            elif filtered_by == 'Latex':
                 contents = contents.filter(latex__isnull=False)
-            elif filtered_by == 'imagecontent':
+            elif filtered_by == 'Image':
                 contents = contents.filter(imagecontent__isnull=False)
-            elif filtered_by == 'ytvideocontent':
+            elif filtered_by == 'YouTube-Video':
                 contents = contents.filter(ytvideocontent__isnull=False)
-            elif filtered_by == 'pdfcontent':
+            elif filtered_by == 'PDF':
                 contents = contents.filter(pdfcontent__isnull=False)
             else:
                 contents = contents.filter()
         if sorted_by != 'None' and sorted_by is not None:
-            if sorted_by == 'rating':
+            if sorted_by == 'Rating':
                 contents = sorted(contents, key=lambda x: x.get_rate(), reverse=True)
+            elif sorted_by == 'Date':
+                contents = contents.order_by('-' + 'creation_date')
             else:
                 contents = contents.order_by('-' + sorted_by)
         return contents

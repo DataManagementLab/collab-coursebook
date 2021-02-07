@@ -54,10 +54,10 @@ class FilterAndSortForm(forms.Form):
     :type FilterAndSortForm.sort: CharField
     """
 
-    FILTER_CHOICE = [('None', '------'), ('textfield', _('Textfield')), ('imagecontent', _('Image')),
-                     ('latex', _('LaTeX-Textfield')), ('ytvideocontent', _('YouTube-Video')),
-                     ('pdfcontent', 'PDF')]  # + Content.STYLE
-    SORTING_CHOICE = [('None', '-----'), ('creation_date', _('Date')), ('rating', _('Rating'))]
+    FILTER_CHOICE = [('None', '------'), ('Text', _('Text')), ('Image', _('Image')),
+                     ('Latex', _('LaTeX-Textfield')), ('YouTube-Video', _('YouTube-Video')),
+                     ('PDF', 'PDF')]  # + Content.STYLE
+    SORTING_CHOICE = [('None', '-----'), ('Date', _('Date')), ('Rating', _('Rating'))]
     filter = forms.CharField(label=_('Filter by'),
                              widget=forms.Select(choices=FILTER_CHOICE,
                                                  attrs={'class': 'form-control',
