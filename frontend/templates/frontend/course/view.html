@@ -62,8 +62,9 @@
     </h5>
 
 
-
+    {% if course.image %}
     <img class="img-thumbnail" style="width: 30%; height: 250px; object-fit: cover;" src="{{ course.image.url }}" alt="{{ course.description }}">
+    {% endif %}
 
     <p><h2>{% trans "Description" %}</h2>
     {{ course.description | linebreaks }}
