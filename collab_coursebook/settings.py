@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'reversion',  # https://github.com/etianen/django-reversion
     'reversion_compare',  # https://github.com/jedie/django-reversion-compare
+    'ckeditor',  # https://pypi.org/project/django-ckeditor/
 ]
 
 MIDDLEWARE = [
@@ -188,8 +189,27 @@ FOOTER_INFO = {
 
 ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE = True
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        # Custom toolbar
+        'toolbar_my_toolbar': [
+            {'name': 'basic', 'items': [
+                'Source',
+                '-',
+                'Bold',
+                'Italic',
+            ]}
+        ],
+        'toolbar': 'my_toolbar',
+        # Plugins
+        'extraPlugins': ','.join(
+            [
+            ]),
+    }
+}
+
 # Add reversion models to admin interface:
-ADD_REVERSION_ADMIN=True
+ADD_REVERSION_ADMIN = True
 # optional settings:
-REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID=False
-REVERSION_COMPARE_IGNORE_NOT_REGISTERED=False
+REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID = False
+REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False

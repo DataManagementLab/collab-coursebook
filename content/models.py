@@ -11,6 +11,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from ckeditor.fields import RichTextField
+
 import reversion
 
 from pdf2image import convert_from_path
@@ -320,7 +322,8 @@ class TextField(BaseContentModel):
     TYPE = "Textfield"
     DESC = _("Textfield")
 
-    textfield = models.TextField(verbose_name=_("Text"))
+    textfield = RichTextField(verbose_name=_("Text"))
+    #   textfield = models.TextField(verbose_name=_("Text"))
     source = models.TextField(verbose_name=_("Source"))
 
     class Meta:

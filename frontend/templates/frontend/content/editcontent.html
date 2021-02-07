@@ -16,6 +16,7 @@
         {% csrf_token %}
         {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
+        {{ content_type_form.media }}
         <br>
         {% if attachment_allowed %}
             <div>
