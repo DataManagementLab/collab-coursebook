@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-07 00:05+0100\n"
+"POT-Creation-Date: 2021-02-07 21:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: .\forms\addcontent.py:49
+msgid "Change Log"
+msgstr "Änderungsprotokoll"
 
 #: .\forms\comment.py:39
 msgid "Your Comment"
@@ -56,7 +60,7 @@ msgstr "Sortieren nach"
 #: .\templates\frontend\base.html:28
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
-msgstr "Sicher die Sprache jetzt zu verändern? Die Form wird dann geleert?"
+msgstr "Sicher die Sprache jetzt zu verändern? Die Form wird dann geleert!"
 
 #: .\templates\frontend\base.html:57
 msgid "Impress"
@@ -99,10 +103,8 @@ msgstr "Aktionen"
 #: .\templates\frontend\content\detail.html:32
 #: .\templates\frontend\content\detail.html:35
 #: .\templates\frontend\course\coursebook.html:18
-#, fuzzy
-#| msgid "Courses"
 msgid "Coursebook"
-msgstr "Kurse"
+msgstr "Coursebook"
 
 #: .\templates\frontend\content\detail.html:42
 #: .\templates\frontend\profile\profile.html:12
@@ -181,8 +183,6 @@ msgid "Export"
 msgstr "Exportieren"
 
 #: .\templates\frontend\course\coursebook.html:24
-#, fuzzy
-#| msgid "Your Courses"
 msgid "Your coursebook is empty"
 msgstr "Dein Kursbuch ist leer"
 
@@ -226,20 +226,16 @@ msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
 #: .\templates\frontend\course\view.html:128
-#, fuzzy
-#| msgid "sort by:"
 msgid "sort by: "
-msgstr "sortieren nach"
+msgstr "sortieren nach: "
 
 #: .\templates\frontend\course\view.html:129
 msgid "filter by: "
-msgstr "filtern nach"
+msgstr "filtern nach: "
 
 #: .\templates\frontend\course\view.html:156
-#, fuzzy
-#| msgid "No topics yet"
 msgid "No Topics"
-msgstr "Bisher keine Themen"
+msgstr "Keine Themen"
 
 #: .\templates\frontend\course\view.html:157
 msgid "This course doesn't have topics at the moment."
@@ -278,10 +274,8 @@ msgid "for Category"
 msgstr "für Kategorie"
 
 #: .\templates\frontend\course_lists\courses_category.html:24
-#, fuzzy
-#| msgid "sort by:"
 msgid "Sort by: "
-msgstr "sortiert nach"
+msgstr "Sortieren nach: "
 
 #: .\templates\frontend\course_lists\courses_period.html:12
 msgid "Courses for"
@@ -334,10 +328,8 @@ msgid "User"
 msgstr "Benutzer*in"
 
 #: .\templates\frontend\history\history_compare_header.html:34
-#, fuzzy
-#| msgid "Comments"
 msgid "Comment"
-msgstr "Kommentare"
+msgstr "Kommentar"
 
 #: .\templates\frontend\history\history_compare_header.html:67
 #: .\templates\frontend\history\history_compare_header.html:70
@@ -352,7 +344,8 @@ msgid ""
 "            Compare <strong>%(date1)s</strong> with <strong>%(date2)s</"
 "strong>:\n"
 "        "
-msgstr "\n"
+msgstr ""
+"\n"
 "            Vergleich <strong>%(date1)s</strong> mit <strong>%(date2)s</"
 "strong>:\n"
 "        "
@@ -362,10 +355,8 @@ msgid "There are no differences."
 msgstr "Es besteht keinen Unterschied."
 
 #: .\templates\frontend\history\history_compare_view.html:42
-#, fuzzy
-#| msgid "Add comment"
 msgid "Edit comment:"
-msgstr "Kommentar hinzufügen"
+msgstr "Änderungsprotokoll: "
 
 #: .\templates\frontend\history\history_compare_view.html:45
 msgid "(no comment exists)"
@@ -382,17 +373,17 @@ msgid ""
 "not under reversion control.\n"
 "                It may be that not all marked information are correct.\n"
 "            "
-msgstr "\n"
-"                Mit <sup class=\"follow\">*</sup> gekennzeichneten Felder/Einträge sind "
-"nicht unter Kontrolle von Reversion. \n"
-"                Es kann sein, dass nicht alle gekennzeichnete Informationen korrekt sind.\n"
+msgstr ""
+"\n"
+"                Mit <sup class=\"follow\">*</sup> gekennzeichneten Felder/"
+"Einträge sind nicht unter Kontrolle von Reversion. \n"
+"                Es kann sein, dass nicht alle gekennzeichnete Informationen "
+"korrekt sind.\n"
 "            "
 
 #: .\templates\frontend\history\history_compare_view.html:64
-#, fuzzy
-#| msgid "Previous"
 msgid "previous"
-msgstr "Vorherige"
+msgstr "vorherige"
 
 #: .\templates\frontend\history\history_compare_view.html:70
 msgid "next"
@@ -487,20 +478,14 @@ msgid "You are not allowed to edit this content"
 msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
 
 #: .\views\content.py:523
-#, fuzzy
-#| msgid "Profile updated"
 msgid "Content updated"
-msgstr "Profil aktualisiert"
+msgstr "Inhalt aktualisiert"
 
 #: .\views\content.py:783
-#, fuzzy
-#| msgid "You are not allowed to edit this content"
 msgid "You are not allowed to delete this content"
-msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
+msgstr "Du bist nicht berechtigt, diesen Inhalt zu löschen"
 
 #: .\views\course.py:55
-#, fuzzy
-#| msgid "Course '{cleaned_data['title']}' successfully created"
 msgid "Course '{cleaned_data['title']}' successfully created. "
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 

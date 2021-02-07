@@ -4,7 +4,7 @@ This file contains forms associated with the course.
 """
 
 from django import forms
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext as _
 
 from base.models import Course
 

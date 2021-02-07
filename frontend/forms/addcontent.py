@@ -4,6 +4,8 @@ This file contains forms associated with the addition content.
 """
 
 from django import forms
+from django.utils.translation import ugettext as _
+
 from base.models.content import Content
 
 
@@ -43,7 +45,9 @@ class EditContentForm(forms.ModelForm):
     change_log = forms.CharField(
         required=True,
         widget=forms.Textarea(
-            attrs={'style': 'height: 35px'}))
+            attrs={'style': 'height: 35px'}),
+        label=_('Change Log')
+        )
 
     # pylint: disable=too-few-public-methods
     class Meta:
