@@ -65,20 +65,16 @@
 
     <img class="img-thumbnail" style="width: 30%; height: 250px; object-fit: cover;" src="{{ course.image.url }}" alt="{{ course.description }}">
 
+    <p><h2>{% trans "Description" %}</h2>
+    {{ course.description | linebreaks }}
 
-    <div class="row" style="margin-top: 20px;">
-        <div class="col-md-8">
-                <h2>{% trans "Description" %}</h2>
-                {{ course.description | linebreaks }}
-        </div>
-    </div>
 
 
     <!-- Table of contents -->
     <div class="row" style="margin-top: 20px;">
         <div class="col-md-4">
             <ol class="list-group" style="font-weight: bold;">
-                <!-- ToDo Show nested structure -->
+                <!-- ToDo Click on links to jump to links -->
                 {% for entry in structure %}
                     <li class="list-group-item">
                         {% with forloop.counter as outer_index %}

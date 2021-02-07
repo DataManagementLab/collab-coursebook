@@ -16,11 +16,12 @@
     <h1>{% trans "User" %}: {{ profile.user.get_username }}</h1>
 
     {% if profile.pic %}
-        <img src="{{ profile.pic.url }}" class="float-left" style="max-width: 200px;padding-right: 20px;"
+        <img src="{{ profile.pic.url }}" class="img-thumbnail" style="width: 30%; height: 250px; object-fit: cover;"
              alt="{% trans "User profile picture" %}">
     {% endif %}
 
-    <p>{{ profile.bio | linebreaks }}
+    <p><h2>{% trans "Biography" %}</h2>
+    {{ profile.bio | linebreaks }}
 
     <div style="clear: both;"></div>
 
