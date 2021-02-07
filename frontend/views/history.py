@@ -67,6 +67,30 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
 
         Gets the url to the page related to the given value.
 
+        :param value: The redirection to the page
+        :type value: str
+
+        :return: url of the page related to the given value
+        :rtype: Optional[str]
+        """
+        pass
+
+
+class BaseContentHistoryCompareView(BaseHistoryCompareView):
+    """Base content history compare view
+
+      This detail view represents the base content history compare view. It defines the default
+      configurations  and needed information for all other compare views.
+      """
+
+    def get_url(self, value):
+        """Content url
+
+        Gets the url to the page related to the given value.
+
+        :param value: The redirection to the page
+        :type value: str
+
         :return: url of the page related to the given value
         :rtype: Optional[str]
         """
@@ -76,7 +100,29 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         return reverse(f'frontend:{value}', args=(course_id, topic_id, content_id,))
 
 
-class CourseHistoryCompareView(BaseHistoryCompareView):
+class BaseCourseHistoryCompareView(BaseHistoryCompareView):
+    """Base course history compare view
+
+      This detail view represents the base course history compare view. It defines the default
+      configurations  and needed information for all other compare views.
+      """
+
+    def get_url(self, value):
+        """Content url
+
+        Gets the url to the page related to the given value.
+
+        :param value: The redirection to the page
+        :type value: str
+
+        :return: url of the page related to the given value
+        :rtype: Optional[str]
+        """
+        course_id = self.kwargs['pk']
+        return reverse(f'frontend:{value}', args=(course_id,))
+
+
+class CourseHistoryCompareView(BaseCourseHistoryCompareView):
     """Edit course view
 
     Displays history of this course to the user.
@@ -87,10 +133,10 @@ class CourseHistoryCompareView(BaseHistoryCompareView):
     model = Course
 
     def __init__(self):
-        super().__init__('content', 'course-history')
+        super().__init__('course', 'course-history')
 
 
-class ImageHistoryCompareView(BaseHistoryCompareView):
+class ImageHistoryCompareView(BaseContentHistoryCompareView):
     """Image history compare view
 
     Displays history of this content to the user.
@@ -104,7 +150,7 @@ class ImageHistoryCompareView(BaseHistoryCompareView):
         super().__init__('content', 'image-history')
 
 
-class LatexHistoryCompareView(BaseHistoryCompareView):
+class LatexHistoryCompareView(BaseContentHistoryCompareView):
     """LaTeX history compare view
 
     Displays history of this content to the user
@@ -118,7 +164,7 @@ class LatexHistoryCompareView(BaseHistoryCompareView):
         super().__init__('content', 'latex-history')
 
 
-class PdfHistoryCompareView(BaseHistoryCompareView):
+class PdfHistoryCompareView(BaseContentHistoryCompareView):
     """PDF history compare view
 
     Displays history of this content to the user.
@@ -132,7 +178,7 @@ class PdfHistoryCompareView(BaseHistoryCompareView):
         super().__init__('content', 'pdf-history')
 
 
-class TextfieldHistoryCompareView(BaseHistoryCompareView):
+class TextfieldHistoryCompareView(BaseContentHistoryCompareView):
     """Text field history compare view
 
     Displays history of this content to the user.
@@ -146,7 +192,7 @@ class TextfieldHistoryCompareView(BaseHistoryCompareView):
         super().__init__('content', 'textfield-history')
 
 
-class YTVideoHistoryCompareView(BaseHistoryCompareView):
+class YTVideoHistoryCompareView(BaseContentHistoryCompareView):
     """YouTube history compare view
 
     Displays history of this content to the user.
