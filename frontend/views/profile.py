@@ -10,6 +10,7 @@ from django.views.generic import DetailView, UpdateView
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Profile
+from frontend.forms.profile import AddProfile
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
@@ -42,8 +43,8 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     :type ProfileEditView.fields: List[str]
     """
     model = Profile
+    form_class = AddProfile
     template_name = "frontend/profile/profile_edit.html"
-    fields = ['bio', 'pic']
 
     def get_success_url(self):
         """Success URL
