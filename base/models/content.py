@@ -7,7 +7,7 @@ content of the course book and can be registered in admin.py.
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.utils.translation import gettext_lazy as _
 
 import reversion
@@ -419,6 +419,17 @@ class Content(models.Model):
         if self.get_rate() is None:
             return 0
         return self.get_rate()
+
+    """Ratings
+
+    Returns the amount number of ratings and 0 if there are no ratings present.
+
+    :return: the amount of ratings
+    :rtype: int
+    
+    """
+    def get_rate_amount(self):
+        return Rating.objects.filter(content_id=self.id).aggregate(Count('rating'))['rating__count']
 
     def get_rate(self):
         """Ratings
