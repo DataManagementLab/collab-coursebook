@@ -21,6 +21,10 @@ class HelperFunctionsTest(TestCase):
         test_utility.setup_database()
 
     def test_errors(self):
+        """Test error()
+
+        Tests that error() returns the correct errors.
+        """
         path = os.path.dirname(__file__) + '/resources/log'
         log = open(path, mode='rb').read()
         errors = LaTeX.errors(log)
@@ -30,10 +34,18 @@ class HelperFunctionsTest(TestCase):
         self.assertEqual(errors[0], '! Undefined control sequence.')
 
     def test_prerender_errors(self):
+        """Test pre_render with a template type argument
+
+        Tests that pre_render prerenders the content of the error_template correctly
+        """
         x = LaTeX.pre_render(42, False, LaTeX.error_template)
         self.assertIn('42 errors were found during compilation.', x.decode(LaTeX.encoding))
 
     def test_prerender_Latex_export(self):
+        """Test pre_render without a template and with the export_flag set
+
+        Tests that pre_render renders a Latex Content correctly for export.
+        """
         content = Content.objects.first()
         latex_content = Latex.objects.first()
         x = LaTeX.pre_render(content, True)
@@ -41,6 +53,10 @@ class HelperFunctionsTest(TestCase):
         self.assertIn(content.description, x.decode(LaTeX.encoding))
 
     def test_prerender_Latex_no_export(self):
+        """Test pre_render without a template and with the export_flag not set
+
+        Tests that pre_render renders a Latex Content correctly without the data used for export.
+        """
         content = Content.objects.first()
         latex_content = Latex.objects.first()
         x = LaTeX.pre_render(content, False)

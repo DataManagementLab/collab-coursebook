@@ -33,17 +33,28 @@ class ValidatorTest(TestCase):
         super().tearDownClass()
 
     def test_validate_pdf_valid(self):
+        """Test validate_pdf() with a valid pdf
+
+        Tests that validate_pdf raises no error for a valid pdf and returns None
+        """
         latex = model.Latex.objects.first()
         self.assertIsNone(validate_pdf(latex.pdf))
 
     def test_validate_pdf_invalid_filetype(self):
+        """Test validate_pdf() with an invalid file type
+
+        Tests that validate_pdf raises the correct error for an image
+        """
         not_a_pdf = test_utility.generate_image_file(1)
         with self.assertRaises(ValidationError) as cm:
             validate_pdf(not_a_pdf)
-        exception = cm.exception
-        self.assertEqual('Unsupported file type.', exception.message)
+        self.assertEqual('Unsupported file type.', cm.exception.message)
 
     def test_validate_pdf_invalid_file_extension(self):
+        """Test validate_pdf() with an invalid file extension
+
+        Tests that validate_pdf raises the correct error for a pdf with a .jpg extension
+        """
         latex = model.Latex.objects.first()
         pre, ext = os.path.splitext(latex.pdf.path)
         new_path = pre + '.jpg'
@@ -51,5 +62,4 @@ class ValidatorTest(TestCase):
         latex.pdf.name = new_path
         with self.assertRaises(ValidationError) as cm:
             validate_pdf(latex.pdf)
-        exception = cm.exception
-        self.assertEqual('Unacceptable file extension.', exception.message)
+        self.assertEqual('Unacceptable file extension.', cm.exception.message)
