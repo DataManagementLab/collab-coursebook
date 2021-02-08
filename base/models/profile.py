@@ -73,6 +73,6 @@ def save_user_profile(sender, instance, **kwargs):
     :param kwargs: The keyword arguments
     :type kwargs: ANY
     """
-    profile = Profile.objects.get_or_create(user=instance)
+    profile = Profile.objects.get(user=instance)
     profile.save()
 
