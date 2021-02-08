@@ -411,9 +411,9 @@ class Content(models.Model):
     def get_rate_num(self):
         """Ratings
 
-        Returns the average number of ratings and 0 if there are no ratings presents.
+        Returns the number of ratings and 0 if there are no ratings present.
 
-        :return: the average number of ratings
+        :return: the number of ratings
         :rtype: float
         """
         if self.get_rate() is -1:
@@ -423,7 +423,7 @@ class Content(models.Model):
     def get_rate(self):
         """Ratings
 
-        Returns the average number of ratings and -1 if there are no ratings presents.
+        Returns the average number of ratings and -1 if there are no ratings present.
 
         :return: the average number of ratings
         :rtype: float
