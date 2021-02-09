@@ -43,7 +43,7 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 
 **Automatic Setup**
 
-1. execute the setup bash script ``Utils/setup.sh``
+1. execute the setup bash script ``utils/script/setup.sh``
 
 
 **Manual Setup**
@@ -105,14 +105,14 @@ or create a new config (.conf) file (similar to ``apache-collab-coursebook.conf`
 1. Copy or symlink the uwsgi config in ``uwsgi-collab-coursebook.ini`` to ``/etc/uwsgi/apps-available/`` and then symlink it to ``/etc/uwsgi/apps-enabled/`` using e.g., ``ln -s /srv/collab-coursebook/uwsgi-collab-coursebook.ini /etc/uwsgi/apps-available/collab-coursebook.ini`` and ``ln -s /etc/uwsgi/apps-available/collab-coursebook.ini /etc/uwsgi/apps-enabled/collab-coursebook.ini``
 1. test your uwsgi configuration file with``uwsgi --ini collab-coursebook.ini``
 1. restart uwsgi ``sudo systemctl restart uwsgi``
-1. execute the update script ``./Utils/update.sh --prod``
+1. execute the update script ``./utils/script/update.sh --prod``
 
 
 ### Updates
 
-To update the setup to the current version on the main branch of the repository use the update script ``utils/update.sh`` or ``utils/update.sh --prod`` in production.
+To update the setup to the current version on the main branch of the repository use the update script ``utils/script/update.sh`` or ``utils/script/update.sh --prod`` in production.
 
-Afterwards, you may check your setup by executing ``utils/check.sh`` or ``utils/check.sh --prod`` in production.
+Afterwards, you may check your setup by executing ``utils/script/check.sh`` or ``utils/script/check.sh --prod`` in production.
 
 
 ## Structure
