@@ -25,8 +25,8 @@ from content.models import SingleImageAttachment, ImageAttachment
 
 from export.views import generate_pdf_response
 
-from frontend.forms import CommentForm, TranslateForm
-from frontend.forms.addcontent import AddContentForm, EditContentForm
+from frontend.forms.comment import CommentForm
+from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
 
 
 def clean_attachment(attachment_object, image_formset):
