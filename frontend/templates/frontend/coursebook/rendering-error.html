@@ -4,12 +4,12 @@
 {% load bootstrap4 %}
 {% load i18n %}
 
-{% block title %}Error - Collab Coursebook{% endblock %}
+{% block title %}{% trans "Error" %} - Collab Coursebook{% endblock %}
 
 {% block content %}
-    <h1>Error</h1>
-    <p>An error occurred while generating your coursebook. Please see the log file below.</p>
+    <h1>{% trans "Error" %}</h1>
+    <p>{% trans "An error occurred while generating your coursebook. Please see the log file below."%}</p>
     <p>{{ content|linebreaks }}</p>
-    <h3>Latex Template</h3>
+    <h3>{% trans "Latex Template"%}</h3>
     <p>{{ tex_template|linebreaksbr }}</p>
 {% endblock %}
