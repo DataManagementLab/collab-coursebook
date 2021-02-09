@@ -55,7 +55,7 @@ class EditContentForm(forms.ModelForm):
         label=_('Change Log')
     )
     field_order = ['change_log', 'description', 'language', 'tags',
-                   'readonly', 'public', 'description', 'comment']
+                   'readonly', 'public']
 
     # pylint: disable=too-few-public-methods
     class Meta:
