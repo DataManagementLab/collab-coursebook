@@ -75,4 +75,3 @@ def save_user_profile(sender, instance, **kwargs):
     """
     profile = Profile.objects.get(user=instance)
     profile.save()
-

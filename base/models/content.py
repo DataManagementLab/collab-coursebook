@@ -409,7 +409,7 @@ class Content(models.Model):
         return f"{self.type} for {self.topic} by {self.author}"
 
     def get_rate_num(self):
-        """Ratings
+        """Average rating
 
         Returns the average number of ratings and -1 if there are no ratings present.
 
@@ -420,19 +420,19 @@ class Content(models.Model):
             return 0
         return self.get_rate()
 
-    """Ratings
-
-    Returns the amount number of ratings and 0 if there are no ratings present.
-
-    :return: the amount of ratings
-    :rtype: int
-    
-    """
     def get_rate_amount(self):
+        """Total number of ratings
+
+        Returns the amount number of ratings and 0 if there are no ratings present.
+
+        :return: the amount of ratings
+        :rtype: int
+
+        """
         return Rating.objects.filter(content_id=self.id).aggregate(Count('rating'))['rating__count']
 
     def get_rate(self):
-        """Ratings
+        """Average rating
 
         Returns the average number of ratings and -1 if there are no ratings present.
 
@@ -560,7 +560,8 @@ class CourseStructureEntry(models.Model):
         return f"{self.course} -> {self.index}. {self.topic}"
 
 
-# Register models for reversion if it is not already done in admin, else we can specify configuration
+# Register models for reversion if it is not already done in admin,
+# else we can specify configuration
 reversion.register(Course,
                    fields=['title', 'description', 'image', 'topics',
                            'owners', 'restrict_changes', 'category', 'period'])
