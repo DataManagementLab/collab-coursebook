@@ -18,7 +18,7 @@ Collab Coursebook has two types of requirements: System requirements are depende
 
 #### System Requirements
 
-* Python 3.6 incl. development tools
+* Python 3.7 incl. development tools
 * Virtualenv
 * poppler
 * for production using uwsgi:
@@ -51,7 +51,8 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 1. setup a virtual environment using the proper python version ``virtualenv venv -p python3``
 1. activate virtualenv ``source venv/bin/activate``
 1. install python requirements ``pip install -r requirements.txt``
-1. setup necessary database tables etc. ``python manage.py migrate``
+1. setup necessary database tables etc. ``python manage.py migrate``1.
+1. setup initial revision for all registered models for versioning``python manage.py createinitialrevisions``   
 1. prepare static files (can be omitted for dev setups) ``python manage.py collectstatic``
 1. compile translations ``python manage.py compilemessages``
 1. create a priviledged user, credentials are entered interactively on CLI ``python manage.py createsuperuser``
