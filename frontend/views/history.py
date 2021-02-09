@@ -1,11 +1,15 @@
-from django.contrib.admin.utils import quote
-from django.http import Http404
+"""Purpose of this file
+
+This file describes the frontend history compare views to the models
+which are being tracked by the reversion (versioning) and allows us
+to compare the differences between different versions of the same model.
+"""
+
 from django.urls import reverse
-from reversion.models import Version
-from reversion_compare.forms import SelectDiffForm
 from reversion_compare.views import HistoryCompareDetailView
 
-from base.models import Course, Content
+from base.models import Course
+
 from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex
 
 
@@ -46,6 +50,7 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         self.back_url = back_url
         self.history_url = history_url
 
+    # pylint: disable=assignment-from-no-return
     def get_context_data(self, **kwargs):
         """Context data
 
@@ -73,7 +78,6 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         :return: url of the page related to the given value
         :rtype: Optional[str]
         """
-        pass
 
 
 class BaseContentHistoryCompareView(BaseHistoryCompareView):

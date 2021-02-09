@@ -1,3 +1,8 @@
+"""Purpose of this file
+
+This file describes the frontend views related to profiles.
+"""
+
 from django import forms
 
 from base.models import Profile

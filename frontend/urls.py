@@ -6,10 +6,10 @@ This file defines the URL mapping.
 from django.urls import path, re_path, include
 
 from content.models import CONTENT_TYPES
+
 from export.views import generate_coursebook_response
+
 from frontend import views
-from frontend.views.coursebook import add_to_coursebook
-from frontend.views.search import SearchView
 
 app_name = "frontend"
 
@@ -59,7 +59,7 @@ urlpatterns = [
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 
-            re_path(r'add/(?P<type>' + '|'.join([key for key in CONTENT_TYPES.keys()]) + ')/$',
+            re_path(r'add/(?P<type>' + '|'.join(list(CONTENT_TYPES.keys())) + ')/$',
                     views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/', include([
                 path('attachment/<int:imageattachment_id>/<int:pk>',

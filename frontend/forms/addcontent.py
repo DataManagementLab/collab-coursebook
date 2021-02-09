@@ -47,7 +47,7 @@ class EditContentForm(forms.ModelForm):
         widget=forms.Textarea(
             attrs={'style': 'height: 35px'}),
         label=_('Change Log')
-        )
+    )
 
     # pylint: disable=too-few-public-methods
     class Meta:
@@ -69,4 +69,5 @@ class EditContentForm(forms.ModelForm):
             'comment': forms.Textarea
         }
 
-    field_order = ['change_log', 'description', 'language''tags', 'readonly', 'public', 'description', 'comment']
+    field_order = ['change_log', 'description', 'language', 'tags',
+                   'readonly', 'public', 'description', 'comment']

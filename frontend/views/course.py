@@ -12,7 +12,6 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin, CreateView, DeleteView, UpdateView
 from django.utils.translation import gettext_lazy as _
-from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Course, CourseStructureEntry
 from base.utils import check_owner_permission

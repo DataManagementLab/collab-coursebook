@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.files.base import ContentFile
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -15,17 +15,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
 import reversion
-from reversion.models import Version
-from reversion_compare.forms import SelectDiffForm
-from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
 from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
-from content.models import ImageContent, Latex, PDFContent, YTVideoContent
-from content.models import SingleImageAttachment, ImageAttachment, TextField
+from content.models import SingleImageAttachment, ImageAttachment
 
 from export.views import generate_pdf_response
 

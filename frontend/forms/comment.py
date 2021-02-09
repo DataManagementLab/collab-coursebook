@@ -33,7 +33,6 @@ class CommentForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # TODO
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['text'].label = False
         self.fields['text'].widget.attrs['placeholder'] = _("Your Comment")
