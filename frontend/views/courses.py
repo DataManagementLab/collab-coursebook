@@ -67,7 +67,7 @@ class CourseListView(ListView):
         :return: the context
         :rtype: dict
         """
-        context = super(CourseListView, self).get_context_data()
+        context = super().get_context_data()
         if "sort" in self.kwargs:
             sort = self.kwargs['sort']
             if sort == 'title-a':

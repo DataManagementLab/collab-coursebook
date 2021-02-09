@@ -46,7 +46,7 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         :param history_url:  The url to the main history page
         :type history_url: str
         """
-        super(BaseHistoryCompareView, self).__init__()
+        super().__init__()
         self.back_url = back_url
         self.history_url = history_url
 

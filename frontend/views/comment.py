@@ -168,7 +168,7 @@ class EditComment(LoginRequiredMixin, UpdateView):
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse('frontend:content', args=(course_id, topic_id,
                                                                           comment.content.id,)))
-        return super(EditComment, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """Context data

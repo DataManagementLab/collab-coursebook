@@ -32,7 +32,7 @@ class ModifiedClearableFileInput(ClearableFileInput):
        :return: the context of the widget
        :rtype: dict
         """
-        ctx = super(ModifiedClearableFileInput, self).get_context(name, value, attrs)
+        ctx = super().get_context(name, value, attrs)
         # If a value is currently entered in the field, entering another value is not required
         if value is not None:
             ctx['widget']['attrs']['required'] = False
