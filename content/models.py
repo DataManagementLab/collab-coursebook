@@ -470,7 +470,8 @@ IMAGE_ATTACHMENT_TYPES = {
     Latex.TYPE
 }
 
-# Register models for reversion if it is not already done in admin, else we can specify configuration
+# Register models for reversion if it is not already done in admin,
+# else we can specify configuration
 reversion.register(ImageContent,
                    fields=None,
                    follow=['content'])

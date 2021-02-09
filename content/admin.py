@@ -15,6 +15,7 @@ from content.models import PDFContent, SingleImageAttachment, TextField
 from content.models import YTVideoContent
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(ImageAttachment)
 class ImageAttachmentAdmin(CompareVersionAdmin):
     """Image attachment admin
