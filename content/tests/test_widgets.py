@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from content.widgets import ModifiedClearableFileInput
 
+# Attributes
 attrs = {'required': 'true',
          'accept': 'image/*',
          'class': 'form-control-file',
@@ -14,19 +15,24 @@ attrs = {'required': 'true',
 
 
 class WidgetsTest(TestCase):
-    def test_ModifiedClearableFileInput_get_context_required(self):
+    """Models test case
+
+    Defines the test cases for the widgets.
+    """
+
+    def test_modified_clearable_file_get_context_required(self):
         """Test get_context()
 
-        Tests that the field is required if the given value is None
+        Tests that the field is required if the given value is None.
         """
         widget = ModifiedClearableFileInput()
         ctx = widget.get_context('form-0-image', None, attrs)
         self.assertTrue(ctx['widget']['attrs']['required'])
 
-    def test_ModifiedClearableFileInput_get_context_not_required(self):
+    def test_modified_clearable_file_input_get_context_not_required(self):
         """Test get_context()
 
-        Tests that the field is not required if the given value is not None
+        Tests that the field is not required if the given value is not None.
         """
         widget = ModifiedClearableFileInput()
         ctx = widget.get_context('form-0-image', "Test", attrs)

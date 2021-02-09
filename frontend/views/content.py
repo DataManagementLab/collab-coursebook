@@ -134,8 +134,9 @@ def validate_attachment(view, attachment_form, image_formset, content):
 
         # Stores the attached images in DB
         content.attachment.images.set(images)
-    else:
-        return view.form_invalid(attachment_form)
+        return None
+
+    return view.form_invalid(attachment_form)
 
 
 # pylint: disable=too-many-ancestors
@@ -465,7 +466,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
                 # If the content type is Latex, compile the Latex Code and store in DB
                 if content_type == 'Latex':
-                    validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
+                    validate_latex(get_user(request),
+                                   content,
+                                   content_type_data,
+                                   kwargs['topic_id'])
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:

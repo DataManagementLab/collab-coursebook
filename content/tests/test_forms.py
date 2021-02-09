@@ -9,6 +9,11 @@ import content.models as model
 
 
 class FormsTest(TestCase):
+    """Form test case
+
+    Defines the test cases for the forms.
+    """
+
     def test_get_placeholder_valid(self):
         """Test get_placeholder with valid arguments
 

@@ -2,21 +2,33 @@
 
 This file contains the test cases for /frontend/views/content.py
 """
-from django.test import TestCase
 
+from django.test import TestCase
+# pylint: disable=imported-auth-user
 from django.contrib.auth.models import User
+
 from base.models.content import Topic, Content
+
 from content import models as model
 from content import forms as form
+
 from content.forms import SingleImageFormSet
+
 from frontend.views.content import validate_latex, clean_attachment
-from utility import test_utility
+
+from utils import test_utility
 
 
 class ContentViewTest(TestCase):
+    """Content view test case
+
+    Defines the test cases for the content view.
+    """
+
     def setUp(self):
-        """
-        Sets up the test database
+        """Setup
+
+        Sets up the test database.
         """
         test_utility.setup_database()
 
@@ -37,7 +49,7 @@ class ContentViewTest(TestCase):
         self.assertTrue((bool(latex.pdf)))
 
     def test_clean_attachments(self):
-        """Test validate_latex
+        """Test clean_attachments
 
         Tests that clean_attachments removes the attachments from the database.
         """

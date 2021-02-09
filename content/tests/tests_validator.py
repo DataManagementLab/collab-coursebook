@@ -3,39 +3,29 @@
 This file contains the test cases for this /content/models.py
 """
 import os
-import shutil
 
 from django.core.exceptions import ValidationError
-from django.test import TestCase, override_settings
+from django.test import override_settings
 
 import content.models as model
+from content.tests.base_test_case import BaseTestCase
 from content.validator import validate_pdf
 
-from utility.test_utility import MEDIA_ROOT
-from utility import test_utility
+from utils import test_utility
+from utils.test_utility import MEDIA_ROOT
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ValidatorTest(TestCase):
+class ValidatorTest(BaseTestCase):
+    """Validator test case
 
-    def setUp(self):
-        """
-        Sets up the test database
-        """
-        test_utility.setup_database()
-
-    @classmethod
-    def tearDownClass(cls):
-        """
-        Deletes the generated files after running the utility.
-        """
-        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
-        super().tearDownClass()
+    Defines the test cases for the validators.
+    """
 
     def test_validate_pdf_valid(self):
         """Test validate_pdf() with a valid pdf
 
-        Tests that validate_pdf raises no error for a valid pdf and returns None
+        Tests that validate_pdf raises no error for a valid pdf and returns None.
         """
         latex = model.Latex.objects.first()
         self.assertIsNone(validate_pdf(latex.pdf))
@@ -43,23 +33,24 @@ class ValidatorTest(TestCase):
     def test_validate_pdf_invalid_filetype(self):
         """Test validate_pdf() with an invalid file type
 
-        Tests that validate_pdf raises the correct error for an image
+        Tests that validate_pdf raises the correct error for an image.
         """
         not_a_pdf = test_utility.generate_image_file(1)
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             validate_pdf(not_a_pdf)
-        self.assertEqual('Unsupported file type.', cm.exception.message)
+        self.assertEqual('Unsupported file type.', context_manager.exception.message)
 
     def test_validate_pdf_invalid_file_extension(self):
         """Test validate_pdf() with an invalid file extension
 
-        Tests that validate_pdf raises the correct error for a pdf with a .jpg extension
+        Tests that validate_pdf raises the correct error for a pdf with a .jpg extension.
         """
         latex = model.Latex.objects.first()
-        pre, ext = os.path.splitext(latex.pdf.path)
+        split = os.path.splitext(latex.pdf.path)
+        pre = split[0]
         new_path = pre + '.jpg'
         os.rename(latex.pdf.path, new_path)
         latex.pdf.name = new_path
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             validate_pdf(latex.pdf)
-        self.assertEqual('Unacceptable file extension.', cm.exception.message)
+        self.assertEqual('Unacceptable file extension.', context_manager.exception.message)

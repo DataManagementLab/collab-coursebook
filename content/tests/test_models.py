@@ -3,38 +3,29 @@
 This file contains the test cases for /content/models.py
 """
 import os
-import shutil
 
-from django.test import TestCase, override_settings
+from django.test import override_settings
 
-import content.models as model
 from base.models.content import Content
 
-from utility.test_utility import MEDIA_ROOT
-from utility import test_utility
+import content.models as model
+from content.tests.base_test_case import BaseTestCase
+
+from utils.test_utility import MEDIA_ROOT
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ModelsTest(TestCase):
-    def setUp(self):
-        """
-        Sets up the test database
-        """
-        test_utility.setup_database()
+class ModelsTest(BaseTestCase):
+    """Models test case
 
-    @classmethod
-    def tearDownClass(cls):
-        """
-        Deletes the generated files after running the tests.
-        """
-        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
-        super().tearDownClass()
+    Defines the test cases for the models.
+    """
 
     def test_generate_preview(self):
         """Test BasePDFModel.generate_preview()
 
         Tests that a preview image gets generated in the preview folder
-        after calling generate_preview on a Latex Content
+        after calling generate_preview on a Latex Content.
         """
         latex = model.Latex.objects.first()
         preview_folder = 'uploads/previews/'

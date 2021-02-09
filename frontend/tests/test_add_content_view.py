@@ -1,36 +1,52 @@
+"""Purpose of this file
+
+This file contains the test cases for /frontend/forms/content.py - AddContentView.
+"""
+
 import shutil
 
 from django.test import TestCase, override_settings
+# pylint: disable=imported-auth-user
 from django.contrib.auth.models import User
 from django.urls import reverse
 
 from base.models import Content
+
 from content.models import TextField, Latex, SingleImageAttachment
-from utility import test_utility
-from utility.test_utility import MEDIA_ROOT
+
+from utils import test_utility
+from utils.test_utility import MEDIA_ROOT
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class AddContentTestCase(TestCase):
+class AddContentViewTestCase(TestCase):
+    """Add content test case
+
+    Defines the test cases for the add content view.
+    """
+
     def setUp(self):
-        """
-        Sets up the test database
+        """Setup
+
+        Sets up the test database.
         """
         test_utility.setup_database()
         self.client.force_login(User.objects.get(pk=1))
 
     @classmethod
     def tearDownClass(cls):
-        """
+        """Teat down class
+
         Deletes the generated files after running the utility.
         """
         shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
 
     def post_redirects_to_content(self, path, data):
-        """
-        Tests that the Post request with the given path and data redirects to the content page of the newly
-        created Content
+        """Post redirection to content
+
+        Tests that the Post request with the given path and data redirects to
+        the content page of the newly created Content.
 
         :param path: The path used for the POST request
         :type path: str
@@ -44,11 +60,12 @@ class AddContentTestCase(TestCase):
         })
         self.assertEqual(response.url, response_path)
 
-    def test_add_TextField(self):
+    def test_add_textfield(self):
         """Test add TextField
 
-        Tests that a Textfield gets created and saved properly after sending a POST request to content-add
-        and that the POST request redirects to the content page.
+        Tests that a Textfield gets created and saved properly after sending
+        a POST request to content-add and that the POST request redirects to
+        the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
@@ -65,11 +82,12 @@ class AddContentTestCase(TestCase):
         content = TextField.objects.first()
         self.assertEqual(content.textfield, "Lorem ipsum")
 
-    def test_add_Latex(self):
+    def test_add_latex(self):
         """Test add Latex
 
-        Tests that a Latex Content gets created and saved properly after sending a POST request to content-add
-        and that the POST request redirects to the content page.
+        Tests that a Latex Content gets created and saved properly after sending
+        a POST request to content-add and that the POST request redirects to the
+        content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Latex'
@@ -90,8 +108,9 @@ class AddContentTestCase(TestCase):
     def test_add_attachments(self):
         """Test add Latex
 
-        Tests that Image Attachments get created and saved properly after sending a POST request to content-add
-        and that the POST request redirects to the content page.
+        Tests that Image Attachments get created and saved properly after sending
+        a POST request to content-add and that the POST request redirects to
+        the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
