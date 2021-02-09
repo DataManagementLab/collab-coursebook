@@ -40,6 +40,12 @@ class EditContentForm(forms.ModelForm):
     """Add content form
 
     This model represents the add form for new content to a topic.
+
+    :attr EditContentForm.change_log: The change log field which contains
+    a detailed message what was edited
+    :type EditContentForm.change_log: CharField
+    :attr EditContentForm.field_order: The order of the fields
+    :type EditContentForm.field_order: List(str)
     """
 
     change_log = forms.CharField(
@@ -48,6 +54,8 @@ class EditContentForm(forms.ModelForm):
             attrs={'style': 'height: 35px'}),
         label=_('Change Log')
     )
+    field_order = ['change_log', 'description', 'language', 'tags',
+                   'readonly', 'public', 'description', 'comment']
 
     # pylint: disable=too-few-public-methods
     class Meta:
@@ -68,9 +76,6 @@ class EditContentForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'style': 'height: 100px'}),
             'comment': forms.Textarea
         }
-
-    field_order = ['change_log', 'description', 'language', 'tags',
-                   'readonly', 'public', 'description', 'comment']
 
 
 class TranslateForm(forms.Form):
