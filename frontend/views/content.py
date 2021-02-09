@@ -14,8 +14,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
-import reversion
-
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 
@@ -27,6 +25,7 @@ from export.views import generate_pdf_response
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
+from frontend.views.history import update_comment
 
 
 def clean_attachment(attachment_object, image_formset):
@@ -76,23 +75,6 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
-
-
-def update_comment(request):
-    """Update reversion comment
-
-    Gets the comment from the form and updates the comment for the reversion.
-
-    :param request: The given request
-    :type request: HttpRequest
-    """
-    # Reversion comment
-    change_log = request.POST.get('change_log')
-
-    # Changes log is not empty set it as comment in reversion,
-    # else the default comment message will be used
-    if change_log:
-        reversion.set_comment(change_log)
 
 
 def validate_latex(user, content, latex_content, topic_id):

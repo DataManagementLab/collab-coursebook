@@ -4,13 +4,32 @@ This file describes the frontend history compare views to the models
 which are being tracked by the reversion (versioning) and allows us
 to compare the differences between different versions of the same model.
 """
-
 from django.urls import reverse
+
+import reversion
+
 from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Course
 
 from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex
+
+
+def update_comment(request):
+    """Update reversion comment
+
+    Gets the comment from the form and updates the comment for the reversion.
+
+    :param request: The given request
+    :type request: HttpRequest
+    """
+    # Reversion comment
+    change_log = request.POST.get('change_log')
+
+    # Changes log is not empty set it as comment in reversion,
+    # else the default comment message will be used
+    if change_log:
+        reversion.set_comment(change_log)
 
 
 class BaseHistoryCompareView(HistoryCompareDetailView):
