@@ -11,3 +11,4 @@ from .course import CourseView, AddCourseView, CourseDeleteView
 from .content import ContentView
 from .comment import EditComment, DeleteComment
 from .content import rate_content
+from .history import CourseHistoryCompareView, LatexHistoryCompareView, PdfHistoryCompareView, ImageHistoryCompareView, YTVideoHistoryCompareView, ImageHistoryCompareView

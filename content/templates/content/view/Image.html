@@ -1,7 +1,7 @@
 {% load i18n %}
 
-<img src="{{ content.imagecontent.image.url }}" alt="{{ content.description }}"
-     style="width: 100%;margin-bottom: 20px;">
+<p><img src="{{ content.imagecontent.image.url }}" alt="{{ content.description }}"
+     style="max-width: 100%; margin-bottom: 20px;"></p>
 
 <b>{% trans "Source" %}:</b>
 <p>{{ content.imagecontent.source }}</p>

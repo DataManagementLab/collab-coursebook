@@ -4,6 +4,7 @@ This file contains forms associated with the course.
 """
 
 from django import forms
+from django.utils.translation import ugettext as _
 
 from base.models import Course
 
@@ -53,14 +54,16 @@ class FilterAndSortForm(forms.Form):
     :type FilterAndSortForm.sort: CharField
     """
 
-    FILTER_CHOICE = [('None', '------')]  # + Content.STYLE
-    SORTING_CHOICE = [('None', '-----'), ('creation_date', 'Date'), ('rating', 'Rating')]
-    filter = forms.CharField(label='Filter by',
+    FILTER_CHOICE = [('None', '------'), ('Text', _('Text')), ('Image', _('Image')),
+                     ('Latex', _('LaTeX-Textfield')), ('YouTube-Video', _('YouTube-Video')),
+                     ('PDF', 'PDF')]  # + Content.STYLE
+    SORTING_CHOICE = [('None', '-----'), ('Date', _('Date')), ('Rating', _('Rating'))]
+    filter = forms.CharField(label=_('Filter by'),
                              widget=forms.Select(choices=FILTER_CHOICE,
                                                  attrs={'class': 'form-control',
                                                         'style': 'width:auto',
                                                         'onchange': 'this.form.submit();'}))
-    sort = forms.CharField(label='Sort by',
+    sort = forms.CharField(label=_('Sort by'),
                            widget=forms.Select(choices=SORTING_CHOICE,
                                                attrs={'class': 'form-control',
                                                       'style': 'width:auto',

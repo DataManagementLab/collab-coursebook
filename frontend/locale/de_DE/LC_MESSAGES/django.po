@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-05 14:24+0100\n"
+"POT-Creation-Date: 2021-02-07 21:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,50 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: .\forms\addcontent.py:49
+msgid "Change Log"
+msgstr "Änderungsprotokoll"
+
 #: .\forms\comment.py:39
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
+#: .\forms\course.py:57
+msgid "Textfield"
+msgstr "Textfeld"
+
+#: .\forms\course.py:57
+msgid "Image"
+msgstr "Bild"
+
+#: .\forms\course.py:58
+msgid "LaTeX-Textfield"
+msgstr "LaTeX-Textfeld"
+
+#: .\forms\course.py:58
+msgid "YouTube-Video"
+msgstr "YouTube-Video"
+
+#: .\forms\course.py:60
+msgid "Date"
+msgstr "Datum"
+
+#: .\forms\course.py:60 .\templates\frontend\content\detail.html:161
+msgid "Rating"
+msgstr "Bewertung"
+
+#: .\forms\course.py:61
+msgid "Filter by"
+msgstr "Filtern nach"
+
+#: .\forms\course.py:66
+msgid "Sort by"
+msgstr "Sortieren nach"
+
 #: .\templates\frontend\base.html:28
-#, fuzzy
-#| msgid "Are you sure you want to delete the following comment?"
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
-msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
+msgstr "Sicher die Sprache jetzt zu verändern? Die Form wird dann geleert!"
 
 #: .\templates\frontend\base.html:57
 msgid "Impress"
@@ -52,6 +86,17 @@ msgstr "Bestätigen"
 
 #: .\templates\frontend\comment\delete_confirm.html:23
 #: .\templates\frontend\comment\edit.html:18
+#: .\templates\frontend\content\addcontent.html:22
+#: .\templates\frontend\content\editcontent.html:22
+msgid "Image Attachments"
+msgstr "Bildanhänge"
+
+#: .\templates\frontend\content\addcontent.html:44
+#: .\templates\frontend\course\create.html:30
+#: .\templates\frontend\course\duplicate.html:30
+msgid "Create"
+msgstr "Erzeugen"
+
 #: .\templates\frontend\content\addcontent.html:46
 #: .\templates\frontend\content\detail.html:136
 #: .\templates\frontend\content\editcontent.html:46
@@ -94,6 +139,12 @@ msgstr "Erzeugen"
 msgid "Actions"
 msgstr "Aktionen"
 
+#: .\templates\frontend\content\detail.html:32
+#: .\templates\frontend\content\detail.html:35
+#: .\templates\frontend\course\coursebook.html:18
+msgid "Coursebook"
+msgstr "Coursebook"
+
 #: .\templates\frontend\content\detail.html:42
 #: .\templates\frontend\profile\profile.html:12
 msgid "Edit"
@@ -104,6 +155,7 @@ msgstr "Bearbeiten"
 #: .\templates\frontend\content\detail.html:64
 #: .\templates\frontend\content\detail.html:70
 #: .\templates\frontend\content\detail.html:77
+#: .\templates\frontend\course\view.html:44
 msgid "View History"
 msgstr "Versionsgeschichte"
 
@@ -149,6 +201,10 @@ msgstr "Bewertung"
 msgid "No rating yet"
 msgstr "Bisher keine Bewertungen"
 
+#: .\templates\frontend\content\detail.html:139
+msgid "Confirm"
+msgstr "Bestätigen"
+
 #: .\templates\frontend\content\detail.html:176
 msgid "Comments"
 msgstr "Kommentare"
@@ -175,6 +231,10 @@ msgstr "Zurück"
 #: .\templates\frontend\content\history.html:20
 msgid "History"
 msgstr "Geschicht"
+
+#: .\templates\frontend\content\editcontent.html:44
+msgid "Save"
+msgstr "Speichern"
 
 #: .\templates\frontend\content\readingmode.html:10
 msgid "Close"
@@ -238,14 +298,12 @@ msgstr "Kurs bearbeiten"
 
 #: .\templates\frontend\course\edit.html:30
 msgid "Change"
-msgstr "Verändern"
 
 #: .\templates\frontend\course\view.html:32
 msgid "Unsave"
 msgstr "Zurückkehren"
-
+msgstr "Ändern"
 #: .\templates\frontend\course\view.html:42
-msgid "Edit Course"
 msgstr "Kurs bearbeiten"
 
 #: .\templates\frontend\course\view.html:44
@@ -268,6 +326,31 @@ msgid "No Topics"
 msgstr "Keine Themen"
 
 #: .\templates\frontend\course\view.html:146
+#: .\templates\frontend\course\view.html:46
+msgid "Delete Course"
+msgstr "Kurs löschen"
+
+#: .\templates\frontend\course\view.html:71
+msgid "Description"
+msgstr "Beschreibung"
+
+#: .\templates\frontend\course\view.html:102
+msgid "No topics yet"
+msgstr "Bisher keine Themen"
+
+#: .\templates\frontend\course\view.html:128
+msgid "sort by: "
+msgstr "sortieren nach: "
+
+#: .\templates\frontend\course\view.html:129
+msgid "filter by: "
+msgstr "filtern nach: "
+
+#: .\templates\frontend\course\view.html:156
+msgid "No Topics"
+msgstr "Keine Themen"
+
+#: .\templates\frontend\course\view.html:157
 msgid "This course doesn't have topics at the moment."
 msgstr "Der Kurs hat momentan keine Themen."
 
@@ -302,6 +385,10 @@ msgstr "Alle Kurse"
 #: .\templates\frontend\course_lists\courses_category.html:19
 msgid "for Category"
 msgstr "für Kategorie"
+
+#: .\templates\frontend\course_lists\courses_category.html:24
+msgid "Sort by: "
+msgstr "Sortieren nach: "
 
 #: .\templates\frontend\course_lists\courses_period.html:12
 msgid "Courses for"
@@ -342,6 +429,98 @@ msgstr "Alle Kurse für den Zeitraum"
 #: .\templates\frontend\dashboard.html:40
 msgid "All Courses by Category"
 msgstr "Alle Kurse für die Kategorie"
+
+#: .\templates\frontend\history\history.html:19
+msgid "Back"
+msgstr "Zurück"
+
+#: .\templates\frontend\history\history.html:23
+msgid "History"
+msgstr "Geschichte"
+
+#: .\templates\frontend\history\history_compare_header.html:18
+#: .\templates\frontend\history\history_compare_header.html:22
+msgid "compare"
+msgstr "vergleichen"
+
+#: .\templates\frontend\history\history_compare_header.html:28
+msgid "Date/time"
+msgstr "Datum/Uhrzeit"
+
+#: .\templates\frontend\history\history_compare_header.html:31
+#: .\templates\frontend\profile\profile.html:16
+msgid "User"
+msgstr "Benutzer*in"
+
+#: .\templates\frontend\history\history_compare_header.html:34
+msgid "Comment"
+msgstr "Kommentar"
+
+#: .\templates\frontend\history\history_compare_header.html:67
+#: .\templates\frontend\history\history_compare_header.html:70
+#: .\templates\frontend\history\history_compare_view.html:7
+msgid "DATETIME_FORMAT"
+msgstr ""
+
+#: .\templates\frontend\history\history_compare_view.html:7
+#, python-format
+msgid ""
+"\n"
+"            Compare <strong>%(date1)s</strong> with <strong>%(date2)s</"
+"strong>:\n"
+"        "
+msgstr ""
+"\n"
+"            Vergleich <strong>%(date1)s</strong> mit <strong>%(date2)s</"
+"strong>:\n"
+"        "
+
+#: .\templates\frontend\history\history_compare_view.html:34
+msgid "There are no differences."
+msgstr "Es besteht keinen Unterschied."
+
+#: .\templates\frontend\history\history_compare_view.html:42
+msgid "Edit comment:"
+msgstr "Änderungsprotokoll: "
+
+#: .\templates\frontend\history\history_compare_view.html:45
+msgid "(no comment exists)"
+msgstr "(keinen Kommentar)"
+
+#: .\templates\frontend\history\history_compare_view.html:51
+msgid "Note:"
+msgstr "Notiz:"
+
+#: .\templates\frontend\history\history_compare_view.html:54
+msgid ""
+"\n"
+"                Fields/entries marked with <sup class=\"follow\">*</sup> are "
+"not under reversion control.\n"
+"                It may be that not all marked information are correct.\n"
+"            "
+msgstr ""
+"\n"
+"                Mit <sup class=\"follow\">*</sup> gekennzeichneten Felder/"
+"Einträge sind nicht unter Kontrolle von Reversion. \n"
+"                Es kann sein, dass nicht alle gekennzeichnete Informationen "
+"korrekt sind.\n"
+"            "
+
+#: .\templates\frontend\history\history_compare_view.html:64
+msgid "previous"
+msgstr "vorherige"
+
+#: .\templates\frontend\history\history_compare_view.html:70
+msgid "next"
+msgstr "nächst"
+
+#: .\templates\frontend\history\history_compare_view.html:75
+msgid "Revert to this version"
+msgstr "Auf diese Version zurückkehren"
+
+#: .\templates\frontend\history\history_compare_view.html:81
+msgid "Go back to history list"
+msgstr "Zurück zur Versionslist"
 
 #: .\templates\frontend\index.html:28
 msgid "Login"
@@ -446,6 +625,35 @@ msgid "Course '{cleaned_data['title']}' successfully created"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 
 #: .\views\course.py:183
+#: .\views\content.py:193
+msgid "Content '{cleaned_data['type']}' successfully added"
+msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
+
+#: .\views\content.py:200 .\views\content.py:398
+msgid "An error occurred while processing the request"
+msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
+
+#: .\views\content.py:384
+msgid "You are not allowed to edit this content"
+msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
+
+#: .\views\content.py:523
+msgid "Content updated"
+msgstr "Inhalt aktualisiert"
+
+#: .\views\content.py:783
+msgid "You are not allowed to delete this content"
+msgstr "Du bist nicht berechtigt, diesen Inhalt zu löschen"
+
+#: .\views\course.py:55
+msgid "Course '{cleaned_data['title']}' successfully created. "
+msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
+
+#: .\views\course.py:130
+msgid "Course '{cleaned_data['title']}' successfully created"
+msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
+
+#: .\views\course.py:184
 msgid "Course '{cleaned_data['title']}' successfully edited"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 
@@ -466,6 +674,9 @@ msgstr "Profil aktualisiert"
 #~ msgid ""
 #~ "Course '{cleaned_data['title']}' successfully created. All settings and "
 #~ "contents of the course "
+#~ msgid ""
+#~ "Course '{cleaned_data['title']}' successfully created. All settings and "
+#~ "contents of the course '{original_course.title}' were copied."
 #~ msgstr ""
 #~ "Kurs '{cleaned_data['title']}' erfolgreich erstellt. Alle Einstellungen "
 #~ "und Inhalte des Kurses '{original_course.title}' wurden kopiert."

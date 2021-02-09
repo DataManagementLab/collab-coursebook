@@ -7,8 +7,11 @@ content of the course book and can be registered in admin.py.
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.utils.translation import gettext_lazy as _
+
+import reversion
+
 from fontawesome_5.fields import IconField
 
 from base.models import Profile
@@ -245,10 +248,23 @@ class Topic(models.Model):
         """
         contents = self.contents.all()
         if filtered_by != 'None' and filtered_by is not None:
-            contents = contents.filter(style=filtered_by)
+            if filtered_by == 'Text':
+                contents = contents.filter(textfield__isnull=False)
+            elif filtered_by == 'Latex':
+                contents = contents.filter(latex__isnull=False)
+            elif filtered_by == 'Image':
+                contents = contents.filter(imagecontent__isnull=False)
+            elif filtered_by == 'YouTube-Video':
+                contents = contents.filter(ytvideocontent__isnull=False)
+            elif filtered_by == 'PDF':
+                contents = contents.filter(pdfcontent__isnull=False)
+            else:
+                contents = contents.filter()
         if sorted_by != 'None' and sorted_by is not None:
-            if sorted_by == 'rating':
+            if sorted_by == 'Rating':
                 contents = sorted(contents, key=lambda x: x.get_rate(), reverse=True)
+            elif sorted_by == 'Date':
+                contents = contents.order_by('-' + 'creation_date')
             else:
                 contents = contents.order_by('-' + sorted_by)
         return contents
@@ -395,19 +411,30 @@ class Content(models.Model):
     def get_rate_num(self):
         """Ratings
 
-        Returns the average number of ratings and 0 if there are no ratings presents.
+        Returns the average number of ratings and -1 if there are no ratings present.
 
         :return: the average number of ratings
         :rtype: float
         """
-        if self.get_rate() is None:  # TODO How can it returns none?
+        if self.get_rate() is None:
             return 0
         return self.get_rate()
+
+    """Ratings
+
+    Returns the amount number of ratings and 0 if there are no ratings present.
+
+    :return: the amount of ratings
+    :rtype: int
+    
+    """
+    def get_rate_amount(self):
+        return Rating.objects.filter(content_id=self.id).aggregate(Count('rating'))['rating__count']
 
     def get_rate(self):
         """Ratings
 
-        Returns the average number of ratings and -1 if there are no ratings presents.
+        Returns the average number of ratings and -1 if there are no ratings present.
 
         :return: the average number of ratings
         :rtype: float
@@ -531,3 +558,13 @@ class CourseStructureEntry(models.Model):
         :rtype: str
         """
         return f"{self.course} -> {self.index}. {self.topic}"
+
+
+# Register models for reversion if it is not already done in admin, else we can specify configuration
+reversion.register(Course,
+                   fields=['title', 'description', 'image', 'topics',
+                           'owners', 'restrict_changes', 'category', 'period'])
+
+reversion.register(Content,
+                   fields=['author', 'description', 'language',
+                           'tags', 'readonly', 'public', 'attachment'])

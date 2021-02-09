@@ -68,10 +68,11 @@ def save_user_profile(sender, instance, **kwargs):
 
     :param sender: The user of the profile
     :type sender: User
-    :param instance: THe user instance to be saved
+    :param instance: The user instance to be saved
     :type instance: User
     :param kwargs: The keyword arguments
     :type kwargs: ANY
     """
-    # TODO Undefined reference?
-    instance.profile.save()
+    profile = Profile.objects.get(user=instance)
+    profile.save()
+

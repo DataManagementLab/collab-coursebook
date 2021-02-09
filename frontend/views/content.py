@@ -7,13 +7,16 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.files.base import ContentFile
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
+import reversion
+from reversion.models import Version
+from reversion_compare.forms import SelectDiffForm
 from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Content, Comment, Course, Topic, Favorite
@@ -27,7 +30,7 @@ from content.models import SingleImageAttachment, ImageAttachment, TextField
 from export.views import generate_pdf_response
 
 from frontend.forms import CommentForm, TranslateForm
-from frontend.forms.addcontent import AddContentForm
+from frontend.forms.addcontent import AddContentForm, EditContentForm
 
 
 def clean_attachment(attachment_object, image_formset):
@@ -77,6 +80,23 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
+
+
+def update_comment(request):
+    """Update reversion comment
+
+    Gets the comment from the form and updates the comment for the reversion.
+
+    :param request: The given request
+    :type request: HttpRequest
+    """
+    # Reversion comment
+    change_log = request.POST.get('change_log')
+
+    # Changes log is not empty set it as comment in reversion,
+    # else the default comment message will be used
+    if change_log:
+        reversion.set_comment(change_log)
 
 
 def validate_latex(user, content, latex_content, topic_id):
@@ -196,7 +216,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
          """
         context = super().get_context_data(**kwargs)
 
-        # retrieve form for content type
+        # Retrieves the form for content type
         if "type" in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
@@ -206,13 +226,13 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         else:
             return self.handle_error()
 
-        # check if attachments are allowed for given content type
+        # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
-        # retrieve attachment_form
+        # Retrieves attachment_form
         context['attachment_form'] = AddContentFormAttachedImage
 
-        # retrieve parameters
+        # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
@@ -262,7 +282,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content.topic = Topic.objects.get(pk=topic_id)
             content.type = content_type
             content.save()
-
             # Evaluates generic form
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
@@ -318,7 +337,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
     """
     model = Content
     template_name = 'frontend/content/editcontent.html'
-    form_class = AddContentForm
+    form_class = EditContentForm
 
     def get_content_url(self):
         """Content url
@@ -388,7 +407,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :param kwargs: The keyword arguments
         :type kwargs: dict
 
-        :return: the context data of the search
+        :return: the context data of the editing
         :rtype: Dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
@@ -457,6 +476,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
+
+            # Reversion comment
+            update_comment(request)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
@@ -859,81 +881,3 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
             context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
                                 self.request.GET.get('f')
         return context
-
-
-class BaseHistoryCompareView(HistoryCompareDetailView):
-    """Base history compare view
-
-      This detail view represents the base history compare view. It defines the default
-      template and needed information for all other compare views.
-
-      :attr BaseHistoryCompareView.template_name: The path to the html template
-      :type BaseHistoryCompareView.template_name: str
-      """
-    template_name = "frontend/content/history.html"
-
-    # pylint: disable=too-few-public-methods
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.abstract: Describes whether this model is an abstract model (class)
-        :type Meta.abstract: bool
-        """
-        abstract = True
-
-
-class ImageHistoryCompareView(BaseHistoryCompareView):
-    """Image history compare view
-
-    Displays history of this content to the user.
-
-    :attr ImageHistoryCompareView.model: The model of the view
-    :type ImageHistoryCompareView.model: Model
-    """
-    model = ImageContent
-
-
-class LatexHistoryCompareView(BaseHistoryCompareView):
-    """LaTeX history compare view
-
-    Displays history of this content to the user
-
-    :attr LatexHistoryCompareView.model: The model of the view
-    :type LatexHistoryCompareView.model: Model
-    """
-    model = Latex
-
-
-class PdfHistoryCompareView(BaseHistoryCompareView):
-    """PDF history compare view
-
-    Displays history of this content to the user.
-
-    :attr PdfHistoryCompareView.model: The model of the view
-    :type PdfHistoryCompareView.model: Model
-    """
-    model = PDFContent
-
-
-class TextfieldHistoryCompareView(BaseHistoryCompareView):
-    """Text field history compare view
-
-    Displays history of this content to the user.
-
-    :attr TextfieldHistoryCompareView.model: The model of the view
-    :type TextfieldHistoryCompareView.model: Model
-    """
-    model = TextField
-
-
-class YTVideoHistoryCompareView(BaseHistoryCompareView):
-    """YouTube history compare view
-
-    Displays history of this content to the user.
-
-    :attr YTVideoHistoryCompareView.model: The model of the view
-    :type YTVideoHistoryCompareView.model: Model
-    """
-    model = YTVideoContent

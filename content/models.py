@@ -11,6 +11,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+import reversion
+
 from pdf2image import convert_from_path
 
 from base.models import Content
@@ -467,3 +469,22 @@ IMAGE_ATTACHMENT_TYPES = {
     TextField.TYPE,
     Latex.TYPE
 }
+
+# Register models for reversion if it is not already done in admin, else we can specify configuration
+reversion.register(ImageContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(Latex,
+                   fields=['textfield', 'source'],
+                   follow=['content'])
+reversion.register(PDFContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(YTVideoContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(SingleImageAttachment,
+                   fields=None)
+reversion.register(ImageAttachment,
+                   fields=None,
+                   follow=['images'])
