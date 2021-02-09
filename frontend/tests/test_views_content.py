@@ -21,6 +21,10 @@ class ContentViewTest(TestCase):
         test_utility.setup_database()
 
     def test_validate_latex(self):
+        """Test validate_latex
+
+        Tests that validate_latex compiles the latex code and saves the pdf in the database.
+        """
         user = User.objects.first()
         topic = Topic.objects.first()
         content = Content.objects.create(author=user.profile, topic=topic, type=model.Latex.TYPE,
@@ -33,6 +37,10 @@ class ContentViewTest(TestCase):
         self.assertTrue((bool(latex.pdf)))
 
     def test_clean_attachments(self):
+        """Test validate_latex
+
+        Tests that clean_attachments removes the attachments from the database.
+        """
         attachment = test_utility.generate_attachment(2)
         self.assertEqual(attachment.images.count(), 2)
 

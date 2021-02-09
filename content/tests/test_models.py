@@ -25,12 +25,17 @@ class ModelsTest(TestCase):
     @classmethod
     def tearDownClass(cls):
         """
-        Deletes the generated files after running the utility.
+        Deletes the generated files after running the tests.
         """
         shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
 
-    def test_generate_preview_latex(self):
+    def test_generate_preview(self):
+        """Test BasePDFModel.generate_preview()
+
+        Tests that a preview image gets generated in the preview folder
+        after calling generate_preview on a Latex Content
+        """
         latex = model.Latex.objects.first()
         preview_folder = 'uploads/previews/'
 

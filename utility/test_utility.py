@@ -35,6 +35,16 @@ def generate_image_file(image_file_number):
 
 
 def generate_attachment(image_count):
+    """ Generate an Image Attachment.
+
+    Generates an image attachment with the given number of images which can be used for testing
+
+    :param image_count: number of the images to be generated in the attachment
+    :type image_count: int
+
+    :return: the generated image file
+    :rtype: ImageFile
+    """
     attachment = model.ImageAttachment.objects.create()
     for i in range(image_count):
         image = generate_image_file(i)
@@ -45,6 +55,10 @@ def generate_attachment(image_count):
 
 
 def setup_database():
+    """ Sets up the database for Testing.
+
+    Sets up the database to be used for testing which contains a latex content
+    """
     user = User.objects.create()
     cat = Category.objects.create(title="Category")
     Course.objects.create(title='Course', description='desc', category=cat)
