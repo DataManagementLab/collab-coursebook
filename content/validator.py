@@ -7,15 +7,16 @@ import magic
 from django.core.exceptions import ValidationError
 
 
-def validate_is_pdf(file):
-    """
+def validate_pdf(file):
+    """Validate PDF
 
-    Validates the PDF upload if the the file is a valid PDF.
+    Validates if the given file is a valid PDF.
 
-    Args:
-        file (TODO): TODO
+    :param file: The file that should be checked
+    :type file: file
 
-    Returns: TODO
+    :return: an validation error, if it's not a valid pdf
+    :rtype: None or ValidationError
 
     """
     valid_types = ['application/pdf']

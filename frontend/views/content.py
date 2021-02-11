@@ -1,5 +1,6 @@
 """Purpose of this file
 
+This file describes the frontend views related to content types.
 """
 
 from django.contrib import messages
@@ -13,20 +14,145 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 
+from reversion_compare.views import HistoryCompareDetailView
+
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
+
 from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
 from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
-from content.models import SingleImageAttachment, ImageAttachment
+from content.models import ImageContent, Latex, PDFContent, YTVideoContent
+from content.models import SingleImageAttachment, ImageAttachment, TextField
+
 from export.views import generate_pdf_response
+
 from frontend.forms import CommentForm, TranslateForm
 from frontend.forms.addcontent import AddContentForm
 
 
+def clean_attachment(attachment_object, image_formset):
+    """Clean attachment
+
+    Cleans the attachment from the database if the attachments
+    were removed from the form.
+
+    :param attachment_object: The attachment object
+    :type attachment_object: ImageAttachment
+    :param image_formset: The image form set
+    :type image_formset: BaseModelFormSet
+    """
+    clean = attachment_object.images.count() - image_formset.total_form_count()
+    if clean > 0:
+        remove_source = attachment_object.images.order_by('id').reverse()[:clean]
+        for remove_object in remove_source:
+            SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
+            remove_object.delete()
+
+
+# pylint: disable=invalid-name
+def rate_content(request, course_id, topic_id, content_id, pk):
+    """Rate content
+
+    Let the user rate content.
+
+    :param topic_id: The id of the topic
+    :type topic_id: int
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: course id
+    :type course_id: int
+    :param content_id: id of the content which gets rated
+    :type content_id: int
+    :param pk: the user rating (should be in [ 1, 2, 3, 4, 5])
+    :type pk: Any
+
+
+    :return: the redirect to content page
+    :rtype: HttpResponse
+    """
+    content = get_object_or_404(Content, pk=content_id)
+    profile = get_user(request)
+    content.rate_content(user=profile, rating=pk)
+
+    return HttpResponseRedirect(
+        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
+        + '#rating')
+
+
+def validate_latex(user, content, latex_content, topic_id):
+    """Validate LaTeX
+
+    Validates LateX and compiles the LaTeX code and stores its pdf into the database.
+
+    :param user: The current user
+    :type user: User
+    :param content: The content of the pdf
+    :type content: Content
+    :param latex_content: The data of the content type
+    :type latex_content: Latex
+    :param topic_id: The primary key of the topic
+    :type topic_id: int
+    """
+    topic = Topic.objects.get(pk=topic_id)
+    pdf = generate_pdf_response(user, topic, content)
+    latex_content.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+    latex_content.save()
+
+
+def validate_attachment(view, attachment_form, image_formset, content):
+    """Validate attachment
+
+    Validates the image attachments and stores them into the database.
+
+    :param view: The view that wants to validate the data
+    :type view: View
+    :param attachment_form: The attachment form
+    :type attachment_form: ModelForm
+    :param image_formset: The image form set
+    :type image_formset: BaseModelFormSet
+    :param content: The content
+    :type content: Content
+
+    :return: the redirection to the invalid page if the image form set or
+    the attachment form is not valid
+    :rtype: None | HttpResponseRedirect
+    """
+    if attachment_form.is_valid():
+        # Evaluates the attachment form
+        content_attachment = attachment_form.save(commit=False)
+        content_attachment.save()
+        content.attachment = content_attachment
+        images = []
+        # Evaluates all forms of the formset and append to image set
+        if image_formset.is_valid():
+            for form in image_formset:
+                used_form = form.save(commit=False)
+                used_form.save()
+                images.append(used_form)
+        else:
+            return view.form_invalid(image_formset)
+
+        # Stores the attached images in DB
+        content.attachment.images.set(images)
+        return None
+
+    return view.form_invalid(attachment_form)
+
+
 # pylint: disable=too-many-ancestors
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
-    """
-    Adds a new content to the database
+    """Add content view
+
+    Adds a new content to the database.
+
+    :attr AddContentView.model: The model to which this view corresponds
+    :type AddContentView.model: Model
+    :attr AddContentView.template_name: The path to the html template
+    :type AddContentView.template_name: str
+    :attr AddContentView.success_url: Redirection of a successful url
+    :type AddContentView.success_url: __proxy__
+    :attr AddContentView.context_object_name: The context object name
+    :type AddContentView.context_object_name: str
     """
     model = Content
     template_name = 'frontend/content/addcontent.html'
@@ -35,6 +161,16 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     context_object_name = 'content'
 
     def get_success_message(self, cleaned_data):
+        """Success message
+
+        Returns the success message when the profile was updated
+
+        :param cleaned_data: The cleaned data
+        :type cleaned_data: dict
+
+        :return: the success message when the profile was updated
+        :rtype: __proxy__
+        """
         return _(f"Content '{cleaned_data['type']}' successfully added")
 
     def handle_error(self):
@@ -46,6 +182,18 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
 
     def get_context_data(self, **kwargs):
+        """Context data
+
+        Returns the context data of the addition of content. If something went wrong,
+        redirect to the invalid page.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the context data of the addition of the content or if something went wrong,
+        redirect to the invalid page
+        :rtype: Dict[str, Any] | HttpResponseRedirect
+         """
         context = super().get_context_data(**kwargs)
 
         # retrieve form for content type
@@ -75,8 +223,23 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        # retrieve content type form
-        if "type" in self.kwargs:
+        """Post
+
+        Submits the form and its uploaded files to store it into the database.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection to the content page after the submitting or
+        to the invalid page if something wrong occurs
+        :rtype: HttpResponseRedirect
+        """
+        # Retrieves content type form
+        if 'type' in self.kwargs:
             content_type = self.kwargs['type']
             if content_type in CONTENT_TYPE_FORMS:
                 content_type_form = CONTENT_TYPE_FORMS.get(content_type)(request.POST,
@@ -86,15 +249,13 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         else:
             return self.handle_error()
 
-        # read input from all included forms
+        # Reads input from included forms
         add_content_form = AddContentForm(request.POST)
-        attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
-        image_formset = SingleImageFormSet(request.POST, request.FILES)
 
-        # check if content forms are valid
+        # Checks if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
 
-            # save author etc.
+            # Saves author etc.
             content = add_content_form.save(commit=False)
             content.author = get_user(self.request)
             topic_id = self.kwargs['topic_id']
@@ -102,52 +263,39 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content.type = content_type
             content.save()
 
-            # evaluate generic form
+            # Evaluates generic form
             content_type_data = content_type_form.save(commit=False)
             content_type_data.content = content
             content_type_data.save()
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                topic = Topic.objects.get(pk=kwargs['topic_id'])
-                pdf = generate_pdf_response(get_user(self.request), topic, content)
-                content_type_data.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-                content_type_data.save()
+                validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
 
-            # Check if attachments are allowed for the given content type
+            # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
-                if attachment_form.is_valid():
+                # Reads input from all forms
+                attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
+                image_formset = SingleImageFormSet(request.POST, request.FILES)
 
-                    # evaluate the attachment form
-                    content_attachment = attachment_form.save(commit=False)
-                    content_attachment.save()
-                    content.attachment = content_attachment
-                    images = []
+                # Validates attachments
+                redirect = validate_attachment(self, attachment_form, image_formset, content)
+                if redirect is not None:
+                    return redirect
 
-                    # evaluate all forms of the formset and append to image set
-                    if image_formset.is_valid():
-                        for form in image_formset:
-                            used_form = form.save(commit=False)
-                            used_form.save()
-                            images.append(used_form)
-                    else:
-                        return self.form_invalid(image_formset)
-
-                    # store the attached images in DB
-                    content.attachment.images.set(images)
-                else:
-                    return self.form_invalid(attachment_form)
-
-            # generate preview image in 'uploads/contents/'
+            # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview
             content.save()
 
-            # Redirect to content
+            # Redirects to content
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
-            return HttpResponseRedirect(reverse_lazy('frontend:content',
-                                                     args=(course_id, topic_id, content.id,)))
+            return HttpResponseRedirect(reverse_lazy(
+                'frontend:content',
+                args=(course_id,
+                      topic_id,
+                      content.id)))
 
         # add_content_form invalid
         if not add_content_form.is_valid():
@@ -247,7 +395,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
 
-        # Add form only to context data if not already in it
+        # Adds the form only to context data if not already in it
         # (when passed by post method containing error messages)
         if 'content_type_form' not in context:
             content_type = self.get_object().type
@@ -257,15 +405,52 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
             else:
                 return self.handle_error()
+
+        # Checks if attachments are allowed for given content type
+        context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
+
+        if content_type in IMAGE_ATTACHMENT_TYPES:
+
+            # Retrieves attachment_form
+            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+            context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
+
+            # Identifies the pk's of attached images
+            pk_set = []
+            for picture in self.get_object().attachment.images.all():
+                pk_set.append(picture.pk)
+
+            # Setups the formset with attached images
+            formset = SingleImageFormSet(
+                queryset=SingleImageAttachment.objects.filter(pk__in=pk_set))
+            context['item_forms'] = formset
+
         return context
 
     def post(self, request, *args, **kwargs):
+        """Post
+
+        Submits the form and its uploaded files to store it into the database.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict
+
+        :return: the redirection to the content page after the submitting or
+        to the invalid page if something wrong occurs
+        :rtype: HttpResponseRedirect
+        """
         self.object = self.get_object()
         form = self.get_form()
 
         if self.object.type in CONTENT_TYPE_FORMS:
+
             # Bind/init form with existing data
             content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
+
             # Careful: Order is important for file fields (instance first, afterwards form data,
             # if using kwargs dict as single argument instead, instance information
             # will not be parsed in time)
@@ -275,22 +460,45 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
-                form.save()
                 content = form.save()
                 content_type = content.type
-                content_object = content_type_form.save()
+                content_type_data = content_type_form.save()
 
                 # If the content type is Latex, compile the Latex Code and store in DB
                 if content_type == 'Latex':
-                    topic = Topic.objects.get(pk=kwargs['topic_id'])
-                    pdf = generate_pdf_response(get_user(self.request), topic, content)
-                    content_object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-                    content_object.save()
+                    validate_latex(get_user(request),
+                                   content,
+                                   content_type_data,
+                                   kwargs['topic_id'])
 
-                preview = CONTENT_TYPES.get(content_type). \
-                    objects.get(pk=content.pk).generate_preview()
+                # Checks if attachments are allowed for the given content type
+                if content_type in IMAGE_ATTACHMENT_TYPES:
+
+                    # Retrieves current state of attachment form and formset
+                    attachment_object = ImageAttachment.objects.get(
+                        pk=self.get_object().attachment.pk)
+                    attachment_form = AddContentFormAttachedImage(
+                        instance=attachment_object,
+                        data=request.POST,
+                        files=request.FILES)
+                    image_formset = SingleImageFormSet(
+                        data=request.POST,
+                        files=request.FILES)
+
+                    # Removes images from database
+                    clean_attachment(attachment_object, image_formset)
+
+                    # Validates attachments
+                    redirect = validate_attachment(self, attachment_form, image_formset, content)
+                    if redirect is not None:
+                        return redirect
+
+                # Generates preview image in 'uploads/contents/'
+                preview = CONTENT_TYPES.get(content_type) \
+                    .objects.get(pk=content.pk).generate_preview()
                 content.preview.name = preview
                 content.save()
+
                 messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
                 return HttpResponseRedirect(self.get_success_url())
 
@@ -350,7 +558,7 @@ class ContentView(DetailView):
             context = self.get_context_data(**kwargs)
             # get original content
             content = self.object
-            """
+            r"""
             with content.file.open() as file:
                 html = markdown(file.read().decode('utf-8'), safe_mode=True,
                                 extras=["tables"])
@@ -393,7 +601,8 @@ class ContentView(DetailView):
         """
         context = super().get_context_data(**kwargs)
         context['search_result'] = self.request.GET.get('q')
-        content = super().get_object()
+        content = self.get_object()
+        context['user'] = self.request.user
         context['count'] = content.get_rate_count()
         context['rate'] = round(content.get_rate(), 2)
 
@@ -569,7 +778,25 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         :rtype: HttpResponse
         """
 
+        # Send success message
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
+
+        if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
+
+            # Retrieve the attachment
+            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
+
+            # Remove the images in the attachment from DB
+            for remove_object in attachment_object.images.all():
+                SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
+                remove_object.delete()
+
+            # Retrieve the success url, then delete the corresponding attachment
+            success_url = super().delete(self, request, *args, **kwargs)
+            ImageAttachment.objects.filter(pk=attachment_object.pk).delete()
+            attachment_object.delete()
+            return success_url
+
         return super().delete(self, request, *args, **kwargs)
 
 
@@ -634,30 +861,79 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
         return context
 
 
-def rate_content(request, course_id, topic_id, content_id, pk):
-    """Rate content
+class BaseHistoryCompareView(HistoryCompareDetailView):
+    """Base history compare view
 
-    Let the user rate content.
+      This detail view represents the base history compare view. It defines the default
+      template and needed information for all other compare views.
 
-    :param topic_id: The id of the topic
-    :type topic_id: int
-    :param request: The given request
-    :type request: HttpRequest
-    :param course_id: course id
-    :type course_id: int
-    :param content_id: id of the content which gets rated
-    :type content_id: int
-    :param pk: the user rating (should be in [ 1, 2, 3, 4, 5])
-    :type pk: Any
+      :attr BaseHistoryCompareView.template_name: The path to the html template
+      :type BaseHistoryCompareView.template_name: str
+      """
+    template_name = "frontend/content/history.html"
+
+    # pylint: disable=too-few-public-methods
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
+        """
+        abstract = True
 
 
-    :return: the redirect to content page
-    :rtype: HttpResponse
+class ImageHistoryCompareView(BaseHistoryCompareView):
+    """Image history compare view
+
+    Displays history of this content to the user.
+
+    :attr ImageHistoryCompareView.model: The model of the view
+    :type ImageHistoryCompareView.model: Model
     """
-    content = get_object_or_404(Content, pk=content_id)
-    profile = get_user(request)
-    content.rate_content(user=profile, rating=pk)
+    model = ImageContent
 
-    return HttpResponseRedirect(
-        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
-        + '#rating')
+
+class LatexHistoryCompareView(BaseHistoryCompareView):
+    """LaTeX history compare view
+
+    Displays history of this content to the user
+
+    :attr LatexHistoryCompareView.model: The model of the view
+    :type LatexHistoryCompareView.model: Model
+    """
+    model = Latex
+
+
+class PdfHistoryCompareView(BaseHistoryCompareView):
+    """PDF history compare view
+
+    Displays history of this content to the user.
+
+    :attr PdfHistoryCompareView.model: The model of the view
+    :type PdfHistoryCompareView.model: Model
+    """
+    model = PDFContent
+
+
+class TextfieldHistoryCompareView(BaseHistoryCompareView):
+    """Text field history compare view
+
+    Displays history of this content to the user.
+
+    :attr TextfieldHistoryCompareView.model: The model of the view
+    :type TextfieldHistoryCompareView.model: Model
+    """
+    model = TextField
+
+
+class YTVideoHistoryCompareView(BaseHistoryCompareView):
+    """YouTube history compare view
+
+    Displays history of this content to the user.
+
+    :attr YTVideoHistoryCompareView.model: The model of the view
+    :type YTVideoHistoryCompareView.model: Model
+    """
+    model = YTVideoContent

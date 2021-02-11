@@ -17,7 +17,7 @@ from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
 
-from content.validator import validate_is_pdf
+from content.validator import validate_pdf
 
 
 class BaseModel(models.Model, GeneratePreviewMixin):
@@ -76,7 +76,7 @@ class BasePDFModel(BaseModel):
     pdf = models.FileField(verbose_name=_("PDF"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True,
-                           validators=(validate_is_pdf,))
+                           validators=(validate_pdf,))
 
     class Meta:
         """Meta options
@@ -288,7 +288,7 @@ class SingleImageAttachment(BaseSourceModel):
         :type Meta.verbose_name_plural: __proxy__
         """
         verbose_name = _("Single Image Attachment")
-        verbose_name_plural = _("Single Attachments")
+        verbose_name_plural = _("Single Image Attachments")
 
     def __str__(self):
         """String representation
@@ -413,7 +413,7 @@ class ImageAttachment(BaseModel):
     :type ImageAttachment.images: ManyToManyField - SingleImageAttachment
     """
     TYPE = "ImageAttachment"
-    DESC = _("Single Image Attachment")
+    DESC = _("Image Attachment")
 
     images = models.ManyToManyField(SingleImageAttachment,
                                     verbose_name=_("Images"),

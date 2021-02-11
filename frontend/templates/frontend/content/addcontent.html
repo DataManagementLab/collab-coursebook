@@ -19,20 +19,20 @@
         <br>
         {% if attachment_allowed %}
             <div>
-                <h2>Image Attachments</h2>
+                <h2>{% trans 'Image Attachments' %}</h2>
                 {% bootstrap_form attachment_form %}
                 {{ item_forms.management_form }}
                 <div id="items-form-container">
                     {% for item_form in item_forms %}
-                        <div id="item-{{ forLoop.counter }}">
+                        <div id="item-{{ forloop.counter0 }}">
                             {{ item_form.id }}
-                            {{ item_form.as_p }}
+                            {% bootstrap_form item_form %}
                         </div>
                     {% endfor %}
                 </div>
-                <button id="add-item-button" class="btn btn-primary add-item">Add attachment</button>
-                <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">Remove
-                    attachment
+                <button id="add-item-button" class="btn btn-primary add-item">{% trans "Add attachment" %}</button>
+                <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">{% trans "Remove
+                    attachment" %}
                 </button>
             </div>
         {% endif %}

@@ -4,7 +4,7 @@ This file contains utility functions related to exporting and rendering files.
 """
 
 import os
-
+import re
 import tempfile
 
 from subprocess import Popen, PIPE
@@ -75,7 +75,7 @@ class LaTeX:
             if len(error_log) != 0:
                 rendered_tpl = template.render(context).encode(LaTeX.encoding)
                 # Prerender errors templates
-                rendered_tpl += LaTeX.pre_render(error_log, context['export_pdf'],
+                rendered_tpl += LaTeX.pre_render(len(error_log), context['export_pdf'],
                                                  LaTeX.error_template)
                 rendered_tpl += r"\end{document}".encode(LaTeX.encoding)
 
@@ -128,14 +128,14 @@ class LaTeX:
 
         Parameters:
             :param content: The content to be rendered
-            :type content: Content
+            :type content: any
             :param export_flag: True if export, False if simple content compilation
             :type export_flag: bool
             :param template_type: The type of the template to use
             :type template_type: str
 
         :return: the rendered template
-        :rtype: str
+        :rtype: bytes
         """
         if template_type is None:
             template = get_template(export_template(content.type))
@@ -145,5 +145,7 @@ class LaTeX:
         # Set context for rendering
         context = {'content': content, 'export_pdf': export_flag}
 
-        # Return result of rendering
-        return template.render(context).encode(LaTeX.encoding)
+        # render the template and use escape for triple angular brackets
+        rendered_tpl = template.render(context)
+        rendered_tpl = re.sub(r'\{~~', '{', rendered_tpl).encode(LaTeX.encoding)
+        return rendered_tpl

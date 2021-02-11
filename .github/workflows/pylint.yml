@@ -13,7 +13,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [ 3.6, 3.7, 3.8 ]
+        python-version: [ 3.7, 3.8 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -39,3 +39,6 @@ jobs:
       - name: Run PyLint - frontend
         run: |
           pylint --fail-under=8 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings frontend
+      - name: Run PyLint - utils
+        run: |
+          pylint --fail-under=8 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings utils

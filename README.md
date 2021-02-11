@@ -18,7 +18,7 @@ Collab Coursebook has two types of requirements: System requirements are depende
 
 #### System Requirements
 
-* Python 3.6 incl. development tools
+* Python 3.7 incl. development tools
 * Virtualenv
 * poppler
 * for production using uwsgi:
@@ -43,7 +43,7 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 
 **Automatic Setup**
 
-1. execute the setup bash script ``Utils/setup.sh``
+1. execute the setup bash script ``utils/script/setup.sh``
 
 
 **Manual Setup**
@@ -51,7 +51,8 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 1. setup a virtual environment using the proper python version ``virtualenv venv -p python3``
 1. activate virtualenv ``source venv/bin/activate``
 1. install python requirements ``pip install -r requirements.txt``
-1. setup necessary database tables etc. ``python manage.py migrate``
+1. setup necessary database tables etc. ``python manage.py migrate``1.
+1. setup initial revision for all registered models for versioning``python manage.py createinitialrevisions``   
 1. prepare static files (can be omitted for dev setups) ``python manage.py collectstatic``
 1. compile translations ``python manage.py compilemessages``
 1. create a priviledged user, credentials are entered interactively on CLI ``python manage.py createsuperuser``
@@ -105,14 +106,14 @@ or create a new config (.conf) file (similar to ``apache-collab-coursebook.conf`
 1. Copy or symlink the uwsgi config in ``uwsgi-collab-coursebook.ini`` to ``/etc/uwsgi/apps-available/`` and then symlink it to ``/etc/uwsgi/apps-enabled/`` using e.g., ``ln -s /srv/collab-coursebook/uwsgi-collab-coursebook.ini /etc/uwsgi/apps-available/collab-coursebook.ini`` and ``ln -s /etc/uwsgi/apps-available/collab-coursebook.ini /etc/uwsgi/apps-enabled/collab-coursebook.ini``
 1. test your uwsgi configuration file with``uwsgi --ini collab-coursebook.ini``
 1. restart uwsgi ``sudo systemctl restart uwsgi``
-1. execute the update script ``./Utils/update.sh --prod``
+1. execute the update script ``./utils/script/update.sh --prod``
 
 
 ### Updates
 
-To update the setup to the current version on the main branch of the repository use the update script ``utils/update.sh`` or ``utils/update.sh --prod`` in production.
+To update the setup to the current version on the main branch of the repository use the update script ``utils/script/update.sh`` or ``utils/script/update.sh --prod`` in production.
 
-Afterwards, you may check your setup by executing ``utils/check.sh`` or ``utils/check.sh --prod`` in production.
+Afterwards, you may check your setup by executing ``utils/script/check.sh`` or ``utils/script/check.sh --prod`` in production.
 
 
 ## Structure
