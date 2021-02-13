@@ -61,7 +61,7 @@ class Latex:
         for content in context['contents']:
             rendered_tpl += Latex.pre_render(content, context['export_pdf'])
         rendered_tpl += r"\end{document}".encode(Latex.encoding)
-        print(rendered_tpl)
+
         with tempfile.TemporaryDirectory() as tempdir:
 
             process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
