@@ -6,6 +6,7 @@ This file contains forms associated with the course.
 from django import forms
 
 from base.models import Course
+from content.widgets import ModifiedClearableFileInput
 
 
 class AddAndEditCourseForm(forms.ModelForm):
@@ -31,6 +32,9 @@ class AddAndEditCourseForm(forms.ModelForm):
         model = Course
         fields = ['title', 'description', 'image', 'owners',
                   'restrict_changes', 'category', 'period']
+        widgets = {
+            'image': ModifiedClearableFileInput(attrs={'required':'false'})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
