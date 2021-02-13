@@ -11,8 +11,8 @@ import content.models as model
 from content.tests.base_test_case import BaseTestCase
 from content.validator import Validator
 
-from utils import test_utility
-from utils.test_utility import MEDIA_ROOT
+from utils import test_utils
+from utils.test_utils import MEDIA_ROOT
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -35,7 +35,7 @@ class ValidatorTest(BaseTestCase):
 
         Tests that validate_pdf raises the correct error for an image.
         """
-        not_a_pdf = test_utility.generate_image_file(1)
+        not_a_pdf = test_utils.generate_image_file(1)
         with self.assertRaises(ValidationError) as context_manager:
             Validator.validate_pdf(not_a_pdf)
         self.assertEqual('Unsupported file type.', context_manager.exception.message)

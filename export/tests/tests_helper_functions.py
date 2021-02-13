@@ -13,7 +13,7 @@ from base.models import Content
 
 from content.models import Latex
 
-from utils import test_utility
+from utils import test_utils
 
 
 class HelperFunctionsTest(TestCase):
@@ -26,7 +26,7 @@ class HelperFunctionsTest(TestCase):
         """
         Sets up the test database
         """
-        test_utility.setup_database()
+        test_utils.setup_database()
 
     def test_errors(self):
         """Test error()

@@ -14,8 +14,8 @@ from base.models import Content
 
 from content.models import TextField, Latex, SingleImageAttachment
 
-from utils import test_utility
-from utils.test_utility import MEDIA_ROOT
+from utils import test_utils
+from utils.test_utils import MEDIA_ROOT
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -30,7 +30,7 @@ class AddContentViewTestCase(TestCase):
 
         Sets up the test database.
         """
-        test_utility.setup_database()
+        test_utils.setup_database()
         self.client.force_login(User.objects.get(pk=1))
 
     @classmethod
@@ -115,8 +115,8 @@ class AddContentViewTestCase(TestCase):
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
         })
-        img0 = test_utility.generate_image_file(0)
-        img1 = test_utility.generate_image_file(1)
+        img0 = test_utils.generate_image_file(0)
+        img1 = test_utils.generate_image_file(1)
         data = {
             'language': 'de',
             'textfield': 'Lorem ipsum',

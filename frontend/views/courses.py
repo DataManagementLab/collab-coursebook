@@ -53,7 +53,6 @@ class CourseListView(ListView):
                 queryset = Course.objects.order_by("creation_date")
         return queryset
 
-    # pylint: disable=unused-argument
     def get_context_data(self, *, object_list=None, **kwargs):
         """Context data
 

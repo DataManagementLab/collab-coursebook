@@ -11,7 +11,7 @@ from base.models.content import Content
 import content.models as model
 from content.tests.base_test_case import BaseTestCase
 
-from utils.test_utility import MEDIA_ROOT
+from utils.test_utils import MEDIA_ROOT
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)

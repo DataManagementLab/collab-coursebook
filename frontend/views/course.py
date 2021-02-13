@@ -208,7 +208,6 @@ class CourseView(DetailView, FormMixin):
         self.filtered_by = 'None'
         super().__init__()
 
-    # pylint: disable=unused-argument
     def post(self, request, *args, **kwargs):
         """Post
 

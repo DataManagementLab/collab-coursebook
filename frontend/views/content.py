@@ -45,7 +45,6 @@ def clean_attachment(attachment_object, image_formset):
             remove_object.delete()
 
 
-# pylint: disable=invalid-name
 def rate_content(request, course_id, topic_id, content_id, pk):
     """Rate content
 
@@ -205,7 +204,10 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                Validator.validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
+                Validator.validate_latex(get_user(request),
+                                         content,
+                                         content_type_data,
+                                         kwargs['topic_id'])
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -214,7 +216,10 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                 image_formset = SingleImageFormSet(request.POST, request.FILES)
 
                 # Validates attachments
-                redirect = Validator.validate_attachment(self, attachment_form, image_formset, content)
+                redirect = Validator.validate_attachment(self,
+                                                         attachment_form,
+                                                         image_formset,
+                                                         content)
                 if redirect is not None:
                     return redirect
 
@@ -427,7 +432,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     clean_attachment(attachment_object, image_formset)
 
                     # Validates attachments
-                    redirect = Validator.validate_attachment(self, attachment_form, image_formset, content)
+                    redirect = Validator.validate_attachment(self,
+                                                             attachment_form,
+                                                             image_formset,
+                                                             content)
                     if redirect is not None:
                         return redirect
 
@@ -466,7 +474,6 @@ class ContentView(DetailView):
 
     context_object_name = 'content'
 
-    # pylint: disable=unused-argument
     def post(self, request, *args, **kwargs):
         """Post
 

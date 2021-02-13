@@ -480,7 +480,6 @@ class Content(models.Model):
         :return: the rating of an user
         :rtype: int
         """
-        # pylint: disable=W0612
         if self.user_already_rated(user):
             content_id = self.id
             return self.ratings.get(user=user).rating_set.first().rating

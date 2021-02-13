@@ -17,7 +17,7 @@ from content.forms import SingleImageFormSet
 from frontend.views.content import clean_attachment
 from frontend.views.validator import Validator
 
-from utils import test_utility
+from utils import test_utils
 
 
 class ContentViewTest(TestCase):
@@ -31,7 +31,7 @@ class ContentViewTest(TestCase):
 
         Sets up the test database.
         """
-        test_utility.setup_database()
+        test_utils.setup_database()
 
     def test_validate_latex(self):
         """Test validate_latex
@@ -54,7 +54,7 @@ class ContentViewTest(TestCase):
 
         Tests that clean_attachments removes the attachments from the database.
         """
-        attachment = test_utility.generate_attachment(2)
+        attachment = test_utils.generate_attachment(2)
         self.assertEqual(attachment.images.count(), 2)
 
         formset = SingleImageFormSet(queryset=model.SingleImageAttachment.objects.none())

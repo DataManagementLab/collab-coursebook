@@ -7,8 +7,8 @@ import shutil
 
 from django.test import TestCase, override_settings
 
-from utils import test_utility
-from utils.test_utility import MEDIA_ROOT
+from utils import test_utils
+from utils.test_utils import MEDIA_ROOT
 
 
 @override_settings(MEDIA_ROOT=MEDIA_ROOT)
@@ -24,7 +24,7 @@ class BaseTestCase(TestCase):
 
         Sets up the test database.
         """
-        test_utility.setup_database()
+        test_utils.setup_database()
 
     @classmethod
     def tearDownClass(cls):
