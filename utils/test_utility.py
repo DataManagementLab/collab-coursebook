@@ -16,9 +16,9 @@ from base.models.content import Category, Topic, Content, Course
 import content.forms as form
 import content.models as model
 
-from frontend.views.content import validate_latex
-
 # Temporary media directory
+from frontend.views.validator import Validator
+
 MEDIA_ROOT = tempfile.mkdtemp()
 
 
@@ -75,4 +75,4 @@ def setup_database():
                                      description='this is a descrieption')
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
-    validate_latex(user, content, latex, topic_id=topic.pk)
+    Validator.validate_latex(user, content, latex, topic_id=topic.pk)

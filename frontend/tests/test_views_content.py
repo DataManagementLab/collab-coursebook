@@ -14,7 +14,8 @@ from content import forms as form
 
 from content.forms import SingleImageFormSet
 
-from frontend.views.content import validate_latex, clean_attachment
+from frontend.views.content import clean_attachment
+from frontend.views.validator import Validator
 
 from utils import test_utility
 
@@ -45,7 +46,7 @@ class ContentViewTest(TestCase):
         latex = model.Latex.objects.create(textfield=latex_code, content=content)
 
         self.assertFalse(bool(latex.pdf))
-        validate_latex(user, content, latex, topic.pk)
+        Validator.validate_latex(user, content, latex, topic.pk)
         self.assertTrue((bool(latex.pdf)))
 
     def test_clean_attachments(self):

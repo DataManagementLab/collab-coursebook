@@ -6,7 +6,6 @@ This file describes the frontend views related to content types.
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.files.base import ContentFile
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -21,11 +20,10 @@ from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, Singl
 from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
 from content.models import SingleImageAttachment, ImageAttachment
 
-from export.views import generate_pdf_response
-
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
 from frontend.views.history import update_comment
+from frontend.views.validator import Validator
 
 
 def clean_attachment(attachment_object, image_formset):
@@ -75,66 +73,6 @@ def rate_content(request, course_id, topic_id, content_id, pk):
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
-
-
-def validate_latex(user, content, latex_content, topic_id):
-    """Validate LaTeX
-
-    Validates LateX and compiles the LaTeX code and stores its pdf into the database.
-
-    :param user: The current user
-    :type user: User
-    :param content: The content of the pdf
-    :type content: Content
-    :param latex_content: The data of the content type
-    :type latex_content: Latex
-    :param topic_id: The primary key of the topic
-    :type topic_id: int
-    """
-    topic = Topic.objects.get(pk=topic_id)
-    pdf = generate_pdf_response(user, content)
-    latex_content.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-    latex_content.save()
-
-
-def validate_attachment(view, attachment_form, image_formset, content):
-    """Validate attachment
-
-    Validates the image attachments and stores them into the database.
-
-    :param view: The view that wants to validate the data
-    :type view: View
-    :param attachment_form: The attachment form
-    :type attachment_form: ModelForm
-    :param image_formset: The image form set
-    :type image_formset: BaseModelFormSet
-    :param content: The content
-    :type content: Content
-
-    :return: the redirection to the invalid page if the image form set or
-    the attachment form is not valid
-    :rtype: None | HttpResponseRedirect
-    """
-    if attachment_form.is_valid():
-        # Evaluates the attachment form
-        content_attachment = attachment_form.save(commit=False)
-        content_attachment.save()
-        content.attachment = content_attachment
-        images = []
-        # Evaluates all forms of the formset and append to image set
-        if image_formset.is_valid():
-            for form in image_formset:
-                used_form = form.save(commit=False)
-                used_form.save()
-                images.append(used_form)
-        else:
-            return view.form_invalid(image_formset)
-
-        # Stores the attached images in DB
-        content.attachment.images.set(images)
-        return None
-
-    return view.form_invalid(attachment_form)
 
 
 # pylint: disable=too-many-ancestors
@@ -267,7 +205,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             # If the content type is Latex, compile the Latex Code and store in DB
             if content_type == 'Latex':
-                validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
+                Validator.validate_latex(get_user(request), content, content_type_data, kwargs['topic_id'])
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -276,7 +214,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                 image_formset = SingleImageFormSet(request.POST, request.FILES)
 
                 # Validates attachments
-                redirect = validate_attachment(self, attachment_form, image_formset, content)
+                redirect = Validator.validate_attachment(self, attachment_form, image_formset, content)
                 if redirect is not None:
                     return redirect
 
@@ -466,10 +404,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
                 # If the content type is Latex, compile the Latex Code and store in DB
                 if content_type == 'Latex':
-                    validate_latex(get_user(request),
-                                   content,
-                                   content_type_data,
-                                   kwargs['topic_id'])
+                    Validator.validate_latex(get_user(request),
+                                             content,
+                                             content_type_data,
+                                             kwargs['topic_id'])
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -489,7 +427,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     clean_attachment(attachment_object, image_formset)
 
                     # Validates attachments
-                    redirect = validate_attachment(self, attachment_form, image_formset, content)
+                    redirect = Validator.validate_attachment(self, attachment_form, image_formset, content)
                     if redirect is not None:
                         return redirect
 

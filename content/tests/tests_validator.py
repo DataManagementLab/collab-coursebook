@@ -9,7 +9,7 @@ from django.test import override_settings
 
 import content.models as model
 from content.tests.base_test_case import BaseTestCase
-from content.validator import validate_pdf
+from content.validator import Validator
 
 from utils import test_utility
 from utils.test_utility import MEDIA_ROOT
@@ -28,7 +28,7 @@ class ValidatorTest(BaseTestCase):
         Tests that validate_pdf raises no error for a valid pdf and returns None.
         """
         latex = model.Latex.objects.first()
-        self.assertIsNone(validate_pdf(latex.pdf))
+        self.assertIsNone(Validator.validate_pdf(latex.pdf))
 
     def test_validate_pdf_invalid_filetype(self):
         """Test validate_pdf() with an invalid file type
@@ -37,7 +37,7 @@ class ValidatorTest(BaseTestCase):
         """
         not_a_pdf = test_utility.generate_image_file(1)
         with self.assertRaises(ValidationError) as context_manager:
-            validate_pdf(not_a_pdf)
+            Validator.validate_pdf(not_a_pdf)
         self.assertEqual('Unsupported file type.', context_manager.exception.message)
 
     def test_validate_pdf_invalid_file_extension(self):
@@ -52,5 +52,5 @@ class ValidatorTest(BaseTestCase):
         os.rename(latex.pdf.path, new_path)
         latex.pdf.name = new_path
         with self.assertRaises(ValidationError) as context_manager:
-            validate_pdf(latex.pdf)
+            Validator.validate_pdf(latex.pdf)
         self.assertEqual('Unacceptable file extension.', context_manager.exception.message)

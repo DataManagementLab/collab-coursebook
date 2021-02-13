@@ -18,8 +18,7 @@ from pdf2image import convert_from_path
 from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
-
-from content.validator import validate_pdf
+from content.validator import Validator
 
 
 class BaseModel(models.Model, GeneratePreviewMixin):
@@ -78,7 +77,7 @@ class BasePDFModel(BaseModel):
     pdf = models.FileField(verbose_name=_("PDF"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True,
-                           validators=(validate_pdf,))
+                           validators=(Validator.validate_pdf,))
 
     class Meta:
         """Meta options
