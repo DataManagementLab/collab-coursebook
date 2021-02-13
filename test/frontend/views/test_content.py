@@ -1,25 +1,49 @@
 """Purpose of this file
 
-This file contains the test cases for /frontend/forms/content.py - AddContentView.
+This file contains the test cases for /frontend/forms/content.py.
 """
+import test.utils as utils
 
-import shutil
-
-from django.test import TestCase, override_settings
-# pylint: disable=imported-auth-user
+# pylint: disable=imported-auth-user)
 from django.contrib.auth.models import User
+from django.test import TestCase
 from django.urls import reverse
 
-from base.models import Content
+import content.forms as form
+import content.models as model
 
-from content.models import TextField, Latex, SingleImageAttachment
-
-from utils import test_utils
-from utils.test_utils import MEDIA_ROOT
+from frontend.views.content import clean_attachment
+from test.test_cases import MediaTestCase
 
 
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class AddContentViewTestCase(TestCase):
+class CleanAttachmentTestCase(TestCase):
+    """Clean attachment test case
+
+    Defines the test cases for the function clean_attachment.
+    """
+
+    def setUp(self):
+        """Setup
+
+        Sets up the test database.
+        """
+        utils.setup_database()
+
+    def test_successful(self):
+        """Test successful
+
+        Tests that clean_attachments removes the attachments from the database.
+        """
+        attachment = utils.generate_attachment(2)
+        self.assertEqual(attachment.images.count(), 2)
+
+        formset = form.SingleImageFormSet(queryset=model.SingleImageAttachment.objects.none())
+        clean_attachment(attachment, formset)
+        self.assertEqual(attachment.images.count(), 0)
+        self.assertEqual(model.SingleImageAttachment.objects.count(), 0)
+
+
+class AddContentViewTestCase(MediaTestCase):
     """Add content test case
 
     Defines the test cases for the add content view.
@@ -30,22 +54,13 @@ class AddContentViewTestCase(TestCase):
 
         Sets up the test database.
         """
-        test_utils.setup_database()
+        super().setUp()
         self.client.force_login(User.objects.get(pk=1))
 
-    @classmethod
-    def tearDownClass(cls):
-        """Teat down class
-
-        Deletes the generated files after running the utility.
-        """
-        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
-        super().tearDownClass()
-
     def post_redirects_to_content(self, path, data):
-        """Post redirection to content
+        """POST redirection to content
 
-        Tests that the Post request with the given path and data redirects to
+        Tests the function post that the POST request with the given path and data redirects to
         the content page of the newly created Content.
 
         :param path: The path used for the POST request
@@ -61,9 +76,9 @@ class AddContentViewTestCase(TestCase):
         self.assertEqual(response.url, response_path)
 
     def test_add_textfield(self):
-        """Test add TextField
+        """POST test case - add TextField
 
-        Tests that a Textfield gets created and saved properly after sending
+        Tests the function post that a Textfield gets created and saved properly after sending
         a POST request to content-add and that the POST request redirects to
         the content page.
         """
@@ -78,14 +93,14 @@ class AddContentViewTestCase(TestCase):
             'form-INITIAL_FORMS': '0'
         }
         self.post_redirects_to_content(path, data)
-        self.assertEqual(TextField.objects.count(), 1)
-        content = TextField.objects.first()
+        self.assertEqual(model.TextField.objects.count(), 1)
+        content = model.TextField.objects.first()
         self.assertEqual(content.textfield, "Lorem ipsum")
 
     def test_add_latex(self):
-        """Test add Latex
+        """POST test case -  add Latex
 
-        Tests that a Latex Content gets created and saved properly after sending
+        Tests the function post that a Latex Content gets created and saved properly after sending
         a POST request to content-add and that the POST request redirects to the
         content page.
         """
@@ -100,23 +115,23 @@ class AddContentViewTestCase(TestCase):
             'form-INITIAL_FORMS': '0'
         }
         self.post_redirects_to_content(path, data)
-        self.assertEqual(Latex.objects.count(), 2)
-        content = Latex.objects.get(pk=2)
+        self.assertEqual(model.Latex.objects.count(), 2)
+        content = model.Latex.objects.get(pk=2)
         self.assertEqual(content.textfield, '\\textbf{Test}')
         self.assertTrue(bool(content.pdf))
 
     def test_add_attachments(self):
-        """Test add Latex
+        """POST test case - add attachments
 
-        Tests that Image Attachments get created and saved properly after sending
+        Tests the function post that Image Attachments get created and saved properly after sending
         a POST request to content-add and that the POST request redirects to
         the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
         })
-        img0 = test_utils.generate_image_file(0)
-        img1 = test_utils.generate_image_file(1)
+        img0 = utils.generate_image_file(0)
+        img1 = utils.generate_image_file(1)
         data = {
             'language': 'de',
             'textfield': 'Lorem ipsum',
@@ -129,11 +144,11 @@ class AddContentViewTestCase(TestCase):
             'form-INITIAL_FORMS': '0'
         }
         self.post_redirects_to_content(path, data)
-        self.assertEqual(TextField.objects.count(), 1)
-        text = TextField.objects.first()
+        self.assertEqual(model.TextField.objects.count(), 1)
+        text = model.TextField.objects.first()
         self.assertEqual(text.textfield, "Lorem ipsum")
-        self.assertEqual(SingleImageAttachment.objects.count(), 2)
-        content = Content.objects.get(pk=text.content_id)
+        self.assertEqual(model.SingleImageAttachment.objects.count(), 2)
+        content = model.Content.objects.get(pk=text.content_id)
         self.assertEqual(content.attachment.images.count(), 2)
         for image_attachment in content.attachment.images.all():
             self.assertTrue(bool(image_attachment.image))

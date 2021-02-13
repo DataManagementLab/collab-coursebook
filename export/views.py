@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from base.models import Course, Favorite
-from export.helper_functions import LaTeX
+from export.helper_functions import Latex
 
 
 def generate_coursebook(request, pk, template="content/export/base.tex", context=None):
@@ -19,12 +19,12 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
-    :param template: The path of the LaTeX template to use
+    :param template: The path of the Latex template to use
     :type template: str
     :param context: The context of the content
     :type context: dict:
 
-    :return: the generated coursebook as PDF, PDF LaTeX output and as an rendered template
+    :return: the generated coursebook as PDF, PDF Latex output and as an rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
     """
 
@@ -41,7 +41,7 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     context['export_pdf'] = True
 
     # Perform compilation given context and template
-    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
+    (pdf, pdflatex_output, tex_template) = Latex.render(context, template, [])
     return pdf, pdflatex_output, tex_template
 
 
@@ -76,7 +76,7 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
     :type request: WSGIRequest
     :param pdf: The PDF
     :type pdf: bytes
-    :param pdflatex_output: The PDF LaTeX output
+    :param pdflatex_output: The PDF Latex output
     :type pdflatex_output: Tuple[bytes, bytes]
     :param tex_template: The rendered template
     :type tex_template: str
@@ -108,12 +108,12 @@ def generate_pdf(user, content, template="content/export/base.tex", context=None
     :type user: User
     :param content: The content of the PDF
     :type content: Content
-    :param template: The path of the LaTeX template to use
+    :param template: The path of the Latex template to use
     :type template: str
     :param context: The context of the content
     :type context: dict
 
-    :return: the generated PDF as PDF, PDF LaTeX output and its rendered template
+    :return: the generated PDF as PDF, PDF Latex output and its rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
     """
     if context is None:
@@ -126,7 +126,7 @@ def generate_pdf(user, content, template="content/export/base.tex", context=None
     context['export_pdf'] = False
 
     # Performs compilation given context and template
-    (pdf, pdflatex_output, tex_template) = LaTeX.render(context, template, [])
+    (pdf, pdflatex_output, tex_template) = Latex.render(context, template, [])
     return pdf, pdflatex_output, tex_template
 
 

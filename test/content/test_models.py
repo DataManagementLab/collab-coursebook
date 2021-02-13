@@ -1,28 +1,29 @@
 """Purpose of this file
 
-This file contains the test cases for /content/models.py
+This file contains the test cases for /content/models.py.
 """
 import os
 
+from test.test_cases import MediaTestCase
+import test.utils as utils
+
 from django.test import override_settings
 
-from base.models.content import Content
+from base.models import Content
 
 import content.models as model
-from content.tests.base_test_case import BaseTestCase
-
-from utils.test_utils import MEDIA_ROOT
 
 
-@override_settings(MEDIA_ROOT=MEDIA_ROOT)
-class ModelsTest(BaseTestCase):
-    """Models test case
+# pylint: disable=too-few-public-methods)
+@override_settings(MEDIA_ROOT=utils.MEDIA_ROOT)
+class LatexTestCase(MediaTestCase):
+    """Latex test case
 
-    Defines the test cases for the models.
+    Defines the test cases for the model Latex.
     """
 
-    def test_generate_preview(self):
-        """Test BasePDFModel.generate_preview()
+    def test_generate_preview_successful(self):
+        """Generate preview test case - successful
 
         Tests that a preview image gets generated in the preview folder
         after calling generate_preview on a Latex Content.
@@ -30,9 +31,9 @@ class ModelsTest(BaseTestCase):
         latex = model.Latex.objects.first()
         preview_folder = 'uploads/previews/'
 
-        self.assertFalse(os.path.exists(os.path.join(MEDIA_ROOT, preview_folder)))
+        self.assertFalse(os.path.exists(os.path.join(utils.MEDIA_ROOT, preview_folder)))
         preview_path = latex.generate_preview()
-        self.assertTrue(os.path.exists(os.path.join(MEDIA_ROOT, preview_folder)))
+        self.assertTrue(os.path.exists(os.path.join(utils.MEDIA_ROOT, preview_folder)))
 
         content = Content.objects.first()
         content.preview.name = preview_path

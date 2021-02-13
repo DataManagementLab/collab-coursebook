@@ -34,8 +34,8 @@ msgid "Image"
 msgstr "Bild"
 
 #: .\forms\course.py:58
-msgid "LaTeX-Textfield"
-msgstr "LaTeX-Textfeld"
+msgid "Latex-Textfield"
+msgstr "Latex-Textfeld"
 
 #: .\forms\course.py:58
 msgid "YouTube-Video"

@@ -36,9 +36,9 @@ class ImageContentAdmin(CompareVersionAdmin):
 # pylint: disable=too-many-ancestors
 @admin.register(Latex)
 class LatexAdmin(CompareVersionAdmin):
-    """LaTeX admin
+    """Latex admin
 
-    Represents the LaTeX model in the admin panel.
+    Represents the Latex model in the admin panel.
     """
 
 

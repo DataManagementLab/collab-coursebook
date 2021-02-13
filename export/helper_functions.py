@@ -14,17 +14,17 @@ from django.template.loader import get_template
 from export.templatetags.cc_export_tags import export_template, tex_escape
 
 
-class LaTeX:
+class Latex:
     """LaTeX Export
 
-    This class takes care of the export and rendering of LaTeX code.
+    This class takes care of the export and rendering of Latex code.
 
-    :attr LaTeX.encoding: The file encoding
-    :type LaTeX.encoding: str
-    :attr LaTeX.error_prefix: The error prefix character to find the error message in the logs
-    :type LaTeX.error_prefix: str
-    :attr LaTeX.error_template: he name of the error template if the compilation went wrong
-    :type LaTeX.error_template: str
+    :attr Latex.encoding: The file encoding
+    :type Latex.encoding: str
+    :attr Latex.error_prefix: The error prefix character to find the error message in the logs
+    :type Latex.error_prefix: str
+    :attr Latex.error_template: he name of the error template if the compilation went wrong
+    :type Latex.error_template: str
     """
     encoding = 'utf-8'
     error_prefix = '!'
@@ -35,7 +35,7 @@ class LaTeX:
     def render(context, template_name, assets, app='export', external_assets=None):
         """Render
 
-        Renders the LaTeX code with its content and then compiles the code to generate
+        Renders the Latex code with its content and then compiles the code to generate
         a PDF with its log.
 
         https://github.com/d120/pyophase/blob/master/ophasebase/helper.py
@@ -52,15 +52,15 @@ class LaTeX:
         :param external_assets:
         :type external_assets:
 
-        :return: the rendered LaTeX code as PDF, PDF LaTeX output and its the rendered template
+        :return: the rendered Latex code as PDF, PDF Latex output and its the rendered template
         :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
         """
         template = get_template(template_name)
-        rendered_tpl = template.render(context).encode(LaTeX.encoding)
+        rendered_tpl = template.render(context).encode(Latex.encoding)
         # Prerender content templates
         for content in context['contents']:
-            rendered_tpl += LaTeX.pre_render(content, context['export_pdf'])
-        rendered_tpl += r"\end{document}".encode(LaTeX.encoding)
+            rendered_tpl += Latex.pre_render(content, context['export_pdf'])
+        rendered_tpl += r"\end{document}".encode(Latex.encoding)
 
         with tempfile.TemporaryDirectory() as tempdir:
 
@@ -70,14 +70,14 @@ class LaTeX:
             pdflatex_output = process.communicate(rendered_tpl)
 
             # Filter error messages in log (stdout)
-            error_log = LaTeX.errors(pdflatex_output[0])
+            error_log = Latex.errors(pdflatex_output[0])
             # Error log
             if len(error_log) != 0:
-                rendered_tpl = template.render(context).encode(LaTeX.encoding)
+                rendered_tpl = template.render(context).encode(Latex.encoding)
                 # Prerender errors templates
-                rendered_tpl += LaTeX.pre_render(len(error_log), context['export_pdf'],
-                                                 LaTeX.error_template)
-                rendered_tpl += r"\end{document}".encode(LaTeX.encoding)
+                rendered_tpl += Latex.pre_render(len(error_log), context['export_pdf'],
+                                                 Latex.error_template)
+                rendered_tpl += r"\end{document}".encode(Latex.encoding)
 
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
                 pdflatex_output = process.communicate(rendered_tpl)
@@ -97,18 +97,18 @@ class LaTeX:
         If there are none, an empty list will be returned.
 
         Parameters:
-            :param lob: A list of bytes representing the PDF LaTeX compile log
+            :param lob: A list of bytes representing the PDF Latex compile log
             :type lob: List[byte]
 
         :return: the error messages from the log (stdout)
         :rtype: List[str]
         """
         # Decode bytes to string and split the string by the delimiter '\n'
-        lines = lob.decode(LaTeX.encoding).splitlines()
+        lines = lob.decode(Latex.encoding).splitlines()
         found = []
         for line in lines:
-            # LaTeX log errors contains '!'
-            index = line.find(LaTeX.error_prefix)
+            # Latex log errors contains '!'
+            index = line.find(Latex.error_prefix)
             if index != -1:
                 tmp = line[index:]
                 # Do not add duplicates
@@ -148,5 +148,5 @@ class LaTeX:
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data
         rendered_tpl = template.render(context)
-        rendered_tpl = re.sub(r'\{~~', '{', rendered_tpl).encode(LaTeX.encoding)
+        rendered_tpl = re.sub(r'\{~~', '{', rendered_tpl).encode(Latex.encoding)
         return rendered_tpl

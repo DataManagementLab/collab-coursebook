@@ -16,9 +16,9 @@ from base.models.content import Category, Topic, Content, Course
 import content.forms as form
 import content.models as model
 
-# Temporary media directory
 from frontend.views.validator import Validator
 
+# Temporary media directory
 MEDIA_ROOT = tempfile.mkdtemp()
 
 

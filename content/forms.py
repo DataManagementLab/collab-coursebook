@@ -168,9 +168,9 @@ class AddTextField(forms.ModelForm):
 
 
 class AddLatex(forms.ModelForm):
-    """Add LaTeX
+    """Add Latex
 
-    This model represents the add form for LaTeX code.
+    This model represents the add form for Latex code.
     """
 
     class Meta:

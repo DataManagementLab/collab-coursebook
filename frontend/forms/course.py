@@ -59,7 +59,7 @@ class FilterAndSortForm(forms.Form):
     """
 
     FILTER_CHOICE = [('None', '------'), ('Text', _('Text')), ('Image', _('Image')),
-                     ('Latex', _('LaTeX-Textfield')), ('YouTube-Video', _('YouTube-Video')),
+                     ('Latex', _('Latex-Textfield')), ('YouTube-Video', _('YouTube-Video')),
                      ('PDF', 'PDF')]  # + Content.STYLE
     SORTING_CHOICE = [('None', '-----'), ('Date', _('Date')), ('Rating', _('Rating'))]
     filter = forms.CharField(label=_('Filter by'),

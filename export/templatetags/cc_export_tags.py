@@ -24,6 +24,9 @@ def export_template(type_t):
 
     Validate the type and retrieve the suitable template.
 
+    :param type_t: The content type or error
+    :type type_t: str
+
     returns: the path of the template
     rtype: str
     """
@@ -56,7 +59,7 @@ def ret_path(value):
 def tex_escape(value):
     """Escape characters
 
-    Defines the escape characters with special meaning in LaTeX and replace them.
+    Defines the escape characters with special meaning in Latex and replace them.
 
     https://github.com/d120/pyophase/blob/master/ophasebase/templatetags/tex_escape.py
     Retrieved: 10.08.2020
