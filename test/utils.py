@@ -72,7 +72,7 @@ def setup_database():
     Course.objects.create(title='Course', description='desc', category=cat)
     topic = Topic.objects.create(title="Topic", category=cat)
     content = Content.objects.create(author=user.profile, topic=topic, type=model.Latex.TYPE,
-                                     description='this is a descrieption')
+                                     description='this is a description')
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
     Validator.validate_latex(user, content, latex, topic_id=topic.pk)

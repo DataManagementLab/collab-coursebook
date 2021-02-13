@@ -17,7 +17,7 @@ from export.templatetags.cc_export_tags import export_template, tex_escape
 class Latex:
     """LaTeX Export
 
-    This class takes care of the export and rendering of Latex code.
+    This class takes care of the export and rendering of LaTeX code.
 
     :attr Latex.encoding: The file encoding
     :type Latex.encoding: str
@@ -35,7 +35,7 @@ class Latex:
     def render(context, template_name, assets, app='export', external_assets=None):
         """Render
 
-        Renders the Latex code with its content and then compiles the code to generate
+        Renders the LaTeX code with its content and then compiles the code to generate
         a PDF with its log.
 
         https://github.com/d120/pyophase/blob/master/ophasebase/helper.py
@@ -52,7 +52,7 @@ class Latex:
         :param external_assets:
         :type external_assets:
 
-        :return: the rendered Latex code as PDF, PDF Latex output and its the rendered template
+        :return: the rendered LaTeX code as PDF, PDF LaTeX output and its the rendered template
         :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
         """
         template = get_template(template_name)
@@ -61,7 +61,7 @@ class Latex:
         for content in context['contents']:
             rendered_tpl += Latex.pre_render(content, context['export_pdf'])
         rendered_tpl += r"\end{document}".encode(Latex.encoding)
-
+        print(rendered_tpl)
         with tempfile.TemporaryDirectory() as tempdir:
 
             process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
@@ -97,7 +97,7 @@ class Latex:
         If there are none, an empty list will be returned.
 
         Parameters:
-            :param lob: A list of bytes representing the PDF Latex compile log
+            :param lob: A list of bytes representing the PDF LaTeX compile log
             :type lob: List[byte]
 
         :return: the error messages from the log (stdout)
@@ -107,7 +107,7 @@ class Latex:
         lines = lob.decode(Latex.encoding).splitlines()
         found = []
         for line in lines:
-            # Latex log errors contains '!'
+            # LaTeX log errors contains '!'
             index = line.find(Latex.error_prefix)
             if index != -1:
                 tmp = line[index:]

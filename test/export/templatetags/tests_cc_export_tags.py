@@ -36,7 +36,7 @@ class ExportTemplateTestCases(TestCase):
     def test_latex(self):
         """Test LaTex content
 
-        Tests that the function returns the correct path for the Latex template.
+        Tests that the function returns the correct path for the LaTeX template.
         """
         image_template = export_template(model.Latex.TYPE)
         self.assertEqual(image_template, self.path + 'Latex.tex')

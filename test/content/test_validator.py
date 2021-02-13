@@ -21,7 +21,7 @@ class ValidatorTestCase(MediaTestCase):
     """
 
     def test_latex_valid(self):
-        """Validate Latex test case - valid
+        """Validate LaTeX test case - valid
 
         Tests that the function validate_latex raises no error for a valid pdf and returns None.
         """
@@ -29,7 +29,7 @@ class ValidatorTestCase(MediaTestCase):
         self.assertIsNone(Validator.validate_pdf(latex.pdf))
 
     def test_latex_invalid_filetype(self):
-        """Validate Latex test case - invalid file type
+        """Validate LaTeX test case - invalid file type
 
         Tests that the function validate_latex raises the correct error for an invalid file
         type (image).
@@ -40,7 +40,7 @@ class ValidatorTestCase(MediaTestCase):
         self.assertEqual('Unsupported file type.', context_manager.exception.message)
 
     def test_latex_invalid_extension(self):
-        """Validate Latex test case -  invalid file extension
+        """Validate LaTeX test case -  invalid file extension
 
         Tests that the function validate_latex raises the correct error for a pdf with an invalid
         file extension (jpg).

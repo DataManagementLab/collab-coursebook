@@ -17,7 +17,7 @@ class Validator:
 
     @staticmethod
     def validate_latex(user, content, latex_content, topic_id):
-        """Validate Latex
+        """Validate LaTeX
 
         Validates LateX and compiles the Latex code and stores its pdf into the database.
 

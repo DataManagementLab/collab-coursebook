@@ -202,7 +202,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content_type_data.content = content
             content_type_data.save()
 
-            # If the content type is Latex, compile the Latex Code and store in DB
+            # If the content type is LaTeX, compile the LaTeX Code and store in DB
             if content_type == 'Latex':
                 Validator.validate_latex(get_user(request),
                                          content,
@@ -407,7 +407,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 content_type = content.type
                 content_type_data = content_type_form.save()
 
-                # If the content type is Latex, compile the Latex Code and store in DB
+                # If the content type is LaTeX, compile the LaTeX Code and store in DB
                 if content_type == 'Latex':
                     Validator.validate_latex(get_user(request),
                                              content,

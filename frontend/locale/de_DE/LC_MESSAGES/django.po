@@ -34,8 +34,8 @@ msgid "Image"
 msgstr "Bild"
 
 #: .\forms\course.py:58
-msgid "Latex-Textfield"
-msgstr "Latex-Textfeld"
+msgid "LaTeX-Textfield"
+msgstr "LaTeX-Textfeld"
 
 #: .\forms\course.py:58
 msgid "YouTube-Video"
@@ -298,12 +298,14 @@ msgstr "Kurs bearbeiten"
 
 #: .\templates\frontend\course\edit.html:30
 msgid "Change"
+msgstr "Ändern"
 
 #: .\templates\frontend\course\view.html:32
 msgid "Unsave"
 msgstr "Zurückkehren"
-msgstr "Ändern"
+
 #: .\templates\frontend\course\view.html:42
+msgid "Edit Course"
 msgstr "Kurs bearbeiten"
 
 #: .\templates\frontend\course\view.html:44

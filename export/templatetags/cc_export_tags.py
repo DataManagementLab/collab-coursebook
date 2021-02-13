@@ -49,7 +49,7 @@ def ret_path(value):
             value
         """
 
-    # Compute the path to the image and escape \ for Latex
+    # Compute the path to the image and escape \ for LaTeX
     path = os.path.join(os.path.abspath(BASE_DIR), value[1:])
     return path.replace('\\', '/')
 
@@ -59,7 +59,7 @@ def ret_path(value):
 def tex_escape(value):
     """Escape characters
 
-    Defines the escape characters with special meaning in Latex and replace them.
+    Defines the escape characters with special meaning in LaTeX and replace them.
 
     https://github.com/d120/pyophase/blob/master/ophasebase/templatetags/tex_escape.py
     Retrieved: 10.08.2020

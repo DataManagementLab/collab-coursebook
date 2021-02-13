@@ -174,7 +174,7 @@ class ImageHistoryCompareView(BaseContentHistoryCompareView):
 
 
 class LatexHistoryCompareView(BaseContentHistoryCompareView):
-    """Latex history compare view
+    """LaTeX history compare view
 
     Displays history of this content to the user
 

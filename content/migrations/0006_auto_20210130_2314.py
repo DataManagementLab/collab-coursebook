@@ -19,12 +19,12 @@ class Migration(migrations.Migration):
             fields=[
                 ('content', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='base.Content', verbose_name='Content')),
                 ('pdf', models.FileField(blank=True, upload_to='uploads/contents/%Y/%m/%d/', validators=[content.validator.Validator.validate_pdf], verbose_name='PDF')),
-                ('textfield', models.TextField(verbose_name='Latex Code')),
+                ('textfield', models.TextField(verbose_name='LaTeX Code')),
                 ('source', models.TextField(verbose_name='Source')),
             ],
             options={
-                'verbose_name': 'Latex Content',
-                'verbose_name_plural': 'Latex Contents',
+                'verbose_name': 'LaTeX Content',
+                'verbose_name_plural': 'LaTeX Contents',
             },
             bases=(models.Model, content.mixin.GeneratePreviewMixin),
         ),

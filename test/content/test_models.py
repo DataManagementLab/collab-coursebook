@@ -17,7 +17,7 @@ import content.models as model
 # pylint: disable=too-few-public-methods)
 @override_settings(MEDIA_ROOT=utils.MEDIA_ROOT)
 class LatexTestCase(MediaTestCase):
-    """Latex test case
+    """LaTeX test case
 
     Defines the test cases for the model Latex.
     """
@@ -26,7 +26,7 @@ class LatexTestCase(MediaTestCase):
         """Generate preview test case - successful
 
         Tests that a preview image gets generated in the preview folder
-        after calling generate_preview on a Latex Content.
+        after calling generate_preview on a LaTeX Content.
         """
         latex = model.Latex.objects.first()
         preview_folder = 'uploads/previews/'

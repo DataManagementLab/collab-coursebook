@@ -98,9 +98,9 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(content.textfield, "Lorem ipsum")
 
     def test_add_latex(self):
-        """POST test case -  add Latex
+        """POST test case -  add LaTeX
 
-        Tests the function post that a Latex Content gets created and saved properly after sending
+        Tests the function post that a LaTeX Content gets created and saved properly after sending
         a POST request to content-add and that the POST request redirects to the
         content page.
         """

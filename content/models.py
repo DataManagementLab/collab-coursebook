@@ -180,9 +180,9 @@ class ImageContent(BaseContentModel, BaseSourceModel):
 
 
 class Latex(BaseContentModel, BasePDFModel):
-    """Latex text field
+    """LaTeX text field
 
-    This model represents a Latex based content.
+    This model represents a LaTeX based content.
 
     :attr Latex.TYPE: Describes the content type of this model
     :type Latex.TYPE: str
@@ -224,7 +224,7 @@ class Latex(BaseContentModel, BasePDFModel):
 
 
 class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
-    """Latex text field
+    """PDF content
 
     This model represents a PDF based content.
 

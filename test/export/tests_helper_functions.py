@@ -16,7 +16,7 @@ from export.templatetags.cc_export_tags import tex_escape
 
 
 class LaTeXTestCase(TestCase):
-    """Latex test case
+    """LaTeX test case
 
     Defines the test cases for the class Latex.
     """
@@ -51,9 +51,9 @@ class LaTeXTestCase(TestCase):
                       pre_render.decode(helper.Latex.encoding))
 
     def test_prerender_latex_export(self):
-        """Prerender test case -  Latex export
+        """Prerender test case -  LaTeX export
 
-        Tests that the function prerender renders a Latex content correctly for export.
+        Tests that the function prerender renders a LaTeX content correctly for export.
         """
         content = model.Content.objects.first()
         latex_content = model.Latex.objects.first()
@@ -62,9 +62,9 @@ class LaTeXTestCase(TestCase):
         self.assertIn(content.description, pre_render.decode(helper.Latex.encoding))
 
     def test_prerender_latex_no_export(self):
-        """Prerender test case -  Latex no export
+        """Prerender test case - LaTeX no export
 
-        Tests that the function prerender renders a Latex content correctly without the data used
+        Tests that the function prerender renders a LaTeX content correctly without the data used
         for export.
         """
         content = model.Content.objects.first()
