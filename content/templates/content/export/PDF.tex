@@ -1,22 +1,23 @@
 {% load cc_export_tags %}
 {% autoescape off %}
 
-% Show topic title when exporting
+% show topic title when exporting
 {% if export_pdf %}
 {\Large \textbf{ {{content.topic.title}}   }}
 {% endif %}
 
 \vskip 1em
 
-% Show description when exporting
+% show description when exporting
 {% if export_pdf %}
 \textit{Description:} {{content.description|tex_escape}}
 {% endif %}
 
 \vskip 1em
 
-% YouTube link
-\url{ {{ content.ytvideocontent.url }} }
+% show pdf content
+\includepdf[pages=-]{~~{{content.pdfcontent.pdf.url|ret_path}}} % ~~ is escape char
+
 
 \vskip 3em
 

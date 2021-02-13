@@ -8,15 +8,15 @@
 
 \vskip 1em
 
-% Show latex content
-{{ content.latex.textfield }}
-
-\vskip 1em
-
-%Show description when exporting
+% Show description when exporting
 {% if export_pdf %}
 \textit{Description:} {{content.description|tex_escape}}
 {% endif %}
+
+\vskip 1em
+
+% Show latex content
+{{ content.latex.textfield }}
 
 \vskip 3em
 

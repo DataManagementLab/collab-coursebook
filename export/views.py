@@ -99,17 +99,15 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
     return response
 
 
-def generate_pdf(user, topic, content, template="content/export/base.tex", context=None):
+def generate_pdf(user, content, template="content/export/base.tex", context=None):
     """Generate PDF
 
     Generates a PDF file with name tags for students in the queryset.
 
     :param user: The user of the content
     :type user: User
-    :param topic: The topic the content belongs to
-    :type topic: Topic
     :param content: The content of the PDF
-    :type content: dict
+    :type content: Content
     :param template: The path of the LaTeX template to use
     :type template: str
     :param context: The context of the content
@@ -123,7 +121,7 @@ def generate_pdf(user, topic, content, template="content/export/base.tex", conte
 
         # Set Context
     context['user'] = user
-    context['topic'] = topic
+    context['topic'] = content.topic
     context['contents'] = [content]
     context['export_pdf'] = False
 
@@ -132,15 +130,13 @@ def generate_pdf(user, topic, content, template="content/export/base.tex", conte
     return pdf, pdflatex_output, tex_template
 
 
-def generate_pdf_response(user, topic, content):
+def generate_pdf_response(user, content):
     """Generate pdf response
 
     Generates a PDF file with name tags for students in the queryset.
 
     :param user: The user of the content
     :type user: User
-    :param topic: The topic the content belongs to
-    :type topic: Topic
     :param content: The content of the pdf
     :type content: dict
 
@@ -149,5 +145,5 @@ def generate_pdf_response(user, topic, content):
     """
 
     # Calls the function for generating the pdf and return the pdf
-    pdf = generate_pdf(user, topic, content)[0]
+    pdf = generate_pdf(user, content)[0]
     return pdf

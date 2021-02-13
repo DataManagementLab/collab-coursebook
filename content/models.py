@@ -443,7 +443,7 @@ class ImageAttachment(BaseModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.DESC}: {self.images.creation_counter}"
+        return f"{self.DESC}: {self.pk}"
 
 
 # Dict: Contains all available content types.

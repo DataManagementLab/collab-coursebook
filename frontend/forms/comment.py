@@ -25,6 +25,8 @@ class CommentForm(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: Dict[str, Model field]
         """
         model = Comment
         fields = ['text']
