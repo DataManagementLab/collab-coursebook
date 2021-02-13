@@ -92,7 +92,7 @@ def validate_latex(user, content, latex_content, topic_id):
     :type topic_id: int
     """
     topic = Topic.objects.get(pk=topic_id)
-    pdf = generate_pdf_response(user, topic, content)
+    pdf = generate_pdf_response(user, content)
     latex_content.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
     latex_content.save()
 
