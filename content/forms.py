@@ -124,6 +124,8 @@ class AddContentFormPdf(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: Dict[str, Model field]
         """
         model = PDFContent
         fields = ['pdf', 'source']
@@ -149,6 +151,8 @@ class AddTextField(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: Dict[str, Model field]
         """
         model = TextField
         fields = ['textfield', 'source']
@@ -178,6 +182,8 @@ class AddLatex(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: Dict[str, Model field]
         """
         model = Latex
         fields = ['textfield', 'source']
