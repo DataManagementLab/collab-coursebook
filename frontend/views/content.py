@@ -207,7 +207,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                 Validator.validate_latex(get_user(request),
                                          content,
                                          content_type_data,
-                                         kwargs['topic_id'])
+                                         topic_id)
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -412,7 +412,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     Validator.validate_latex(get_user(request),
                                              content,
                                              content_type_data,
-                                             kwargs['topic_id'])
+                                             content.topic_id)
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
