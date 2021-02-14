@@ -148,5 +148,5 @@ class Latex:
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data
         rendered_tpl = template.render(context)
-        rendered_tpl = re.sub(r'\{~~', '{', rendered_tpl).encode(Latex.encoding)
+        rendered_tpl = re.sub('{~~', '{', rendered_tpl).encode(Latex.encoding)
         return rendered_tpl
