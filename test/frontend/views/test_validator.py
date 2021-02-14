@@ -42,5 +42,5 @@ class ValidatorTestCase(TestCase):
         latex = model.Latex.objects.create(textfield=latex_code, content=content)
 
         self.assertFalse(bool(latex.pdf))
-        Validator.validate_latex(user, content, latex, topic.pk)
+        Validator.validate_latex(user, content, latex)
         self.assertTrue((bool(latex.pdf)))

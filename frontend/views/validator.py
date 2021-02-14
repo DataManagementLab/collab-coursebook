@@ -4,8 +4,6 @@ This file describes the validators needed for the views.
 """
 from django.core.files.base import ContentFile
 
-from base.models import Topic
-
 from export.views import generate_pdf_response
 
 
@@ -16,7 +14,7 @@ class Validator:
     """
 
     @staticmethod
-    def validate_latex(user, content, latex_content, topic_id):
+    def validate_latex(user, content, latex_content):
         """Validate LaTeX
 
         Validates LateX and compiles the Latex code and stores its pdf into the database.
@@ -27,12 +25,9 @@ class Validator:
         :type content: Content
         :param latex_content: The data of the content type
         :type latex_content: Latex
-        :param topic_id: The primary key of the topic
-        :type topic_id: int
         """
-        topic = Topic.objects.get(pk=topic_id)
         pdf = generate_pdf_response(user, content)
-        latex_content.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+        latex_content.pdf.save(f"{content.topic}" + ".pdf", ContentFile(pdf))
         latex_content.save()
 
     @staticmethod

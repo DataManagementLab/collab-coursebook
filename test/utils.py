@@ -50,8 +50,8 @@ def generate_attachment(image_count):
     :param image_count: The number of the images to be generated in the attachment
     :type image_count: int
 
-    :return: the generated image files
-    :rtype: ImageFile
+    :return: the generated image Attachment
+    :rtype: ImageAttachment
     """
     attachment = model.ImageAttachment.objects.create()
     for i in range(image_count):
@@ -75,4 +75,4 @@ def setup_database():
                                      description='this is a description')
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
-    Validator.validate_latex(user, content, latex, topic_id=topic.pk)
+    Validator.validate_latex(user, content, latex)

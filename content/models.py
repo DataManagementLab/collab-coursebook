@@ -450,10 +450,8 @@ CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
     PDFContent.TYPE: PDFContent,
-    ImageAttachment.TYPE: ImageAttachment,
     TextField.TYPE: TextField,
     Latex.TYPE: Latex,
-    SingleImageAttachment.TYPE: SingleImageAttachment
 }
 
 # Set: Content types which are not directly accessible via the topics,

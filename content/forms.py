@@ -197,7 +197,6 @@ class AddLatex(forms.ModelForm):
         }
 
 
-
 # BaseModelFormset: Image attachment form set
 SingleImageFormSet = modelformset_factory(
     SingleImageAttachment,

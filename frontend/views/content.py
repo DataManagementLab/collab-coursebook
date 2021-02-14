@@ -119,27 +119,19 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Returns the context data of the addition of content. If something went wrong,
-        redirect to the invalid page.
+        Returns the context data of the addition of content.
 
         :param kwargs: The keyword arguments
         :type kwargs: dict
 
-        :return: the context data of the addition of the content or if something went wrong,
-        redirect to the invalid page
-        :rtype: Dict[str, Any] | HttpResponseRedirect
+        :return: the context data of the addition of the content
+        :rtype: Dict[str, Any]
          """
         context = super().get_context_data(**kwargs)
 
         # Retrieves the form for content type
-        if "type" in self.kwargs:
-            content_type = self.kwargs['type']
-            if content_type in CONTENT_TYPE_FORMS:
-                context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
-            else:
-                return self.handle_error()
-        else:
-            return self.handle_error()
+        content_type = self.kwargs['type']
+        context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
@@ -206,8 +198,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             if content_type == 'Latex':
                 Validator.validate_latex(get_user(request),
                                          content,
-                                         content_type_data,
-                                         topic_id)
+                                         content_type_data)
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -343,8 +334,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
                 context['content_type_form'] = \
                     CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
-            else:
-                return self.handle_error()
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
@@ -411,8 +400,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 if content_type == 'Latex':
                     Validator.validate_latex(get_user(request),
                                              content,
-                                             content_type_data,
-                                             content.topic_id)
+                                             content_type_data)
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:

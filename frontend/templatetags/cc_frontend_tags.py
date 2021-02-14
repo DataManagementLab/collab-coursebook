@@ -171,7 +171,6 @@ def add_content_button(user, course_id, topic_id):
     # generate list of tuple (content type, content verbose name) for add content dropdown
     content_data = [(content_type, content_model.DESC)
                     for content_type, content_model in CONTENT_TYPES.items()]
-    content_data = list(filter(lambda x: x[0] not in EMBEDDED_CONTENT_TYPES, content_data))
     return {'user': user,
             'course_id': course_id,
             'topic_id': topic_id,
