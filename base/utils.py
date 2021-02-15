@@ -1,6 +1,6 @@
 """Purpose of this file
 
-This module contains the utility functions used in this project.
+This file contains the utility functions used in this module.
 """
 
 from django.utils import timezone
@@ -9,17 +9,17 @@ from .models import CourseStructureEntry
 
 
 def create_topic_and_subtopic_list(topics, course):
-    """(Sub-)Topics
+    """Create (Sub-)Topics list
 
     Creates an ordered list of (sub-)topics.
 
     :param topics: The used topics
-    :type topics: list
+    :type topics: List
     :param course: The course
     :type course: Course
 
     :return: a sorted list of topics
-    :rtype: List[Tuple[Any, int, Any, str]]
+    :rtype: List[Tuple[str, int, Any, str]]
     """
 
     sorted_topics = []
@@ -58,12 +58,13 @@ def create_topic_and_subtopic_list(topics, course):
 def structure_to_tuple(structure):
     """Structure to tuple
 
-    Returns the structure as a tuple.
+    Returns the index of structure as a tuple. The index determines if the topic is a
+    main topic or a sub topic.
 
-    :param structure: The index in the structure
+    :param structure: The index of the structure
     :type structure: str
 
-    return: the structure as a tuple
+    return: the index of the structure as a tuple
     rtype: Tuple[int, int]
     """
     if len(structure.split('/')) <= 1:
@@ -118,7 +119,7 @@ def check_owner_permission(request, course, messages):
     :param course: The course for which it should be checked
     :type course: Course
     :param messages: The messages to be able to set an error message
-    :type messages: TreeWalker
+    :type messages: TODO
 
     :return: true if the owner has no permission and a message should be displayed
     :rtype: bool

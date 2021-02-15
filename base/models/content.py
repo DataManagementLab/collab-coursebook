@@ -15,6 +15,7 @@ import reversion
 from fontawesome_5.fields import IconField
 
 from base.models import Profile
+
 from .social import Rating
 
 
@@ -244,7 +245,7 @@ class Topic(models.Model):
         :type filtered_by: str
 
         :return: the sorted and filtered contents
-        :rtype: QuerySet
+        :rtype: QuerySet[Content]
         """
         contents = self.contents.all()
         # filtered by is a String and represents the decision of the user
@@ -422,7 +423,7 @@ class Content(models.Model):
         :return: the average number of ratings
         :rtype: float
         """
-        if self.get_rate() is None:
+        if self.get_rate() == -1:
             return 0
         return self.get_rate()
 
@@ -458,7 +459,6 @@ class Content(models.Model):
         :return: the total count of ratings
         :rtype: int
         """
-        # pylint: disable=no-member
         return self.ratings.count()
 
     def user_already_rated(self, user):
@@ -472,13 +472,13 @@ class Content(models.Model):
         :return: true if an user already rated a content
         :rtype: bool
         """
-        # pylint: disable=no-member
         return self.ratings.filter(user_id=user.pk).count() > 0
 
     def get_user_rate(self, user):
         """User rating
 
-        Returns the rating of an user.
+        Returns the rating of an user. If the use did not rate already, then the returned
+        rating will be 0.
 
         :param user: The user to retrieve the rating
         :type user: User
@@ -487,7 +487,6 @@ class Content(models.Model):
         :rtype: int
         """
         if self.user_already_rated(user):
-            content_id = self.id
             return self.ratings.get(user=user).rating_set.first().rating
         return 0
 
