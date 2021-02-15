@@ -36,10 +36,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         Gets the context data.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         ctx = super().get_context_data(**kwargs)
         ctx["periods"] = Period.objects.all()

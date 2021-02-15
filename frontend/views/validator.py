@@ -2,6 +2,7 @@
 
 This file describes the validators needed for the views.
 """
+
 from django.core.files.base import ContentFile
 
 from export.views import generate_pdf_response
@@ -47,7 +48,7 @@ class Validator:
 
         :return: the redirection to the invalid page if the image form set or
         the attachment form is not valid
-        :rtype: None | HttpResponseRedirect
+        :rtype: None or HttpResponseRedirect
         """
         if attachment_form.is_valid():
             # Evaluates the attachment form

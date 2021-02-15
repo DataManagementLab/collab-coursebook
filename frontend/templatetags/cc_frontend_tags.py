@@ -7,8 +7,10 @@ from django import template
 from django.conf import settings
 
 from base.models import Favorite
+
 from collab_coursebook.settings import ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE
-from content.models import CONTENT_TYPES, EMBEDDED_CONTENT_TYPES
+
+from content.models import CONTENT_TYPES
 
 register = template.Library()
 
@@ -53,10 +55,10 @@ def count_content(topic_queryset):
     This method counts the contents of the topics in a queryset.
 
     :param topic_queryset: The queryset
-    :type topic_queryset: QuerySet
+    :type topic_queryset: QuerySet[Topic]
 
     :return: the number of contents
-    :rtype: int
+    :rtype: str
     """
     count = 0
     for topic in topic_queryset:
@@ -74,7 +76,7 @@ def rev_range(arg):
     :type arg: int
 
     :return: the range of review
-    :rtype: Iterator
+    :rtype: Iterator[_T]
     """
     return reversed(range(1, arg + 1))
 
@@ -102,7 +104,7 @@ def content_card(content_type):
 
     Gets the matching view for the type.
 
-    :param content_type: type of the content
+    :param content_type: The type of the content
     :type content_type: str
 
     :return: the path to the matching view for the type
@@ -166,9 +168,9 @@ def add_content_button(user, course_id, topic_id):
     :type topic_id: int
 
     :return: The dropdown button as html div
-    :rtype: dict
+    :rtype: dict[str, Any]
     """
-    # generate list of tuple (content type, content verbose name) for add content dropdown
+    # Generates a list of tuple (content type, content verbose name) for add content dropdown
     content_data = [(content_type, content_model.DESC)
                     for content_type, content_model in CONTENT_TYPES.items()]
     return {'user': user,
@@ -189,7 +191,7 @@ def get_coursebook(user, course):
     :type course: Course
 
     :return: the coursebook
-    :rtype: list
+    :rtype: list[Content]
     """
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]

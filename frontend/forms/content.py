@@ -24,9 +24,9 @@ class AddContentForm(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         :attr Meta.widgets: Customization of the model form
-        :type Meta.widgets: Dict[str, Model field]
+        :type Meta.widgets: dict[str, Widget]
         """
         model = Content
         fields = ['description', 'language', 'tags', 'readonly', 'public']
@@ -45,7 +45,7 @@ class EditContentForm(forms.ModelForm):
     a detailed message what was edited
     :type EditContentForm.change_log: CharField
     :attr EditContentForm.field_order: The order of the fields
-    :type EditContentForm.field_order: List(str)
+    :type EditContentForm.field_order: list(str)
     """
 
     change_log = forms.CharField(
@@ -66,9 +66,9 @@ class EditContentForm(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         :attr Meta.widgets: Customization of the model form
-        :type Meta.widgets: Dict[str, Model field]
+        :type Meta.widgets: dict[str, Widget]
         """
         model = Content
         fields = ['description', 'language', 'tags', 'readonly', 'public']
@@ -84,7 +84,7 @@ class TranslateForm(forms.Form):
     This model represents form for translating markdown content.
 
     :attr TranslateForm.TRANSLATE_CHOICE: The translation choices
-    :type TranslateForm.TRANSLATE_CHOICE: List[Tuple[str, str]]
+    :type TranslateForm.TRANSLATE_CHOICE: list[tuple[str, str]]
     :attr TranslateForm.translation: The field to enter the translation
     :type TranslateForm.translation: CharField
     """

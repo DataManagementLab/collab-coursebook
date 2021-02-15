@@ -48,21 +48,21 @@ def clean_attachment(attachment_object, image_formset):
 def rate_content(request, course_id, topic_id, content_id, pk):
     """Rate content
 
-    Let the user rate content.
+    Lets the user rate content.
 
     :param topic_id: The id of the topic
     :type topic_id: int
     :param request: The given request
     :type request: HttpRequest
-    :param course_id: course id
+    :param course_id: The course id
     :type course_id: int
-    :param content_id: id of the content which gets rated
+    :param content_id: The id of the content which gets rated
     :type content_id: int
-    :param pk: the user rating (should be in [ 1, 2, 3, 4, 5])
+    :param pk: The user rating (should be in [ 1, 2, 3, 4, 5])
     :type pk: Any
 
 
-    :return: the redirect to content page
+    :return: the redirection to the content page
     :rtype: HttpResponse
     """
     content = get_object_or_404(Content, pk=content_id)
@@ -101,7 +101,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         Returns the success message when the profile was updated
 
         :param cleaned_data: The cleaned data
-        :type cleaned_data: dict
+        :type cleaned_data: dict[str, Any]
 
         :return: the success message when the profile was updated
         :rtype: __proxy__
@@ -109,8 +109,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return _(f"Content '{cleaned_data['type']}' successfully added")
 
     def handle_error(self):
-        """
-        create error message and return to course page
+        """Error handling
+
+        Creates an error message and return to course page.
+
+        :return: to the course page
+        :rtype: HttpResponseRedirect
         """
         course_id = self.kwargs['course_id']
         messages.error(self.request, _('An error occurred while processing the request'))
@@ -122,10 +126,10 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         Returns the context data of the addition of content.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data of the addition of the content
-        :rtype: Dict[str, Any]
+        :rtype: dict[str, Any]
          """
         context = super().get_context_data(**kwargs)
 
@@ -159,7 +163,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirection to the content page after the submitting or
         to the invalid page if something wrong occurs
@@ -257,7 +261,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         Gets the url of the content page.
 
         :return: url of the content page
-        :rtype: Optional[str]
+        :rtype: None or str
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
@@ -270,7 +274,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         Returns the url for successful editing.
 
         :return: the url of the edited content
-        :rtype: str
+        :rtype: None or str
         """
         return self.get_content_url()
 
@@ -284,27 +288,27 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirection page of the dispatch
         :rtype: HttpResponse
         """
         user = get_user(request)
         if self.get_object().readonly:
-            # only admins and the content owner can edit the content
+            # Only admins and the content owner can edit the content
             if self.get_object().author == user or request.user.is_superuser:
                 return super().dispatch(request, *args, **kwargs)
             messages.error(request, _('You are not allowed to edit this content'))
             return HttpResponseRedirect(self.get_content_url())
-        # everyone can edit the content
+        # Everyone can edit the content
         return super().dispatch(request, *args, **kwargs)
 
     def handle_error(self):
-        """Handle error
+        """Error handling
 
-        Create error message and return to course page.
+        Creates error message and return to course page.
 
-        :return: the http response redirect of the error handling
+        :return: to the course page.
         :rtype: HttpResponseRedirect
         """
         course_id = self.kwargs['course_id']
@@ -317,10 +321,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         Returns the context data of the editing.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data of the editing
-        :rtype: Dict[str, Any]
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
@@ -357,7 +361,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        """Post
+        """Post request
 
         Submits the form and its uploaded files to store it into the database.
 
@@ -366,7 +370,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirection to the content page after the submitting or
         to the invalid page if something wrong occurs
@@ -463,7 +467,7 @@ class ContentView(DetailView):
     context_object_name = 'content'
 
     def post(self, request, *args, **kwargs):
-        """Post
+        """Post request
 
         Creates comment in database.
 
@@ -472,14 +476,14 @@ class ContentView(DetailView):
         :param args: The arguments
         :type: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirection to the content page
         :rtype: HttpResponse
         """
         comment_form = CommentForm(request.POST)
         translate_form = TranslateForm(request.POST)
-        self.object = self.get_object()  # line required
+        self.object = self.get_object()
 
         # pylint: disable=no-member
         if comment_form.is_valid():
@@ -489,7 +493,7 @@ class ContentView(DetailView):
         elif translate_form.is_valid():
             language = translate_form.cleaned_data['translation']
             context = self.get_context_data(**kwargs)
-            # get original content
+            # Gets original content
             content = self.object
             r"""
             with content.file.open() as file:
@@ -527,10 +531,10 @@ class ContentView(DetailView):
         Gets the context data.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['search_result'] = self.request.GET.get('q')
@@ -539,9 +543,9 @@ class ContentView(DetailView):
         context['count'] = content.get_rate_count()
         context['rate'] = round(content.get_rate(), 2)
 
-        # course id for back to course button
+        # Course id for back to course button
         course_id = self.kwargs['course_id']
-        # pylint: disable=no-member
+
         course = Course.objects.get(pk=course_id)
         context['course'] = course
 
@@ -563,7 +567,7 @@ class ContentView(DetailView):
         """
 
         context['comment_form'] = CommentForm()
-        # pylint: disable=no-member
+
         context['comments'] = Comment.objects.filter(content=self.get_object()
                                                      ).order_by('-creation_date')
         context['translate_form'] = TranslateForm()
@@ -607,10 +611,10 @@ class AttachedImageView(DetailView):
         Gets the context data.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
 
@@ -653,7 +657,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         Gets the url of the content page.
 
         :return: the url of the content page
-        :rtype: optional[str]
+        :rtype: None or str
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
@@ -666,7 +670,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         Returns the url to return to after successful delete
 
         :return: the url of the edited content
-        :rtype: str
+        :rtype: __proxy__
         """
         course_id = self.kwargs['course_id']
         return reverse_lazy('frontend:course', args=(course_id,))
@@ -682,7 +686,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the response to redirect to overview of the course if the user is not owner
         :rtype: HttpResponse
@@ -705,26 +709,26 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirect to success url (course)
         :rtype: HttpResponse
         """
 
-        # Send success message
+        # Sends the success message
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
 
         if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
-            
-            # Retrieve the attachment
+
+            # Retrieves the attachment
             attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
 
-            # Remove the images in the attachment from DB
+            # Removes the images in the attachment from DB
             for remove_object in attachment_object.images.all():
                 SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
                 remove_object.delete()
 
-            # Retrieve the success url, then delete the corresponding attachment
+            # Retrieves the success url, then delete the corresponding attachment
             success_url = super().delete(self, request, *args, **kwargs)
             ImageAttachment.objects.filter(pk=attachment_object.pk).delete()
             attachment_object.delete()
@@ -753,10 +757,10 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
         Gets the context data for the response.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']

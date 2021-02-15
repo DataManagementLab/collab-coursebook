@@ -55,14 +55,14 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         abstract = True
 
     def __init__(self, back_url, history_url):
-        """Init
+        """Initializer
 
-        Constructor. Initialize the back and history url to redirect to the
-        page corresponding to the model.
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
 
         :param back_url: The url to the main page
         :type back_url: str
-        :param history_url:  The url to the main history page
+        :param history_url: The url to the main history page
         :type history_url: str
         """
         super().__init__()
@@ -76,10 +76,10 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         Returns the context data of the history.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data of the history
-        :rtype: Dict[str, Any]
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data()
         context['back_url'] = self.get_url(self.back_url)
@@ -95,7 +95,7 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         :type value: str
 
         :return: url of the page related to the given value
-        :rtype: Optional[str]
+        :rtype: None or str
         """
 
 
@@ -106,6 +106,17 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
       configurations  and needed information for all other compare views.
       """
 
+    # pylint: disable=too-few-public-methods
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
+        """
+        abstract = True
+
     def get_url(self, value):
         """Content url
 
@@ -115,7 +126,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         :type value: str
 
         :return: url of the page related to the given value
-        :rtype: Optional[str]
+        :rtype: None or str
         """
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
@@ -130,6 +141,17 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
       configurations  and needed information for all other compare views.
       """
 
+    # pylint: disable=too-few-public-methods
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.abstract: Describes whether this model is an abstract model (class)
+        :type Meta.abstract: bool
+        """
+        abstract = True
+
     def get_url(self, value):
         """Content url
 
@@ -139,7 +161,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
         :type value: str
 
         :return: url of the page related to the given value
-        :rtype: Optional[str]
+        :rtype: None or str
         """
         course_id = self.kwargs['pk']
         return reverse(f'frontend:{value}', args=(course_id,))
@@ -156,6 +178,11 @@ class CourseHistoryCompareView(BaseCourseHistoryCompareView):
     model = Course
 
     def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
         super().__init__('course', 'course-history')
 
 
@@ -170,6 +197,11 @@ class ImageHistoryCompareView(BaseContentHistoryCompareView):
     model = ImageContent
 
     def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
         super().__init__('content', 'image-history')
 
 
@@ -184,6 +216,11 @@ class LatexHistoryCompareView(BaseContentHistoryCompareView):
     model = Latex
 
     def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
         super().__init__('content', 'latex-history')
 
 
@@ -198,6 +235,11 @@ class PdfHistoryCompareView(BaseContentHistoryCompareView):
     model = PDFContent
 
     def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
         super().__init__('content', 'pdf-history')
 
 
@@ -226,4 +268,9 @@ class YTVideoHistoryCompareView(BaseContentHistoryCompareView):
     model = YTVideoContent
 
     def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
         super().__init__('content', 'ytvideo-history')

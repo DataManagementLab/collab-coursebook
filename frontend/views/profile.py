@@ -10,6 +10,7 @@ from django.views.generic import DetailView, UpdateView
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Profile
+
 from frontend.forms.profile import AddProfile
 
 
@@ -23,7 +24,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
     :attr ProfileView.template_name: The path to the html template
     :type ProfileView.template_name: str
     :attr ProfileView.context_object_name: The context object name
-    ProfileView.context_object_name: str
+    :type ProfileView.context_object_name: str
     """
     model = Profile
     template_name = "frontend/profile/profile.html"
@@ -40,7 +41,7 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     :attr ProfileEditView.template_name: The path to the html template
     :type ProfileEditView.template_name: str
     :attr ProfileEditView.fields: Including fields into the form
-    :type ProfileEditView.fields: List[str]
+    :type ProfileEditView.fields: list[str]
     """
     model = Profile
     form_class = AddProfile
@@ -53,7 +54,7 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
         :return: the url of the content to which the deleted argument
         belonged with tag to the comment section
-        :rtype: str
+        :rtype: __proxy__
         """
         return reverse_lazy('frontend:profile', kwargs={'pk': self.request.user.pk})
 
@@ -63,7 +64,7 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         Returns the success message when the profile was updated
 
         :param cleaned_data: The cleaned data
-        :type cleaned_data: dict
+        :type cleaned_data: dict[str, Any]
 
         :return: the success message when the profile was updated
         :rtype: __proxy__
@@ -74,6 +75,9 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         """Get object
 
         Returns the profile object of this user.
+
+        :param queryset: The given queryset
+        :type queryset: QuerySet
 
         :return: the profile object of this user
         :rtype: Profile

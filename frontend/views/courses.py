@@ -59,12 +59,12 @@ class CourseListView(ListView):
         Gets context data for the template.
 
         :param object_list: The django object list
-        :type object_list: List
+        :type object_list: list
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data()
         if "sort" in self.kwargs:
@@ -101,7 +101,7 @@ class CourseListForCategoryView(CourseListView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirection page of the dispatch
         :rtype: HttpResponse
@@ -125,12 +125,12 @@ class CourseListForCategoryView(CourseListView):
         Gets context data for the template.
 
         :param object_list: The django object list
-        :type object_list: List
+        :type object_list: list
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         ctx = super().get_context_data(object_list=object_list, **kwargs)
         ctx["category"] = self.category
@@ -158,7 +158,7 @@ class CourseListForPeriodView(CourseListView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirection page of the dispatch
         :rtype: HttpResponse
@@ -182,12 +182,12 @@ class CourseListForPeriodView(CourseListView):
         Gets context data for the template.
 
         :param object_list: The django object list
-        :type object_list: List
+        :type object_list: list
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         ctx = super().get_context_data(object_list=object_list, **kwargs)
         ctx["period"] = self.period
