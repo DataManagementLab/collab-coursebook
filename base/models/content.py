@@ -247,6 +247,9 @@ class Topic(models.Model):
         :rtype: QuerySet
         """
         contents = self.contents.all()
+        # filtered by is a String and represents the decision of the user
+        # , how they want to filter the data,
+        # e.g. 'Text' means they want to only see all text fields in the topic
         if filtered_by != 'None' and filtered_by is not None:
             if filtered_by == 'Text':
                 contents = contents.filter(textfield__isnull=False)
@@ -260,6 +263,9 @@ class Topic(models.Model):
                 contents = contents.filter(pdfcontent__isnull=False)
             else:
                 contents = contents.filter()
+        # the topic can be sorted (even as an addition to filter)
+        # the user decides, if they want to sort by rating or by date
+        # and the String represent their decision
         if sorted_by != 'None' and sorted_by is not None:
             if sorted_by == 'Rating':
                 contents = sorted(contents, key=lambda x: x.get_rate(), reverse=True)
