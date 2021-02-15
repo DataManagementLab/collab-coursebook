@@ -39,7 +39,11 @@ class LatexAdmin(CompareVersionAdmin):
     """LaTeX admin
 
     Represents the Latex model in the admin panel.
+
+    :attr LatexAdmin.fields: Including fields into the form
+    :type LatexAdmin.fields: List[str]
     """
+    fields = ['content', 'textfield', 'source']
 
 
 # pylint: disable=too-many-ancestors

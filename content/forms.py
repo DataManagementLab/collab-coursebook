@@ -5,6 +5,7 @@ This file contains forms associated with the content types.
 
 from django import forms
 from django.forms import modelformset_factory
+
 from content.models import YTVideoContent, ImageContent, PDFContent
 from content.models import ImageAttachment, TextField, Latex, SingleImageAttachment
 from content.widgets import ModifiedClearableFileInput
@@ -80,6 +81,8 @@ class AddContentFormImage(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
+        :attr Meta.fields: Customization of the model form
+        :type Meta.fields: Dict[str, Widget]
         """
         model = ImageContent
         fields = ['image', 'source', 'license']
@@ -124,8 +127,8 @@ class AddContentFormPdf(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
-        :attr Meta.widgets: Customization of the model form
-        :type Meta.widgets: Dict[str, Model field]
+        :attr Meta.fields: Customization of the model form
+        :type Meta.fields: Dict[str, Widget]
         """
         model = PDFContent
         fields = ['pdf', 'source']
@@ -151,8 +154,8 @@ class AddTextField(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
-        :attr Meta.widgets: Customization of the model form
-        :type Meta.widgets: Dict[str, Model field]
+        :attr Meta.fields: Customization of the model form
+        :type Meta.fields: Dict[str, Widget]
         """
         model = TextField
         fields = ['textfield', 'source']
@@ -182,8 +185,8 @@ class AddLatex(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
         :type Meta.fields: List[str]
-        :attr Meta.widgets: Customization of the model form
-        :type Meta.widgets: Dict[str, Model field]
+        :attr Meta.fields: Customization of the model form
+        :type Meta.fields: Dict[str, Widget]
         """
         model = Latex
         fields = ['textfield', 'source']

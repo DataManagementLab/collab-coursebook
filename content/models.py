@@ -48,7 +48,6 @@ class BaseContentModel(BaseModel):
     :attr BaseContentModel.content: Describes the content of this model
     :type BaseContentModel.content: OneToOneField - Content
     """
-
     content = models.OneToOneField(Content,
                                    verbose_name=_("Content"),
                                    on_delete=models.CASCADE,
@@ -73,7 +72,6 @@ class BasePDFModel(BaseModel):
     :attr BasePDFModel.pdf: Describes the PDF file of this model
     :type BasePDFModel.pdf: FileField
     """
-
     pdf = models.FileField(verbose_name=_("PDF"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True,
@@ -120,7 +118,6 @@ class BaseSourceModel(BaseModel):
     :attr BaseSourceModel.license: Describes the license of the source
     :type BaseSourceModel.license: CharField
     """
-
     source = models.TextField(verbose_name=_("Source"))
     license = models.CharField(verbose_name=_("License"),
                                blank=True,
@@ -176,7 +173,7 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content}: {self.DESC} - {self.image}"
+        return f"{self.content}: {self.image}"
 
 
 class Latex(BaseContentModel, BasePDFModel):
@@ -220,7 +217,7 @@ class Latex(BaseContentModel, BasePDFModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content}: {self.DESC} - {self.pdf}"
+        return f"{self.content}: {self.pk}"
 
 
 class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
@@ -257,7 +254,7 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content}: {self.DESC} - {self.pdf}"
+        return f"{self.content}: {self.pdf}"
 
 
 class SingleImageAttachment(BaseSourceModel):
@@ -343,7 +340,7 @@ class TextField(BaseContentModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content} : {self.DESC} - {self.pk}"
+        return f"{self.content}: {self.pk}"
 
 
 class YTVideoContent(BaseContentModel):
@@ -398,7 +395,7 @@ class YTVideoContent(BaseContentModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.DESC}: {self.url}"
+        return f"{self.url}"
 
 
 class ImageAttachment(BaseModel):
@@ -442,7 +439,7 @@ class ImageAttachment(BaseModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.DESC}: {self.pk}"
+        return f"{self.pk}"
 
 
 # Dict: Contains all available content types.

@@ -2,6 +2,7 @@
 
 This file configures the application.
 """
+
 from django.apps import AppConfig
 
 
