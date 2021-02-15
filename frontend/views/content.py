@@ -325,11 +325,11 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
+        content_type = self.get_object().type
 
         # Adds the form only to context data if not already in it
         # (when passed by post method containing error messages)
         if 'content_type_form' not in context:
-            content_type = self.get_object().type
             if content_type in CONTENT_TYPE_FORMS:
                 content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
                 context['content_type_form'] = \
@@ -346,8 +346,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Identifies the pk's of attached images
             pk_set = []
-            for picture in self.get_object().attachment.images.all():
-                pk_set.append(picture.pk)
+            for image in self.get_object().attachment.images.all():
+                pk_set.append(image.pk)
 
             # Setups the formset with attached images
             formset = SingleImageFormSet(
@@ -715,7 +715,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
 
         if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
-
+            
             # Retrieve the attachment
             attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
 
