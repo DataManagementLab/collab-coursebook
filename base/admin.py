@@ -20,9 +20,9 @@ class CourseAdmin(admin.ModelAdmin):
 
     :attr CourseAdmin.list_display: Controls which fields are displayed on the change
     list page of the admin
-    :type CourseAdmin.list_display: List[str]
+    :type CourseAdmin.list_display: list[str]
     :attr CourseAdmin.readonly_fields: Controls which fields are non-editable
-    :type CourseAdmin.readonly_fields: List[str]
+    :type CourseAdmin.readonly_fields: list[str]
     """
     list_display = ['title', 'category', 'period']
     readonly_fields = ['creation_date']
@@ -43,9 +43,9 @@ class ContentAdmin(admin.ModelAdmin):
     Represents the content model in the admin panel.
 
     :attr ContentAdmin.readonly_fields: Controls which fields are non-editable
-    :type ContentAdmin.readonly_fields: List[str]
+    :type ContentAdmin.readonly_fields: list[str]
     :attr ContentAdmin.exclude: Controls which fields should be excluded from the form
-    :type ContentAdmin.exclude: List[str]
+    :type ContentAdmin.exclude: list[str]
     """
     readonly_fields = ['creation_date']
     exclude = ['preview']
@@ -58,7 +58,7 @@ class CommentAdmin(admin.ModelAdmin):
     Represents the comment model in the admin panel.
 
     :attr CommentAdmin.readonly_fields: Controls which fields are non-editable
-    :type CommentAdmin.readonly_fields: List[str]
+    :type CommentAdmin.readonly_fields: list[str]
     """
     readonly_fields = ['creation_date', 'last_edit']
 
@@ -71,13 +71,13 @@ class CourseStructureAdmin(admin.ModelAdmin):
 
     :attr CourseAdmin.list_display: Controls which fields are displayed on the change
     list page of the admin
-    :type CourseAdmin.list_display: List[str]
+    :type CourseAdmin.list_display: list[str]
     :attr CourseStructureAdmin.list_display_links: Controls if and which fields in list_display
     should be linked to the "change" page for an object
-    :type CourseStructureAdmin.list_display_links: List[str]
+    :type CourseStructureAdmin.list_display_links: list[str]
     :attr CourseStructureAdmin.list_filter: Activates filters in the right sidebar of the change
     list page
-    :type CourseStructureAdmin.list_filter: List[str]
+    :type CourseStructureAdmin.list_filter: list[str]
     """
     list_display = ['index', 'course', 'topic']
     list_display_links = ['index', 'course', 'topic']
@@ -92,10 +92,10 @@ class FavoriteAdmin(admin.ModelAdmin):
 
     :attr FavoriteAdmin.list_display: Controls which fields are displayed on the change
     list page of the admin
-    :type FavoriteAdmin.list_display: List[str]
+    :type FavoriteAdmin.list_display: list[str]
     :attr FavoriteAdmin.list_display_links: Controls if and which fields in list_display
     should be linked to the "change" page for an object
-    :type FavoriteAdmin.list_display_links: List[str]
+    :type FavoriteAdmin.list_display_links: list[str]
     """
     list_display = ['user', 'course', 'content']
     list_display_links = ['user', 'course', 'content']
@@ -109,7 +109,7 @@ class PeriodAdmin(admin.ModelAdmin):
 
     :attr PeriodAdmin.list_display_links: Controls if and which fields in list_display
     should be linked to the "change" page for an object
-    :type PeriodAdmin.list_display_links: List[str]
+    :type PeriodAdmin.list_display_links: list[str]
     """
     list_display = ['title', 'start', 'end']
 

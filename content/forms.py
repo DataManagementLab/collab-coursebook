@@ -60,7 +60,7 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         """
         model = YTVideoContent
         fields = ['url']
@@ -80,9 +80,9 @@ class AddContentFormImage(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         :attr Meta.fields: Customization of the model form
-        :type Meta.fields: Dict[str, Widget]
+        :type Meta.fields: dict[str, Widget]
         """
         model = ImageContent
         fields = ['image', 'source', 'license']
@@ -106,7 +106,7 @@ class AddContentFormAttachedImage(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         """
         model = ImageAttachment
         fields = []
@@ -126,9 +126,9 @@ class AddContentFormPdf(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         :attr Meta.fields: Customization of the model form
-        :type Meta.fields: Dict[str, Widget]
+        :type Meta.fields: dict[str, Widget]
         """
         model = PDFContent
         fields = ['pdf', 'source']
@@ -153,9 +153,9 @@ class AddTextField(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         :attr Meta.fields: Customization of the model form
-        :type Meta.fields: Dict[str, Widget]
+        :type Meta.fields: dict[str, Widget]
         """
         model = TextField
         fields = ['textfield', 'source']
@@ -184,9 +184,9 @@ class AddLatex(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         :attr Meta.fields: Customization of the model form
-        :type Meta.fields: Dict[str, Widget]
+        :type Meta.fields: dict[str, Widget]
         """
         model = Latex
         fields = ['textfield', 'source']
@@ -211,7 +211,7 @@ SingleImageFormSet = modelformset_factory(
     }
 )
 
-# Dict[str, ModelForm]: Contains all available content types form.
+# dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
     ImageContent.TYPE: AddContentFormImage,

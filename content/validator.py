@@ -24,7 +24,7 @@ class Validator:
         :type file: file
 
         :return: a validation error, if the file is not a valid pdf
-        :rtype: Optional[ValidationError]
+        :rtype: None or ValidationError
 
         """
         valid_types = ['application/pdf']

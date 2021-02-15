@@ -44,7 +44,7 @@ class Category(models.Model):
         :attr Meta.verbose_name_plural: A human-readable name for the object in plural
         :type Meta.verbose_name_plural: __proxy__
         :attr Meta.ordering: The default ordering for the object
-        :type Meta.ordering: List[str]
+        :type Meta.ordering: list[str]
         """
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
@@ -88,7 +88,7 @@ class Period(models.Model):
         :attr Meta.verbose_name_plural: A human-readable name for the object in plural
         :type Meta.verbose_name_plural: __proxy__
         :attr Meta.ordering: The default ordering for the object
-        :type Meta.ordering: List[str]
+        :type Meta.ordering: list[str]
         """
         verbose_name = _("Period")
         verbose_name_plural = _("Periods")
@@ -177,7 +177,7 @@ class Course(models.Model):
         :attr Meta.verbose_name_plural: A human-readable name for the object in plural
         :type Meta.verbose_name_plural: __proxy__
         :attr Meta.ordering: The default ordering for the object
-        :type Meta.ordering: List[str]
+        :type Meta.ordering: list[str]
         """
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
