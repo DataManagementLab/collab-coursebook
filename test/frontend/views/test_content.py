@@ -174,8 +174,8 @@ class DeleteContentViewTestCase(MediaTestCase):
     def test_delete_textfield_attachments(self):
         """POST test case - delete textfield with attachments
 
-        Tests the function post that a TextField with Image Attachments gets deleted properly after sending
-        a POST request to content-delete.
+        Tests the function post that a TextField with Image Attachments gets deleted properly
+        after sending a POST request to content-delete.
         """
         content = utils.create_content(model.TextField.TYPE)
         content.attachment = utils.generate_attachment(2)
@@ -246,8 +246,9 @@ class EditContentViewTestCase(MediaTestCase):
     def test_textfield_attachments(self):
         """POST test case -  edit textfield with attachments
 
-        Tests the function post that a textfield with attachments gets edited and saved properly after sending
-        a POST request to content-edit and that the POST request redirects to the content page.
+        Tests the function post that a textfield with attachments gets edited and saved properly
+        after sending a POST request to content-edit and that the POST request redirects to the
+        content page.
         """
         content = utils.create_content(model.TextField.TYPE)
         content.attachment = utils.generate_attachment(2)
