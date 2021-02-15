@@ -71,9 +71,28 @@ def setup_database():
     user = User.objects.create()
     cat = Category.objects.create(title="Category")
     Course.objects.create(title='Course', description='desc', category=cat)
-    topic = Topic.objects.create(title="Topic", category=cat)
-    content = Content.objects.create(author=user.profile, topic=topic, type=model.Latex.TYPE,
-                                     description='this is a description')
+    Topic.objects.create(title="Topic", category=cat)
+    content = create_content(model.Latex.TYPE)
+    content.attachment = model.ImageAttachment.objects.create()
+    content.save()
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
     Validator.validate_latex(user, content, latex)
+
+
+def create_content(content_type):
+    """Create content
+
+    :param content_type: The type of the content
+    :type content_type: str
+
+    Create a dummy content with the given content type.
+
+    :return: the created content
+    :rtype: Content
+    """
+    return Content.objects.create(author=User.objects.first().profile,
+                                  topic=Topic.objects.first(),
+                                  type=content_type,
+                                  description='this is a description',
+                                  language='de')

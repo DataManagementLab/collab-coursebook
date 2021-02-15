@@ -6,13 +6,13 @@ This file contains the test cases for /frontend/forms/content.py.
 from test.test_cases import MediaTestCase
 import test.utils as utils
 
-# pylint: disable=imported-auth-user)
-from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
 import content.forms as form
 import content.models as model
+from base.models import Content, Course
+from frontend.forms import AddContentForm
 
 from frontend.views.content import clean_attachment
 
@@ -49,14 +49,6 @@ class AddContentViewTestCase(MediaTestCase):
 
     Defines the test cases for the add content view.
     """
-
-    def setUp(self):
-        """Setup
-
-        Sets up the test database.
-        """
-        super().setUp()
-        self.client.force_login(User.objects.get(pk=1))
 
     def post_redirects_to_content(self, path, data):
         """POST redirection to content
@@ -153,3 +145,159 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(content.attachment.images.count(), 2)
         for image_attachment in content.attachment.images.all():
             self.assertTrue(bool(image_attachment.image))
+
+    def test_get(self):
+        """GET test case
+
+        Tests the function get_context_data that the context for content-add is set properly.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
+        })
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200)
+        context = response.context_data
+        self.assertEqual(type(context['form']), AddContentForm)
+        self.assertEqual(context['course'], Course.objects.first())
+        self.assertEqual(context['content_type_form'], form.AddTextField)
+        self.assertTrue(context['attachment_allowed'])
+        self.assertTrue('attachment_form' in context)
+        self.assertTrue('item_forms' in context)
+
+
+class DeleteContentViewTestCase(MediaTestCase):
+    """Delete content test case
+
+    Defines the test cases for the delete content view.
+    """
+
+    def test_delete_textfield_attachments(self):
+        """POST test case - delete textfield with attachments
+
+        Tests the function post that a TextField with Image Attachments gets deleted properly after sending
+        a POST request to content-delete.
+        """
+        content = utils.create_content(model.TextField.TYPE)
+        content.attachment = utils.generate_attachment(2)
+        content.save()
+        model.TextField.objects.create(textfield='Lorem Ipsum', content=content)
+        self.assertEqual(Content.objects.count(), 2)
+        self.assertEqual(model.TextField.objects.count(), 1)
+        self.assertEqual(model.ImageAttachment.objects.count(), 2)
+        self.assertEqual(model.SingleImageAttachment.objects.count(), 2)
+        path = reverse('frontend:content-delete', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 2
+        })
+        self.client.post(path)
+        self.assertEqual(Content.objects.count(), 1)
+        self.assertEqual(model.TextField.objects.count(), 0)
+        self.assertEqual(model.ImageAttachment.objects.count(), 1)
+        self.assertEqual(model.SingleImageAttachment.objects.count(), 0)
+
+    def test_latex(self):
+        """POST test case - delete latex
+
+        Tests the function post that a LaTeX content gets deleted properly after sending
+        a POST request to content-delete.
+        """
+        self.assertEqual(Content.objects.count(), 1)
+        self.assertEqual(model.Latex.objects.count(), 1)
+        path = reverse('frontend:content-delete', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 1
+        })
+        self.client.post(path)
+        self.assertEqual(Content.objects.count(), 0)
+        self.assertEqual(model.Latex.objects.count(), 0)
+
+
+class EditContentViewTestCase(MediaTestCase):
+    """Edit content test case
+
+    Defines the test cases for the edit content view.
+    """
+
+    def test_latex(self):
+        """POST test case -  edit LaTeX
+
+        Tests the function post that a LaTeX Content gets edited and saved properly after sending
+        a POST request to content-edit and that the POST request redirects to the content page.
+        """
+        data = {
+            'change_log': 'stuff changed',
+            'description': 'description',
+            'language': 'en',
+            'textfield': 'Lorem ipsum',
+            'source': 'src 2',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0'
+        }
+        path = reverse('frontend:content-edit', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 1
+        })
+        response = self.client.post(path, data)
+
+        self.assertEqual(response.url, reverse('frontend:content', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 1
+        }))
+        self.assertEqual(Content.objects.first().language, 'en')
+        self.assertEqual(model.Latex.objects.first().source, 'src 2')
+        self.assertEqual(model.Latex.objects.first().textfield, 'Lorem ipsum')
+
+    def test_textfield_attachments(self):
+        """POST test case -  edit textfield with attachments
+
+        Tests the function post that a textfield with attachments gets edited and saved properly after sending
+        a POST request to content-edit and that the POST request redirects to the content page.
+        """
+        content = utils.create_content(model.TextField.TYPE)
+        content.attachment = utils.generate_attachment(2)
+        content.save()
+        model.TextField.objects.create(textfield='Text', source='src', content=content)
+
+        data = {
+            'change_log': 'stuff changed',
+            'language': 'de',
+            'description': 'description',
+            'textfield': 'Lorem ipsum',
+            'source': 'src text',
+            'form-0-id': '1',
+            'form-0-source': 'src 0',
+            'form-0-image': utils.generate_image_file(42),
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '2'
+        }
+        path = reverse('frontend:content-edit', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 2
+        })
+        response = self.client.post(path, data)
+
+        self.assertEqual(response.url, reverse('frontend:content', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 2
+        }))
+        content = Content.objects.get(pk=2)
+        self.assertEqual(content.language, 'de')
+        textfield = model.TextField.objects.first()
+        self.assertEqual(textfield.source, 'src text')
+        self.assertEqual(textfield.textfield, 'Lorem ipsum')
+        self.assertEqual(content.attachment.images.count(), 1)
+        self.assertEqual(model.SingleImageAttachment.objects.count(), 1)
+        image = model.SingleImageAttachment.objects.first().image
+        self.assertIn('test42', image.name)
+
+    def test_context(self):
+        """Get context data test case
+
+        Tests the function get_context_data that the context for content-edit is set properly.
+        """
+        path = reverse('frontend:content-edit', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 1
+        })
+        response = self.client.get(path)
+        self.assertEqual(response.status_code, 200)
+        context = response.context_data
+        self.assertEqual(context['course_id'], 1)
+        self.assertEqual(context['topic_id'], 1)
+        self.assertEqual(type(context['content_type_form']), form.AddLatex)
+        self.assertTrue(context['attachment_allowed'])
+        self.assertTrue('attachment_form' in context)
+        self.assertTrue('item_forms' in context)

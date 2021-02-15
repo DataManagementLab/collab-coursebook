@@ -73,3 +73,12 @@ class ExportTemplateTestCases(TestCase):
         """
         image_template = export_template('lol')
         self.assertEqual(image_template, self.path + 'invalid.tex')
+
+    def test_invalid_attachment(self):
+        """Test invalid
+
+        Tests that the function returns the correct path for the invalid template
+        since there are no Attachment templates.
+        """
+        image_template = export_template('ImageAttachment')
+        self.assertEqual(image_template, self.path + 'invalid.tex')

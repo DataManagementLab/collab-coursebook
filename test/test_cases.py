@@ -4,6 +4,8 @@ This file contains the custom test cases used to reduce redundant code..
 """
 import shutil
 
+from django.contrib.auth.models import User
+
 import test.utils as utils
 
 from django.test import TestCase, override_settings
@@ -22,6 +24,7 @@ class MediaTestCase(TestCase):
         Sets up the test database.
         """
         utils.setup_database()
+        self.client.force_login(User.objects.first())
 
     @classmethod
     def tearDownClass(cls):
