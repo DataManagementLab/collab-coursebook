@@ -39,6 +39,6 @@ jobs:
       - name: Run PyLint - frontend
         run: |
           pylint --fail-under=8 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings frontend
-      - name: Run PyLint - tests
+      - name: Run PyLint - test
         run: |
           pylint --fail-under=8 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings test
