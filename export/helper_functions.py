@@ -53,7 +53,7 @@ class Latex:
         :type external_assets:
 
         :return: the rendered LaTeX code as PDF, PDF LaTeX output and its the rendered template
-        :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
+        :rtype: tuple[bytes, tuple[bytes, bytes], str]
         """
         template = get_template(template_name)
         rendered_tpl = template.render(context).encode(Latex.encoding)
@@ -98,10 +98,10 @@ class Latex:
 
         Parameters:
             :param lob: A list of bytes representing the PDF LaTeX compile log
-            :type lob: List[byte]
+            :type lob: list[byte]
 
         :return: the error messages from the log (stdout)
-        :rtype: List[str]
+        :rtype: list[str]
         """
         # Decode bytes to string and split the string by the delimiter '\n'
         lines = lob.decode(Latex.encoding).splitlines()

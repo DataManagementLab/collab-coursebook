@@ -13,7 +13,7 @@ class Rating(models.Model):
     This model represents the user ratings.
 
     :attr Rating.CHOICES: The choices of the ratings which is described as a scala from 1 to 5
-    :type Rating.CHOICES: List[Tuple[int, str]]
+    :type Rating.CHOICES: list[tuple[int, str]]
     :attr Rating.content: The content to rate
     :type Rating.content: ForeignKey - Content
     :attr Rating.user: The user of the rating
@@ -45,7 +45,7 @@ class Rating(models.Model):
         :param Meta.verbose_name_plural: A human-readable name for the object in plural
         :type Meta.verbose_name_plural: __proxy__
         :param Meta.unique_together: Sets of field names that, taken together, must be unique
-        :type Meta.unique_together: Tuple[str, str]
+        :type Meta.unique_together: tuple[str, str]
         """
         verbose_name = _("Rating")
         verbose_name_plural = _("Ratings")

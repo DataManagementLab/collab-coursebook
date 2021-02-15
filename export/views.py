@@ -25,7 +25,7 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     :type context: dict[str, Any]
 
     :return: the generated coursebook as PDF, PDF LaTeX output and as an rendered template
-    :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
+    :rtype: tuple[bytes, tuple[bytes, bytes], str]
     """
 
     if context is None:
@@ -77,7 +77,7 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
     :param pdf: The PDF
     :type pdf: bytes
     :param pdflatex_output: The PDF LaTeX output
-    :type pdflatex_output: Tuple[bytes, bytes]
+    :type pdflatex_output: tuple[bytes, bytes]
     :param tex_template: The rendered template
     :type tex_template: str
     :param filename: The name of the file
@@ -114,7 +114,7 @@ def generate_pdf(user, content, template="content/export/base.tex", context=None
     :type context: dict[str, Any]
 
     :return: the generated PDF as PDF, PDF LaTeX output and its rendered template
-    :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
+    :rtype: tuple[bytes, tuple[bytes, bytes], str]
     """
     if context is None:
         context = {}

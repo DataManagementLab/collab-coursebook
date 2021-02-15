@@ -41,7 +41,7 @@ class LatexAdmin(CompareVersionAdmin):
     Represents the Latex model in the admin panel.
 
     :attr LatexAdmin.fields: Including fields into the form
-    :type LatexAdmin.fields: List[str]
+    :type LatexAdmin.fields: list[str]
     """
     fields = ['content', 'textfield', 'source']
 

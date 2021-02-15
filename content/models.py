@@ -442,7 +442,7 @@ class ImageAttachment(BaseModel):
         return f"{self.pk}"
 
 
-# Dict: Contains all available content types.
+# dict: Contains all available content types.
 CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,

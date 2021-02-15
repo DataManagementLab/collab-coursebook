@@ -14,12 +14,12 @@ def create_topic_and_subtopic_list(topics, course):
     Creates an ordered list of (sub-)topics.
 
     :param topics: The used topics
-    :type topics: List
+    :type topics: list
     :param course: The course
     :type course: Course
 
     :return: a sorted list of topics
-    :rtype: List[Tuple[str, int, Any, str]]
+    :rtype: list[tuple[str, int, Any, str]]
     """
 
     sorted_topics = []
@@ -65,7 +65,7 @@ def structure_to_tuple(structure):
     :type structure: str
 
     return: the index of the structure as a tuple
-    rtype: Tuple[int, int]
+    rtype: tuple[int, int]
     """
     if len(structure.split('/')) <= 1:
         return int(structure.split('/')[0]), 0

@@ -76,7 +76,7 @@ def tex_escape(value):
     :rtype: str
     """
 
-    # Dict[str, str]: Replacements - Escape characters
+    # dict[str, str]: Replacements - Escape characters
     replacements = {
         '&': r'\&',
         '%': r'\%',
