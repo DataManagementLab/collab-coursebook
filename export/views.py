@@ -22,7 +22,7 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     :param template: The path of the LaTeX template to use
     :type template: str
     :param context: The context of the content
-    :type context: dict:
+    :type context: dict[str, Any]
 
     :return: the generated coursebook as PDF, PDF LaTeX output and as an rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
@@ -111,7 +111,7 @@ def generate_pdf(user, content, template="content/export/base.tex", context=None
     :param template: The path of the LaTeX template to use
     :type template: str
     :param context: The context of the content
-    :type context: dict
+    :type context: dict[str, Any]
 
     :return: the generated PDF as PDF, PDF LaTeX output and its rendered template
     :rtype: Tuple[bytes, Tuple[bytes, bytes], str]
@@ -145,5 +145,5 @@ def generate_pdf_response(user, content):
     """
 
     # Calls the function for generating the pdf and return the pdf
-    pdf = generate_pdf(user, content)[0]
-    return pdf
+    pdf = generate_pdf(user, content)
+    return pdf[0]

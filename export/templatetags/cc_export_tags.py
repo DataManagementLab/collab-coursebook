@@ -5,10 +5,12 @@ and if necessary the escape characters.
 """
 
 import os
+
 import re
 
 from django import template
 from django.template.defaultfilters import stringfilter
+
 from collab_coursebook.settings import BASE_DIR
 
 from content.models import CONTENT_TYPES
@@ -19,13 +21,13 @@ register = template.Library()
 
 
 @register.filter
-def export_template(type_t):
+def export_template(content_type):
     """Export template
 
     Validate the type and retrieve the suitable template.
 
-    :param type_t: The content type or error
-    :type type_t: str
+    :param content_type: The content type or error
+    :type content_type: str
 
     returns: the path of the template
     rtype: str
@@ -34,8 +36,8 @@ def export_template(type_t):
     path = base_path + "/templates/content/export"
 
     # Type must be a content type or the error type for an invalid latex compilation
-    if type_t in CONTENT_TYPES.keys() or type_t == 'error':
-        return path + f"/{type_t}.tex"
+    if content_type in CONTENT_TYPES.keys() or content_type == 'error':
+        return path + f"/{content_type}.tex"
     return path + "/invalid.tex"
 
 
@@ -43,11 +45,14 @@ def export_template(type_t):
 def ret_path(value):
     """Return path to image
 
-        returns the correct path to the image in media directory
+    Returns the correct path to the image in media directory.
 
-        Parameters:
-            value
-        """
+    :param value: The path
+    :type value: str
+
+    :return: the correct path to the image in media directory
+    :rtype: str
+    """
 
     # Compute the path to the image and escape \ for LaTeX
     path = os.path.join(os.path.abspath(BASE_DIR), value[1:])
@@ -64,11 +69,14 @@ def tex_escape(value):
     https://github.com/d120/pyophase/blob/master/ophasebase/templatetags/tex_escape.py
     Retrieved: 10.08.2020
 
-    Parameters:
-        value
+    :param value: The LaTeX code to be escaped
+    :type value: str
+
+    :return: the escaped LaTeX code
+    :rtype: str
     """
 
-    # Dict: Replacements - Escape characters
+    # Dict[str, str]: Replacements - Escape characters
     replacements = {
         '&': r'\&',
         '%': r'\%',
