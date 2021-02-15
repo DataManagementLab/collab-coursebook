@@ -2,6 +2,7 @@
 
 This file contains the test cases for /content/models.py.
 """
+
 import os
 
 from test.test_cases import MediaTestCase

@@ -14,7 +14,7 @@ class ModifiedClearableFileInputTestCase(TestCase):
     Defines the test cases for the class ModifiedClearableFileInput.
 
     :attr ModifiedClearableFileInputTestCase.attrs: The test attributes
-    :type ModifiedClearableFileInputTestCase.attrs: Dict[str, str]
+    :type ModifiedClearableFileInputTestCase.attrs: dict[str, str]
     """
     attrs = {'required': 'true',
              'accept': 'image/*',

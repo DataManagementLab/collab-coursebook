@@ -5,6 +5,7 @@ This files is used as a collection utility operation for testing purpose.
 
 import tempfile
 import io
+
 from PIL import Image
 
 from django.core.files.images import ImageFile

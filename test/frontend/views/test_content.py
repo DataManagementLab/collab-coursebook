@@ -2,6 +2,8 @@
 
 This file contains the test cases for /frontend/forms/content.py.
 """
+
+from test.test_cases import MediaTestCase
 import test.utils as utils
 
 # pylint: disable=imported-auth-user)
@@ -13,7 +15,6 @@ import content.forms as form
 import content.models as model
 
 from frontend.views.content import clean_attachment
-from test.test_cases import MediaTestCase
 
 
 class CleanAttachmentTestCase(TestCase):

@@ -2,6 +2,7 @@
 
 This file contains the test cases for /content/forms.py.
 """
+
 from django.test import TestCase
 
 import content.forms as form

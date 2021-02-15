@@ -2,6 +2,7 @@
 
 This file contains the test cases for /export/templatetags/cc_export_tags.py
 """
+
 import os
 
 from django.test import TestCase

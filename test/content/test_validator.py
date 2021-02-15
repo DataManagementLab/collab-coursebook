@@ -2,6 +2,7 @@
 
 This file contains the test cases for this /content/validator.py.
 """
+
 import os
 
 from test.test_cases import MediaTestCase
@@ -10,7 +11,6 @@ import test.utils as utils
 from django.core.exceptions import ValidationError
 
 import content.models as model
-
 from content.validator import Validator
 
 
