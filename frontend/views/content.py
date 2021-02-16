@@ -198,12 +198,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content_type_data.content = content
             content_type_data.save()
 
-            # If the content type is LaTeX, compile the LaTeX Code and store in DB
-            if content_type == 'Latex':
-                Validator.validate_latex(get_user(request),
-                                         content,
-                                         content_type_data)
-
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
                 # Reads input from all forms
@@ -217,6 +211,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                                          content)
                 if redirect is not None:
                     return redirect
+
+            # If the content type is LaTeX, compile the LaTeX Code and store in DB
+            if content_type == 'Latex':
+                Validator.validate_latex(get_user(request),
+                                         content,
+                                         content_type_data)
 
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
@@ -400,12 +400,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 content_type = content.type
                 content_type_data = content_type_form.save()
 
-                # If the content type is LaTeX, compile the LaTeX Code and store in DB
-                if content_type == 'Latex':
-                    Validator.validate_latex(get_user(request),
-                                             content,
-                                             content_type_data)
-
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
 
@@ -430,6 +424,12 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                                              content)
                     if redirect is not None:
                         return redirect
+
+                # If the content type is LaTeX, compile the LaTeX Code and store in DB
+                if content_type == 'Latex':
+                    Validator.validate_latex(get_user(request),
+                                             content,
+                                             content_type_data)
 
                 # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \
