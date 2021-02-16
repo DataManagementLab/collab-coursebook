@@ -11,7 +11,7 @@ from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
 
-from export.templatetags.cc_export_tags import export_template, tex_escape
+from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
 
 
 class Latex:
@@ -76,7 +76,7 @@ class Latex:
                 rendered_tpl = template.render(context).encode(Latex.encoding)
                 # Prerender errors templates
                 rendered_tpl += Latex.pre_render(len(error_log), context['export_pdf'],
-                                                 Latex.error_template)
+                                                 Latex.error_template, False)
                 rendered_tpl += r"\end{document}".encode(Latex.encoding)
 
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
@@ -119,7 +119,7 @@ class Latex:
         return found
 
     @staticmethod
-    def pre_render(content, export_flag, template_type=None):
+    def pre_render(content, export_flag, template_type=None, no_error=True):
         """Prerender
 
         Prerender the given content and its corresponding template. If there
@@ -148,5 +148,20 @@ class Latex:
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data
         rendered_tpl = template.render(context)
-        rendered_tpl = re.sub('{~~', '{', rendered_tpl).encode(Latex.encoding)
-        return rendered_tpl
+        rendered_tpl = re.sub('{~~', '{', rendered_tpl)
+
+        # Check that we are not compiling an error template (otherwise the content would be an int)
+        if no_error:
+
+            # If there exists an attachment, replace all placeholders in the tex file with image path
+            if content.attachment is not None and content.attachment.images.count() > 0:
+                pictures = content.attachment.images.all()
+
+                for idx, picture in enumerate(pictures):
+                    path = ret_path(picture.image.url)
+                    rendered_tpl = re.sub(f"Image-{idx}",
+                                          r"\\includegraphics[width=\\textwidth]" + f"{{{path}}}",
+                                          rendered_tpl)
+
+        # Encode the template with Latex Encoding
+        return rendered_tpl.encode(Latex.encoding)
