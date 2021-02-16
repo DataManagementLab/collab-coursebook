@@ -45,12 +45,12 @@ def export_template(content_type):
 def ret_path(value):
     """Return path to image
 
-    Returns the correct path to the image in media directory.
+    Returns the correct (absolute) path to the image in media directory.
 
     :param value: The path
     :type value: str
 
-    :return: the correct path to the image in media directory
+    :return: the absolute path to the image in media directory
     :rtype: str
     """
 

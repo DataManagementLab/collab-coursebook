@@ -6,22 +6,22 @@
 {% load fontawesome_5 %}
 
 {% block content %}
-    <h1>{% trans "Edit your profile" %}</h1>
+<h1>{% trans "Edit your profile" %}</h1>
 
-    <form method="POST" class="post-form" enctype=multipart/form-data>{% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons %}
-            <button type="reset" class="btn btn-danger">
-                {% fa5_icon "undo-alt" 'fas' %} {% trans "Reset" %}
-            </button>
+<form method="POST" class="post-form" enctype=multipart/form-data>
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="reset" class="btn btn-danger">
+        {% fa5_icon "undo-alt" 'fas' %} {% trans "Reset" %}
+    </button>
 
-            <a href="{% url 'frontend:profile' pk=user.pk %}" class="btn btn-secondary">
-                {% fa5_icon "times" 'fas' %} {% trans "Cancel" %}
-            </a>
-            <button type="submit" class="save btn btn-primary float-right">
-                {% fa5_icon "check" 'fas' %} {% trans "Submit" %}
-            </button>
-        {% endbuttons %}
-    </form>
-
+    <a href="{% url 'frontend:profile' pk=user.pk %}" class="btn btn-secondary">
+        {% fa5_icon "times" 'fas' %} {% trans "Cancel" %}
+    </a>
+    <button type="submit" class="save btn btn-primary float-right">
+        {% fa5_icon "check" 'fas' %} {% trans "Submit" %}
+    </button>
+    {% endbuttons %}
+</form>
 {% endblock %}

@@ -60,7 +60,7 @@ msgstr "Sortieren nach"
 #: .\templates\frontend\base.html:28
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
-msgstr "Sicher die Sprache jetzt zu verändern? Die Form wird dann geleert!"
+msgstr "Sind Sie sicher, dass Sie die Sprache ändern möchten? Die Seite wird dann neu geladen!"
 
 #: .\templates\frontend\base.html:57
 msgid "Impress"
@@ -479,11 +479,11 @@ msgstr ""
 
 #: .\templates\frontend\history\history_compare_view.html:34
 msgid "There are no differences."
-msgstr "Es besteht keinen Unterschied."
+msgstr "Es bestehen keine Unterschiede."
 
 #: .\templates\frontend\history\history_compare_view.html:42
 msgid "Edit comment:"
-msgstr "Änderungsprotokoll: "
+msgstr "Kommentar bearbeiten:: "
 
 #: .\templates\frontend\history\history_compare_view.html:45
 msgid "(no comment exists)"
@@ -502,9 +502,9 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"                Mit <sup class=\"follow\">*</sup> gekennzeichneten Felder/"
+"                Mit <sup class=\"follow\">*</sup> gekennzeichnete Felder/"
 "Einträge sind nicht unter Kontrolle von Reversion. \n"
-"                Es kann sein, dass nicht alle gekennzeichnete Informationen "
+"                Es kann sein, dass nicht alle gekennzeichneten Informationen "
 "korrekt sind.\n"
 "            "
 
@@ -514,7 +514,7 @@ msgstr "vorherige"
 
 #: .\templates\frontend\history\history_compare_view.html:70
 msgid "next"
-msgstr "nächst"
+msgstr "nächste"
 
 #: .\templates\frontend\history\history_compare_view.html:75
 msgid "Revert to this version"
@@ -522,7 +522,7 @@ msgstr "Auf diese Version zurückkehren"
 
 #: .\templates\frontend\history\history_compare_view.html:81
 msgid "Go back to history list"
-msgstr "Zurück zur Versionslist"
+msgstr "Zurück zur Versionsliste"
 
 #: .\templates\frontend\index.html:28
 msgid "Login"
