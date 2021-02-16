@@ -5,5 +5,7 @@ frontend forms related operation.
 """
 
 from .course import AddAndEditCourseForm, FilterAndSortForm
-from .content import TranslateForm
+
+from .content import AddContentForm, EditContentForm, TranslateForm
+
 from .comment import CommentForm

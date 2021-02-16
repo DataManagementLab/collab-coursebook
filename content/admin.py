@@ -15,8 +15,9 @@ from content.models import PDFContent, SingleImageAttachment, TextField
 from content.models import YTVideoContent
 
 
+# pylint: disable=too-many-ancestors
 @admin.register(ImageAttachment)
-class ImageAttachmentAdmin(admin.ModelAdmin):
+class ImageAttachmentAdmin(CompareVersionAdmin):
     """Image attachment admin
 
     Represents the image attachment model in the admin panel.
@@ -37,8 +38,12 @@ class ImageContentAdmin(CompareVersionAdmin):
 class LatexAdmin(CompareVersionAdmin):
     """LaTeX admin
 
-    Represents the LaTeX model in the admin panel.
+    Represents the Latex model in the admin panel.
+
+    :attr LatexAdmin.fields: Including fields into the form
+    :type LatexAdmin.fields: list[str]
     """
+    fields = ['content', 'textfield', 'source']
 
 
 # pylint: disable=too-many-ancestors

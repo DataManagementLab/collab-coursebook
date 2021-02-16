@@ -20,7 +20,7 @@ def add_to_coursebook(request, *args, **kwargs):
     :param args: The arguments
     :type args: Any
     :param kwargs: The keyword arguments
-    :type kwargs: dict
+    :type kwargs: dict[str, Any]
 
     :return: the redirection to the page after the request was added to the course book
     :rtype: HttpResponseRedirect
@@ -45,7 +45,7 @@ def remove_from_coursebook(request, *args, **kwargs):
     :param request: The given request
     :type request: HttpRequest
     :param kwargs: The keyword arguments
-    :type kwargs: dict
+    :type kwargs: dict[str, Any]
 
     :return: the redirection to the page after the request was removed from the course book
     :rtype: HttpResponseRedirect

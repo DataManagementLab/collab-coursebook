@@ -5,6 +5,7 @@ This files is used as a collection utility operation for testing purpose.
 
 import tempfile
 import io
+
 from PIL import Image
 
 from django.core.files.images import ImageFile
@@ -16,7 +17,7 @@ from base.models.content import Category, Topic, Content, Course
 import content.forms as form
 import content.models as model
 
-from frontend.views.content import validate_latex
+from frontend.views.validator import Validator
 
 # Temporary media directory
 MEDIA_ROOT = tempfile.mkdtemp()
@@ -50,8 +51,8 @@ def generate_attachment(image_count):
     :param image_count: The number of the images to be generated in the attachment
     :type image_count: int
 
-    :return: the generated image files
-    :rtype: ImageFile
+    :return: the generated image Attachment
+    :rtype: ImageAttachment
     """
     attachment = model.ImageAttachment.objects.create()
     for i in range(image_count):
@@ -70,9 +71,28 @@ def setup_database():
     user = User.objects.create()
     cat = Category.objects.create(title="Category")
     Course.objects.create(title='Course', description='desc', category=cat)
-    topic = Topic.objects.create(title="Topic", category=cat)
-    content = Content.objects.create(author=user.profile, topic=topic, type=model.Latex.TYPE,
-                                     description='this is a descrieption')
+    Topic.objects.create(title="Topic", category=cat)
+    content = create_content(model.Latex.TYPE)
+    content.attachment = model.ImageAttachment.objects.create()
+    content.save()
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
-    validate_latex(user, content, latex, topic_id=topic.pk)
+    Validator.validate_latex(user, content, latex)
+
+
+def create_content(content_type):
+    """Create content
+
+    :param content_type: The type of the content
+    :type content_type: str
+
+    Create a dummy content with the given content type.
+
+    :return: the created content
+    :rtype: Content
+    """
+    return Content.objects.create(author=User.objects.first().profile,
+                                  topic=Topic.objects.first(),
+                                  type=content_type,
+                                  description='this is a description',
+                                  language='de')

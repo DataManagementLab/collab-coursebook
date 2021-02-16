@@ -55,21 +55,21 @@ msgid "Image Contents"
 msgstr "Inhalte: Bilder"
 
 #: .\models.py:196
-msgid "Latex Textfield"
+msgid "LaTeX Textfield"
 msgstr "LaTeX-Textfeld"
 
 #: .\models.py:198
-msgid "Latex Code"
+msgid "LaTeX Code"
 msgstr "LaTeX-Code"
 
 #: .\models.py:211
-msgid "Latex Content"
+msgid "LaTeX Content"
 msgstr "Inhalt: LaTeX"
 
 #: .\models.py:212
 #, fuzzy
 #| msgid "Image Contents"
-msgid "Latex Contents"
+msgid "LaTeX Contents"
 msgstr "Inhalte: LaTeX"
 
 #: .\models.py:248

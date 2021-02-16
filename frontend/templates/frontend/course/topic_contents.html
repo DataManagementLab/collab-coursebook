@@ -27,7 +27,9 @@
                             {% endif %}
                             {% if content.get_rate != -1 %}
                                 &nbsp;&middot;&nbsp;
-                                <span class="badge badge-info">{{ content.get_rate }}</span>
+                                <span class="badge badge-info">{% fa5_icon "star" "fas" %} {{ content.get_rate }}</span>
+                                &nbsp;&middot;&nbsp;
+                                <span class="badge badge-info">{% fa5_icon "hashtag" "fas" %} {{ content.get_rate_amount }}</span>
                             {% endif %}
                         </div>
                     </div>

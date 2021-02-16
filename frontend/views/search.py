@@ -32,7 +32,7 @@ class SearchView(ListView, LoginRequiredMixin):
         Returns the query set of the search.
 
         :return: The query set of the search
-        :rtype: Dict[str, CourseStructureEntry]
+        :rtype: dict[str, QuerySet[CourseStructureEntry]]
         """
         query = self.request.GET.get('q')
         query = query.strip().lower()
@@ -49,10 +49,10 @@ class SearchView(ListView, LoginRequiredMixin):
         :param object_list: The object list
         :type object_list: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data of the search
-        :rtype: Dict[str, Any]
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['search_query'] = self.request.GET.get('q')

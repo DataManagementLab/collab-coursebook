@@ -11,13 +11,14 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+import reversion
+
 from pdf2image import convert_from_path
 
 from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
-
-from content.validator import validate_pdf
+from content.validator import Validator
 
 
 class BaseModel(models.Model, GeneratePreviewMixin):
@@ -47,7 +48,6 @@ class BaseContentModel(BaseModel):
     :attr BaseContentModel.content: Describes the content of this model
     :type BaseContentModel.content: OneToOneField - Content
     """
-
     content = models.OneToOneField(Content,
                                    verbose_name=_("Content"),
                                    on_delete=models.CASCADE,
@@ -72,11 +72,10 @@ class BasePDFModel(BaseModel):
     :attr BasePDFModel.pdf: Describes the PDF file of this model
     :type BasePDFModel.pdf: FileField
     """
-
     pdf = models.FileField(verbose_name=_("PDF"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True,
-                           validators=(validate_pdf,))
+                           validators=(Validator.validate_pdf,))
 
     class Meta:
         """Meta options
@@ -119,7 +118,6 @@ class BaseSourceModel(BaseModel):
     :attr BaseSourceModel.license: Describes the license of the source
     :type BaseSourceModel.license: CharField
     """
-
     source = models.TextField(verbose_name=_("Source"))
     license = models.CharField(verbose_name=_("License"),
                                blank=True,
@@ -175,7 +173,7 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content}: {self.DESC} - {self.image}"
+        return f"{self.content}: {self.image}"
 
 
 class Latex(BaseContentModel, BasePDFModel):
@@ -187,7 +185,7 @@ class Latex(BaseContentModel, BasePDFModel):
     :type Latex.TYPE: str
     :attr Latex.DESC: Describes the name of this model
     :type Latex.DESC: __proxy__
-    :attr Latex.textfield: The LaTeX code of the content
+    :attr Latex.textfield: The Latex code of the content
     :type Latex.textfield: TextField
     :attr Latex.source: The source of this content
     :type Latex.source: TextField
@@ -219,11 +217,11 @@ class Latex(BaseContentModel, BasePDFModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content}: {self.DESC} - {self.pdf}"
+        return f"{self.content}: {self.pk}"
 
 
 class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
-    """LaTeX text field
+    """PDF content
 
     This model represents a PDF based content.
 
@@ -256,7 +254,7 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content}: {self.DESC} - {self.pdf}"
+        return f"{self.content}: {self.pdf}"
 
 
 class SingleImageAttachment(BaseSourceModel):
@@ -342,7 +340,7 @@ class TextField(BaseContentModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.content} : {self.DESC} - {self.pk}"
+        return f"{self.content}: {self.pk}"
 
 
 class YTVideoContent(BaseContentModel):
@@ -397,7 +395,7 @@ class YTVideoContent(BaseContentModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.DESC}: {self.url}"
+        return f"{self.url}"
 
 
 class ImageAttachment(BaseModel):
@@ -441,18 +439,16 @@ class ImageAttachment(BaseModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.DESC}: {self.images.creation_counter}"
+        return f"{self.pk}"
 
 
-# Dict: Contains all available content types.
+# dict: Contains all available content types.
 CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
     PDFContent.TYPE: PDFContent,
-    ImageAttachment.TYPE: ImageAttachment,
     TextField.TYPE: TextField,
     Latex.TYPE: Latex,
-    SingleImageAttachment.TYPE: SingleImageAttachment
 }
 
 # Set: Content types which are not directly accessible via the topics,
@@ -467,3 +463,23 @@ IMAGE_ATTACHMENT_TYPES = {
     TextField.TYPE,
     Latex.TYPE
 }
+
+# Register models for reversion if it is not already done in admin,
+# else we can specify configuration
+reversion.register(ImageContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(Latex,
+                   fields=['textfield', 'source'],
+                   follow=['content'])
+reversion.register(PDFContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(YTVideoContent,
+                   fields=None,
+                   follow=['content'])
+reversion.register(SingleImageAttachment,
+                   fields=None)
+reversion.register(ImageAttachment,
+                   fields=None,
+                   follow=['images'])

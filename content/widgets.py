@@ -25,14 +25,14 @@ class ModifiedClearableFileInput(ClearableFileInput):
        :param name: The name of the field
        :type name: str
        :param value: The value of the field e.g. ImageField: Image
-       :type value: any
+       :type value: Any
        :param attrs: The the attributes of the widget
-       :type attrs: dict
+       :type attrs: dict[str, Any]
 
        :return: the context of the widget
        :rtype: dict
         """
-        ctx = super(ModifiedClearableFileInput, self).get_context(name, value, attrs)
+        ctx = super().get_context(name, value, attrs)
         # If a value is currently entered in the field, entering another value is not required
         if value is not None:
             ctx['widget']['attrs']['required'] = False

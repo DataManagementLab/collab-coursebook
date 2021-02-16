@@ -24,7 +24,9 @@ class CommentForm(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
         """
         model = Comment
         fields = ['text']
@@ -33,7 +35,10 @@ class CommentForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        # TODO
-        super(CommentForm, self).__init__(*args, **kwargs)
+        """Initializer
+
+        Initialize the comment form with pre configuration for the label and placeholder.
+        """
+        super().__init__(*args, **kwargs)
         self.fields['text'].label = False
         self.fields['text'].widget.attrs['placeholder'] = _("Your Comment")

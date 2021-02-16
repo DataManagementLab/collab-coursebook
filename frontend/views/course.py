@@ -61,7 +61,7 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         Returns the current user to the initial of the owner field.
 
         :return: the initial data
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         course_to_duplicate = Course.objects.get(pk=self.get_object().id)
         data = course_to_duplicate.__dict__
@@ -81,7 +81,7 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :param form: The form that contains the filter and the sorting
         :type form: FilterAndSortForm
 
-        :return: Itself rendered to a response
+        :return: itself rendered to a response
         :rtype: HttpResponse
         """
         duplicated_course = form.save()
@@ -134,7 +134,7 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         Returns the current user to the initial of the owner field.
 
         :return: the initial data
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         initial = super().get_initial()
         initial['owners'] = get_user(self.request).profile
@@ -144,7 +144,7 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     """Edit course view
 
-    Displays the edit course page
+    Displays the edit course page.
 
     :attr EditCourseView.model: The model of the view
     :type EditCourseView.model: Model
@@ -164,7 +164,7 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
         :return: The url of the content to which the edited argument
         belonged
-        :rtype: str
+        :rtype: None or str
         """
         course_id = self.get_object().id
         return reverse('frontend:course', args=(course_id,))
@@ -175,7 +175,7 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         Returns the success message after the editing was successful.
 
         :param cleaned_data: The cleaned data
-        :type cleaned_data: dict
+        :type cleaned_data: dict[str, Any]
 
         return: the success message
         rtype: __proxy__
@@ -204,11 +204,15 @@ class CourseView(DetailView, FormMixin):
     context_object_name = "course"
 
     def __init__(self):
+        """Initializer
+
+        Initialize the course view with pre configuration for the sort and filter options
+        with default values.
+        """
         self.sorted_by = 'None'
         self.filtered_by = 'None'
         super().__init__()
 
-    # pylint: disable=unused-argument
     def post(self, request, *args, **kwargs):
         """Post
 
@@ -219,9 +223,9 @@ class CourseView(DetailView, FormMixin):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
-        :return: The result from form_valid / form_invalid depending on the result from is_valid
+        :return: the result from form_valid / form_invalid depending on the result from is_valid
         :rtype: TemplateResponse
         """
         self.object = self.get_object()
@@ -251,10 +255,10 @@ class CourseView(DetailView, FormMixin):
         Gets the  context data for the page.
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: The context
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
@@ -337,7 +341,7 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         Returns the url to return to after successful delete
 
         :return: the success url
-        :rtype: str
+        :rtype: __proxy__
         """
         return reverse_lazy('frontend:dashboard')
 
@@ -352,7 +356,7 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the response to redirect to overview of the course if the user is not owner
         :rtype: HttpResponse
@@ -372,7 +376,7 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the redirect to success url (course list)
         :rtype: HttpResponse

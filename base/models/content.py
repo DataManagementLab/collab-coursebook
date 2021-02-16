@@ -7,11 +7,15 @@ content of the course book and can be registered in admin.py.
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from django.utils.translation import gettext_lazy as _
+
+import reversion
+
 from fontawesome_5.fields import IconField
 
 from base.models import Profile
+
 from .social import Rating
 
 
@@ -40,7 +44,7 @@ class Category(models.Model):
         :attr Meta.verbose_name_plural: A human-readable name for the object in plural
         :type Meta.verbose_name_plural: __proxy__
         :attr Meta.ordering: The default ordering for the object
-        :type Meta.ordering: List[str]
+        :type Meta.ordering: list[str]
         """
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
@@ -84,7 +88,7 @@ class Period(models.Model):
         :attr Meta.verbose_name_plural: A human-readable name for the object in plural
         :type Meta.verbose_name_plural: __proxy__
         :attr Meta.ordering: The default ordering for the object
-        :type Meta.ordering: List[str]
+        :type Meta.ordering: list[str]
         """
         verbose_name = _("Period")
         verbose_name_plural = _("Periods")
@@ -173,7 +177,7 @@ class Course(models.Model):
         :attr Meta.verbose_name_plural: A human-readable name for the object in plural
         :type Meta.verbose_name_plural: __proxy__
         :attr Meta.ordering: The default ordering for the object
-        :type Meta.ordering: List[str]
+        :type Meta.ordering: list[str]
         """
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
@@ -241,14 +245,33 @@ class Topic(models.Model):
         :type filtered_by: str
 
         :return: the sorted and filtered contents
-        :rtype: QuerySet
+        :rtype: QuerySet[Content]
         """
         contents = self.contents.all()
+        # filtered by is a String and represents the decision of the user
+        # , how they want to filter the data,
+        # e.g. 'Text' means they want to only see all text fields in the topic
         if filtered_by != 'None' and filtered_by is not None:
-            contents = contents.filter(style=filtered_by)
+            if filtered_by == 'Text':
+                contents = contents.filter(textfield__isnull=False)
+            elif filtered_by == 'Latex':
+                contents = contents.filter(latex__isnull=False)
+            elif filtered_by == 'Image':
+                contents = contents.filter(imagecontent__isnull=False)
+            elif filtered_by == 'YouTube-Video':
+                contents = contents.filter(ytvideocontent__isnull=False)
+            elif filtered_by == 'PDF':
+                contents = contents.filter(pdfcontent__isnull=False)
+            else:
+                contents = contents.filter()
+        # the topic can be sorted (even as an addition to filter)
+        # the user decides, if they want to sort by rating or by date
+        # and the String represent their decision
         if sorted_by != 'None' and sorted_by is not None:
-            if sorted_by == 'rating':
+            if sorted_by == 'Rating':
                 contents = sorted(contents, key=lambda x: x.get_rate(), reverse=True)
+            elif sorted_by == 'Date':
+                contents = contents.order_by('-' + 'creation_date')
             else:
                 contents = contents.order_by('-' + sorted_by)
         return contents
@@ -393,21 +416,32 @@ class Content(models.Model):
         return f"{self.type} for {self.topic} by {self.author}"
 
     def get_rate_num(self):
-        """Ratings
+        """Average rating
 
-        Returns the average number of ratings and 0 if there are no ratings presents.
+        Returns the average number of ratings and -1 if there are no ratings present.
 
         :return: the average number of ratings
         :rtype: float
         """
-        if self.get_rate() is None:  # TODO How can it returns none?
+        if self.get_rate() == -1:
             return 0
         return self.get_rate()
 
-    def get_rate(self):
-        """Ratings
+    def get_rate_amount(self):
+        """Total number of ratings
 
-        Returns the average number of ratings and -1 if there are no ratings presents.
+        Returns the amount number of ratings and 0 if there are no ratings present.
+
+        :return: the amount of ratings
+        :rtype: int
+
+        """
+        return Rating.objects.filter(content_id=self.id).aggregate(Count('rating'))['rating__count']
+
+    def get_rate(self):
+        """Average rating
+
+        Returns the average number of ratings and -1 if there are no ratings present.
 
         :return: the average number of ratings
         :rtype: float
@@ -425,7 +459,6 @@ class Content(models.Model):
         :return: the total count of ratings
         :rtype: int
         """
-        # pylint: disable=no-member
         return self.ratings.count()
 
     def user_already_rated(self, user):
@@ -439,13 +472,13 @@ class Content(models.Model):
         :return: true if an user already rated a content
         :rtype: bool
         """
-        # pylint: disable=no-member
         return self.ratings.filter(user_id=user.pk).count() > 0
 
     def get_user_rate(self, user):
         """User rating
 
-        Returns the rating of an user.
+        Returns the rating of an user. If the use did not rate already, then the returned
+        rating will be 0.
 
         :param user: The user to retrieve the rating
         :type user: User
@@ -453,9 +486,7 @@ class Content(models.Model):
         :return: the rating of an user
         :rtype: int
         """
-        # pylint: disable=W0612
         if self.user_already_rated(user):
-            content_id = self.id
             return self.ratings.get(user=user).rating_set.first().rating
         return 0
 
@@ -531,3 +562,14 @@ class CourseStructureEntry(models.Model):
         :rtype: str
         """
         return f"{self.course} -> {self.index}. {self.topic}"
+
+
+# Register models for reversion if it is not already done in admin,
+# else we can specify configuration
+reversion.register(Course,
+                   fields=['title', 'description', 'image', 'topics',
+                           'owners', 'restrict_changes', 'category', 'period'])
+
+reversion.register(Content,
+                   fields=['author', 'description', 'language',
+                           'tags', 'readonly', 'public', 'attachment'])

@@ -8,7 +8,7 @@
 {% block content %}
     <h1>{% trans "Edit your profile" %}</h1>
 
-    <form method="POST" class="post-form" class="post-form">{% csrf_token %}
+    <form method="POST" class="post-form" enctype=multipart/form-data>{% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
             <button type="reset" class="btn btn-danger">

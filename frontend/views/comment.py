@@ -41,9 +41,9 @@ class DeleteComment(LoginRequiredMixin, DeleteView):
         :param request: The given request
         :type request: HttpRequest
         :param args: The arguments
-        :tyüe args: ANY
+        :type args: Any
         :param kwargs: The additional arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: if user has no permission he will be redirected to the no permission page
         otherwise the dispatch from DeleteView is called and the result is returned
@@ -86,10 +86,10 @@ class DeleteComment(LoginRequiredMixin, DeleteView):
         Gets the context data and adds course id to it
 
         :param kwargs: The additional arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data to which the course_id was added
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
@@ -111,7 +111,7 @@ class EditComment(LoginRequiredMixin, UpdateView):
     :type EditComment.template_name: str
     :attr EditComment.context_object_name: The context object name
     :type EditComment.context_object_name: str
-    :attr EditComment.form_class: THe form of the view
+    :attr EditComment.form_class: The form of the view
     :type EditComment.form_class: ModelForm
     """
     model = Comment
@@ -152,9 +152,9 @@ class EditComment(LoginRequiredMixin, UpdateView):
         :param request: The given request
         :type request: HttpRequest
         :param args: The arguments
-        :type args: ANY
+        :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: if the user is the author the dispatch from UpdateView is called, otherwise the
         no permission page will be displayed
@@ -168,7 +168,7 @@ class EditComment(LoginRequiredMixin, UpdateView):
             topic_id = self.kwargs['topic_id']
             return HttpResponseRedirect(reverse('frontend:content', args=(course_id, topic_id,
                                                                           comment.content.id,)))
-        return super(EditComment, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """Context data
@@ -176,10 +176,10 @@ class EditComment(LoginRequiredMixin, UpdateView):
         Gets context data and adds the course_id
 
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
         :return: the context data with added course_id
-        :rtype: dict
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']

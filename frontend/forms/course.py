@@ -4,8 +4,11 @@ This file contains forms associated with the course.
 """
 
 from django import forms
+from django.utils.translation import ugettext as _
 
 from base.models import Course
+
+from content.widgets import ModifiedClearableFileInput
 
 
 class AddAndEditCourseForm(forms.ModelForm):
@@ -26,11 +29,14 @@ class AddAndEditCourseForm(forms.ModelForm):
         :attr Meta.model (Model): The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List[str]
+        :type Meta.fields: list[str]
         """
         model = Course
         fields = ['title', 'description', 'image', 'owners',
                   'restrict_changes', 'category', 'period']
+        widgets = {
+            'image': ModifiedClearableFileInput(attrs={'required':'false'})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,23 +50,25 @@ class FilterAndSortForm(forms.Form):
     This model represents the add form for entering filter and sorting options.
 
     :attr FilterAndSortForm.FILTER_CHOICE: The filter choices
-    :type FilterAndSortForm.FILTER_CHOICE: List[Tuple[str, str]]
+    :type FilterAndSortForm.FILTER_CHOICE: list[tuple[str, str]]
     :attr FilterAndSortForm.SORTING_CHOICE: The sorting choices
-    :type FilterAndSortForm.SORTING_CHOICE: List[Tuple[str, str]]
+    :type FilterAndSortForm.SORTING_CHOICE: list[tuple[str, str]]
     :attr FilterAndSortForm.filter: The field to enter the filter choices
     :type FilterAndSortForm.filter: CharField
     :attr FilterAndSortForm.sort: The field to enter the sort choices
     :type FilterAndSortForm.sort: CharField
     """
 
-    FILTER_CHOICE = [('None', '------')]  # + Content.STYLE
-    SORTING_CHOICE = [('None', '-----'), ('creation_date', 'Date'), ('rating', 'Rating')]
-    filter = forms.CharField(label='Filter by',
+    FILTER_CHOICE = [('None', '------'), ('Text', _('Text')), ('Image', _('Image')),
+                     ('Latex', _('Latex-Textfield')), ('YouTube-Video', _('YouTube-Video')),
+                     ('PDF', 'PDF')]  # + Content.STYLE
+    SORTING_CHOICE = [('None', '-----'), ('Date', _('Date')), ('Rating', _('Rating'))]
+    filter = forms.CharField(label=_('Filter by'),
                              widget=forms.Select(choices=FILTER_CHOICE,
                                                  attrs={'class': 'form-control',
                                                         'style': 'width:auto',
                                                         'onchange': 'this.form.submit();'}))
-    sort = forms.CharField(label='Sort by',
+    sort = forms.CharField(label=_('Sort by'),
                            widget=forms.Select(choices=SORTING_CHOICE,
                                                attrs={'class': 'form-control',
                                                       'style': 'width:auto',

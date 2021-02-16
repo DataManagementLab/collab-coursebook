@@ -1,0 +1,29 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load cc_frontend_tags %}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+
+{% block imports %}
+    <link href="{% static 'css/reversion.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+
+{% block content %}
+
+    <button onclick="location.href='{{ back_url }}'" class="btn btn-primary add-item">
+        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Back" %}
+    </button>
+
+    <h2 style="font-weight: bold" align="center">
+        {% trans "History" %}
+    </h2>
+
+    {% include "frontend/history/history_compare_header.html" %}
+
+    {% include "frontend/history/history_compare_view.html" %}
+
+{% endblock content %}
