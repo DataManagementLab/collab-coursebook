@@ -140,6 +140,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
+        # Checks if content type is of type Latex
+        context['is_latex_content'] = content_type == 'Latex'
+
         # Retrieves attachment_form
         context['attachment_form'] = AddContentFormAttachedImage
 
@@ -341,6 +344,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
+
+        # Checks if content type is of type Latex
+        context['is_latex_content'] = content_type == 'Latex'
 
         if content_type in IMAGE_ATTACHMENT_TYPES:
 

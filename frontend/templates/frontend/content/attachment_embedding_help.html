@@ -1,0 +1,35 @@
+{# Load the tag library #}
+{% load cc_frontend_tags %}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+<!-- TODO -->
+
+{% block imports %}
+    <link href="{% static 'css/popup.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+
+    <script>
+
+        const popup_field = '<div class="popup">?' +
+                            '<span class="popuptext" id="myPopup"> ' +
+                                'In order to include an attached image i in your latex file, ' +
+                                'use \"Image-i\" inside \\includegraphics instead of the actual path. ' +
+                                'Be aware that the image count begins at 0.' +
+                            '</span>' +
+                        '</div>';
+
+        document.getElementById("id_textfield").outerHTML = "&nbsp;&nbsp;" + popup_field +
+            document.getElementById("id_textfield").outerHTML
+
+        $(".popup").click(function() {
+            var popup_intern = document.getElementById("myPopup");
+            popup_intern.classList.toggle("show");
+        });
+
+    </script>
+
+{% endblock %}
