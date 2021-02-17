@@ -34,4 +34,14 @@
         {% endfor %}
     </div>
 
+    <!-- TODO: <Iteration 5> -->
+    <h3 class="text-info"
+        style="margin-top: 30px;">{% fa5_icon "chalkboard-teacher" "fas" %} {% trans "Favourite Courses" %}</h3>
+    <div class="row">
+        {% for course in profile.stared_courses.all %}
+            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
+            {% include "frontend/course_lists/card_course.html" %}
+        {% endfor %}
+    </div>
+
 {% endblock %}

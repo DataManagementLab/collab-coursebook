@@ -28,7 +28,7 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 {% if user.is_authenticated %}
                     <a class="dropdown-item"
-                       href="{# url 'favourite_content' course.id topic.id content.id ?onDetailPage=True#}">
+                       href="{% url 'frontend:favourite_course' pk=course.pk %}">
                         {% if course in user.profile.stared_courses.all %}{% fa5_icon 'bookmark' 'fas' %} {% trans "Unsave" %}
                             {% else %}{% fa5_icon 'bookmark' 'far' %} {% trans "Save" %}{% endif %}</a>
                     {% if user.is_superuser or isCurrentUserOwner %}

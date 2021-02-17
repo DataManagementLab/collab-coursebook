@@ -56,6 +56,9 @@ urlpatterns = [
             path('coursebook/',
                  generate_coursebook_response,
                  name='coursebook-generate'),
+            path('favourite/',
+                 views.course.add_remove_favourites,
+                 name='favourite_course')
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 

@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin, CreateView, DeleteView, UpdateView
@@ -385,3 +386,37 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(request, "Course '" + self.get_object().title +
                          "' successfully deleted", extra_tags="alert-success")
         return super().delete(self, request, *args, **kwargs)
+
+
+
+def add_remove_favourites(request, pk):
+    """
+    #TODO <Iteration 5>
+    :param request: the given request
+    :type request: HTTPRequest
+    :param pk: The course id
+    :type pk: int
+
+    :return: the redirection to the course page
+    :rtype: HttpResponse
+    """
+
+    # Identify the profile and the course
+    profile = get_user(request).profile
+    course = get_object_or_404(Course, pk=pk)
+
+    # If the course is already in the favourite set, remove it
+    if course in profile.stared_courses.all():
+        profile.stared_courses.remove(course)
+        messages.success(request, "Course '" + course.title +
+                     "' successfully removed from favourites", extra_tags="alert-success")
+
+    # otherwise add it to the favourite set
+    else:
+        profile.stared_courses.add(course)
+        messages.success(request, "Course '" + course.title +
+                         "' successfully added to favourites", extra_tags="alert-success")
+
+    # return to the course page afterwards
+    return HttpResponseRedirect(reverse_lazy('frontend:course', args=(pk,)))
+
