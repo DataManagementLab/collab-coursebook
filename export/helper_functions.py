@@ -160,8 +160,8 @@ class Latex:
 
                 for idx, picture in enumerate(pictures):
                     path = ret_path(picture.image.url)
-                    rendered_tpl = re.sub(r"\\includegraphics" + f"(\[.*])?{{Image-{idx}}}",
-                                          r"\\includegraphics\1" + f"{{{path}}}",
+                    rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
+                                          rf"\\includegraphics\1{{{path}}}",
                                           rendered_tpl)
 
         # Encode the template with Latex Encoding
