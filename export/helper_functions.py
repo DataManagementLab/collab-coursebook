@@ -97,7 +97,7 @@ class Latex:
         If there are none, an empty list will be returned.
 
         :param lob: A list of bytes representing the PDF LaTeX compile log
-        :type lob: list[byte]
+        :type lob: bytes
 
         :return: the error messages from the log (stdout)
         :rtype: list[str]
