@@ -31,7 +31,6 @@ def create_topic_and_subtopic_list(topics, course):
         if topic in already_checked_topics:
             continue
         already_checked_topics.append(topic)
-        # pylint: disable=no-member
         # Get all structures (even if the same topic is part of the course more than one time)
         for structure in CourseStructureEntry.objects.filter(
                 topic=topic,

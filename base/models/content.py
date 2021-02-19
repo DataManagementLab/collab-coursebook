@@ -513,7 +513,6 @@ class Content(models.Model):
         Rating.objects.filter(user_id=user.user.id, content_id=self.id).delete()
         rating = Rating.objects.create(user=user, content=self, rating=rating)  # user = profile
         rating.save()
-        # pylint: disable=no-member
         self.save()
 
     def get_index_in_course(self, course):
