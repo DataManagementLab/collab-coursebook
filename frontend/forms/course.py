@@ -35,7 +35,7 @@ class AddCourseForm(forms.ModelForm):
         fields = ['title', 'description', 'image', 'owners',
                   'restrict_changes', 'category', 'period']
         widgets = {
-            'image': ModifiedClearableFileInput(attrs={'required':'false'})
+            'image': ModifiedClearableFileInput(attrs={'required': 'false'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -78,11 +78,16 @@ class EditCourseForm(forms.ModelForm):
         :type Meta.model: Model
         :attr Meta.field_order: The order of the fields
         :type Meta.field_order: List(str)
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
         """
 
         model = Course
         fields = ['title', 'description', 'image', 'owners',
                   'restrict_changes', 'category', 'period']
+        widgets = {
+            'image': ModifiedClearableFileInput(attrs={'required': 'false'})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
