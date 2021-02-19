@@ -40,6 +40,8 @@
                     {% if user|check_edit_course_permission:course %}
                         <a href="{% url 'frontend:course-edit' pk=course.pk %}"
                            class="dropdown-item">{% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Course" %}</a>
+                        <a href="{% url 'frontend:course-edit-structure' pk=course.pk %}"
+                           class="dropdown-item">{% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Structure" %}</a>
                         <a href="{% url 'frontend:course-history' pk=course.pk %}"
                            class="dropdown-item">{% fa5_icon "history" "fas" %} {% trans "View History" %}</a>
                         <a href="{% url 'frontend:course-delete' pk=course.pk %}"
@@ -76,15 +78,15 @@
                 {% for entry in structure %}
                     <li class="list-group-item">
                         {% with forloop.counter as outer_index %}
-                            <a href="#{{ entry.topic.title }}">{{ outer_index }}. {{ entry.topic.title }}
+                            <a href="#{{ entry.topic.pk }}">{{ outer_index }}. {{ entry.topic.title }}
                                 <span class="badge badge-primary badge-pill badge-light">{{ entry.topic.contents.count }}</span></a>
                             <!-- Show (up to one level of) subtopics in ToC -->
                             {% if entry.subtopics %}
                                 <ol class="list-group">
                                     {% for subtopic in entry.subtopics %}
                                         <li class="list-group-item" style="border: none;">
-                                            {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
-                                            <span class="badge badge-primary badge-pill badge-light">{{ subtopic.topic.contents.count }}</span>
+                                            <a href="#{{ subtopic.topic.pk }}">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
+                                                <span class="badge badge-primary badge-pill badge-light">{{ subtopic.topic.contents.count }}</span></a>
                                         </li>
                                     {% endfor %}
                                 </ol>
@@ -105,7 +107,7 @@
 
     <!-- Display course contents -->
     {% for entry in structure %}
-        <div style="margin-top: 30px;">
+        <div id='{{ entry.topic.pk }}' style="margin-top: 30px;">
             {% with forloop.counter as outer_index %}
                 <!-- Filters, Ordering, Add contents -->
                 <div class="float-right text-right">
@@ -128,7 +130,7 @@
                 <!-- Show subtopics -->
                 {% if entry.subtopics %}
                     {% for subtopic in entry.subtopics %}
-                        <div style="margin-top: 15px;">
+                        <div id='{{ subtopic.topic.pk }}' style="margin-top: 15px;">
                             <div class="float-right text-right">
                                 {% with subtopic.topic as subtopic_topic %}
                                     {% add_content_button user course.id subtopic_topic.id %}

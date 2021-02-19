@@ -154,7 +154,8 @@ class Latex:
         # Check that we are not compiling an error template (otherwise the content would be an int)
         if no_error:
 
-            # If there exists an attachment, replace all placeholders in the tex file with image path
+            # If there exists an attachment, replace all placeholders in the tex file with
+            # image path
             if content.attachment is not None and content.attachment.images.count() > 0:
                 pictures = content.attachment.images.all()
 
