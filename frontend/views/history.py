@@ -133,8 +133,7 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
       """
     template_name = "frontend/history/history.html"
 
-    # pylint: disable=too-few-public-methods
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """Meta options
 
         This class handles all possible meta options that you can give to this model.
@@ -159,7 +158,6 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         self.back_url = back_url
         self.history_url = history_url
 
-    # pylint: disable=assignment-from-no-return
     def get_context_data(self, **kwargs):
         """Context data
 
@@ -172,8 +170,8 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         :rtype: dict[str, Any]
         """
         context = super().get_context_data()
-        context['back_url'] = self.get_url(self.back_url)
-        context['history_url'] = self.get_url(self.history_url)
+        context['back_url'] = self.get_url(self.back_url)  # pylint: disable=assignment-from-no-return
+        context['history_url'] = self.get_url(self.history_url)  # pylint: disable=assignment-from-no-return
         return context
 
     def get_url(self, value):
@@ -198,8 +196,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
       compared which allow us more customization for the compare view.
       """
 
-    # pylint: disable=too-few-public-methods
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """Meta options
 
         This class handles all possible meta options that you can give to this model.
@@ -272,11 +269,11 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         :rtype: list(dict(str, any)), bool
         """
         content = obj.content
-        content_versions = Version.objects.get_for_object(content)
-        content_version1 = content_versions.get(revision=version1.revision)
-        content_version2 = content_versions.get(revision=version2.revision)
+        versions = Version.objects.get_for_object(content)
+        obj_version1 = versions.get(revision=version1.revision)
+        obj_version2 = versions.get(revision=version2.revision)
 
-        diff, has_unfollowed_fields = super().compare(content, content_version1, content_version2)
+        diff, has_unfollowed_fields = super().compare(content, obj_version1, obj_version2)
         diff2, has_unfollowed_fields2 = super().compare(obj, version1, version2)
 
         diff += diff2
@@ -284,12 +281,12 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
         if content.attachment is not None:
             attachment = content.attachment
-            attachment_versions = Version.objects.get_for_object(attachment)
-            attachment_version1 = attachment_versions.get(revision=version1.revision)
-            attachment_version2 = attachment_versions.get(revision=version2.revision)
+            versions = Version.objects.get_for_object(attachment)
+            obj_version1 = versions.get(revision=version1.revision)
+            obj_version2 = versions.get(revision=version2.revision)
             diff2, has_unfollowed_fields2 = super().compare(attachment,
-                                                            attachment_version1,
-                                                            attachment_version2)
+                                                            obj_version1,
+                                                            obj_version2)
             diff += diff2
             has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
 
@@ -303,8 +300,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
       configurations  and needed information for all other compare views.
       """
 
-    # pylint: disable=too-few-public-methods
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """Meta options
 
         This class handles all possible meta options that you can give to this model.

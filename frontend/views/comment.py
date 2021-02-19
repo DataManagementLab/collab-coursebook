@@ -15,8 +15,7 @@ from base.models import Comment, Topic
 from frontend.forms import CommentForm
 
 
-# pylint: disable=too-many-ancestors
-class DeleteComment(LoginRequiredMixin, DeleteView):
+class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many-ancestors
     """Delete comment
 
     This model represents the deletion of a comment and redirects to course list.
@@ -32,7 +31,6 @@ class DeleteComment(LoginRequiredMixin, DeleteView):
     template_name = 'frontend/comment/delete_confirm.html'
     context_object_name = 'comment'
 
-    # check if the user is allowed to view the delete page
     def dispatch(self, request, *args, **kwargs):
         """Dispatch
 
@@ -99,8 +97,7 @@ class DeleteComment(LoginRequiredMixin, DeleteView):
         return context
 
 
-# pylint: disable=too-many-ancestors
-class EditComment(LoginRequiredMixin, UpdateView):
+class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-ancestors
     """Edit comment
 
     This model represents the editing of a comment in the database.
@@ -147,7 +144,8 @@ class EditComment(LoginRequiredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         """Dispatch
 
-        Checks if the user is the author and therefore has permission to change the comment.
+        Checks if the user is the author of the comment and therefore has permission to change
+        the comment.
 
         :param request: The given request
         :type request: HttpRequest

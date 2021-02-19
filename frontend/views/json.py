@@ -4,6 +4,7 @@ This file describes the json handling on resources needed for frontend views.
 """
 
 from django.core.exceptions import ValidationError
+
 from base.models import CourseStructureEntry, Topic
 
 
@@ -49,7 +50,7 @@ class JsonHandler:
 
         :param course: The Course where the structure should be modified
         :type course: Course
-        :param json_data: the json data
+        :param json_data: The json data
         :type json_data: list[str, dict[str, int]]
 
         :return: true if the structure was changed after its call
@@ -102,6 +103,48 @@ class JsonHandler:
         return True
 
     @staticmethod
+    def topics_structure_to_json(course):
+        """Topic structure to json
+
+        Creates a json object representing the structure of the course from the given course.
+
+        :param course: The course object of the structure
+        :type course: Course
+
+        :return: a json object of the topic structure
+        :rtype: List[Optional[Dict[str, Union[int, list]]]]
+        """
+        # Generates json object representing the structure of the model
+        json_obj = []
+        # Saves last main topic to append its children later
+        last_main_topic = None
+        for topic in course.get_sorted_topic_list():
+            # Course structure
+            structure = CourseStructureEntry.objects.get(topic=topic, course=course)
+            # Possible sub topic
+            structure_index = structure.index.split('/')
+
+            topic_json = {'value': topic.__str__(), 'id': topic.id}
+
+            if len(structure_index) == 1:
+                # Appends the first main topic
+                if last_main_topic is not None:
+                    json_obj.append(last_main_topic)
+                # Checks if a main topic has sub topics
+                if CourseStructureEntry.objects.filter(
+                        course=course,
+                        index__startswith=str(structure_index[0])).count() > 1:
+                    topic_json['children'] = []
+                last_main_topic = topic_json
+            else:
+                last_main_topic['children'].append(topic_json)
+
+        # Appends the first topic: 'if last_main_topic is not None' does not get
+        # called if there is only one main topic
+        json_obj.append(last_main_topic)
+        return json_obj
+
+    @staticmethod
     def clean_structure_topic(course, index):
         """Clean structure topic
 
@@ -147,48 +190,6 @@ class JsonHandler:
             sub_index += 1
             topic = CourseStructureEntry.objects.filter(index=f'{index}/{sub_index}',
                                                         course_id=course_id)
-
-    @staticmethod
-    def topics_structure_to_json(course):
-        """Topic structure to json
-
-        Creates a json object representing the structure of the course from the given course.
-
-        :param course: The course object of the structure
-        :type course: Course
-
-        :return: a json object of the topic structure
-        :rtype: List[Optional[Dict[str, Union[int, list]]]]
-        """
-        # Generates json object representing the structure of the model
-        json_obj = []
-        # Saves last main topic to append its children later
-        last_main_topic = None
-        for topic in course.get_sorted_topic_list():
-            # Course structure
-            structure = CourseStructureEntry.objects.get(topic=topic, course=course)
-            # Possible sub topic
-            structure_index = structure.index.split('/')
-
-            topic_json = {'value': topic.__str__(), 'id': topic.id}
-
-            if len(structure_index) == 1:
-                # Appends the first main topic
-                if last_main_topic is not None:
-                    json_obj.append(last_main_topic)
-                # Checks if a main topic has sub topics
-                if CourseStructureEntry.objects.filter(
-                        course=course,
-                        index__startswith=str(structure_index[0])).count() > 1:
-                    topic_json['children'] = []
-                last_main_topic = topic_json
-            else:
-                last_main_topic['children'].append(topic_json)
-
-        # Appends the first topic: 'if last_main_topic is not None' does not get
-        # called if there is only one main topic
-        json_obj.append(last_main_topic)
-        return json_obj
 
     @staticmethod
     def clean_topics(ids):

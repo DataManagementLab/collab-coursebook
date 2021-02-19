@@ -74,7 +74,6 @@ def rate_content(request, course_id, topic_id, content_id, pk):
         + '#rating')
 
 
-# pylint: disable=too-many-ancestors
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add content view
 
@@ -150,7 +149,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
-        # setup formset
+        # Setup formset
         formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
         context['item_forms'] = formset
 
@@ -454,7 +453,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return self.handle_error()
 
 
-# pylint: disable=too-many-ancestors
 class ContentView(DetailView):
     """Content view
 
@@ -491,7 +489,6 @@ class ContentView(DetailView):
         translate_form = TranslateForm(request.POST)
         self.object = self.get_object()
 
-        # pylint: disable=no-member
         if comment_form.is_valid():
             text = comment_form.cleaned_data['text']
             Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),
@@ -643,7 +640,6 @@ class AttachedImageView(DetailView):
         return context
 
 
-# pylint: disable=too-many-ancestors
 class DeleteContentView(LoginRequiredMixin, DeleteView):
     """Delete content view
 
@@ -681,11 +677,10 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         course_id = self.kwargs['course_id']
         return reverse_lazy('frontend:course', args=(course_id,))
 
-    # Check if the user is allowed to view the delete page
     def dispatch(self, request, *args, **kwargs):
         """Dispatch
 
-        Overwrites dispatch: Check if a user is allowed to visit the page.
+        Checks if the user is allowed to view the delete page.
 
         :param request: The given request
         :type request: HttpRequest
@@ -743,7 +738,6 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         return super().delete(self, request, *args, **kwargs)
 
 
-# pylint: disable=too-many-ancestors
 class ContentReadingModeView(LoginRequiredMixin, DetailView):
     """Content reading mode view
 

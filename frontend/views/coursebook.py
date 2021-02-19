@@ -10,6 +10,7 @@ from django.urls import reverse
 from base.models import Course, Favorite, Topic, Content
 
 
+#  TODO class based view?
 def add_to_coursebook(request, *args, **kwargs):
     """Add to course book
 
@@ -37,6 +38,7 @@ def add_to_coursebook(request, *args, **kwargs):
                                               content.id,)))
 
 
+#  TODO class based view?
 def remove_from_coursebook(request, *args, **kwargs):
     """Remove from course book
 

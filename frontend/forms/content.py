@@ -15,7 +15,6 @@ class AddContentForm(forms.ModelForm):
     This model represents the add form for new content to a topic.
     """
 
-    # pylint: disable=too-few-public-methods
     class Meta:
         """Meta options
 
@@ -57,7 +56,6 @@ class EditContentForm(forms.ModelForm):
     field_order = ['change_log', 'description', 'language', 'tags',
                    'readonly', 'public']
 
-    # pylint: disable=too-few-public-methods
     class Meta:
         """Meta options
 

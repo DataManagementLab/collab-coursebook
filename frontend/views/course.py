@@ -73,10 +73,10 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         """
         course_to_duplicate = Course.objects.get(pk=self.get_object().id)
         data = course_to_duplicate.__dict__
-        # set data not included in the dict
+        # Set data not included in the dict
         data['owners'] = get_user(self.request)
         data['image'] = course_to_duplicate.image
-        # this data has the wrong key
+        # This data has the wrong key
         data['category'] = course_to_duplicate.category
         data['period'] = course_to_duplicate.period
         return data
@@ -95,7 +95,7 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         duplicated_course = form.save()
         original_course = Course.objects.get(pk=self.get_object().id)
         course_structure_entries = CourseStructureEntry.objects.filter(course=original_course)
-        # duplicate course structure entries
+        # Duplicates the course structure entries
         for entry in course_structure_entries:
             entry.pk = None
             entry.course = duplicated_course
@@ -103,7 +103,6 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# pylint: disable=too-many-ancestors
 class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add course view
 
@@ -276,7 +275,6 @@ class EditCourseStructureView(DetailView, FormMixin):
         return HttpResponse(status=400)
 
 
-# pylint: disable=too-many-ancestors
 class CourseView(DetailView, FormMixin):
     """Course list view
 
@@ -435,7 +433,6 @@ class CourseView(DetailView, FormMixin):
         return context
 
 
-# pylint: disable=too-many-ancestors
 class CourseDeleteView(LoginRequiredMixin, DeleteView):
     """Course delete view
 
@@ -459,11 +456,10 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         """
         return reverse_lazy('frontend:dashboard')
 
-    # Check if the user is allowed to view the delete page
     def dispatch(self, request, *args, **kwargs):
         """Dispatch
 
-        Overwrites dispatch: Check if a user is allowed to visit the page.
+        Overwrites dispatch: Check if a user is allowed to view the deletepage.
 
         :param request: The given request
         :type request: HttpRequest
@@ -503,7 +499,7 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
 
 def add_remove_favourites(request, pk):
     """
-    #TODO <Iteration 5>
+    TODO <Iteration 5> integrate in post
     :param request: the given request
     :type request: HTTPRequest
     :param pk: The course id
@@ -523,11 +519,11 @@ def add_remove_favourites(request, pk):
         messages.success(request, "Course '" + course.title +
                          "' successfully removed from favourites", extra_tags="alert-success")
 
-    # otherwise add it to the favourite set
+    # Otherwise add it to the favourite set
     else:
         profile.stared_courses.add(course)
         messages.success(request, "Course '" + course.title +
                          "' successfully added to favourites", extra_tags="alert-success")
 
-    # return to the course page afterwards
+    # Return to the course page afterwards
     return HttpResponseRedirect(reverse_lazy('frontend:course', args=(pk,)))
