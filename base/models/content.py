@@ -8,6 +8,7 @@ content of the course book and can be registered in admin.py.
 from django.conf import settings
 from django.db import models
 from django.db.models import Avg, Count
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 import reversion
@@ -137,7 +138,7 @@ class Course(models.Model):
     description = models.TextField(verbose_name=_("Description"))
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
-                                         auto_now_add=True,
+                                         default=timezone.now,
                                          blank=True)
 
     image = models.ImageField(verbose_name=_("Title Image"),
@@ -393,7 +394,7 @@ class Content(models.Model):
                                       blank=True,
                                       null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
-                                         auto_now_add=True,
+                                         default=timezone.now,
                                          blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"),
                                 blank=True,
@@ -578,8 +579,8 @@ class CourseStructureEntry(models.Model):
 # else we can specify configuration
 reversion.register(Course,
                    fields=['title', 'description', 'image', 'topics',
-                           'owners', 'restrict_changes', 'category', 'period'])
+                           'restrict_changes'])
 
 reversion.register(Content,
-                   fields=['author', 'description', 'language',
+                   fields=['description', 'language',
                            'tags', 'readonly', 'public', 'attachment'])

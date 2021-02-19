@@ -467,19 +467,22 @@ IMAGE_ATTACHMENT_TYPES = {
 # Register models for reversion if it is not already done in admin,
 # else we can specify configuration
 reversion.register(ImageContent,
-                   fields=None,
+                   fields=['content', 'image', 'source', 'license'],
+                   follow=['content'])
+reversion.register(TextField,
+                   fields=['content', 'textfield', 'source'],
                    follow=['content'])
 reversion.register(Latex,
-                   fields=['textfield', 'source'],
+                   fields=['content', 'textfield', 'source'],
                    follow=['content'])
 reversion.register(PDFContent,
-                   fields=None,
+                   fields=['content', 'pdf', 'source', 'license'],
                    follow=['content'])
 reversion.register(YTVideoContent,
-                   fields=None,
+                   fields=['content', 'url'],
                    follow=['content'])
 reversion.register(SingleImageAttachment,
-                   fields=None)
+                   fields=['image', 'source', 'license'])
 reversion.register(ImageAttachment,
-                   fields=None,
+                   fields=['images'],
                    follow=['images'])

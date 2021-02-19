@@ -1,18 +1,25 @@
 """Purpose of this file
-
 This file describes the frontend history compare views to the models
 which are being tracked by the reversion (versioning) and allows us
 to compare the differences between different versions of the same model.
 """
-from django.urls import reverse
+
+from django.core import serializers
+from django.core.files.base import ContentFile
+from django.db import transaction
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 import reversion
+from reversion.models import Version
 
 from reversion_compare.views import HistoryCompareDetailView
 
-from base.models import Course
+from base.models import Course, Content, Topic
 
-from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex
+from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex, CONTENT_TYPES
+from export.views import generate_pdf_response
 
 
 def update_comment(request):
@@ -30,6 +37,91 @@ def update_comment(request):
     # else the default comment message will be used
     if change_log:
         reversion.set_comment(change_log)
+
+
+def revert_course_to_revision(request, pk, rev_pk):
+    """revert course
+
+    Revert the certain course to an older version
+
+    :param request: The given request
+    :type request: HttpRequest
+    :param pk: id of the to be reverted course
+    :type pk: int
+    :param rev_pk: id of the to be reverted version of the course
+    :type rev_pk: int
+    """
+    with transaction.atomic(), reversion.create_revision():
+        version = Version.objects.get(id=rev_pk)
+
+        date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
+        reversion.set_comment(_("Revert to version: {}".format(date_time)))
+
+        for deserialized_obj in serializers.deserialize('json', version.serialized_data):
+            if isinstance(deserialized_obj.object, Course):
+                # revert deletes category and period, so set it manually
+                course = Course.objects.get(pk=pk)
+                deserialized_obj.object.category_id = course.category_id
+                deserialized_obj.object.period_id = course.period_id
+            deserialized_obj.object.save()
+    course = Course.objects.get(pk=pk)
+    course.save()
+
+    return HttpResponseRedirect(reverse_lazy(
+        'frontend:course',
+        args=(course.pk,)))
+
+
+def revert_content_to_revision(request, course_id, topic_id, pk, rev_pk):
+    """revert content
+
+    Revert the certain content to an older version.
+
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: id of the course that the to be reverted content belongs to
+    :type course_id: int
+    :param topic_id: id of the topic that the to be reverted content belongs to
+    :type topic_id: int
+    :param pk: id of the to be reverted content
+    :type pk: int
+    :param rev_pk: id of the to be reverted version of the content
+    :type rev_pk: int
+    """
+
+    with transaction.atomic(), reversion.create_revision():
+        revision_id = Version.objects.get(pk=rev_pk).revision_id
+
+        for version in Version.objects.filter(revision_id=revision_id):
+            date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
+            reversion.set_comment(_("Revert to version: {}".format(date_time)))
+
+            for deserialized_obj in serializers.deserialize('json', version.serialized_data):
+                if isinstance(deserialized_obj.object, Content):
+                    # revert deletes author and topic, so set it manually
+                    content = Content.objects.get(pk=pk)
+                    deserialized_obj.object.author_id = content.author_id
+                    deserialized_obj.object.topic_id = content.topic_id
+                elif isinstance(deserialized_obj.object, Latex):
+                    deserialized_obj.object.save()
+                    topic = Topic.objects.get(pk=topic_id)
+                    pdf = generate_pdf_response(request.user.profile,
+                                                deserialized_obj.object.content)
+                    deserialized_obj.object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+                deserialized_obj.save()
+
+    content = Content.objects.get(pk=pk)
+    print("Test")
+    print(content)
+    print("-----------")
+    print(content.type)
+    content.preview = CONTENT_TYPES.get(content.type) \
+        .objects.get(pk=content.pk).generate_preview()
+    content.save()
+
+    return HttpResponseRedirect(reverse_lazy(
+        'frontend:content',
+        args=(course_id, topic_id, pk,)))
 
 
 class BaseHistoryCompareView(HistoryCompareDetailView):
@@ -104,6 +196,8 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
       This detail view represents the base content history compare view. It defines the default
       configurations  and needed information for all other compare views.
+      Each model should modify the attribute compare_files to declare which fields should be
+      compared which allow us more customization for the compare view.
       """
 
     # pylint: disable=too-few-public-methods
@@ -116,6 +210,20 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         :type Meta.abstract: bool
         """
         abstract = True
+
+    def get_context_data(self, **kwargs):
+        """Context data
+        Returns the context data of the history.
+
+        :param kwargs: The keyword arguments
+        :type kwargs: dict[str, Any]
+
+        :return: the context data of the history
+        :rtype: dict[str, Any]
+        """
+        context = super().get_context_data()
+        context['save_list'] = self.get_save_list()
+        return context
 
     def get_url(self, value):
         """Content url
@@ -132,6 +240,62 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         topic_id = self.kwargs['topic_id']
         content_id = self.get_object().pk
         return reverse(f'frontend:{value}', args=(course_id, topic_id, content_id,))
+
+    def get_save_list(self):
+        """Revert redirection
+
+        Gets the redirection information related to revert.
+
+        :return: the information related to revert redirection
+        :rtype: list[str]
+        """
+
+        course_id = self.kwargs['course_id']
+        topic_id = self.kwargs['topic_id']
+        content_id = self.get_object().pk
+
+        save_list = [course_id, topic_id, content_id]
+
+        return save_list
+
+    def compare(self, obj, version1, version2):
+        """Compare two versions of an object
+
+        Create a generic html diff from the obj between version1 and version2
+
+        :param obj: The object to compare
+        :type obj: BaseContentModel
+        :param version1: The first version to compare
+        :type version1: Version
+        :param version2: The second version to compare
+        :type version2: Version
+
+        :return: A diff of every changed field values
+        :rtype: list(dict(str, any)), bool
+        """
+        content = obj.content
+        content_versions = Version.objects.get_for_object(content)
+        content_version1 = content_versions.get(revision=version1.revision)
+        content_version2 = content_versions.get(revision=version2.revision)
+
+        diff, has_unfollowed_fields = super().compare(content, content_version1, content_version2)
+        diff2, has_unfollowed_fields2 = super().compare(obj, version1, version2)
+
+        diff += diff2
+        has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+
+        if content.attachment is not None:
+            attachment = content.attachment
+            attachment_versions = Version.objects.get_for_object(attachment)
+            attachment_version1 = attachment_versions.get(revision=version1.revision)
+            attachment_version2 = attachment_versions.get(revision=version2.revision)
+            diff2, has_unfollowed_fields2 = super().compare(attachment,
+                                                            attachment_version1,
+                                                            attachment_version2)
+            diff += diff2
+            has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+
+        return diff, has_unfollowed_fields
 
 
 class BaseCourseHistoryCompareView(BaseHistoryCompareView):
@@ -174,8 +338,11 @@ class CourseHistoryCompareView(BaseCourseHistoryCompareView):
 
     :attr CourseHistoryCompareView.model: The model of the view
     :type CourseHistoryCompareView.model: Model
+    :attr CourseHistoryCompareView.compare_fields: The fields which should be compared
+    :type CourseHistoryCompareView.compare_fields: list[str]
     """
     model = Course
+    compare_fields = ['title', 'description', 'image', 'topics', 'restrict_changes']
 
     def __init__(self):
         """Initializer
@@ -193,8 +360,12 @@ class ImageHistoryCompareView(BaseContentHistoryCompareView):
 
     :attr ImageHistoryCompareView.model: The model of the view
     :type ImageHistoryCompareView.model: Model
+    :attr ImageHistoryCompareView.compare_fields: The fields which should be compared
+    :type ImageHistoryCompareView.compare_fields: list[str]
     """
     model = ImageContent
+    compare_fields = ['description', 'language', 'tags', 'readonly',
+                      'public', 'image', 'source', 'license']
 
     def __init__(self):
         """Initializer
@@ -212,8 +383,12 @@ class LatexHistoryCompareView(BaseContentHistoryCompareView):
 
     :attr LatexHistoryCompareView.model: The model of the view
     :type LatexHistoryCompareView.model: Model
+    :attr LatexHistoryCompareView.compare_fields: The fields which should be compared
+    :type LatexHistoryCompareView.compare_fields: list[str]
     """
     model = Latex
+    compare_fields = ['description', 'language', 'tags', 'readonly',
+                      'public', 'images', 'textfield', 'source']
 
     def __init__(self):
         """Initializer
@@ -231,8 +406,12 @@ class PdfHistoryCompareView(BaseContentHistoryCompareView):
 
     :attr PdfHistoryCompareView.model: The model of the view
     :type PdfHistoryCompareView.model: Model
+    :attr PdfHistoryCompareView.compare_fields: The fields which should be compared
+    :type PdfHistoryCompareView.compare_fields: list[str]
     """
     model = PDFContent
+    compare_fields = ['description', 'language', 'tags', 'readonly',
+                      'public', 'images', 'pdf', 'source', 'license']
 
     def __init__(self):
         """Initializer
@@ -250,8 +429,12 @@ class TextfieldHistoryCompareView(BaseContentHistoryCompareView):
 
     :attr TextfieldHistoryCompareView.model: The model of the view
     :type TextfieldHistoryCompareView.model: Model
+    :attr TextfieldHistoryCompareView.compare_fields: The fields which should be compared
+    :type TextfieldHistoryCompareView.compare_fields: list[str]
     """
     model = TextField
+    compare_fields = ['description', 'language', 'tags', 'readonly',
+                      'public', 'images', 'textfield', 'source']
 
     def __init__(self):
         super().__init__('content', 'textfield-history')
@@ -264,8 +447,11 @@ class YTVideoHistoryCompareView(BaseContentHistoryCompareView):
 
     :attr YTVideoHistoryCompareView.model: The model of the view
     :type YTVideoHistoryCompareView.model: Model
+    :attr YTVideoHistoryCompareView.compare_fields: The fields which should be compared
+    :type YTVideoHistoryCompareView.compare_fields: list[str]
     """
     model = YTVideoContent
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'public', 'images', 'url']
 
     def __init__(self):
         """Initializer

@@ -5,7 +5,7 @@
 {% if request.GET.version_id1 %}
     <p class="help">
         {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") date2=version2.revision.date_created|date:_("DATETIME_FORMAT") %}
-            Compare <strong>{{ date1 }}</strong> with <strong>{{ date2 }}</strong>:
+            Compare Version 1: <strong>{{ date1 }}</strong> with Version 2: <strong>{{ date2 }}</strong>:
         {% endblocktrans %}
     </p>
 
@@ -39,24 +39,12 @@
 
     <!-- Show comment -->
     <h4>
-        {% trans "Edit comment:" %}
+        {% trans "Change log:" %}
     </h4>
     <blockquote>
         {{ version2.revision.comment|default:_("(no comment exists)") }}
     </blockquote>
 
-    <!-- Unfollowed fields note -->
-    {% if has_unfollowed_fields %}
-        <h4 class="follow">
-            {% trans "Note:" %}
-        </h4>
-        <p class="follow">
-            {% blocktrans %}
-                Fields/entries marked with <sup class="follow">*</sup> are not under reversion control.
-                It may be that not all marked information are correct.
-            {% endblocktrans %}
-        </p>
-    {% endif %}
 
     <!-- Buttons for previous and next compare -->
     {% if prev_url %}
@@ -71,9 +59,57 @@
         </button>
     {% endif %}
 
-    <button onclick="location.href='{{ save_url }}'" class="btn btn-primary add-item">
-        {% fa5_icon 'history' %} {% trans "Revert to this version" %}
+    <!-- Buttons for revert -->
+    <button type="button" class="btn btn-warning" data-toggle="modal"
+            data-target="#revertCourseModal">
+        {% fa5_icon 'undo' 'fas' %} {% trans "Revert to Version 1" %}
     </button>
+
+    <!-- modal for course/content revert -->
+    <div class="modal fade" id="revertCourseModal" tabindex="1" role="dialog" aria-labelledby="revertCourseModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="revertCourseModalLabel">{% trans "Reversion of" %} <i>{{ version1.content_type.name }}</i>?</h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") type=version1.content_type.name %}
+                            Are you sure you want to revert this {{ type }} to Version <strong>{{ date1 }}</strong>? You can also undo the revert
+                            later.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    {% if version1.content_type.name == 'Course' %}
+                    <form action="{% url 'frontend:course-revert' version1.object_id version1.pk %}" method="post"
+                          class="mb-0">
+                        {% csrf_token %}
+                        <button class="btn btn-secondary" data-dismiss="modal">
+                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                        </button>
+                        <button
+                                type="submit" class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                        </button>
+                    </form>
+                    {% endif %}
+                    {% if 'Content' in version1.content_type.name %}
+                    <form action="{% url 'frontend:content-revert' save_list.0 save_list.1 save_list.2 version1.pk %}" method="post"
+                          class="mb-0">
+                        {% csrf_token %}
+                        <button class="btn btn-secondary" data-dismiss="modal">
+                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                        </button>
+                        <button
+                                type="submit" class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
     <br><br>
 

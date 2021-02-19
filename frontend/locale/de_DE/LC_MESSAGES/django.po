@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-07 21:22+0100\n"
+"POT-Creation-Date: 2021-02-17 22:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,43 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\forms\addcontent.py:49
-msgid "Change Log"
-msgstr "Änderungsprotokoll"
-
-#: .\forms\comment.py:39
+#: .\forms\comment.py:38
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
-#: .\forms\course.py:57
-msgid "Textfield"
-msgstr "Textfeld"
+#: .\forms\content.py:55 .\forms\course.py:58
+msgid "Change Log"
+msgstr "Änderungsprotokoll"
 
-#: .\forms\course.py:57
+#: .\forms\course.py:103
+msgid "Text"
+msgstr "Text"
+
+#: .\forms\course.py:103
 msgid "Image"
 msgstr "Bild"
 
-#: .\forms\course.py:58
+#: .\forms\course.py:104
 msgid "LaTeX-Textfield"
 msgstr "LaTeX-Textfeld"
 
-#: .\forms\course.py:58
+#: .\forms\course.py:104
 msgid "YouTube-Video"
 msgstr "YouTube-Video"
 
-#: .\forms\course.py:60
+#: .\forms\course.py:106
 msgid "Date"
 msgstr "Datum"
 
-#: .\forms\course.py:60 .\templates\frontend\content\detail.html:161
+#: .\forms\course.py:106 .\templates\frontend\content\detail.html:161
 msgid "Rating"
 msgstr "Bewertung"
 
-#: .\forms\course.py:61
+#: .\forms\course.py:107
 msgid "Filter by"
 msgstr "Filtern nach"
 
-#: .\forms\course.py:66
+#: .\forms\course.py:112
 msgid "Sort by"
 msgstr "Sortieren nach"
 
@@ -81,38 +81,29 @@ msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 #: .\templates\frontend\comment\delete_confirm.html:21
 #: .\templates\frontend\content\detail.html:139
 #: .\templates\frontend\course\delete_course_confirm.html:19
+#: .\templates\frontend\history\history_compare_view.html:93
+#: .\templates\frontend\history\history_compare_view.html:105
 msgid "Confirm"
 msgstr "Bestätigen"
 
 #: .\templates\frontend\comment\delete_confirm.html:23
 #: .\templates\frontend\comment\edit.html:18
-#: .\templates\frontend\content\addcontent.html:22
-#: .\templates\frontend\content\editcontent.html:22
-msgid "Image Attachments"
-msgstr "Bildanhänge"
-
-#: .\templates\frontend\content\addcontent.html:44
-#: .\templates\frontend\course\create.html:30
-#: .\templates\frontend\course\duplicate.html:30
-msgid "Create"
-msgstr "Erzeugen"
-
 #: .\templates\frontend\content\addcontent.html:46
 #: .\templates\frontend\content\detail.html:136
-#: .\templates\frontend\content\editcontent.html:46
+#: .\templates\frontend\content\editcontent.html:45
 #: .\templates\frontend\course\create.html:32
 #: .\templates\frontend\course\delete_course_confirm.html:21
 #: .\templates\frontend\course\duplicate.html:32
 #: .\templates\frontend\course\edit.html:32
+#: .\templates\frontend\history\history_compare_view.html:90
+#: .\templates\frontend\history\history_compare_view.html:102
 #: .\templates\frontend\profile\profile_edit.html:19
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: .\templates\frontend\comment\edit.html:8
-#, fuzzy
-#| msgid "Add comment"
 msgid "Edit comment"
-msgstr "Kommentar hinzufügen"
+msgstr "Kommentar bearbeiten"
 
 #: .\templates\frontend\comment\edit.html:16
 #: .\templates\frontend\profile\profile_edit.html:22
@@ -120,6 +111,7 @@ msgid "Submit"
 msgstr "Abschicken"
 
 #: .\templates\frontend\content\addcontent.html:22
+#: .\templates\frontend\content\editcontent.html:22
 msgid "Image Attachments"
 msgstr "Bildanhänge"
 
@@ -127,6 +119,11 @@ msgstr "Bildanhänge"
 #: .\templates\frontend\content\editcontent.html:33
 msgid "Add attachment"
 msgstr "Anhang hinzufügen"
+
+#: .\templates\frontend\content\addcontent.html:35
+#: .\templates\frontend\content\editcontent.html:34
+msgid "Remove attachment"
+msgstr "Anhang entfernen"
 
 #: .\templates\frontend\content\addcontent.html:44
 #: .\templates\frontend\course\create.html:30
@@ -138,12 +135,6 @@ msgstr "Erzeugen"
 #: .\templates\frontend\course\view.html:25
 msgid "Actions"
 msgstr "Aktionen"
-
-#: .\templates\frontend\content\detail.html:32
-#: .\templates\frontend\content\detail.html:35
-#: .\templates\frontend\course\coursebook.html:18
-msgid "Coursebook"
-msgstr "Coursebook"
 
 #: .\templates\frontend\content\detail.html:42
 #: .\templates\frontend\profile\profile.html:12
@@ -190,20 +181,13 @@ msgstr ""
 "                        "
 
 #: .\templates\frontend\content\detail.html:150
+#: .\templates\frontend\course\view.html:66
 msgid "Description"
 msgstr "Beschreibung"
-
-#: .\templates\frontend\content\detail.html:161
-msgid "Rating"
-msgstr "Bewertung"
 
 #: .\templates\frontend\content\detail.html:165
 msgid "No rating yet"
 msgstr "Bisher keine Bewertungen"
-
-#: .\templates\frontend\content\detail.html:139
-msgid "Confirm"
-msgstr "Bestätigen"
 
 #: .\templates\frontend\content\detail.html:176
 msgid "Comments"
@@ -214,25 +198,11 @@ msgid "Add comment"
 msgstr "Kommentar hinzufügen"
 
 #: .\templates\frontend\content\detail_attachment.html:7
-#, fuzzy
-#| msgid "Add attachment"
 msgid "Attachments"
-msgstr "Anhang hinzufügen"
+msgstr "Anhänge"
 
-#: .\templates\frontend\content\editcontent.html:44
+#: .\templates\frontend\content\editcontent.html:43
 #: .\templates\frontend\course\view.html:33
-msgid "Save"
-msgstr "Speichern"
-
-#: .\templates\frontend\content\history.html:18
-msgid "Back"
-msgstr "Zurück"
-
-#: .\templates\frontend\content\history.html:20
-msgid "History"
-msgstr "Geschicht"
-
-#: .\templates\frontend\content\editcontent.html:44
 msgid "Save"
 msgstr "Speichern"
 
@@ -253,12 +223,11 @@ msgid "Export"
 msgstr "Exportieren"
 
 #: .\templates\frontend\course\coursebook.html:24
-#, fuzzy
-#| msgid "Your Courses"
 msgid "Your coursebook is empty"
 msgstr "Dein Kursbuch ist leer"
 
 #: .\templates\frontend\course\create.html:11
+#: .\templates\frontend\course\create.html:19
 #: .\templates\frontend\course_lists\card_create_course.html:21
 msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"
@@ -308,51 +277,27 @@ msgstr "Zurückkehren"
 msgid "Edit Course"
 msgstr "Kurs bearbeiten"
 
-#: .\templates\frontend\course\view.html:44
-msgid "Delete Course"
-msgstr "Kurs löschen"
-
-#: .\templates\frontend\course\view.html:88
-msgid "No topics yet"
-msgstr "Bisher keine Themen"
-
-#: .\templates\frontend\course\view.html:118
-#: .\templates\frontend\course_lists\courses.html:23
-#: .\templates\frontend\course_lists\courses_category.html:24
-#: .\templates\frontend\course_lists\courses_period.html:23
-msgid "Sort by:"
-msgstr "Sortieren nach:"
-
-#: .\templates\frontend\course\view.html:145
-msgid "No Topics"
-msgstr "Keine Themen"
-
-#: .\templates\frontend\course\view.html:146
 #: .\templates\frontend\course\view.html:46
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
-#: .\templates\frontend\course\view.html:71
-msgid "Description"
-msgstr "Beschreibung"
-
-#: .\templates\frontend\course\view.html:102
+#: .\templates\frontend\course\view.html:96
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
-#: .\templates\frontend\course\view.html:128
-msgid "sort by: "
-msgstr "sortieren nach: "
+#: .\templates\frontend\course\view.html:122
+msgid "Sort by: "
+msgstr "Sortieren nach: "
 
-#: .\templates\frontend\course\view.html:129
-msgid "filter by: "
-msgstr "filtern nach: "
+#: .\templates\frontend\course\view.html:123
+msgid "Filter by: "
+msgstr "Filtern nach: "
 
-#: .\templates\frontend\course\view.html:156
+#: .\templates\frontend\course\view.html:149
 msgid "No Topics"
 msgstr "Keine Themen"
 
-#: .\templates\frontend\course\view.html:157
+#: .\templates\frontend\course\view.html:150
 msgid "This course doesn't have topics at the moment."
 msgstr "Der Kurs hat momentan keine Themen."
 
@@ -369,6 +314,12 @@ msgstr "Inhalte"
 #: .\templates\frontend\course_lists\course_cards_paginated.html:11
 msgid "No matching courses found"
 msgstr "Keine passenden Kurse gefunden"
+
+#: .\templates\frontend\course_lists\courses.html:23
+#: .\templates\frontend\course_lists\courses_category.html:24
+#: .\templates\frontend\course_lists\courses_period.html:23
+msgid "Sort by:"
+msgstr "Sortieren nach:"
 
 #: .\templates\frontend\course_lists\courses.html:33
 msgid "Add Course"
@@ -388,10 +339,6 @@ msgstr "Alle Kurse"
 msgid "for Category"
 msgstr "für Kategorie"
 
-#: .\templates\frontend\course_lists\courses_category.html:24
-msgid "Sort by: "
-msgstr "Sortieren nach: "
-
 #: .\templates\frontend\course_lists\courses_period.html:12
 msgid "Courses for"
 msgstr "Kurse für"
@@ -400,17 +347,22 @@ msgstr "Kurse für"
 msgid "for"
 msgstr "für"
 
-#: .\templates\frontend\coursebook\rendering-error.html:10
+#: .\templates\frontend\coursebook\rendering-error.html:8
+#: .\templates\frontend\coursebook\rendering-error.html:11
 msgid "Error"
 msgstr "Fehler"
 
-#: .\templates\frontend\coursebook\rendering-error.html:11
+#: .\templates\frontend\coursebook\rendering-error.html:12
 msgid ""
 "An error occurred while generating your coursebook. Please see the log file "
 "below."
 msgstr ""
 "Beim Generieren Ihres Coursebooks ist ein Fehler aufgetreten. Weitere "
 "Informationen finden Sie in der Protokolldatei unten."
+
+#: .\templates\frontend\coursebook\rendering-error.html:14
+msgid "Latex Template"
+msgstr "Latex Template"
 
 #: .\templates\frontend\dashboard.html:9
 msgid "Dashboard"
@@ -441,26 +393,26 @@ msgid "History"
 msgstr "Geschichte"
 
 #: .\templates\frontend\history\history_compare_header.html:18
-#: .\templates\frontend\history\history_compare_header.html:22
 msgid "compare"
 msgstr "vergleichen"
 
-#: .\templates\frontend\history\history_compare_header.html:28
+#: .\templates\frontend\history\history_compare_header.html:24
 msgid "Date/time"
 msgstr "Datum/Uhrzeit"
 
-#: .\templates\frontend\history\history_compare_header.html:31
+#: .\templates\frontend\history\history_compare_header.html:27
 #: .\templates\frontend\profile\profile.html:16
 msgid "User"
 msgstr "Benutzer*in"
 
-#: .\templates\frontend\history\history_compare_header.html:34
+#: .\templates\frontend\history\history_compare_header.html:30
 msgid "Comment"
 msgstr "Kommentar"
 
-#: .\templates\frontend\history\history_compare_header.html:67
-#: .\templates\frontend\history\history_compare_header.html:70
+#: .\templates\frontend\history\history_compare_header.html:61
+#: .\templates\frontend\history\history_compare_header.html:64
 #: .\templates\frontend\history\history_compare_view.html:7
+#: .\templates\frontend\history\history_compare_view.html:78
 msgid "DATETIME_FORMAT"
 msgstr ""
 
@@ -468,13 +420,13 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"            Compare <strong>%(date1)s</strong> with <strong>%(date2)s</"
-"strong>:\n"
+"            Compare Version 1: <strong>%(date1)s</strong> with Version 2: "
+"<strong>%(date2)s</strong>:\n"
 "        "
 msgstr ""
 "\n"
-"            Vergleich <strong>%(date1)s</strong> mit <strong>%(date2)s</"
-"strong>:\n"
+"            Vergleich Version 1: <strong>%(date1)s</strong> mit Version 2: "
+"<strong>%(date2)s</strong>:\n"
 "        "
 
 #: .\templates\frontend\history\history_compare_view.html:34
@@ -482,45 +434,45 @@ msgid "There are no differences."
 msgstr "Es bestehen keine Unterschiede."
 
 #: .\templates\frontend\history\history_compare_view.html:42
-msgid "Edit comment:"
-msgstr "Kommentar bearbeiten:: "
+msgid "Change log:"
+msgstr "Änderungsprotokoll:"
 
 #: .\templates\frontend\history\history_compare_view.html:45
 msgid "(no comment exists)"
 msgstr "(keinen Kommentar)"
 
-#: .\templates\frontend\history\history_compare_view.html:51
-msgid "Note:"
-msgstr "Notiz:"
-
-#: .\templates\frontend\history\history_compare_view.html:54
-msgid ""
-"\n"
-"                Fields/entries marked with <sup class=\"follow\">*</sup> are "
-"not under reversion control.\n"
-"                It may be that not all marked information are correct.\n"
-"            "
-msgstr ""
-"\n"
-"                Mit <sup class=\"follow\">*</sup> gekennzeichnete Felder/"
-"Einträge sind nicht unter Kontrolle von Reversion. \n"
-"                Es kann sein, dass nicht alle gekennzeichneten Informationen "
-"korrekt sind.\n"
-"            "
-
-#: .\templates\frontend\history\history_compare_view.html:64
+#: .\templates\frontend\history\history_compare_view.html:52
 msgid "previous"
 msgstr "vorherige"
 
-#: .\templates\frontend\history\history_compare_view.html:70
+#: .\templates\frontend\history\history_compare_view.html:58
 msgid "next"
 msgstr "nächste"
 
-#: .\templates\frontend\history\history_compare_view.html:75
-msgid "Revert to this version"
-msgstr "Auf diese Version zurückkehren"
+#: .\templates\frontend\history\history_compare_view.html:65
+msgid "Revert to Version 1"
+msgstr "Rückkehrung auf Version 1"
 
-#: .\templates\frontend\history\history_compare_view.html:81
+#: .\templates\frontend\history\history_compare_view.html:74
+msgid "Reversion of"
+msgstr "Rückkehrung von"
+
+#: .\templates\frontend\history\history_compare_view.html:78
+#, python-format
+msgid ""
+"\n"
+"                            Are you sure you want to revert this %(type)s to "
+"Version <strong>%(date1)s</strong>? You can also undo the revert\n"
+"                            later.\n"
+"                        "
+msgstr ""
+"\n"
+"                            Sicher, dass Sie diesen %(type)s zu  Version "
+"<strong>%(date1)s</strong> zurückkehren möchten? Sie können später auch die "
+"Rückkehrung zurücknehmen.\n"
+"                        "
+
+#: .\templates\frontend\history\history_compare_view.html:117
 msgid "Go back to history list"
 msgstr "Zurück zur Versionsliste"
 
@@ -548,15 +500,15 @@ msgstr "Sprache"
 msgid "Logout"
 msgstr "Logout"
 
-#: .\templates\frontend\profile\profile.html:16
-msgid "User"
-msgstr "Benutzer*in"
-
 #: .\templates\frontend\profile\profile.html:20
 msgid "User profile picture"
 msgstr "Profilbild"
 
-#: .\templates\frontend\profile\profile.html:28
+#: .\templates\frontend\profile\profile.html:23
+msgid "Biography"
+msgstr "Biographie"
+
+#: .\templates\frontend\profile\profile.html:29
 msgid "Owned Courses"
 msgstr "Verantwortete Kurse"
 
@@ -592,90 +544,82 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: .\views\content.py:45
+#: .\views\content.py:174
 msgid "Content '{cleaned_data['type']}' successfully added"
 msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
 
-#: .\views\content.py:52 .\views\content.py:239
+#: .\views\content.py:181 .\views\content.py:379
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: .\views\content.py:225
+#: .\views\content.py:365
 msgid "You are not allowed to edit this content"
 msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
 
-#: .\views\content.py:366
-#, fuzzy
-#| msgid "Profile updated"
-msgid "Content updated"
-msgstr "Profil aktualisiert"
-
-#: .\views\content.py:626
-#, fuzzy
-#| msgid "You are not allowed to edit this content"
-msgid "You are not allowed to delete this content"
-msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
-
-#: .\views\course.py:54
-#, fuzzy
-#| msgid "Course '{cleaned_data['title']}' successfully created"
-msgid "Course '{cleaned_data['title']}' successfully created. "
-msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
-
-#: .\views\course.py:129
-msgid "Course '{cleaned_data['title']}' successfully created"
-msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
-
-#: .\views\course.py:183
-#: .\views\content.py:193
-msgid "Content '{cleaned_data['type']}' successfully added"
-msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
-
-#: .\views\content.py:200 .\views\content.py:398
-msgid "An error occurred while processing the request"
-msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
-
-#: .\views\content.py:384
-msgid "You are not allowed to edit this content"
-msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
-
-#: .\views\content.py:523
+#: .\views\content.py:504
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: .\views\content.py:783
+#: .\views\content.py:764
 msgid "You are not allowed to delete this content"
-msgstr "Du bist nicht berechtigt, diesen Inhalt zu löschen"
+msgstr "Du bist nicht berechtigt, diesen Inhalt zu entfernen"
 
-#: .\views\course.py:55
+#: .\views\course.py:59
 msgid "Course '{cleaned_data['title']}' successfully created. "
-msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
+msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt."
 
-#: .\views\course.py:130
+#: .\views\course.py:134
 msgid "Course '{cleaned_data['title']}' successfully created"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 
-#: .\views\course.py:184
+#: .\views\course.py:188
 msgid "Course '{cleaned_data['title']}' successfully edited"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 
-#: .\views\profile.py:70
+#: .\views\history.py:59 .\views\history.py:102
+msgid "Revert to version: {}"
+msgstr "Rückkehrung auf der Version: {}"
+
+#: .\views\history.py:96
+msgid "This content type is not allowed!"
+msgstr "Dieser Inhalttyp ist nicht erlaubt!"
+
+#: .\views\profile.py:71
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
+
+#~ msgid "Edit comment:"
+#~ msgstr "Änderungsprotokoll: "
+
+#~ msgid "Revert to the older version"
+#~ msgstr "Auf der alten Version zurückkehren"
+
+#~ msgid "Coursebook"
+#~ msgstr "Coursebook"
+
+#~ msgid "sort by: "
+#~ msgstr "sortieren nach: "
+
+#~ msgid "Note:"
+#~ msgstr "Notiz:"
+
+#~ msgid ""
+#~ "\n"
+#~ "                Fields/entries marked with <sup class=\"follow\">*</sup> "
+#~ "are not under reversion control.\n"
+#~ "                It may be that not all marked information are correct.\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "                Mit <sup class=\"follow\">*</sup> gekennzeichneten Felder/"
+#~ "Einträge sind nicht unter Kontrolle von Reversion. \n"
+#~ "                Es kann sein, dass nicht alle gekennzeichnete "
+#~ "Informationen korrekt sind.\n"
+#~ "            "
 
 #~ msgid "sort by:"
 #~ msgstr "sortieren nach"
 
-#~ msgid "Coursebook"
-#~ msgstr "Kurse"
-
-#, fuzzy
-#~| msgid ""
-#~| "Course '{cleaned_data['title']}' successfully created. All settings and "
-#~| "contents of the course '{original_course.title}' were copied."
-#~ msgid ""
-#~ "Course '{cleaned_data['title']}' successfully created. All settings and "
-#~ "contents of the course "
 #~ msgid ""
 #~ "Course '{cleaned_data['title']}' successfully created. All settings and "
 #~ "contents of the course '{original_course.title}' were copied."
