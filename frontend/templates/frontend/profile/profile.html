@@ -17,7 +17,7 @@
 
     {% if profile.pic %}
         <img src="{{ profile.pic.url }}" class="img-thumbnail" style="width: 30%; height: 250px; object-fit: cover;"
-             alt="{% trans "User profile picture" %}">
+             alt="{% trans 'User profile picture' %}">
     {% endif %}
 
     <p><h2>{% trans "Biography" %}</h2>
@@ -29,6 +29,16 @@
         style="margin-top: 30px;">{% fa5_icon "chalkboard-teacher" "fas" %} {% trans "Owned Courses" %}</h3>
     <div class="row">
         {% for course in profile.owned_courses.all %}
+            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
+            {% include "frontend/course_lists/card_course.html" %}
+        {% endfor %}
+    </div>
+
+    <!-- TODO: <Iteration 5> -->
+    <h3 class="text-success"
+            style="margin-top: 40px;">{% fa5_icon "bookmark" "fas" %} {% trans "Stared Courses" %}</h3>
+    <div class="row">
+        {% for course in profile.stared_courses.all %}
             {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
             {% include "frontend/course_lists/card_course.html" %}
         {% endfor %}

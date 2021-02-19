@@ -11,7 +11,7 @@
             {% for content in topic_contents %}
                 <div class="card card_style" style="">
                     <div class="card-img-top" style="position: relative; text-align: center; color: black">
-                        <a href="{% url "frontend:content" course.pk content.topic.pk content.pk %}">
+                        <a href="{% url 'frontend:content' course.pk content.topic.pk content.pk %}">
                             {% include content.type|content_card %}
                             <div class="card-body" style="">
                                 <p>{{ content.description|truncatechars:40 }}</p>

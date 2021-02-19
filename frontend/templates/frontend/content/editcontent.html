@@ -50,4 +50,8 @@
         {% include "frontend/content/dynamic_attachment.html" %}
     {% endif %}
 
+    {% if is_latex_content %}
+        {% include "frontend/content/attachment_embedding_help.html" %}
+    {% endif %}
+
 {% endblock %}
