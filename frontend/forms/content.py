@@ -52,7 +52,7 @@ class EditContentForm(forms.ModelForm):
         required=True,
         widget=forms.Textarea(
             attrs={'style': 'height: 35px'}),
-        label=_('Change Log')
+        label=_('Change log')
     )
     field_order = ['change_log', 'description', 'language', 'tags',
                    'readonly', 'public']

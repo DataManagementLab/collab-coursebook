@@ -136,7 +136,7 @@ class TopicChooseForm(forms.Form):
     """
     topic_name = forms.ModelChoiceField(required=False,
                                         queryset=Topic.objects.order_by('category__title', 'title'),
-                                        label='Topics')
+                                        label=_('Topics'))
 
 
 class CreateTopicForm(forms.ModelForm):

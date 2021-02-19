@@ -16,10 +16,12 @@
 
         const popup_field = '<div class="popup">{% fa5_icon "question" "fas" %}' +
                             '<span class="popuptext" id="myPopup"> ' +
-                                'In order to include an attached image i in your latex file, ' +
-                                'use \"Image-i\" inside \\includegraphics instead of the actual path. ' +
-                                'Be aware that the image count begins at 0.' +
-                                'Example: \\includegraphics[width=\\textwidth]{Image-0}'+
+                            '{% trans "In order to include an attached image i in your latex file, use"%}'+
+                            ' \"Image-i\" ' +
+                            '{% trans "inside" %}' +
+                            ' \\includegraphics ' +
+                            '{% trans "instead of the actual path. Be aware that the image count begins at 0. Example:"%}' +
+                            ' \\includegraphics[width=\\textwidth]{Image-0}'+
                             '</span>' +
                         '</div>';
 

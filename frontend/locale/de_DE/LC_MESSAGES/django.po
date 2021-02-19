@@ -41,6 +41,22 @@ msgstr "YouTube-Video"
 msgid "Date"
 msgstr "Datum"
 
+#: .\forms\course.py:106 .\templates\frontend\content\attachment_embedding_help:19
+msgid "In order to include an attached image i in your latex file, use"
+msgstr "Damit Sie eine angehängte Bilddatei in Ihrem LaTeX-Code einbinden können, können Sie"
+
+#: .\forms\course.py:106 .\templates\frontend\content\attachment_embedding_help:21
+msgid "inside"
+msgstr "innerhalb von"
+
+#: .\forms\course.py:106 .\templates\frontend\content\attachment_embedding_help:23
+msgid "instead of the actual path. Be aware that the image count begins at 0. Example:"
+msgstr "verwenden. Die Bilddateien werden ab dem Index 0 gezählt. Beispiel:"
+
+#: .\forms\course.py:106 .\templates\frontend\content\detail.html:28
+msgid "Reading Mode"
+msgstr "Lesemodus"
+
 #: .\forms\course.py:106 .\templates\frontend\content\detail.html:161
 msgid "Rating"
 msgstr "Bewertung"
@@ -453,9 +469,9 @@ msgstr "Zurück"
 msgid "History"
 msgstr "Geschichte"
 
-#: .\templates\frontend\history\history_compare_header.html:18
-msgid "compare"
-msgstr "vergleichen"
+#: .\templates\frontend\history\history_compare_header.html:17
+msgid "Compare"
+msgstr "Vergleichen"
 
 #: .\templates\frontend\history\history_compare_header.html:24
 msgid "Date/time"

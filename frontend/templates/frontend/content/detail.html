@@ -25,7 +25,7 @@
 
 
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
-                    Reading Mode</a>
+                    {% trans "Reading Mode" %}</a>
                 {% if user.is_authenticated %}
                     {% if favorite %}
                         <a class="dropdown-item"

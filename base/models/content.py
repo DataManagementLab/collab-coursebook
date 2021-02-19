@@ -133,7 +133,7 @@ class Course(models.Model):
     :type Course.period: ForeignKey - Period
     """
     title = models.CharField(max_length=200,
-                             verbose_name="Title",
+                             verbose_name=_("Title"),
                              unique=True)
     description = models.TextField(verbose_name=_("Description"))
 
