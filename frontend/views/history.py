@@ -102,6 +102,7 @@ def revert_content_to_revision(request, course_id, topic_id, pk, rev_pk):
                     content = Content.objects.get(pk=pk)
                     deserialized_obj.object.author_id = content.author_id
                     deserialized_obj.object.topic_id = content.topic_id
+                    deserialized_obj.object.type = content.type
                 elif isinstance(deserialized_obj.object, Latex):
                     deserialized_obj.object.save()
                     topic = Topic.objects.get(pk=topic_id)
