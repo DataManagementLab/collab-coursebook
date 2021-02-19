@@ -145,3 +145,18 @@
 .dd3-handle:hover {
     background: #ddd;
 }
+
+
+/**
+  * Vertical Dividing Line
+  */
+
+
+.vl {
+  border-left: 1px solid gray;
+  height: 210px;
+  position: absolute;
+  left: 50%;
+  margin-left: -0.5px;
+  top: 185px;
+}
