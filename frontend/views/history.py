@@ -1,4 +1,5 @@
 """Purpose of this file
+
 This file describes the frontend history compare views to the models
 which are being tracked by the reversion (versioning) and allows us
 to compare the differences between different versions of the same model.
@@ -112,10 +113,6 @@ def revert_content_to_revision(request, course_id, topic_id, pk, rev_pk):
                 deserialized_obj.save()
 
     content = Content.objects.get(pk=pk)
-    print("Test")
-    print(content)
-    print("-----------")
-    print(content.type)
     content.preview = CONTENT_TYPES.get(content.type) \
         .objects.get(pk=content.pk).generate_preview()
     content.save()
