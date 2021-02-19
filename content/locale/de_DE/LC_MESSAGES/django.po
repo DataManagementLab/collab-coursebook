@@ -48,11 +48,11 @@ msgstr "Bild"
 
 #: .\models.py:167
 msgid "Image Content"
-msgstr "Inhalt: Bild"
+msgstr "Bild-Inhalt"
 
 #: .\models.py:168
 msgid "Image Contents"
-msgstr "Inhalte: Bilder"
+msgstr "Bild-Inhalte"
 
 #: .\models.py:196
 msgid "LaTeX Textfield"
@@ -64,21 +64,21 @@ msgstr "LaTeX-Code"
 
 #: .\models.py:211
 msgid "LaTeX Content"
-msgstr "Inhalt: LaTeX"
+msgstr "LaTeX-Inhalt"
 
 #: .\models.py:212
 #, fuzzy
 #| msgid "Image Contents"
 msgid "LaTeX Contents"
-msgstr "Inhalte: LaTeX"
+msgstr "LaTeX-Inhalte"
 
 #: .\models.py:248
 msgid "PDF Content"
-msgstr "Inhalt: PDF"
+msgstr "PDF-Inhalt"
 
 #: .\models.py:249
 msgid "PDF Contents"
-msgstr "Inhalte: PDF"
+msgstr "PDF-Inhalte"
 
 #: .\models.py:275 .\models.py:290 .\models.py:416
 msgid "Single Image Attachment"
@@ -86,7 +86,7 @@ msgstr "Einzelner Bildanhang"
 
 #: .\models.py:291
 msgid "Single Attachments"
-msgstr "Bildanhänge"
+msgstr "Einzelne Anhänge"
 
 #: .\models.py:319
 msgid "Textfield"
@@ -98,11 +98,11 @@ msgstr "Text"
 
 #: .\models.py:334
 msgid "Textfield Content"
-msgstr "Textfeldinhalt"
+msgstr "Textfeld-Inhalt"
 
 #: .\models.py:335
 msgid "Textfield Contents"
-msgstr "Textfeldinhalte"
+msgstr "Textfeld-Inhalte"
 
 #: .\models.py:361
 msgid "YouTube Video"
@@ -114,11 +114,11 @@ msgstr "Video-URL"
 
 #: .\models.py:375
 msgid "YouTube Video Content"
-msgstr "Inhalt: YouTube-Video"
+msgstr "YouTube-Video-Inhalt"
 
 #: .\models.py:376
 msgid "YouTube Video Contents"
-msgstr "Inhalte: YouTube-Videos"
+msgstr "YouTube-Video-Inhalte"
 
 #: .\models.py:419
 msgid "Images"
@@ -140,7 +140,7 @@ msgstr "Auf YouTube ansehen"
 
 #: .\templates\content\view\invalid.html:4
 msgid "Invalid type"
-msgstr "Invalider Typ"
+msgstr "Ungültiger Typ"
 
 #~ msgid "Attached Image"
 #~ msgstr "angehängtes Bild"

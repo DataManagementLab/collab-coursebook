@@ -60,7 +60,7 @@ msgstr "Sortieren nach"
 #: .\templates\frontend\base.html:28
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
-msgstr "Sind Sie sicher, dass Sie die Sprache ändern möchten? Die Seite wird dann neu geladen!"
+msgstr "Sind Sie sicher, dass Sie die Sprache ändern möchten? Ihre Änderungen gehen dann verloren!"
 
 #: .\templates\frontend\base.html:57
 msgid "Impress"
@@ -129,7 +129,7 @@ msgstr "Anhang entfernen"
 #: .\templates\frontend\course\create.html:30
 #: .\templates\frontend\course\duplicate.html:30
 msgid "Create"
-msgstr "Erzeugen"
+msgstr "Erstellen"
 
 #: .\templates\frontend\content\detail.html:20
 #: .\templates\frontend\course\view.html:25
@@ -212,11 +212,11 @@ msgstr "Schließen"
 
 #: .\templates\frontend\content\readingmode.html:13
 msgid "Next"
-msgstr "Nächste"
+msgstr "Vor"
 
 #: .\templates\frontend\content\readingmode.html:15
 msgid "Previous"
-msgstr "Vorherige"
+msgstr "Zurück"
 
 #: .\templates\frontend\course\coursebook.html:11
 msgid "Export"
@@ -246,8 +246,8 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"        Sind Sie sicher, dass Sie diesen Kurs löschen möchten? Nur das "
-"Struktur wird gelöscht - Die Themen bleiben noch.\n"
+"        Sind Sie sicher, dass Sie diesen Kurs löschen möchten? Nur die "
+"Kursstruktur wird gelöscht. Die Themen bleiben erhalten.\n"
 "        "
 
 #: .\templates\frontend\course\dropdown_topic.html:11
@@ -271,7 +271,7 @@ msgstr "Ändern"
 
 #: .\templates\frontend\course\view.html:32
 msgid "Unsave"
-msgstr "Zurückkehren"
+msgstr "Speichern rückgängig machen"
 
 #: .\templates\frontend\course\view.html:42
 msgid "Edit Course"
@@ -327,7 +327,7 @@ msgstr "Kurs hinzufügen"
 
 #: .\templates\frontend\course_lists\courses_category.html:12
 msgid "Courses for Category"
-msgstr "Kurse für Kategorie"
+msgstr "Kurse für die Kategorie"
 
 #: .\templates\frontend\course_lists\courses_category.html:18
 #: .\templates\frontend\course_lists\courses_period.html:18
@@ -335,9 +335,33 @@ msgstr "Kurse für Kategorie"
 msgid "All Courses"
 msgstr "Alle Kurse"
 
+#: .\templates\frontend\course_lists\courses_category.html:18
+msgid "newest"
+msgstr "neuste"
+
+#: .\templates\frontend\course_lists\courses_category.html:18
+msgid "oldest"
+msgstr "älteste"
+
 #: .\templates\frontend\course_lists\courses_category.html:19
 msgid "for Category"
-msgstr "für Kategorie"
+msgstr "für die Kategorie"
+
+#: .\templates\frontend\course_lists\courses_category.html:28
+msgid "Date (newest)"
+msgstr "Datum (neuste)"
+
+#: .\templates\frontend\course_lists\courses_category.html:30
+msgid "Date (oldest)"
+msgstr "Datum (älteste)"
+
+#: .\templates\frontend\course_lists\courses_category.html:32
+msgid "Title (A-Z)"
+msgstr "Title (A-Z)"
+
+#: .\templates\frontend\course_lists\courses_category.html:34
+msgid "Title (Z-A)"
+msgstr "Titel (Z-A)"
 
 #: .\templates\frontend\course_lists\courses_period.html:12
 msgid "Courses for"
@@ -358,11 +382,11 @@ msgid ""
 "below."
 msgstr ""
 "Beim Generieren Ihres Coursebooks ist ein Fehler aufgetreten. Weitere "
-"Informationen finden Sie in der Protokolldatei unten."
+"Informationen dazu finden Sie in der Protokolldatei."
 
 #: .\templates\frontend\coursebook\rendering-error.html:14
 msgid "Latex Template"
-msgstr "Latex Template"
+msgstr "LaTeX Template"
 
 #: .\templates\frontend\dashboard.html:9
 msgid "Dashboard"
@@ -374,7 +398,7 @@ msgstr "Deine Kurse"
 
 #: .\templates\frontend\dashboard.html:23
 msgid "Stared Courses"
-msgstr "Markierte Kurse"
+msgstr "Favorisierte Kurse"
 
 #: .\templates\frontend\dashboard.html:32
 msgid "All Courses by Period"
@@ -425,13 +449,13 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"            Vergleich Version 1: <strong>%(date1)s</strong> mit Version 2: "
+"            Vergleich von Version 1: <strong>%(date1)s</strong> und Version 2: "
 "<strong>%(date2)s</strong>:\n"
 "        "
 
 #: .\templates\frontend\history\history_compare_view.html:34
 msgid "There are no differences."
-msgstr "Es bestehen keine Unterschiede."
+msgstr "Es gibt keine Unterschiede."
 
 #: .\templates\frontend\history\history_compare_view.html:42
 msgid "Change log:"
@@ -439,42 +463,38 @@ msgstr "Änderungsprotokoll:"
 
 #: .\templates\frontend\history\history_compare_view.html:45
 msgid "(no comment exists)"
-msgstr "(keinen Kommentar)"
+msgstr "(kein Kommentar)"
 
 #: .\templates\frontend\history\history_compare_view.html:52
 msgid "previous"
-msgstr "vorherige"
+msgstr "zurück"
 
 #: .\templates\frontend\history\history_compare_view.html:58
 msgid "next"
-msgstr "nächste"
+msgstr "vor"
 
 #: .\templates\frontend\history\history_compare_view.html:65
 msgid "Revert to Version 1"
-msgstr "Rückkehrung auf Version 1"
+msgstr "Kehre zur Version 1 zurück"
 
 #: .\templates\frontend\history\history_compare_view.html:74
 msgid "Reversion of"
-msgstr "Rückkehrung von"
+msgstr "Änderung von"
 
 #: .\templates\frontend\history\history_compare_view.html:78
-#, python-format
-msgid ""
-"\n"
-"                            Are you sure you want to revert this %(type)s to "
-"Version <strong>%(date1)s</strong>? You can also undo the revert\n"
-"                            later.\n"
-"                        "
-msgstr ""
-"\n"
-"                            Sicher, dass Sie diesen %(type)s zu  Version "
-"<strong>%(date1)s</strong> zurückkehren möchten? Sie können später auch die "
-"Rückkehrung zurücknehmen.\n"
-"                        "
+msgid "Are you sure you want to revert to "
+"this Version? You can also undo the revert later.\n"
+msgstr "Sind Sie sich sicher, dass Sie zu der Version zurückkehren möchten? "
+"Sie können Ihre Änderungen auch später noch "
+"rückgängig machen.\n"
 
 #: .\templates\frontend\history\history_compare_view.html:117
 msgid "Go back to history list"
-msgstr "Zurück zur Versionsliste"
+msgstr "Zurück zur Versionsgeschichte"
+
+#: .\templates\frontend\index.html:23
+msgid "Create content. Store knowledge. Learn together."
+msgstr "Erschaffe Inhalt. Speichere Wissen. Lerne gemeinsam."
 
 #: .\templates\frontend\index.html:28
 msgid "Login"
@@ -510,7 +530,7 @@ msgstr "Biographie"
 
 #: .\templates\frontend\profile\profile.html:29
 msgid "Owned Courses"
-msgstr "Verantwortete Kurse"
+msgstr "Eigene Kurse"
 
 #: .\templates\frontend\profile\profile_edit.html:9
 msgid "Edit your profile"
@@ -534,7 +554,7 @@ msgstr "Keine Themen gefunden"
 
 #: .\views\comment.py:54 .\views\comment.py:165
 msgid "You don't have permission to do this."
-msgstr "Keine Berechtigung, um das durchzuführen"
+msgstr "Sie haben keine Berechtigung, um diesen Vorgang durchzuführen."
 
 #: .\views\comment.py:77
 msgid "Successfully deleted comment."
@@ -554,7 +574,7 @@ msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
 #: .\views\content.py:365
 msgid "You are not allowed to edit this content"
-msgstr "Du bist nicht berechtigt, diesen Inhalt zu bearbeiten"
+msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
 #: .\views\content.py:504
 msgid "Content updated"
@@ -562,7 +582,7 @@ msgstr "Inhalt aktualisiert"
 
 #: .\views\content.py:764
 msgid "You are not allowed to delete this content"
-msgstr "Du bist nicht berechtigt, diesen Inhalt zu entfernen"
+msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 
 #: .\views\course.py:59
 msgid "Course '{cleaned_data['title']}' successfully created. "
@@ -578,7 +598,7 @@ msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 
 #: .\views\history.py:59 .\views\history.py:102
 msgid "Revert to version: {}"
-msgstr "Rückkehrung auf der Version: {}"
+msgstr "Kehre zu der Version {} zurück"
 
 #: .\views\history.py:96
 msgid "This content type is not allowed!"
