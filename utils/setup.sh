@@ -20,6 +20,7 @@ sudo apt-get install poppler-utils
 
 # Setup database
 python manage.py migrate
+python manage.py createinitialrevisions
 
 # Prepare static files and translations
 python manage.py collectstatic --noinput
