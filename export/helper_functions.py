@@ -96,9 +96,8 @@ class Latex:
         Checks the given log if there are error messages and returns the messages.
         If there are none, an empty list will be returned.
 
-        Parameters:
-            :param lob: A list of bytes representing the PDF LaTeX compile log
-            :type lob: list[byte]
+        :param lob: A list of bytes representing the PDF LaTeX compile log
+        :type lob: list[byte]
 
         :return: the error messages from the log (stdout)
         :rtype: list[str]
@@ -125,15 +124,15 @@ class Latex:
         Prerender the given content and its corresponding template. If there
         is no template specified, the template will associated with the type
         of the content.
-        TODO <Iteration 5>
 
-        Parameters:
-            :param content: The content to be rendered
-            :type content: any
-            :param export_flag: True if export, False if simple content compilation
-            :type export_flag: bool
-            :param template_type: The type of the template to use
-            :type template_type: str
+        :param content: The content to be rendered
+        :type content: any
+        :param export_flag: True if export, False if simple content compilation
+        :type export_flag: bool
+        :param template_type: The type of the template to use
+        :type template_type: str
+        :type no_error: Tru if we are rendering a non error content (log)
+        :type no_error: bool
 
         :return: the rendered template
         :rtype: bytes

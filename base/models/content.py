@@ -383,9 +383,8 @@ class Content(models.Model):
                                    help_text=_("Can this content be updated?"),
                                    default=False)
     public = models.BooleanField(verbose_name=_("Show in public courses?"),
-                                 help_text=
-                                 _("May this content be displayed in courses "
-                                   "that don't require registration?"),
+                                 help_text=_("May this content be displayed in courses "
+                                             "that don't require registration?"),
                                  default=False)
 
     attachment = models.OneToOneField('content.ImageAttachment',

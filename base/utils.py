@@ -43,12 +43,12 @@ def create_topic_and_subtopic_list(topics, course):
             struct_index = structure.index.split("/")
 
             if len(struct_index) > 1:
-                indexstr = str(struct_index[0]) + "." + str(struct_index[1])
+                index_str = str(struct_index[0]) + "." + str(struct_index[1])
                 is_subtopic = 1
             else:
-                indexstr = str(struct_index[0])
+                index_str = str(struct_index[0])
 
-            sorted_topics.append((structure.index, is_subtopic, topic, indexstr))
+            sorted_topics.append((structure.index, is_subtopic, topic, index_str))
 
     sorted_topics.sort(key=lambda x: structure_to_tuple(x[0]))
     # return list with tuple (is_subtopic, topic)
