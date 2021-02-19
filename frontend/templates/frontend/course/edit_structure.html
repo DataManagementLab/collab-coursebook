@@ -31,34 +31,36 @@
         </h2>
     </div>
 
-    <div style="display: inline-block;width:49.5%; vertical-align: top">
-        <h4 style="font-weight: bold; text-align: center">
-            {% trans 'Add Topic to Structure' %}
-        </h4>
-        <!-- Topic combobox -->
-        {% bootstrap_form topics %}
-        <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary">
-            {% fa5_icon 'expand' %} {% trans 'Expand All' %}
-        </button>
-        <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary">
-            {% fa5_icon 'compress' %} {% trans 'Collapse All' %}
-        </button>
-        <button onclick="addTopic()" class="btn btn-primary">
-            {% fa5_icon 'plus' 'fas' %} {% trans 'Add Topic' %}
-        </button>
-    </div>
-
-    <div style="display: inline-block;width:49.5%">
-        <h4 style="font-weight: bold; text-align: center">
-            {% trans 'Add a new Topic' %}
-        </h4>
-        <form method="post" id="post-form-topic" class="post-form" enctype=multipart/form-data>
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            <button type="submit" class="btn btn-primary">
-                {% fa5_icon 'plus' 'fas' %} {% trans 'Create Topic' %}
+    <div style="display: flex;justify-content: center;">
+        <div style="display: inline-block;width:49.5%; padding-right: 25px;">
+            <h4 style="font-weight: bold; text-align: center">
+                {% trans 'Add Topic to Structure' %}
+            </h4>
+            <!-- Topic combobox -->
+            {% bootstrap_form topics %}
+            <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary">
+                {% fa5_icon 'expand' %} {% trans 'Expand All' %}
             </button>
-        </form>
+            <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary">
+                {% fa5_icon 'compress' %} {% trans 'Collapse All' %}
+            </button>
+            <button onclick="addTopic()" class="btn btn-primary">
+                {% fa5_icon 'plus' 'fas' %} {% trans 'Add Topic' %}
+            </button>
+        </div>
+
+        <div style="display: inline-block;width:49.5%;padding-left: 25px">
+            <h4 style="font-weight: bold; text-align: center">
+                {% trans 'Add a new Topic' %}
+            </h4>
+            <form method="post" id="post-form-topic" class="post-form" enctype=multipart/form-data>
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-primary">
+                    {% fa5_icon 'plus' 'fas' %} {% trans 'Create Topic' %}
+                </button>
+            </form>
+        </div>
     </div>
 
     <br><br>
