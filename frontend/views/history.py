@@ -56,7 +56,7 @@ def revert_course_to_revision(request, pk, rev_pk):
         version = Version.objects.get(id=rev_pk)
 
         date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-        reversion.set_comment(_("Revert to version: {}".format(date_time)))
+        reversion.set_comment(_("Version: {}".format(date_time)))
 
         for deserialized_obj in serializers.deserialize('json', version.serialized_data):
             if isinstance(deserialized_obj.object, Course):

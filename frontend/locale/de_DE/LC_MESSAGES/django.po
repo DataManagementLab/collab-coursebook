@@ -649,10 +649,6 @@ msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
 msgid "Course '{cleaned_data['title']}' successfully edited"
 msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
 
-#: .\views\history.py:59 .\views\history.py:102
-msgid "Revert to version: {}"
-msgstr "Kehre zu der Version {} zurück"
-
 #: .\views\history.py:96
 msgid "This content type is not allowed!"
 msgstr "Dieser Inhalttyp ist nicht erlaubt!"
