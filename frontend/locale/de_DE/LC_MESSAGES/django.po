@@ -29,10 +29,6 @@ msgstr "Änderungsprotokoll"
 msgid "Text"
 msgstr "Text"
 
-#: .\forms\course.py:103
-msgid "Image"
-msgstr "Bild"
-
 #: .\forms\course.py:104
 msgid "LaTeX-Textfield"
 msgstr "LaTeX-Textfeld"
@@ -269,13 +265,45 @@ msgstr "Kurs bearbeiten"
 msgid "Change"
 msgstr "Ändern"
 
+#: .\templates\frontend\course\edit_structure.html:30
+msgid "Edit Course Structure"
+msgstr "Kursstruktur bearbeiten"
+
+#: .\templates\frontend\course\edit_structure.html:36
+msgid "Add Topic to Structure"
+msgstr "Thema zur Kursstruktur hinzufügen"
+
+#: .\templates\frontend\course\edit_structure.html:41
+msgid "Expand All"
+msgstr "Alle aufklappen"
+
+#: .\templates\frontend\course\edit_structure.html:44
+msgid "Collapse All"
+msgstr "Alle zuklappen"
+
+#: .\templates\frontend\course\edit_structure.html:47
+msgid "Add Topic"
+msgstr "Thema hinzufügen"
+
+#: .\templates\frontend\course\edit_structure.html:53
+msgid "Add a new Topic"
+msgstr "Ein neues Thema erstellen"
+
+#: .\templates\frontend\course\edit_structure.html:59
+msgid "Create Topic"
+msgstr "Thema erstellen"
+
 #: .\templates\frontend\course\view.html:32
 msgid "Unsave"
-msgstr "Speichern rückgängig machen"
+msgstr "Nicht Speichern"
 
 #: .\templates\frontend\course\view.html:42
 msgid "Edit Course"
 msgstr "Kurs bearbeiten"
+
+#: .\templates\frontend\course\view.html:44
+msgid "Edit Structure"
+msgstr "Struktur bearbeiten"
 
 #: .\templates\frontend\course\view.html:46
 msgid "Delete Course"
@@ -292,6 +320,15 @@ msgstr "Sortieren nach: "
 #: .\templates\frontend\course\view.html:123
 msgid "Filter by: "
 msgstr "Filtern nach: "
+
+#: .\templates\frontend\course\view.html:142
+#: .\forms\course.py:103
+msgid "Image"
+msgstr "Bild"
+
+#: .\templates\frontend\course\view.html:142
+msgid "Latex"
+msgstr "LaTeX-Textfeld"
 
 #: .\templates\frontend\course\view.html:149
 msgid "No Topics"

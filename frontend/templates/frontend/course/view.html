@@ -121,8 +121,8 @@
                     </form>
                 </div>
                 <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }} {% if sorting != "None" %}(
-                    {% trans "Sort by: " %} {{ sorting }}){% endif %}{% if filtering != "None" %}(
-                    {% trans "Filter by: " %} {{ filtering }}){% endif %}</h3>
+                    {% trans "Sort by: " %} {% trans sorting %}){% endif %}{% if filtering != "None" %}(
+                    {% trans "Filter by: " %} {%  trans filtering %}){% endif %}</h3>
                 {% with entry.topic_contents as topic_contents %}
                     {% include "frontend/course/topic_contents.html" %}
                 {% endwith %}
@@ -137,7 +137,9 @@
                                 {% endwith %}
                             </div>
                             <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
-                                {% if sorting != "None" %}({{ sorting }}) {% endif %}</h4>
+                                {% if sorting != "None" %}({% trans sorting %}) {% endif %}
+                                {% if filtering != "None" %}(
+                                {% trans "Filter by: " %} {%  trans filtering %}){% endif %}</h4>
 
                             {% with subtopic.topic_contents as topic_contents %}
                                 {% include "frontend/course/topic_contents.html" %}
