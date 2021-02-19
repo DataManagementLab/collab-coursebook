@@ -125,7 +125,7 @@ class Latex:
         Prerender the given content and its corresponding template. If there
         is no template specified, the template will associated with the type
         of the content.
-        #TODO <Iteration 5>
+        TODO <Iteration 5>
 
         Parameters:
             :param content: The content to be rendered
