@@ -15,27 +15,24 @@ from content.models import PDFContent, SingleImageAttachment, TextField
 from content.models import YTVideoContent
 
 
-# pylint: disable=too-many-ancestors
 @admin.register(ImageAttachment)
-class ImageAttachmentAdmin(CompareVersionAdmin):
+class ImageAttachmentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """Image attachment admin
 
     Represents the image attachment model in the admin panel.
     """
 
 
-# pylint: disable=too-many-ancestors
 @admin.register(ImageContent)
-class ImageContentAdmin(CompareVersionAdmin):
+class ImageContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """Image content admin
 
     Represents the image content model in the admin panel.
     """
 
 
-# pylint: disable=too-many-ancestors
 @admin.register(Latex)
-class LatexAdmin(CompareVersionAdmin):
+class LatexAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """LaTeX admin
 
     Represents the Latex model in the admin panel.
@@ -46,36 +43,32 @@ class LatexAdmin(CompareVersionAdmin):
     fields = ['content', 'textfield', 'source']
 
 
-# pylint: disable=too-many-ancestors
 @admin.register(PDFContent)
-class PDFContentAdmin(CompareVersionAdmin):
+class PDFContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """PDF content admin
 
     Represents the PDF content model in the admin panel.
     """
 
 
-# pylint: disable=too-many-ancestors
 @admin.register(SingleImageAttachment)
-class SingleImageAttachmentAdmin(admin.ModelAdmin):
+class SingleImageAttachmentAdmin(admin.ModelAdmin):  # pylint: disable=too-many-ancestors
     """Singe Image attachment admin
 
     Represents the single image attachment model in the admin panel.
     """
 
 
-# pylint: disable=too-many-ancestors
 @admin.register(TextField)
-class TextFieldAdmin(CompareVersionAdmin):
+class TextFieldAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """Text field admin
 
     Represents the text field model in the admin panel.
     """
 
 
-# pylint: disable=too-many-ancestors
 @admin.register(YTVideoContent)
-class YTVideoContentAdmin(CompareVersionAdmin):
+class YTVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """YouTube video content
 
     Represents the YouTube video content model in the admin panel.
