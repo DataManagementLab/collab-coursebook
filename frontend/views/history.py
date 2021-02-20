@@ -5,6 +5,8 @@ which are being tracked by the reversion (versioning) and allows us
 to compare the differences between different versions of the same model.
 """
 
+from builtins import staticmethod
+
 from django.core import serializers
 from django.core.files.base import ContentFile
 from django.db import transaction
@@ -23,103 +25,28 @@ from content.models import ImageContent, TextField, YTVideoContent, PDFContent, 
 from export.views import generate_pdf_response
 
 
-def update_comment(request):
-    """Update reversion comment
+class Reversion:  # pylint: disable=too-few-public-methods
+    """Reversion utilities
 
-    Gets the comment from the form and updates the comment for the reversion.
-
-    :param request: The given request
-    :type request: HttpRequest
-    """
-    # Reversion comment
-    change_log = request.POST.get('change_log')
-
-    # Changes log is not empty set it as comment in reversion,
-    # else the default comment message will be used
-    if change_log:
-        reversion.set_comment(change_log)
-
-
-def revert_course_to_revision(request, pk, rev_pk):
-    """revert course
-
-    Revert the certain course to an older version
-
-    :param request: The given request
-    :type request: HttpRequest
-    :param pk: id of the to be reverted course
-    :type pk: int
-    :param rev_pk: id of the to be reverted version of the course
-    :type rev_pk: int
-    """
-    with transaction.atomic(), reversion.create_revision():
-        version = Version.objects.get(id=rev_pk)
-
-        date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-        reversion.set_comment(_("Version: {}".format(date_time)))
-
-        for deserialized_obj in serializers.deserialize('json', version.serialized_data):
-            if isinstance(deserialized_obj.object, Course):
-                # revert deletes category and period, so set it manually
-                course = Course.objects.get(pk=pk)
-                deserialized_obj.object.category_id = course.category_id
-                deserialized_obj.object.period_id = course.period_id
-            deserialized_obj.object.save()
-    course = Course.objects.get(pk=pk)
-    course.save()
-
-    return HttpResponseRedirect(reverse_lazy(
-        'frontend:course',
-        args=(course.pk,)))
-
-
-def revert_content_to_revision(request, course_id, topic_id, pk, rev_pk):
-    """revert content
-
-    Revert the certain content to an older version.
-
-    :param request: The given request
-    :type request: HttpRequest
-    :param course_id: id of the course that the to be reverted content belongs to
-    :type course_id: int
-    :param topic_id: id of the topic that the to be reverted content belongs to
-    :type topic_id: int
-    :param pk: id of the to be reverted content
-    :type pk: int
-    :param rev_pk: id of the to be reverted version of the content
-    :type rev_pk: int
+    This class provides utility operation related to reversion.
     """
 
-    with transaction.atomic(), reversion.create_revision():
-        revision_id = Version.objects.get(pk=rev_pk).revision_id
+    @staticmethod
+    def update_comment(request):
+        """Update reversion comment
 
-        for version in Version.objects.filter(revision_id=revision_id):
-            date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-            reversion.set_comment(_("Revert to version: {}".format(date_time)))
+        Gets the comment from the form and updates the comment for the reversion.
 
-            for deserialized_obj in serializers.deserialize('json', version.serialized_data):
-                if isinstance(deserialized_obj.object, Content):
-                    # revert deletes author and topic, so set it manually
-                    content = Content.objects.get(pk=pk)
-                    deserialized_obj.object.author_id = content.author_id
-                    deserialized_obj.object.topic_id = content.topic_id
-                    deserialized_obj.object.type = content.type
-                elif isinstance(deserialized_obj.object, Latex):
-                    deserialized_obj.object.save()
-                    topic = Topic.objects.get(pk=topic_id)
-                    pdf = generate_pdf_response(request.user.profile,
-                                                deserialized_obj.object.content)
-                    deserialized_obj.object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
-                deserialized_obj.save()
+        :param request: The given request
+        :type request: HttpRequest
+        """
+        # Reversion comment
+        change_log = request.POST.get('change_log')
 
-    content = Content.objects.get(pk=pk)
-    content.preview = CONTENT_TYPES.get(content.type) \
-        .objects.get(pk=content.pk).generate_preview()
-    content.save()
-
-    return HttpResponseRedirect(reverse_lazy(
-        'frontend:content',
-        args=(course_id, topic_id, pk,)))
+        # Changes log is not empty set it as comment in reversion,
+        # else the default comment message will be used
+        if change_log:
+            reversion.set_comment(change_log)
 
 
 class BaseHistoryCompareView(HistoryCompareDetailView):
@@ -206,20 +133,6 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         """
         abstract = True
 
-    def get_context_data(self, **kwargs):
-        """Context data
-        Returns the context data of the history.
-
-        :param kwargs: The keyword arguments
-        :type kwargs: dict[str, Any]
-
-        :return: the context data of the history
-        :rtype: dict[str, Any]
-        """
-        context = super().get_context_data()
-        context['save_list'] = self.get_save_list()
-        return context
-
     def get_url(self, value):
         """Content url
 
@@ -235,23 +148,6 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         topic_id = self.kwargs['topic_id']
         content_id = self.get_object().pk
         return reverse(f'frontend:{value}', args=(course_id, topic_id, content_id,))
-
-    def get_save_list(self):
-        """Revert redirection
-
-        Gets the redirection information related to revert.
-
-        :return: the information related to revert redirection
-        :rtype: list[str]
-        """
-
-        course_id = self.kwargs['course_id']
-        topic_id = self.kwargs['topic_id']
-        content_id = self.get_object().pk
-
-        save_list = [course_id, topic_id, content_id]
-
-        return save_list
 
     def compare(self, obj, version1, version2):
         """Compare two versions of an object
@@ -292,6 +188,55 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
         return diff, has_unfollowed_fields
 
+    def post(self, request, *args, **kwargs):
+        """Post
+
+        Submits the form and its its information to revert the current content to a previous state.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict[str, Any]
+
+        :return: the redirection to the content page after the reversion was successful
+        :rtype: HttpResponseRedirect
+        """
+        topic_id = self.kwargs['topic_id']
+        pk = self.kwargs['pk']
+        rev_pk = request.POST.get('rev_pk')
+        with transaction.atomic(), reversion.create_revision():
+            revision_id = Version.objects.get(pk=rev_pk).revision_id
+
+            for version in Version.objects.filter(revision_id=revision_id):
+                date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
+                reversion.set_comment(_("Revert to version: {}".format(date_time)))
+
+                for deserialized_obj in serializers.deserialize('json', version.serialized_data):
+                    if isinstance(deserialized_obj.object, Content):
+                        # Revert deletes author and topic, so set it manually
+                        content = Content.objects.get(pk=pk)
+                        deserialized_obj.object.author_id = content.author_id
+                        deserialized_obj.object.topic_id = content.topic_id
+                        deserialized_obj.object.type = content.type
+                    elif isinstance(deserialized_obj.object, Latex):
+                        deserialized_obj.object.save()
+                        topic = Topic.objects.get(pk=topic_id)
+                        pdf = generate_pdf_response(request.user.profile,
+                                                    deserialized_obj.object.content)
+                        deserialized_obj.object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+                    deserialized_obj.save()
+
+        content = Content.objects.get(pk=pk)
+        content.preview = CONTENT_TYPES.get(content.type) \
+            .objects.get(pk=content.pk).generate_preview()
+        content.save()
+
+        return HttpResponseRedirect(reverse_lazy(
+            'frontend:content',
+            args=(kwargs['course_id'], topic_id, pk,)))
+
 
 class BaseCourseHistoryCompareView(BaseHistoryCompareView):
     """Base course history compare view
@@ -323,6 +268,42 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
         """
         course_id = self.kwargs['pk']
         return reverse(f'frontend:{value}', args=(course_id,))
+
+    def post(self, request, *args, **kwargs):
+        """Post
+
+        Submits the form and its its information to revert the current course to a previous state.
+
+        :param request: The given request
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict[str, Any]
+
+        :return: the redirection to the content page after the reversion was successful
+        :rtype: HttpResponseRedirect
+        """
+        pk = self.kwargs['pk']
+        rev_pk = request.POST.get('rev_pk')
+        with transaction.atomic(), reversion.create_revision():
+            version = Version.objects.get(id=rev_pk)
+
+            date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
+            reversion.set_comment(_("Version: {}".format(date_time)))
+
+            for deserialized_obj in serializers.deserialize('json', version.serialized_data):
+                if isinstance(deserialized_obj.object, Course):
+                    # Revert deletes category and period, so set it manually
+                    course = Course.objects.get(pk=pk)
+                    deserialized_obj.object.category_id = course.category_id
+                    deserialized_obj.object.period_id = course.period_id
+                deserialized_obj.object.save()
+        course = Course.objects.get(pk=pk)
+        course.save()
+        return HttpResponseRedirect(reverse_lazy(
+            'frontend:course',
+            args=(pk,)))
 
 
 class CourseHistoryCompareView(BaseCourseHistoryCompareView):

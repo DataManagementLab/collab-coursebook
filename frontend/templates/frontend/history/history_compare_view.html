@@ -10,27 +10,27 @@
     </p>
 
     <!-- Show fields differences -->
-        {% for field_diff in compare_data %}
-            <h3>
-                {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
-            </h3>
-            {% if field_diff.field.help_text %}
-                <p class="help">
-                    {{ field_diff.field.help_text }}
-                </p>
-            {% endif %}
-            <div class="module">
-                {{ field_diff.diff }}
-            </div>
-        {% empty %}
-            <div class="module">
-                <p>
-                    <strong>
-                        {% trans "There are no differences." %}
-                    </strong>
-                </p>
-            </div>
-        {% endfor %}
+    {% for field_diff in compare_data %}
+        <h3>
+            {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
+        </h3>
+        {% if field_diff.field.help_text %}
+            <p class="help">
+                {{ field_diff.field.help_text }}
+            </p>
+        {% endif %}
+        <div class="module">
+            {{ field_diff.diff }}
+        </div>
+    {% empty %}
+        <div class="module">
+            <p>
+                <strong>
+                    {% trans "There are no differences." %}
+                </strong>
+            </p>
+        </div>
+    {% endfor %}
 
     <!-- Show comment -->
     <h4>
@@ -61,45 +61,51 @@
     </button>
 
     <!-- modal for course/content revert -->
-    <div class="modal fade" id="revertCourseModal" tabindex="1" role="dialog" aria-labelledby="revertCourseModalLabel"
+    <div class="modal fade" id="revertCourseModal" tabindex="1" role="dialog"
+         aria-labelledby="revertCourseModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="revertCourseModalLabel">{% trans "Reversion of" %} <i>{{ version1.content_type.name }}</i>?</h5>
+                    <h5 class="modal-title" id="revertCourseModalLabel">{% trans "Reversion of" %}
+                        <i>{{ version1.content_type.name }}</i>?</h5>
                 </div>
                 <div class="modal-body">
                     <p>
                         {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") type=version1.content_type.name %}
-                            Are you sure you want to revert this {{ type }} to Version <strong>{{ date1 }}</strong>? You can also undo the revert
+                            Are you sure you want to revert this {{ type }} to Version <strong>{{ date1 }}</strong>?
+                            You
+                            can also undo the revert
                             later.
                         {% endblocktrans %}
                     </p>
                 </div>
                 <div class="modal-footer">
                     {% if version1.content_type.name == 'Course' %}
-                    <form action="{% url 'frontend:course-revert' version1.object_id version1.pk %}" method="post"
-                          class="mb-0">
-                        {% csrf_token %}
-                        <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
-                        </button>
-                        <button
-                                type="submit" class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
-                        </button>
-                    </form>
+                        <form method="post" id="post-form-revert-course" class="post-form" enctype=multipart/form-data>
+                            {% csrf_token %}
+                            <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
+                            <button class="btn btn-secondary" data-dismiss="modal">
+                                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                            </button>
+                            <button
+                                    type="submit"
+                                    class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                            </button>
+                        </form>
                     {% endif %}
                     {% if 'Content' in version1.content_type.name %}
-                    <form action="{% url 'frontend:content-revert' save_list.0 save_list.1 save_list.2 version1.pk %}" method="post"
-                          class="mb-0">
-                        {% csrf_token %}
-                        <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
-                        </button>
-                        <button
-                                type="submit" class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
-                        </button>
-                    </form>
+                        <form method="post" id="post-form-revert-content" class="post-form" enctype=multipart/form-data>
+                            {% csrf_token %}
+                            <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
+                            <button class="btn btn-secondary" data-dismiss="modal">
+                                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                            </button>
+                            <button
+                                    type="submit"
+                                    class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                            </button>
+                        </form>
                     {% endif %}
                 </div>
             </div>

@@ -23,7 +23,7 @@ from base.utils import check_owner_permission
 from frontend.forms import AddCourseForm, EditCourseForm, FilterAndSortForm
 from frontend.forms.course import TopicChooseForm, CreateTopicForm
 
-from frontend.views.history import update_comment
+from frontend.views.history import Reversion
 from frontend.views.json import JsonHandler
 
 
@@ -205,7 +205,7 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         :rtype: TemplateResponse
         """
         # Reversion comment
-        update_comment(request)
+        Reversion.update_comment(request)
         return super().post(request, *args, **kwargs)
 
 

@@ -22,7 +22,7 @@ from content.models import SingleImageAttachment, ImageAttachment
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
-from frontend.views.history import update_comment
+from frontend.views.history import Reversion
 from frontend.views.validator import Validator
 
 
@@ -397,7 +397,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                                                          files=self.request.FILES)
 
             # Reversion comment
-            update_comment(request)
+            Reversion.update_comment(request)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
