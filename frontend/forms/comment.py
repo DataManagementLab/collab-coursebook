@@ -15,7 +15,7 @@ class CommentForm(forms.ModelForm):
     This model represents form for entering comments.
     """
 
-    class Meta:  # pylint: disable=too-few-public-methods
+    class Meta:
         """Meta options
 
         This class handles all possible meta options that you can give to this model.

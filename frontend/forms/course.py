@@ -20,8 +20,7 @@ class AddCourseForm(forms.ModelForm):
     # Default value is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
 
-    # pylint: disable=too-few-public-methods
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """Meta options
 
         This class handles all possible meta options that you can give to this model.
@@ -68,7 +67,7 @@ class EditCourseForm(forms.ModelForm):
     # Default value is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
 
-    # pylint: disable=too-few-public-methods
+
     class Meta:
         """Meta options
 
