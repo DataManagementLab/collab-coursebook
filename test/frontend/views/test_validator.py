@@ -3,7 +3,7 @@
 This file contains the test cases for this /frontend/views/validator.py.
 """
 
-import test.utils as utils
+from test import utils
 
 # pylint: disable=imported-auth-user)
 from django.contrib.auth.models import User

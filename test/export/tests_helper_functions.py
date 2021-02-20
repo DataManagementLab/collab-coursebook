@@ -5,7 +5,7 @@ This file contains the test cases for /export/helper_functions.py.
 
 import os
 
-import test.utils as utils
+from test import utils
 
 from django.test import TestCase
 

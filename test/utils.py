@@ -9,8 +9,8 @@ import io
 from PIL import Image
 
 from django.core.files.images import ImageFile
-# pylint: disable=imported-auth-user
-from django.contrib.auth.models import User
+
+from django.contrib.auth.models import User  # pylint: disable=imported-auth-user
 
 from base.models.content import Category, Topic, Content, Course
 

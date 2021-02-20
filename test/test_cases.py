@@ -4,10 +4,9 @@ This file contains the custom test cases used to reduce redundant code..
 """
 import shutil
 
-import test.utils as utils
+from test import utils
 
-# pylint: disable=imported-auth-user
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User  # pylint: disable=imported-auth-user
 
 from django.test import TestCase, override_settings
 
