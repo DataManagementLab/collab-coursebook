@@ -4,6 +4,7 @@ This file describes the frontend history compare views to the models
 which are being tracked by the reversion (versioning) and allows us
 to compare the differences between different versions of the same model.
 """
+import re
 
 from builtins import staticmethod
 
@@ -12,6 +13,7 @@ from django.core.files.base import ContentFile
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext_lazy as _
 
 import reversion
@@ -186,6 +188,9 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
             diff += diff2
             has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
 
+        for field in diff:
+            field['diff'] = SafeString(re.sub(r'</ins>\n\?\s*\+*\n*', '</ins>\n', field['diff']))
+            field['diff'] = SafeString(re.sub(r'</del>\n\?\s*-*\n*', '</del>\n', field['diff']))
         return diff, has_unfollowed_fields
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
