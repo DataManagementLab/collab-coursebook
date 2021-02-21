@@ -115,6 +115,27 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         :rtype: None or str
         """
 
+    def compare(self, obj, version1, version2):
+        """Compare two versions of an object
+
+        Create a generic html diff from the obj between version1 and version2
+
+        :param obj: The object to compare
+        :type obj: BaseContentModel
+        :param version1: The first version to compare
+        :type version1: Version
+        :param version2: The second version to compare
+        :type version2: Version
+
+        :return: A diff of every changed field values
+        :rtype: list(dict(str, any)), bool
+        """
+        diff, has_unfollowed_fields = super().compare(obj, version1, version2)
+        for field in diff:
+            field['diff'] = SafeString(re.sub(r'</ins>\n\?\s*\+*\n*', '</ins>\n', field['diff']))
+            field['diff'] = SafeString(re.sub(r'</del>\n\?\s*-*\n*', '</del>\n', field['diff']))
+        return diff, has_unfollowed_fields
+
 
 class BaseContentHistoryCompareView(BaseHistoryCompareView):
     """Base content history compare view
@@ -188,9 +209,6 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
             diff += diff2
             has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
 
-        for field in diff:
-            field['diff'] = SafeString(re.sub(r'</ins>\n\?\s*\+*\n*', '</ins>\n', field['diff']))
-            field['diff'] = SafeString(re.sub(r'</del>\n\?\s*-*\n*', '</del>\n', field['diff']))
         return diff, has_unfollowed_fields
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
