@@ -131,6 +131,8 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         :rtype: list(dict(str, any)), bool
         """
         diff, has_unfollowed_fields = super().compare(obj, version1, version2)
+        # Remove sequence of ?+ or ?- at the end of the result of the compare which is not
+        # relevant for the comparison
         for field in diff:
             field['diff'] = SafeString(re.sub(r'</ins>\n\?\s*\+*\n*', '</ins>\n', field['diff']))
             field['diff'] = SafeString(re.sub(r'</del>\n\?\s*-*\n*', '</del>\n', field['diff']))
