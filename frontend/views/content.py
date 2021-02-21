@@ -381,7 +381,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         to the invalid page if something wrong occurs
         :rtype: HttpResponseRedirect
         """
-
+        self.object = self.get_object()
         form = self.get_form()
 
         if self.object.type in CONTENT_TYPE_FORMS:
