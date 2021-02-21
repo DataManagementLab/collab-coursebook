@@ -9,14 +9,18 @@
 
 
 {# title block #}
-{% block title %}{% trans "Courses for Category" %} {{ category.title }} - Collab Coursebook{% endblock %}
+{% block title %}
+    {% trans "Courses for Category" %} {{ category.title }} - Collab Coursebook
+{% endblock %}
 
 {# content block #}
 {% block content %}
     <div class="row mt-3">
         <div class="col-md">
-            <h1>{% trans "All Courses" %}{% if sort %} ({% trans sort %}){% endif %}
-                {% trans "for Category" %} {{ category.title }}</h1>
+            <h1>
+                {% trans "All Courses" %}{% if sort %} ({% trans sort %}){% endif %}
+                {% trans "for Category" %} {{ category.title }}
+            </h1>
         </div>
         <div class="col-md-auto my-auto">
             <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -25,13 +29,21 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item"
-                   href="{% url 'frontend:category-courses-sort' sort='date-new' pk=category.pk %}">{% trans "Date (newest)" %}</a>
+                   href="{% url 'frontend:category-courses-sort' sort='date-new' pk=category.pk %}">
+                    {% trans "Date (newest)" %}
+                </a>
                 <a class="dropdown-item"
-                   href="{% url 'frontend:category-courses-sort' sort='date-old' pk=category.pk %}">{% trans "Date (oldest)" %}</a>
+                   href="{% url 'frontend:category-courses-sort' sort='date-old' pk=category.pk %}">
+                    {% trans "Date (oldest)" %}
+                </a>
                 <a class="dropdown-item"
-                   href="{% url 'frontend:category-courses-sort' sort='title-a' pk=category.pk %}">{% trans "Title (A-Z)" %}</a>
+                   href="{% url 'frontend:category-courses-sort' sort='title-a' pk=category.pk %}">
+                    {% trans "Title (A-Z)" %}
+                </a>
                 <a class="dropdown-item"
-                   href="{% url 'frontend:category-courses-sort' sort='title-z' pk=category.pk %}">{% trans "Title (Z-A)" %}</a>
+                   href="{% url 'frontend:category-courses-sort' sort='title-z' pk=category.pk %}">
+                    {% trans "Title (Z-A)" %}
+                </a>
             </div>
         </div>
     </div>
