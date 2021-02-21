@@ -45,7 +45,7 @@ def clean_attachment(attachment_object, image_formset):
             remove_object.delete()
 
 
-def rate_content(request, course_id, topic_id, content_id, pk):
+def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disable=invalid-name
     """Rate content
 
     Lets the user rate content.
@@ -381,7 +381,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         to the invalid page if something wrong occurs
         :rtype: HttpResponseRedirect
         """
-        self.object = self.get_object()
+
         form = self.get_form()
 
         if self.object.type in CONTENT_TYPE_FORMS:
@@ -470,7 +470,7 @@ class ContentView(DetailView):
 
     context_object_name = 'content'
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post request
 
         Creates comment in database.

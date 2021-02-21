@@ -10,7 +10,7 @@ from base.models import Course, Favorite
 from export.helper_functions import Latex
 
 
-def generate_coursebook(request, pk, template="content/export/base.tex", context=None):
+def generate_coursebook(request, pk, template="content/export/base.tex", context=None):  # pylint: disable=invalid-name
     """Generate course book
 
     Generates a PDF file with name tags for students in the queryset.
@@ -45,7 +45,7 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     return pdf, pdflatex_output, tex_template
 
 
-def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
+def generate_coursebook_response(request, pk, file_name='coursebook.pdf'):  # pylint: disable=invalid-name
     """Generate course book response
 
     Generates a PDF file with name tags for students in the queryset and sends it to the browser.
@@ -54,8 +54,8 @@ def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
-    :param filename: The name of the file
-    :type filename: str
+    :param file_name: The name of the file
+    :type file_name: str
 
     :return: the http response of the generated PDF file
     :rtype: HttpResponse
@@ -63,7 +63,7 @@ def generate_coursebook_response(request, pk, filename='coursebook.pdf'):
 
     # Call the method for coursebook generation and write the output afterwards
     (pdf, pdflatex_output, tex_template) = generate_coursebook(request, pk)
-    return write_response(request, pdf, pdflatex_output, tex_template, filename)
+    return write_response(request, pdf, pdflatex_output, tex_template, file_name)
 
 
 def write_response(request, pdf, pdflatex_output, tex_template, filename,
@@ -94,7 +94,7 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
                       {"content": pdflatex_output[0].decode("utf-8"),
                        "tex_template": tex_template.decode("utf-8")})
     response = HttpResponse(content_type=content_type)
-    response['Content-Disposition'] = 'attachment; filename=' + filename
+    response['Content-Disposition'] = 'attachment; file_name=' + filename
     response.write(pdf)
     return response
 

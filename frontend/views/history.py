@@ -188,7 +188,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
         return diff, has_unfollowed_fields
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
         Submits the form and its its information to revert the current content to a previous state.
@@ -204,7 +204,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         :rtype: HttpResponseRedirect
         """
         topic_id = self.kwargs['topic_id']
-        pk = self.kwargs['pk']
+        pk = self.kwargs['pk']  # pylint: disable=invalid-name
         rev_pk = request.POST.get('rev_pk')
         with transaction.atomic(), reversion.create_revision():
             revision_id = Version.objects.get(pk=rev_pk).revision_id
@@ -269,7 +269,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
         course_id = self.kwargs['pk']
         return reverse(f'frontend:{value}', args=(course_id,))
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
         Submits the form and its its information to revert the current course to a previous state.
@@ -284,7 +284,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
         :return: the redirection to the content page after the reversion was successful
         :rtype: HttpResponseRedirect
         """
-        pk = self.kwargs['pk']
+        pk = self.kwargs['pk']  # pylint: disable=invalid-name
         rev_pk = request.POST.get('rev_pk')
         with transaction.atomic(), reversion.create_revision():
             version = Version.objects.get(id=rev_pk)

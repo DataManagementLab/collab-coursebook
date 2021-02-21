@@ -53,7 +53,8 @@
             <h4 style="font-weight: bold; text-align: center">
                 {% trans 'Add a new Topic' %}
             </h4>
-            <form method="post" id="post-form-topic" class="post-form" enctype=multipart/form-data>
+            <form method="post" id="post-form-edit-structure-create-topic" class="post-form"
+                  enctype=multipart/form-data>
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 <button type="submit" class="btn btn-primary">
@@ -369,7 +370,7 @@
             // Defines actions on remove click
             $('#dd-empty-placeholder').on('click', '.close', removeItem);
 
-            $('#post-form-topic').on('submit', create)
+            $('#post-form-edit-structure-create-topic').on('submit', create)
         });
     </script>
 

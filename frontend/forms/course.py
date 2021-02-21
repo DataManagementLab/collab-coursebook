@@ -67,7 +67,6 @@ class EditCourseForm(forms.ModelForm):
     # Default value is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
 
-
     class Meta:
         """Meta options
 
