@@ -14,7 +14,9 @@
             {% if user.is_authenticated %}
                 {% for content in content_data %}
                     <a class="dropdown-item"
-                       href="{% url 'frontend:content-add' course_id=course_id topic_id=topic_id type=content.0 %}">{% trans content.1 %}</a>
+                       href="{% url 'frontend:content-add' course_id=course_id topic_id=topic_id type=content.0 %}">
+                        {% trans content.1 %}
+                    </a>
                 {% endfor %}
             {% endif %}
         </div>

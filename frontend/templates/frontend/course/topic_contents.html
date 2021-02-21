@@ -14,22 +14,32 @@
                         <a href="{% url 'frontend:content' course.pk content.topic.pk content.pk %}">
                             {% include content.type|content_card %}
                             <div class="card-body" style="">
-                                <p>{{ content.description|truncatechars:40 }}</p>
+                                <p>
+                                    {{ content.description|truncatechars:40 }}
+                                </p>
                             </div>
                         </a>
                         <div class="card-footer">
-                            <span class="badge badge-primary">{{ content.language }}</span>
+                            <span class="badge badge-primary">
+                                {{ content.language }}
+                            </span>
                             {% if content.tags.count > 0 %}
                                 &nbsp;&middot;&nbsp;
                                 {% for tag in content.tags.all %}
-                                    <span class="badge badge-secondary">{{ tag }}</span>
+                                    <span class="badge badge-secondary">
+                                        {{ tag }}
+                                    </span>
                                 {% endfor %}
                             {% endif %}
                             {% if content.get_rate != -1 %}
                                 &nbsp;&middot;&nbsp;
-                                <span class="badge badge-info">{% fa5_icon "star" "fas" %} {{ content.get_rate }}</span>
+                                <span class="badge badge-info">
+                                    {% fa5_icon "star" "fas" %} {{ content.get_rate }}
+                                </span>
                                 &nbsp;&middot;&nbsp;
-                                <span class="badge badge-info">{% fa5_icon "hashtag" "fas" %} {{ content.get_rate_amount }}</span>
+                                <span class="badge badge-info">
+                                    {% fa5_icon "hashtag" "fas" %} {{ content.get_rate_amount }}
+                                </span>
                             {% endif %}
                         </div>
                     </div>

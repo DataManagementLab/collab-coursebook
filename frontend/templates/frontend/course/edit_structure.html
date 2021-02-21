@@ -11,7 +11,7 @@
 {% bootstrap_javascript jquery='full' %}
 
 {% block imports %}
-    <!-- Must be imported to use ajaxSetup and ajax, maybe store it locally? -->
+    <!-- TODO Must be imported to use ajaxSetup and ajax, maybe store it locally? -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="{% static 'nestable2/jquery.nestable.js' %}"></script>
     <script type="text/javascript" src="{% static 'nestable2/dist/jquery.nestable.min.js' %}"></script>
@@ -24,7 +24,6 @@
 {% endblock %}
 
 {% block content %}
-
     <div style="text-align: center">
         <h2 style="font-weight: bold">
             {% trans 'Edit Course Structure' %}
@@ -64,7 +63,8 @@
         </div>
     </div>
 
-    <br><br>
+    <br>
+    <br>
 
     <!-- Structure Editor -->
     <div class="container-fluid">
@@ -88,6 +88,7 @@
     <button onclick="save()" type="submit" class="btn btn-primary">
         {% fa5_icon 'save' %} {% trans 'Save' %}
     </button>
+
     <script>
         // Convert JSON containing topics to String
         const json_obj = JSON.stringify({{ structure|safe }});
@@ -373,5 +374,4 @@
             $('#post-form-edit-structure-create-topic').on('submit', create)
         });
     </script>
-
 {% endblock %}

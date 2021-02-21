@@ -29,64 +29,81 @@
                 {% if user.is_authenticated %}
                     <a class="dropdown-item"
                        href="{% url 'frontend:favourite_course' pk=course.pk %}">
-                        {% if course in user.profile.stared_courses.all %}{% fa5_icon 'bookmark' 'fas' %} {% trans "Unsave" %}
+                        {% if course in user.profile.stared_courses.all %}{% fa5_icon 'bookmark' 'fas' %}
+                            {% trans "Unsave" %}
                             {% else %}{% fa5_icon 'bookmark' 'far' %} {% trans "Save" %}{% endif %}</a>
                     {% if user.is_superuser or isCurrentUserOwner %}
                         <a href="{% url 'frontend:course-duplicate' pk=course.pk %}"
                            class="btn btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
                     {% endif %}
-                    <div class="dropdown-divider"></div>
+
+                    <div class="dropdown-divider">
+
+                    </div>
 
                     {% if user|check_edit_course_permission:course %}
-                        <a href="{% url 'frontend:course-edit' pk=course.pk %}"
-                           class="dropdown-item">{% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Course" %}</a>
-                        <a href="{% url 'frontend:course-edit-structure' pk=course.pk %}"
-                           class="dropdown-item">{% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Structure" %}</a>
-                        <a href="{% url 'frontend:course-history' pk=course.pk %}"
-                           class="dropdown-item">{% fa5_icon "history" "fas" %} {% trans "View History" %}</a>
-                        <a href="{% url 'frontend:course-delete' pk=course.pk %}"
-                           class="dropdown-item">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}</a>
+                        <a href="{% url 'frontend:course-edit' pk=course.pk %}" class="dropdown-item">
+                            {% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Course" %}
+                        </a>
+                        <a href="{% url 'frontend:course-edit-structure' pk=course.pk %}" class="dropdown-item">
+                            {% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Structure" %
+                        </a>
+                        <a href="{% url 'frontend:course-history' pk=course.pk %}" class="dropdown-item">
+                            {% fa5_icon "history" "fas" %} {% trans "View History" %}
+                        </a>
+                        <a href="{% url 'frontend:course-delete' pk=course.pk %}" class="dropdown-item">
+                            {% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}
+                        </a>
                     {% endif %}
                 {% endif %}
-
             </div>
         </div>
     </div>
 
     <!-- Course header: Title, owners, description -->
-    <h1>{{ course.title }}</h1>
+    <h1>
+        {{ course.title }}
+    </h1>
 
     <h5 style="margin-top: 20px;">
         {% for owner in course.owners.all %}
             <a href="{% url 'frontend:profile' pk=owner.pk %}"
-               class="{% if owner == user.profile %}text-danger{% endif %}">{% fa5_icon 'chalkboard-teacher' 'fas' %} {{ owner }}</a>
+               class="{% if owner == user.profile %}text-danger{% endif %}">
+                {% fa5_icon 'chalkboard-teacher' 'fas' %} {{ owner }}
+            </a>
         {% endfor %}
     </h5>
 
     <!-- Todo Add Course Image -->
 
-    <p><h2>{% trans "Description" %}</h2>
+    <p>
+    <h2>
+        {% trans "Description" %}
+    </h2>
     {{ course.description | linebreaks }}
-
-
 
     <!-- Table of contents -->
     <div class="row" style="margin-top: 20px;">
         <div class="col-md-4">
             <ol class="list-group" style="font-weight: bold;">
-                <!-- ToDo Click on links to jump to links -->
                 {% for entry in structure %}
                     <li class="list-group-item">
                         {% with forloop.counter as outer_index %}
                             <a href="#{{ entry.topic.pk }}">{{ outer_index }}. {{ entry.topic.title }}
-                                <span class="badge badge-primary badge-pill badge-light">{{ entry.topic.contents.count }}</span></a>
+                                <span class="badge badge-primary badge-pill badge-light">
+                                    {{ entry.topic.contents.count }}
+                                </span>
+                            </a>
                             <!-- Show (up to one level of) subtopics in ToC -->
                             {% if entry.subtopics %}
                                 <ol class="list-group">
                                     {% for subtopic in entry.subtopics %}
                                         <li class="list-group-item" style="border: none;">
                                             <a href="#{{ subtopic.topic.pk }}">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
-                                                <span class="badge badge-primary badge-pill badge-light">{{ subtopic.topic.contents.count }}</span></a>
+                                                <span class="badge badge-primary badge-pill badge-light">
+                                                    {{ subtopic.topic.contents.count }}
+                                                </span>
+                                            </a>
                                         </li>
                                     {% endfor %}
                                 </ol>
@@ -120,9 +137,11 @@
                         {% endwith %}
                     </form>
                 </div>
-                <h3 class="text-info">{{ outer_index }}. {{ entry.topic.title }} {% if sorting != "None" %}(
+                <h3 class="text-info">
+                    {{ outer_index }}. {{ entry.topic.title }} {% if sorting != "None" %}(
                     {% trans "Sort by: " %} {% trans sorting %}){% endif %}{% if filtering != "None" %}(
-                    {% trans "Filter by: " %} {%  trans filtering %}){% endif %}</h3>
+                    {% trans "Filter by: " %} {% trans filtering %}){% endif %}
+                </h3>
                 {% with entry.topic_contents as topic_contents %}
                     {% include "frontend/course/topic_contents.html" %}
                 {% endwith %}
@@ -136,10 +155,12 @@
                                     {% add_content_button user course.id subtopic_topic.id %}
                                 {% endwith %}
                             </div>
-                            <h4 class="text-info">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
+                            <h4 class="text-info">
+                                {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
                                 {% if sorting != "None" %}({% trans sorting %}) {% endif %}
-                                {% if filtering != "None" %}(
-                                {% trans "Filter by: " %} {%  trans filtering %}){% endif %}</h4>
+                                {% if filtering != "None" %}( {% trans "Filter by: " %} {% trans filtering %}
+                                    ){% endif %}
+                            </h4>
 
                             {% with subtopic.topic_contents as topic_contents %}
                                 {% include "frontend/course/topic_contents.html" %}
@@ -150,7 +171,11 @@
             {% endwith %}
         </div>
     {% empty %}
-        <h3>{% trans "No Topics" %}</h3>
-        <p>{% trans "This course doesn't have topics at the moment." %}</p>
+        <h3>
+            {% trans "No Topics" %}
+        </h3>
+        <p>
+            {% trans "This course doesn't have topics at the moment." %}
+        </p>
     {% endfor %}
 {% endblock %}s
