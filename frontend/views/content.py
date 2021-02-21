@@ -89,7 +89,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     :type AddContentView.context_object_name: str
     """
     model = Content
-    template_name = 'frontend/content/addcontent.html'
+    template_name = 'frontend/content/add.html'
     form_class = AddContentForm
     success_url = reverse_lazy('frontend:dashboard')
     context_object_name = 'content'
@@ -254,7 +254,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
     :type EditContentView.form_class: Form
     """
     model = Content
-    template_name = 'frontend/content/editcontent.html'
+    template_name = 'frontend/content/edit.html'
     form_class = EditContentForm
 
     def get_content_url(self):
@@ -749,7 +749,7 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
     :type ContentReadingModeView.template_name: str
     """
     model = Content
-    template_name = "frontend/content/readingmode.html"
+    template_name = "frontend/content/reading_mode.html"
 
     def get_context_data(self, **kwargs):
         """Context data
