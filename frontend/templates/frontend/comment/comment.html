@@ -12,11 +12,15 @@
         {% endif %}
     </div>
     <div style="margin-left: 10px;">
-        <a href="{% url 'frontend:profile' comment.author.pk %}" class="font-weight-bold">{{ comment.author }}</a>
-        <span class="text-muted">{{ comment.creation_date|date:'d.m.Y H:i' }}
+        <a href="{% url 'frontend:profile' comment.author.pk %}" class="font-weight-bold">
+            {{ comment.author }}
+        </a>
+        <span class="text-muted">
+            {{ comment.creation_date|date:'d.m.Y H:i' }}
             {% if comment.edited %}
                 {% fa5_icon 'pencil-alt' 'fas' %} {{ comment.last_edit|date:'d.m.Y H:i' }}
-            {% endif %}</span>
+            {% endif %}
+        </span>
         {% if user.profile == comment.author %}
             &nbsp;&middot;&nbsp;
             <a class="text-info" href="{% url 'frontend:comment-edit' course_id topic.id content_id comment.id %}">
