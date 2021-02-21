@@ -41,7 +41,7 @@ class Favorite(models.Model):
     def __str__(self):
         """String representation
 
-        Returns he string representation of this object.
+        Returns the string representation of this object.
 
         :return: the string representation of this object
         :rtype: str
