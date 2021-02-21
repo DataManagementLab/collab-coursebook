@@ -13,7 +13,6 @@
 
 
 {% block content %}
-
     <button onclick="location.href='{{ back_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Back" %}
     </button>
@@ -25,5 +24,4 @@
     {% include "frontend/history/history_compare_header.html" %}
 
     {% include "frontend/history/history_compare_view.html" %}
-
 {% endblock content %}

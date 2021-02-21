@@ -68,7 +68,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="revert-modal-label">{% trans "Reversion of" %}
-                        <i>{{ version1.content_type.name }}</i>?</h5>
+                        <i>{{ version1.content_type.name }}</i>?
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <p>
@@ -95,7 +96,8 @@
         </div>
     </div>
 
-    <br><br>
+    <br>
+    <br>
 
     <button onclick="location.href='{{ history_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Go back to history list" %}
