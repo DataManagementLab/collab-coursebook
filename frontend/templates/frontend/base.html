@@ -8,7 +8,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Collab Coursebook{% endblock %}</title>
+    <title>
+        {% block title %}
+            Collab Coursebook
+        {% endblock %}
+    </title>
 
     {# Load Bootstrap CSS and JavaScript as well as font awesome #}
     {% bootstrap_css %}
@@ -16,7 +20,6 @@
     {% fontawesome_5_static %}
 
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
-
 
     <script type='text/javascript'>
         let changed_form = false;
@@ -39,7 +42,6 @@
     </script>
 
     {% block imports %}{% endblock %}
-
 </head>
 <body>
 
@@ -54,14 +56,19 @@
         {{ FI.impress_text }} &middot;
     {% endif %}
     {% if FI.impress_url %}
-        <a href="{{ FI.impress_url }}">{% trans "Impress" %}</a> &middot;
+        <a href="{{ FI.impress_url }}">
+            {% trans "Impress" %}
+        </a> &middot;
     {% endif %}
     {% if FI.repo_url %}
-        <a href="{{ FI.repo_url }}">{% trans "This software is open source" %}</a>
+        <a href="{{ FI.repo_url }}">
+            {% trans "This software is open source" %}
+        </a>
     {% endif %}
 </div>
 
-{% block bottom_script %}{% endblock %}
+{% block bottom_script %}
 
+{% endblock %}
 </body>
 </html>
