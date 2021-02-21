@@ -19,7 +19,9 @@
         <br>
         {% if attachment_allowed %}
             <div>
-                <h2 style="font-weight: bold" align="center">{% trans "Image Attachments" %}</h2>
+                <h2 style="font-weight: bold" align="center">
+                    {% trans "Image Attachments" %}
+                </h2>
                 {% bootstrap_form attachment_form %}
                 {{ item_forms.management_form }}
                 <div id="items-form-container">
@@ -30,20 +32,27 @@
                         </div>
                     {% endfor %}
                 </div>
-                <button id="add-item-button" class="btn btn-primary add-item">{% trans "Add attachment" %}</button>
-                <button id="remove-item-button" class="btn btn-primary remove-item"
-                        style="visibility: hidden">{% trans "Remove attachment" %}
+                <button id="add-item-button" class="btn btn-primary add-item">
+                    {% trans "Add attachment" %}
+                </button>
+                <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">
+                    {% trans "Remove attachment" %}
                 </button>
             </div>
         {% endif %}
 
         <br>
+
         {{ form.media }}
+
         <div>
             <button type="submit"
-                    class="btn btn-primary float-right">{% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}</button>
-            <a href='{% url "frontend:course" pk=course.pk %}'
-               class="btn btn-danger">{% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}</a>
+                    class="btn btn-primary float-right">
+                {% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}
+            </button>
+            <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">
+                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+            </a>
         </div>
     </form>
 
@@ -54,5 +63,4 @@
     {% if is_latex_content %}
         {% include "frontend/content/attachment_embedding_help.html" %}
     {% endif %}
-
 {% endblock %}
