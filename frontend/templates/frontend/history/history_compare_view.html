@@ -74,7 +74,7 @@
                 <div class="modal-body">
                     <p>
                         {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") type=version1.content_type.name %}
-                            Are you sure you want to revert this {{ type }} to Version <strong>{{ date1 }}</strong>?
+                            Are you sure you want to revert to Version <strong>{{ date1 }}</strong>?
                             You can also undo the revert later.
                         {% endblocktrans %}
                     </p>

@@ -211,7 +211,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
             for version in Version.objects.filter(revision_id=revision_id):
                 date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-                reversion.set_comment(_("Revert to version: {}".format(date_time)))
+                reversion.set_comment(_("<== Version: {}".format(date_time)))
 
                 for deserialized_obj in serializers.deserialize('json', version.serialized_data):
                     if isinstance(deserialized_obj.object, Content):
@@ -290,7 +290,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
             version = Version.objects.get(id=rev_pk)
 
             date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-            reversion.set_comment(_("Version: {}".format(date_time)))
+            reversion.set_comment(_("<== Version: {}".format(date_time)))
 
             for deserialized_obj in serializers.deserialize('json', version.serialized_data):
                 if isinstance(deserialized_obj.object, Course):

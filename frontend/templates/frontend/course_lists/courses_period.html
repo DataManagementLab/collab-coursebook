@@ -31,13 +31,13 @@
                     {% trans 'Date (newest)' %}
                 </a>
                 <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='date-old' pk=period.pk %}">
-                    Date (oldest)
+                    {% trans 'Date (oldest)' %}
                 </a>
                 <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='title-a' pk=period.pk %}">
-                    Title (A-Z)
+                    {% trans 'Title (A-Z)' %}
                 </a>
                 <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='title-z' pk=period.pk %}">
-                    Title (Z-A)
+                    {% trans 'Title (Z-A)' %}
                 </a>
             </div>
         </div>
