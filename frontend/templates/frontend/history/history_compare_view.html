@@ -56,57 +56,40 @@
 
     <!-- Buttons for revert -->
     <button type="button" class="btn btn-warning" data-toggle="modal"
-            data-target="#revertCourseModal">
+            data-target="#revert-modal">
         {% fa5_icon 'undo' 'fas' %} {% trans "Revert to Version 1" %}
     </button>
 
-    <!-- modal for course/content revert -->
-    <div class="modal fade" id="revertCourseModal" tabindex="1" role="dialog"
-         aria-labelledby="revertCourseModalLabel"
+    <!-- Modal for course/content revert -->
+    <div class="modal fade" id="revert-modal" tabindex="1" role="dialog"
+         aria-labelledby="revert-modal-label"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="revertCourseModalLabel">{% trans "Reversion of" %}
+                    <h5 class="modal-title" id="revert-modal-label">{% trans "Reversion of" %}
                         <i>{{ version1.content_type.name }}</i>?</h5>
                 </div>
                 <div class="modal-body">
                     <p>
                         {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") type=version1.content_type.name %}
                             Are you sure you want to revert this {{ type }} to Version <strong>{{ date1 }}</strong>?
-                            You
-                            can also undo the revert
-                            later.
+                            You can also undo the revert later.
                         {% endblocktrans %}
                     </p>
                 </div>
                 <div class="modal-footer">
-                    {% if version1.content_type.name == 'Course' %}
-                        <form method="post" id="post-form-revert-course" class="post-form" enctype=multipart/form-data>
-                            {% csrf_token %}
-                            <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
-                            <button class="btn btn-secondary" data-dismiss="modal">
-                                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
-                            </button>
-                            <button
-                                    type="submit"
-                                    class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
-                            </button>
-                        </form>
-                    {% endif %}
-                    {% if 'Content' in version1.content_type.name %}
-                        <form method="post" id="post-form-revert-content" class="post-form" enctype=multipart/form-data>
-                            {% csrf_token %}
-                            <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
-                            <button class="btn btn-secondary" data-dismiss="modal">
-                                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
-                            </button>
-                            <button
-                                    type="submit"
-                                    class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
-                            </button>
-                        </form>
-                    {% endif %}
+                    <form method="post" id="post-form-revert" class="post-form" enctype=multipart/form-data>
+                        {% csrf_token %}
+                        <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
+                        <button class="btn btn-secondary" data-dismiss="modal">
+                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                        </button>
+                        <button
+                                type="submit"
+                                class="btn btn-warning"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

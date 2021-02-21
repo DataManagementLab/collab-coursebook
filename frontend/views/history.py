@@ -235,7 +235,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
         return HttpResponseRedirect(reverse_lazy(
             'frontend:content',
-            args=(kwargs['course_id'], topic_id, pk,)))
+            args=(self.kwargs['course_id'], topic_id, pk,)))
 
 
 class BaseCourseHistoryCompareView(BaseHistoryCompareView):

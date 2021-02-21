@@ -138,7 +138,7 @@ def generate_pdf_response(user, content):
     :param user: The user of the content
     :type user: User
     :param content: The content of the pdf
-    :type content: dict
+    :type content: Content
 
     return: the generated PDF
     rtype: bytes
