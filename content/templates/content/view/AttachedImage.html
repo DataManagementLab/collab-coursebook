@@ -4,10 +4,18 @@
     <img src="{{ SingleImageAttachment.image.url }}" alt="Image cannot be displayed" style="margin-bottom: 20px;">
 </p>
 
-<b>{% trans "Source" %}:</b>
-<p>{{ SingleImageAttachment.source }}</p>
+<b>
+    {% trans "Source" %}:
+</b>
+<p>
+    {{ SingleImageAttachment.source }}
+</p>
 
 {% if SingleImageAttachment.license %}
-    <b>{% trans "License" %}:</b>
-    <p>{{ SingleImageAttachment.license }}</p>
+    <b>
+        {% trans "License" %}:
+    </b>
+    <p>
+        {{ SingleImageAttachment.license }}
+    </p>
 {% endif %}
