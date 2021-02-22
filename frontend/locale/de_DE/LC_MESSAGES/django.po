@@ -21,12 +21,6 @@ msgstr ""
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
-#: .\forms\content.py:54
-#, fuzzy
-#| msgid "Change log:"
-msgid "Change log"
-msgstr "Änderungsprotokoll:"
-
 #: .\forms\course.py:62
 msgid "Change Log"
 msgstr "Änderungsprotokoll"

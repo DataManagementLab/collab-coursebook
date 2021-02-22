@@ -61,8 +61,8 @@ class EditCourseForm(forms.ModelForm):
             attrs={'style': 'height: 35px'}),
         label=_('Change Log')
     )
-    field_order = ['change_log', 'title', 'description', 'image',
-                   'owners', 'restrict_changes', 'category', 'period']
+    field_order = ['title', 'description', 'image',
+                   'owners', 'restrict_changes', 'category', 'period', 'change_log']
 
     # Default value is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
