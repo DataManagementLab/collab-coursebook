@@ -148,6 +148,10 @@
          * @param obj the json object to be parsed
          */
         function parseItems(obj) {
+            // Cannot parse an empty json object
+            if (obj === "[null]") {
+                return;
+            }
             // Parses json, dynamically generate a nestable list
             const placeholder = document.getElementById('dd-empty-placeholder');
             $.each(JSON.parse(obj), function (index, item) {
