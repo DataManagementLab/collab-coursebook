@@ -133,6 +133,16 @@ def check_edit_course_permission(user, course):
     return (user.profile in course.owners.all()) or (not course.restrict_changes
                                                      and ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE)
 
+@register.filter
+def check_profile_permissions(user, profile):
+    """
+    <TODO: Iteration 5>
+    :param user:
+    :param profile:
+    :return:
+    """
+    return (user.profile.pk == profile.pk or user.is_superuser)
+
 
 @register.filter
 def check_edit_content_permission(user, content):
