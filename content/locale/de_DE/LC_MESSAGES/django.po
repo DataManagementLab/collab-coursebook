@@ -74,14 +74,6 @@ msgstr "Latex-Inhalt"
 msgid "Latex Contents"
 msgstr "Latex-Inhalte"
 
-#: .\models.py:209
-msgid "Latex Content"
-msgstr "Latex-Inhalt"
-
-#: .\models.py:210
-msgid "Latex Contents"
-msgstr "Latex-Inhalte"
-
 #: .\models.py:248
 msgid "PDF Content"
 msgstr "PDF-Inhalt"
@@ -155,28 +147,3 @@ msgstr "Auf YouTube ansehen"
 #: .\templates\content\view\invalid.html:4
 msgid "Invalid type"
 msgstr "Ungültiger Typ"
-
-#~ msgid "LaTeX Content"
-#~ msgstr "LaTeX-Inhalt"
-
-#, fuzzy
-#~| msgid "Image Contents"
-#~ msgid "LaTeX Contents"
-#~ msgstr "LaTeX-Inhalte"
-
-#~ msgid "Single Attachments"
-#~ msgstr "Einzelne Anhänge"
-
-#~ msgid "Attached Image"
-#~ msgstr "angehängtes Bild"
-
-#, fuzzy
-#~| msgid "Single Image"
-#~ msgid "Single Images"
-#~ msgstr "Einzelnes Bild"
-
-#~ msgid "Image Attachment in Content"
-#~ msgstr "Bildanhang im Inhalt"
-
-#~ msgid "Image Attachments in Content"
-#~ msgstr "Bildanhänge im Inhalt"
