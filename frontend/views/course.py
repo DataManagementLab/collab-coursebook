@@ -335,6 +335,7 @@ class CourseView(DetailView, FormMixin):
         :rtype: HttpResponse
         """
         self.object = self.get_object()
+        check = False
         # Edit course structure cancel/save
         if request.is_ajax():
             check = True
