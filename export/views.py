@@ -94,7 +94,7 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
                       {"content": pdflatex_output[0].decode("utf-8"),
                        "tex_template": tex_template.decode("utf-8")})
     response = HttpResponse(content_type=content_type)
-    response['Content-Disposition'] = 'attachment; file_name=' + filename
+    response['Content-Disposition'] = 'attachment; filename=' + filename
     response.write(pdf)
     return response
 
