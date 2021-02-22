@@ -53,8 +53,8 @@ class EditContentForm(forms.ModelForm):
             attrs={'style': 'height: 35px'}),
         label=_('Change Log')
     )
-    field_order = ['description', 'language', 'tags',
-                   'readonly', 'public', 'change_log']
+    field_order = ['change_log', 'description', 'language', 'tags',
+                   'readonly', 'public']
 
     class Meta:
         """Meta options

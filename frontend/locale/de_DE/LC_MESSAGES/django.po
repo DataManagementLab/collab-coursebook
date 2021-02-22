@@ -22,6 +22,7 @@ msgid "Your Comment"
 msgstr "Dein Kommentar"
 
 #: .\forms\course.py:62
+#: .\forms\content.py:54
 msgid "Change Log"
 msgstr "Änderungsprotokoll"
 
