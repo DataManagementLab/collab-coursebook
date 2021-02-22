@@ -335,9 +335,12 @@ class CourseView(DetailView, FormMixin):
         :rtype: HttpResponse
         """
         self.object = self.get_object()
-        check = False
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+
         # Edit course structure cancel/save
-        if request.is_ajax():
+        elif request.is_ajax():
             check = True
             # Update course structure
             topic_list = request.POST.get('topic_list')
@@ -355,9 +358,11 @@ class CourseView(DetailView, FormMixin):
             if ids:
                 JsonHandler.clean_topics(ids)
 
-        if not check:
-            return HttpResponseBadRequest()
-        return HttpResponse()
+            if not check:
+                return HttpResponseBadRequest()
+            return HttpResponse()
+
+        return self.form_invalid(form)
 
     def form_valid(self, form):
         """Form validation
