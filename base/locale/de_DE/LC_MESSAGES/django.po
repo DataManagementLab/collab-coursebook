@@ -186,6 +186,14 @@ msgstr "Profilbild"
 msgid "Stared courses:"
 msgstr "Favorisierte Kurse"
 
+#: .\models\profile.py:37
+msgid "Profile"
+msgstr "Profil"
+
+#: .\models\profile.py:38
+msgid "Profiles"
+msgstr "Profile"
+
 #: .\models\social.py:13 .\models\social.py:26
 msgid "Rating"
 msgstr "Bewertung"

@@ -105,7 +105,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :return: the success message when the profile was updated
         :rtype: __proxy__
         """
-        return _(f"Content '{cleaned_data['type']}' successfully added")
+        message = _("Content %(title)s successfully added") % {'title': cleaned_data['type']}
+        return message
 
     def handle_error(self):
         """Error handling

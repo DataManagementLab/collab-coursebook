@@ -666,9 +666,9 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: .\views\content.py:108
-msgid "Content '{cleaned_data['type']}' successfully added"
-msgstr "Inhalt '{cleaned_data['type']}' erfolgreich hinzugefügt"
+#: .\views\content.py:174
+msgid "Content %(title)s successfully added"
+msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
 #: .\views\content.py:119 .\views\content.py:317
 msgid "An error occurred while processing the request"
@@ -686,17 +686,30 @@ msgstr "Inhalt aktualisiert"
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 
-#: .\views\course.py:62
-msgid "Course '{cleaned_data['title']}' successfully created. "
-msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt."
+#: .\views\course.py:59
+msgid "Course %(title)s successfully created"
+msgstr "Kurs %(title)s erfolgreich angelegt"
 
-#: .\views\course.py:136
-msgid "Course '{cleaned_data['title']}' successfully created"
-msgstr "Kurs '{cleaned_data['title']}' erfolgreich angelegt"
+#: .\views\course.py:134
+msgid "Course %(title)s successfully deleted"
+msgstr "Kurs %(title)s erfolgreich gelöscht"
 
-#: .\views\course.py:190
-msgid "Course '{cleaned_data['title']}' successfully edited"
-msgstr "Kurs '{cleaned_data['title']}' erfolgreich bearbeitet"
+#: .\views\course.py:188
+msgid "Course %(title)s successfully edited"
+msgstr "Kurs %(title)s erfolgreich bearbeitet"
+
+#: .\views\course.py:524
+msgid "Course %(title)s successfully removed from favourites"
+msgstr "Kurs %(title)s erfolgreich aus den Favoriten entfernt"
+
+#: .\views\course.py:530
+msgid "Course %(title)s successfully added to favourites"
+msgstr "Kurs %(title)s erfolgreich zu den Favoriten hinzugefügt"
+
+msgid "Course %(title1)s successfully created. All settings and "
+ "contents of the course %(title)s were copied."
+msgstr "Kurs %(title1)s erfolgreich erstellt. Alle Einstellungen "
+"und Inhalte des Kurses %(title)s wurden kopiert."
 
 #: .\views\history.py:214 .\views\history.py:293
 msgid "<== Version: {}"
@@ -757,12 +770,5 @@ msgstr "Profil aktualisiert"
 #~ msgid "sort by:"
 #~ msgstr "sortieren nach"
 
-#~ msgid ""
-#~ "Course '{cleaned_data['title']}' successfully created. All settings and "
-#~ "contents of the course '{original_course.title}' were copied."
-#~ msgstr ""
-#~ "Kurs '{cleaned_data['title']}' erfolgreich erstellt. Alle Einstellungen "
-#~ "und Inhalte des Kurses '{original_course.title}' wurden kopiert."
-
-#~ msgid "Course '{original_course.title}' successfully duplicated."
-#~ msgstr "Kurs '{cleaned_data['title']}' erfolgreich dupliziert"
+msgid "Course %(title)s successfully duplicated."
+msgstr "Kurs %(title)s erfolgreich dupliziert"

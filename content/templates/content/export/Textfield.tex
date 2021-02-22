@@ -1,4 +1,5 @@
 {% load cc_export_tags %}
+{% load i18n %}
 {% autoescape off %}
 
 % Show topic title when exporting
@@ -10,7 +11,7 @@
 
 % Show description when exporting
 {% if export_pdf %}
-\textit{Description:} {{content.description|tex_escape}}
+\textit{~~{% trans "Description" %}:} {{content.description|tex_escape}}
 {% endif %}
 
 \vskip 1em

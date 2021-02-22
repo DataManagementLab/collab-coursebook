@@ -58,10 +58,10 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :rtype: __proxy__
         """
         original_course = Course.objects.get(pk=self.get_object().id)
-        return _(
-            f"Course '{cleaned_data['title']}' successfully created. "
-            f"All settings and contents of the course "
-            f"'{original_course.title}' were copied.")
+        message = _("Course %(title1)s successfully created. "
+                    "All settings and contents of the course %(title)s were copied.") \
+                  % {'title1': cleaned_data['title'], 'title': original_course.title}
+        return message
 
     def get_initial(self):
         """Initial
@@ -133,7 +133,8 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :return: the success message
         :rtype: __proxy__
         """
-        return _(f"Course '{cleaned_data['title']}' successfully created")
+        message = _("Course %(title)s successfully created") % {'title': cleaned_data['title']}
+        return message
 
     def get_initial(self):
         """Initial
@@ -187,7 +188,8 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         return: the success message
         rtype: __proxy__
         """
-        return _(f"Course '{cleaned_data['title']}' successfully edited")
+        message = _("Course %(title)s successfully edited") % {'title': cleaned_data['title']}
+        return message
 
     def post(self, request, *args, **kwargs):
         """Post
@@ -501,9 +503,8 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         :return: the redirect to success url (course list)
         :rtype: HttpResponse
         """
-
-        messages.success(request, "Course '" + self.get_object().title +
-                         "' successfully deleted", extra_tags="alert-success")
+        message = _("Course %(title)s successfully deleted") % {'title': self.get_object().title}
+        messages.success(request, message, extra_tags="alert-success")
         return super().delete(self, request, *args, **kwargs)
 
 
@@ -529,14 +530,14 @@ def add_remove_favourites(request, pk):  # pylint: disable=invalid-name
     # If the course is already in the favourite set, remove it
     if course in profile.stared_courses.all():
         profile.stared_courses.remove(course)
-        messages.success(request, "Course '" + course.title +
-                         "' successfully removed from favourites", extra_tags="alert-success")
+        message = _("Course %(title)s successfully removed from favourites") % {'title': course.title}
+        messages.success(request, message, extra_tags="alert-success")
 
     # Otherwise add it to the favourite set
     else:
         profile.stared_courses.add(course)
-        messages.success(request, "Course '" + course.title +
-                         "' successfully added to favourites", extra_tags="alert-success")
+        message = _("Course %(title)s successfully added to favourites") % {'title': course.title}
+        messages.success(request, message, extra_tags="alert-success")
 
     # Return to the course page afterwards
     return HttpResponseRedirect(reverse_lazy('frontend:course', args=(pk,)))

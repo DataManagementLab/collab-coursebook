@@ -74,7 +74,15 @@ msgstr "Latex-Inhalt"
 msgid "Latex Contents"
 msgstr "Latex-Inhalte"
 
-#: .\models.py:246
+#: .\models.py:209
+msgid "Latex Content"
+msgstr "Latex-Inhalt"
+
+#: .\models.py:210
+msgid "Latex Contents"
+msgstr "Latex-Inhalte"
+
+#: .\models.py:248
 msgid "PDF Content"
 msgstr "PDF-Inhalt"
 
@@ -86,9 +94,13 @@ msgstr "PDF-Inhalte"
 msgid "Single Image Attachment"
 msgstr "Einzelner Bildanhang"
 
-#: .\models.py:289
+#: .\models.py:276
 msgid "Single Image Attachments"
 msgstr "Einzelne Bildanhänge"
+
+#: .\models.py:291
+msgid "Single Attachments"
+msgstr "Einzelne Anhänge"
 
 #: .\models.py:317
 msgid "Textfield"
