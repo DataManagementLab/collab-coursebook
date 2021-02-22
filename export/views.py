@@ -9,6 +9,9 @@ from django.shortcuts import render
 from base.models import Course, Favorite
 from export.helper_functions import Latex
 
+from django.utils.translation import gettext_lazy as _
+
+
 
 def generate_coursebook(request, pk, template="content/export/base.tex", context=None):  # pylint: disable=invalid-name
     """Generate course book
@@ -45,7 +48,7 @@ def generate_coursebook(request, pk, template="content/export/base.tex", context
     return pdf, pdflatex_output, tex_template
 
 
-def generate_coursebook_response(request, pk, file_name='coursebook.pdf'):  # pylint: disable=invalid-name
+def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pylint: disable=invalid-name
     """Generate course book response
 
     Generates a PDF file with name tags for students in the queryset and sends it to the browser.
@@ -63,7 +66,7 @@ def generate_coursebook_response(request, pk, file_name='coursebook.pdf'):  # py
 
     # Call the method for coursebook generation and write the output afterwards
     (pdf, pdflatex_output, tex_template) = generate_coursebook(request, pk)
-    return write_response(request, pdf, pdflatex_output, tex_template, file_name)
+    return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
 
 
 def write_response(request, pdf, pdflatex_output, tex_template, filename,
