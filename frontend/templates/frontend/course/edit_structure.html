@@ -209,12 +209,6 @@
             // id must be an integer to be compared
             id = parseInt(id);
 
-            // Checks if the content already exists
-            const contents = $(document).find('.dd3-content').text()
-            if (contents.includes(topic)) {
-                return false;
-            }
-
             // Checks all nodes
             for (let i = 0; i < data.length; i++) {
                 const entry = data[i];
