@@ -148,6 +148,7 @@
          * @param obj the json object to be parsed
          */
         function parseItems(obj) {
+            console.log(document.getElementsByClassName("dd-empty"));
             // Cannot parse an empty json object
             if (obj === "[null]") {
                 return;
@@ -229,6 +230,20 @@
                 }
             }
             return true;
+        }
+
+        /**
+         * Cleans the nestable list from containing an empty class - 'dd-empty' which causes some bugs.
+         * This bug occurs if the nestable list is initialized with an empty list and it will automatically
+         * add an div with the class 'dd-empty' which represents an empty class and causes conflicts with
+         * drag & drop items.
+         */
+        function cleanNestable() {
+            // Remove empty class from nestable to prevent bugs
+            const dd_empty = document.getElementsByClassName("dd-empty");
+            for (let i = 0; i < dd_empty.length; i++) {
+                dd_empty[i].parentNode.removeChild(dd_empty[i]);
+            }
         }
 
         /**
@@ -375,7 +390,10 @@
             // Defines actions on remove click
             $('#dd-empty-placeholder').on('click', '.close', removeItem);
 
-            $('#post-form-edit-structure-create-topic').on('submit', create)
+            $('#post-form-edit-structure-create-topic').on('submit', create);
+
+            // Clean nestable
+            cleanNestable();
         });
     </script>
 {% endblock %}
