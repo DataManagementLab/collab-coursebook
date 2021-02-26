@@ -1,3 +1,7 @@
+/**
+ * The timeout value for fade out.
+ * @type {number}
+ */
 const TIMEOUT = 5000;
 
 /**
