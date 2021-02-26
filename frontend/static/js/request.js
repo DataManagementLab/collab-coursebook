@@ -5,6 +5,7 @@
  * @return {null} the cookie if it was found
  */
 function getCookie(name) {
+    // https://docs.djangoproject.com/en/3.1/ref/csrf/
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
