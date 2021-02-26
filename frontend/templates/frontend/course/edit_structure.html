@@ -11,6 +11,10 @@
 {% bootstrap_javascript jquery='full' %}
 
 
+{% block imports %}
+    <script src="{% url 'frontend:javascript-catalog' %}"></script>
+{% endblock %}
+
 {% block title %}
     {% trans 'Edit' %} - {{ course.title }}
 {% endblock %}
@@ -120,7 +124,8 @@
                 return;
             }
             addItem(topic, id);
-            showNotification('Topic ' + topic + ' was successfully added to the course structure.');
+            const message = gettext('The topic %s was successfully added to the course structure.');
+            showNotification(interpolate(message, [topic]));
         }
 
         /**
@@ -224,7 +229,8 @@
                     addTopic()
                 },
                 error: function (data) {
-                    alert('{% trans "Fehler bei der Datenübertragung zum Server - Status:" %}' + ' ' + data.status);
+                    const message = gettext('Error during data transfer to the server - status: %s');
+                    alert(interpolate(message, [data.status]));
                 }
             });
         }
