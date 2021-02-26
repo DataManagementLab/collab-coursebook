@@ -204,7 +204,8 @@
                     window.location.href = '{% url "frontend:course" course.id %}'
                 },
                 error: function (data) {
-                    alert('{% trans "Fehler bei der Datenübertragung zum Server - Status:" %}' + ' ' + data.status);
+                    const message = gettext('Error during data transfer to the server - status: %s');
+                    alert(interpolate(message, [data.status]));
                 }
             })
         }
@@ -225,7 +226,8 @@
                     window.location.href = "{% url 'frontend:course' course.id %}"
                 },
                 error: function (data) {
-                    alert('{% trans "Fehler bei der Datenübertragung zum Server - Status:" %}' + ' ' + data.status);
+                    const message = gettext('Error during data transfer to the server - status: %s');
+                    alert(interpolate(message, [data.status]));
                     alert(json_obj);
                 }
             })
