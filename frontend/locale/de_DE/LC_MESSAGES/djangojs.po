@@ -17,11 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Error during data transfer to the server - status: %s"
-msgstr "Fehler bei der Datenübertragung zum Server - Status: %s"
-
+#: ./templates/frontend/course/edit_structure.html/:207
 msgid "The topic %s was successfully added to the course structure."
 msgstr "Das Thema %s wurde erfolgreich zur Kursstruktur hinzugefügt."
 
-msgid "Course"
-msgstr "Kurs"
+#: ./templates/frontend/course/edit_structure.html/:228
+msgid "Error during data transfer to the server - status: %s"
+msgstr "Fehler bei der Datenübertragung zum Server - Status: %s"
