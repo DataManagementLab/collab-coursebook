@@ -55,6 +55,23 @@ function removeItem(event) {
 }
 
 /**
+ * Parses the items from the string
+ * @param obj the json object to be parsed
+ */
+function parseItems(obj) {
+    // Cannot parse an empty json object
+    if (obj === '[null]') {
+        return;
+    }
+    // Parses json, dynamically generate a nestable list
+    const placeholder = document.getElementById('dd-empty-placeholder');
+    $.each(JSON.parse(obj), function (index, item) {
+        // Adds to HTML
+        placeholder.innerHTML += buildItem(item);
+    });
+}
+
+/**
  * Cleans the nestable list from containing an empty class - 'dd-empty' which causes some bugs.
  * This bug occurs if the nestable list is initialized with an empty list and it will automatically
  * add an div with the class 'dd-empty' which represents an empty class and causes conflicts with
