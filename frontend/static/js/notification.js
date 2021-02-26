@@ -1,3 +1,5 @@
+const TIMEOUT = 5000;
+
 /**
  * Hides the notification element.
  */
@@ -14,6 +16,6 @@ function showNotification(message) {
     $('#notification').fadeIn();
     setTimeout(function () {
             $('#notification').fadeOut();
-        }, 5000
+        }, TIMEOUT
     );
 }
