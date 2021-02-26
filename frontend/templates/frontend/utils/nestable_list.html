@@ -1,0 +1,21 @@
+{% load static %}
+
+{% block imports %}
+    <!-- TODO Must be imported to use ajaxSetup and ajax, maybe store it locally? -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.js' %}"></script>
+    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/nestable.js' %}"></script>
+
+    <link href="{% static 'vendor/Nestable2/jquery.nestable.min.css' %}" type="text/css" rel="stylesheet"/>
+    <link href="{% static 'css/edit_structure.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+<!-- Nestable listing -->
+<div class="cf nestable-lists">
+    <div class="dd" id="nestable3">
+        <ol class="dd-list" id="dd-empty-placeholder">
+            <!-- Insert elements here -->
+        </ol>
+    </div>
+</div>
