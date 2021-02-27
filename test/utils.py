@@ -69,7 +69,6 @@ def setup_database():
     Course.objects.create(title='Course', description='desc', category=cat)
     Topic.objects.create(title="Topic", category=cat)
     content = create_content(model.Latex.TYPE)
-    content.attachment = model.ImageAttachment.objects.create()
     content.save()
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
