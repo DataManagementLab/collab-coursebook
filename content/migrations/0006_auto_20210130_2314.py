@@ -29,20 +29,6 @@ class Migration(migrations.Migration):
             bases=(models.Model, content.mixin.GeneratePreviewMixin),
         ),
         migrations.CreateModel(
-            name='ImageAttachment',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('source', models.TextField(verbose_name='Source')),
-                ('license', models.CharField(blank=True, max_length=200, verbose_name='License')),
-                ('image', models.ImageField(upload_to='uploads/contents/%Y/%m/%d/', verbose_name='Image')),
-            ],
-            options={
-                'verbose_name': 'Image Attachment',
-                'verbose_name_plural': 'Image Attachments',
-            },
-            bases=(models.Model, content.mixin.GeneratePreviewMixin),
-        ),
-        migrations.CreateModel(
             name='TextField',
             fields=[
                 ('content', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='base.Content', verbose_name='Content')),
