@@ -16,6 +16,7 @@ from base.models.content import Category, Topic, Content, Course
 
 import content.forms as form
 import content.models as model
+from content.attachment.models import ImageAttachment
 
 from frontend.views.validator import Validator
 
@@ -47,16 +48,14 @@ def generate_attachment(content, image_count):
     """ Generate an Image Attachment.
 
     Generates an image attachment with the given number of images which can be used for testing.
-
+    :param content: The content to which the images get attached
+    :type content: Content
     :param image_count: The number of the images to be generated in the attachment
     :type image_count: int
-
-    :return: the generated image Attachment
-    :rtype: ImageAttachment
     """
     for i in range(image_count):
         image = generate_image_file(i)
-        model.ImageAttachment.objects.create(content=content, image=image)
+        ImageAttachment.objects.create(content=content, image=image)
 
 
 def setup_database():

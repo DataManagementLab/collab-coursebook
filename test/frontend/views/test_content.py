@@ -12,6 +12,8 @@ from django.urls import reverse
 from base.models import Content, Course
 import content.forms as form
 import content.models as model
+from content.attachment.forms import ImageAttachmentFormSet
+from content.attachment.models import ImageAttachment
 
 from frontend.forms import AddContentForm
 
@@ -37,13 +39,13 @@ class CleanAttachmentTestCase(TestCase):
         Tests that clean_attachments removes the attachments from the database.
         """
         content = Content.objects.first()
-        attachment = utils.generate_attachment(content, 2)
+        utils.generate_attachment(content, 2)
         self.assertEqual(content.ImageAttachments.count(), 2)
 
-        formset = form.ImageAttachmentFormSet(queryset=model.ImageAttachment.objects.none())
+        formset = ImageAttachmentFormSet(queryset=ImageAttachment.objects.none())
         clean_attachment(content, formset)
         self.assertEqual(content.ImageAttachments.count(), 0)
-        self.assertEqual(model.ImageAttachment.objects.count(), 0)
+        self.assertEqual(ImageAttachment.objects.count(), 0)
 
 
 class AddContentViewTestCase(MediaTestCase):
@@ -142,7 +144,7 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(model.TextField.objects.count(), 1)
         text = model.TextField.objects.first()
         self.assertEqual(text.textfield, "Lorem ipsum")
-        self.assertEqual(model.ImageAttachment.objects.count(), 2)
+        self.assertEqual(ImageAttachment.objects.count(), 2)
         content = model.Content.objects.get(pk=text.content_id)
         self.assertEqual(content.ImageAttachments.count(), 2)
         for image_attachment in content.ImageAttachments.all():
@@ -184,14 +186,14 @@ class DeleteContentViewTestCase(MediaTestCase):
         model.TextField.objects.create(textfield='Lorem Ipsum', content=content)
         self.assertEqual(Content.objects.count(), 2)
         self.assertEqual(model.TextField.objects.count(), 1)
-        self.assertEqual(model.ImageAttachment.objects.count(), 2)
+        self.assertEqual(ImageAttachment.objects.count(), 2)
         path = reverse('frontend:content-delete', kwargs={
             'course_id': 1, 'topic_id': 1, 'pk': 2
         })
         self.client.post(path)
         self.assertEqual(Content.objects.count(), 1)
         self.assertEqual(model.TextField.objects.count(), 0)
-        self.assertEqual(model.ImageAttachment.objects.count(), 0)
+        self.assertEqual(ImageAttachment.objects.count(), 0)
 
     def test_latex(self):
         """POST test case - delete latex
@@ -280,8 +282,8 @@ class EditContentViewTestCase(MediaTestCase):
         self.assertEqual(textfield.source, 'src text')
         self.assertEqual(textfield.textfield, 'Lorem ipsum')
         self.assertEqual(content.ImageAttachments.count(), 1)
-        self.assertEqual(model.ImageAttachment.objects.count(), 1)
-        image = model.ImageAttachment.objects.first().image
+        self.assertEqual(ImageAttachment.objects.count(), 1)
+        image = ImageAttachment.objects.first().image
         self.assertIn('test42', image.name)
 
     def test_context(self):
