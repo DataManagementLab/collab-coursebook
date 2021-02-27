@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'base',
     'frontend',
     'content',
+    'content.attachment',
     'export',
     'debug_toolbar',
     'reversion',  # https://github.com/etianen/django-reversion
@@ -189,7 +190,7 @@ FOOTER_INFO = {
 ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE = True
 
 # Add reversion models to admin interface:
-ADD_REVERSION_ADMIN=True
+ADD_REVERSION_ADMIN = True
 # optional settings:
-REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID=False
-REVERSION_COMPARE_IGNORE_NOT_REGISTERED=False
+REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID = False
+REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
