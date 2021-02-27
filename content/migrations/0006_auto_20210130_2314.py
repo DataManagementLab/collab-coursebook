@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             bases=(models.Model, content.mixin.GeneratePreviewMixin),
         ),
         migrations.CreateModel(
-            name='SingleImageAttachment',
+            name='ImageAttachment',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('source', models.TextField(verbose_name='Source')),
@@ -37,8 +37,8 @@ class Migration(migrations.Migration):
                 ('image', models.ImageField(upload_to='uploads/contents/%Y/%m/%d/', verbose_name='Image')),
             ],
             options={
-                'verbose_name': 'Single Image Attachment',
-                'verbose_name_plural': 'Single Attachments',
+                'verbose_name': 'Image Attachment',
+                'verbose_name_plural': 'Image Attachments',
             },
             bases=(models.Model, content.mixin.GeneratePreviewMixin),
         ),
@@ -63,17 +63,5 @@ class Migration(migrations.Migration):
             model_name='pdfcontent',
             name='pdf',
             field=models.FileField(blank=True, upload_to='uploads/contents/%Y/%m/%d/', validators=[content.validator.Validator.validate_pdf], verbose_name='PDF'),
-        ),
-        migrations.CreateModel(
-            name='ImageAttachment',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('images', models.ManyToManyField(blank=True, related_name='images', to='content.SingleImageAttachment', verbose_name='Images')),
-            ],
-            options={
-                'verbose_name': 'Image Attachment',
-                'verbose_name_plural': 'Image Attachments',
-            },
-            bases=(models.Model, content.mixin.GeneratePreviewMixin),
         ),
     ]

@@ -12,11 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='content',
-            name='attachment',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='content.ImageAttachment', verbose_name='Attachment'),
-        ),
         migrations.AlterField(
             model_name='rating',
             name='user',
