@@ -37,10 +37,10 @@
             <!-- Topic combobox -->
             {% bootstrap_form topics %}
             <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary">
-                {% fa5_icon 'expand' %} {% trans 'Expand All' %}
+                {% fa5_icon 'expand' %} {% trans 'Expand Structure' %}
             </button>
             <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary">
-                {% fa5_icon 'compress' %} {% trans 'Collapse All' %}
+                {% fa5_icon 'compress' %} {% trans 'Collapse Structure' %}
             </button>
             <button onclick="addTopic()" class="btn btn-primary">
                 {% fa5_icon 'plus' 'fas' %} {% trans 'Add Topic' %}

@@ -329,12 +329,12 @@ msgid "Add Topic to Structure"
 msgstr "Thema zur Kursstruktur hinzufügen"
 
 #: .\templates\frontend\course\edit_structure.html:41
-msgid "Expand All"
-msgstr "Alle aufklappen"
+msgid "Expand Structure"
+msgstr "Struktur aufklappen"
 
 #: .\templates\frontend\course\edit_structure.html:44
-msgid "Collapse All"
-msgstr "Alle zuklappen"
+msgid "Collapse Structure"
+msgstr "Struktur zuklappen"
 
 #: .\templates\frontend\course\edit_structure.html:47
 msgid "Add Topic"
