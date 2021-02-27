@@ -82,7 +82,7 @@ class JsonHandlerTestCase(MediaTestCase):
         json_data2 = [{'value': 'Topic1 (Category)', 'id': 2},
                       {'value': 'Topic2 (Category)', 'id': 3,
                        'children': [{'value': 'Topic4 (Category)', 'id': 5}]},  # new entry for a new child topic
-                      {'value': 'Topic4 (Category)', 'id': 4},  # entry update for a former child topic
+                      {'value': 'Topic3 (Category)', 'id': 4},  # entry update for a former child topic
                       {'value': 'Topic5 (Category)', 'id': 6}]  # new entry for a new topic
         JsonHandler.json_to_topics_structure(self.course1, json_data2)
         # the new structure should subject to the new json data
