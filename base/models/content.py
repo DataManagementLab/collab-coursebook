@@ -350,8 +350,6 @@ class Content(models.Model):
     :type Content.readonly: BooleanField
     :attr Content.public BooleanField: Describes the content visibility
     :type Content.public: BooleanField
-    :attr Content.attachment: Describes the attachment of the content
-    :type Content.attachment: OneToOneField - ImageAttachment
     :attr Content.creation_date: Describes when the content was created
     :type Content.creation_date: DateTimeField
     :attr Content.preview: The preview image of the content
