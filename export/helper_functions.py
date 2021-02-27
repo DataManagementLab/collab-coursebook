@@ -155,11 +155,11 @@ class Latex:
 
             # If there exists an attachment, replace all placeholders in the tex file with
             # image path
-            if content.attachment is not None and content.attachment.images.count() > 0:
-                pictures = content.attachment.images.all()
+            if content.ImageAttachments.count() > 0:
+                attachments = content.ImageAttachments.all()
 
-                for idx, picture in enumerate(pictures):
-                    path = ret_path(picture.image.url)
+                for idx, attachment in enumerate(attachments):
+                    path = ret_path(attachment.image.url)
                     rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
                                           rf"\\includegraphics\1{{{path}}}",
                                           rendered_tpl)

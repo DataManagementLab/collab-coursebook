@@ -386,12 +386,6 @@ class Content(models.Model):
                                  help_text=_("May this content be displayed in courses "
                                              "that don't require registration?"),
                                  default=False)
-
-    attachment = models.OneToOneField('content.ImageAttachment',
-                                      verbose_name=_("Attachment"),
-                                      on_delete=models.CASCADE,
-                                      blank=True,
-                                      null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
                                          default=timezone.now,
                                          blank=True)
@@ -581,4 +575,4 @@ reversion.register(Course,
 
 reversion.register(Content,
                    fields=['description', 'language',
-                           'tags', 'readonly', 'public', 'attachment'])
+                           'tags', 'readonly', 'public'])

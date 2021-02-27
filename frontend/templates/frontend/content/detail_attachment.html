@@ -2,17 +2,17 @@
 {% load static %}
 {% load i18n %}
 
-{% if content.attachment.images.count > 0 %}
+{% if content.ImageAttachments.count > 0 %}
     <br>
     <h4>
         {% trans "Attachments" %}
     </h4>
     <div class="gallery-grid">
-        {% for picture in attachment.images.all %}
+        {% for attachment in content.ImageAttachments.all %}
             <figure class="gallery-frame">
                 <a target="_blank"
-                   href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id picture.id %}">
-                    <img class="gallery-img" src="{{ picture.image.url }}" alt="{{ content.description }}">
+                   href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id %}">
+                    <img class="gallery-img" src="{{ attachment.image.url }}" alt="{{ content.description }}">
                 </a>
             </figure>
         {% endfor %}

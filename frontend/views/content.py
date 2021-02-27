@@ -16,9 +16,9 @@ from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 
-from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
+from content.forms import CONTENT_TYPE_FORMS, ImageAttachmentFormSet
 from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
-from content.models import SingleImageAttachment, ImageAttachment
+from content.models import ImageAttachment
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
@@ -26,22 +26,21 @@ from frontend.views.history import Reversion
 from frontend.views.validator import Validator
 
 
-def clean_attachment(attachment_object, image_formset):
+def clean_attachment(content, image_formset):
     """Clean attachment
 
     Cleans the attachment from the database if the attachments
     were removed from the form.
 
-    :param attachment_object: The attachment object
-    :type attachment_object: ImageAttachment
+    :param content: The content object
+    :type content: Content
     :param image_formset: The image form set
     :type image_formset: BaseModelFormSet
     """
-    clean = attachment_object.images.count() - image_formset.total_form_count()
+    clean = content.ImageAttachments.count() - image_formset.total_form_count()
     if clean > 0:
-        remove_source = attachment_object.images.order_by('id').reverse()[:clean]
+        remove_source = content.ImageAttachments.order_by('id').reverse()[:clean]
         for remove_object in remove_source:
-            SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
             remove_object.delete()
 
 
@@ -143,15 +142,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
 
-        # Retrieves attachment_form
-        context['attachment_form'] = AddContentFormAttachedImage
-
         # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
         # Setup formset
-        formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
+        formset = ImageAttachmentFormSet(queryset=ImageAttachment.objects.none())
         context['item_forms'] = formset
 
         return context
@@ -204,14 +200,11 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
                 # Reads input from all forms
-                attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
-                image_formset = SingleImageFormSet(request.POST, request.FILES)
+                image_formset = ImageAttachmentFormSet(request.POST, request.FILES)
 
                 # Validates attachments
-                redirect = Validator.validate_attachment(self,
-                                                         attachment_form,
-                                                         image_formset,
-                                                         content)
+                redirect = Validator.validate_attachment(content,
+                                                         image_formset)
                 if redirect is not None:
                     return redirect
 
@@ -350,18 +343,14 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         if content_type in IMAGE_ATTACHMENT_TYPES:
 
-            # Retrieves attachment_form
-            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
-            context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
-
             # Identifies the pk's of attached images
             pk_set = []
-            for image in self.get_object().attachment.images.all():
+            for image in self.get_object().ImageAttachments.all():
                 pk_set.append(image.pk)
 
             # Setups the formset with attached images
-            formset = SingleImageFormSet(
-                queryset=SingleImageAttachment.objects.filter(pk__in=pk_set))
+            formset = ImageAttachmentFormSet(
+                queryset=ImageAttachment.objects.filter(pk__in=pk_set))
             context['item_forms'] = formset
 
         return context
@@ -409,25 +398,16 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
 
-                    # Retrieves current state of attachment form and formset
-                    attachment_object = ImageAttachment.objects.get(
-                        pk=self.get_object().attachment.pk)
-                    attachment_form = AddContentFormAttachedImage(
-                        instance=attachment_object,
-                        data=request.POST,
-                        files=request.FILES)
-                    image_formset = SingleImageFormSet(
+                    image_formset = ImageAttachmentFormSet(
                         data=request.POST,
                         files=request.FILES)
 
                     # Removes images from database
-                    clean_attachment(attachment_object, image_formset)
+                    clean_attachment(content, image_formset)
 
                     # Validates attachments
-                    redirect = Validator.validate_attachment(self,
-                                                             attachment_form,
-                                                             image_formset,
-                                                             content)
+                    redirect = Validator.validate_attachment(content,
+                                                             image_formset)
                     if redirect is not None:
                         return redirect
 
@@ -587,7 +567,6 @@ class ContentView(DetailView):
 
         context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
                                                       content=content).count() > 0
-        context['attachment'] = content.attachment
 
         return context
 
@@ -604,10 +583,10 @@ class AttachedImageView(DetailView):
     :attr AttachedImageView.context_object_name: The name of the context variable
     :type AttachedImageView.context_object_name: str
     """
-    model = SingleImageAttachment
+    model = ImageAttachment
     template_name = "content/view/AttachedImage.html"
 
-    context_object_name = 'SingleImageAttachment'
+    context_object_name = 'ImageAttachment'
 
     def get_context_data(self, **kwargs):
         """Context data
@@ -631,9 +610,6 @@ class AttachedImageView(DetailView):
 
         content = Content.objects.get(pk=self.kwargs['content_id'])
         context['content'] = content
-
-        attachment = ImageAttachment.objects.get(pk=self.kwargs['imageattachment_id'])
-        context['attachment'] = attachment
 
         context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
         context['translate_form'] = TranslateForm()
@@ -719,22 +695,6 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
 
         # Sends the success message
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
-
-        if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
-
-            # Retrieves the attachment
-            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
-
-            # Removes the images in the attachment from DB
-            for remove_object in attachment_object.images.all():
-                SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
-                remove_object.delete()
-
-            # Retrieves the success url, then delete the corresponding attachment
-            success_url = super().delete(self, request, *args, **kwargs)
-            ImageAttachment.objects.filter(pk=attachment_object.pk).delete()
-            attachment_object.delete()
-            return success_url
 
         return super().delete(self, request, *args, **kwargs)
 

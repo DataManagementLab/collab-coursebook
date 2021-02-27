@@ -21,25 +21,7 @@ from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
 
-class BaseModel(models.Model, GeneratePreviewMixin):
-    """Base model
-
-    This abstract class forms a basic skeleton for the models from which content
-    types can be created.
-    """
-
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.abstract: Describes whether this model is an abstract model (class)
-        :type Meta.abstract: bool
-        """
-        abstract = True
-
-
-class BaseContentModel(BaseModel):
+class BaseContentModel(models.Model, GeneratePreviewMixin):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to the content.
@@ -64,7 +46,7 @@ class BaseContentModel(BaseModel):
         abstract = True
 
 
-class BasePDFModel(BaseModel):
+class BasePDFModel(models.Model):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to PDF.
@@ -108,7 +90,7 @@ class BasePDFModel(BaseModel):
         return os.path.join(preview_folder, base_filename)
 
 
-class BaseSourceModel(BaseModel):
+class BaseSourceModel(models.Model):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to source.
@@ -257,48 +239,6 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         return f"{self.content}: {self.pdf}"
 
 
-class SingleImageAttachment(BaseSourceModel):
-    """Single image attachment
-
-    This model represents a single image.
-
-    :attr SingleImageAttachment.TYPE: Describes the content type of this model
-    :type SingleImageAttachment.TYPE: str
-    :attr SingleImageAttachment.DESC: Describes the name of this model
-    :type SingleImageAttachment.DESC: __proxy__
-    :attr SingleImageAttachment.image: The image file of this model
-    :type SingleImageAttachment.image: ImageField
-    """
-    TYPE = "SingleImageAttachment"
-    DESC = _("Single Image Attachment")
-
-    image = models.ImageField(verbose_name=_("Image"),
-                              upload_to='uploads/contents/%Y/%m/%d/')
-
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.verbose_name: A human-readable name for the object in singular
-        :type Meta.verbose_name: __proxy__
-        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
-        :type Meta.verbose_name_plural: __proxy__
-        """
-        verbose_name = _("Single Image Attachment")
-        verbose_name_plural = _("Single Image Attachments")
-
-    def __str__(self):
-        """String representation
-
-        Returns the string representation of this object.
-
-        :return: the string representation of this object
-        :rtype: str
-        """
-        return f"{self.image}"
-
-
 class TextField(BaseContentModel):
     """Text field
 
@@ -398,25 +338,28 @@ class YTVideoContent(BaseContentModel):
         return f"{self.url}"
 
 
-class ImageAttachment(BaseModel):
-    """Image attachment
+class ImageAttachment(BaseSourceModel):
+    """image attachment
 
-    This model represents the image attachment of a content.
+    This model represents am imageAttachment.
 
-    :attr ImageAttachment.TYPE: Describes the content type of this model
+    :attr ImageAttachment.TYPE: Describes the type of this model
     :type ImageAttachment.TYPE: str
     :attr ImageAttachment.DESC: Describes the name of this model
     :type ImageAttachment.DESC: __proxy__
-    :attr ImageAttachment.images: A reference to the single images
-    :type ImageAttachment.images: ManyToManyField - SingleImageAttachment
+    :attr ImageAttachment.image: The image file of this model
+    :type ImageAttachment.image: ImageField
+    :attr ImageAttachment.content: The content of this model
+    :type ImageAttachment.image: ForeignKey
     """
     TYPE = "ImageAttachment"
     DESC = _("Image Attachment")
 
-    images = models.ManyToManyField(SingleImageAttachment,
-                                    verbose_name=_("Images"),
-                                    related_name='images',
-                                    blank=True)
+    image = models.ImageField(verbose_name=_("Image"),
+                              upload_to='uploads/contents/%Y/%m/%d/')
+    content = models.ForeignKey(Content, verbose_name=_("Content"),
+                                related_name='ImageAttachments',
+                                on_delete=models.CASCADE)
 
     class Meta:
         """Meta options
@@ -439,7 +382,7 @@ class ImageAttachment(BaseModel):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.pk}"
+        return f"{self.image}"
 
 
 # dict: Contains all available content types.
@@ -454,8 +397,7 @@ CONTENT_TYPES = {
 # Set: Content types which are not directly accessible via the topics,
 # but embedded into other content types
 EMBEDDED_CONTENT_TYPES = {
-    ImageAttachment.TYPE,
-    SingleImageAttachment.TYPE
+    ImageAttachment.TYPE
 }
 
 # Set: Content types which allow image attachments
@@ -481,8 +423,5 @@ reversion.register(PDFContent,
 reversion.register(YTVideoContent,
                    fields=['content', 'url'],
                    follow=['content'])
-reversion.register(SingleImageAttachment,
-                   fields=['image', 'source', 'license'])
 reversion.register(ImageAttachment,
-                   fields=['images'],
-                   follow=['images'])
+                   fields=['image', 'source', 'license'])

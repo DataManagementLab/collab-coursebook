@@ -200,8 +200,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         diff += diff2
         has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
 
-        if content.attachment is not None:
-            attachment = content.attachment
+        for attachment in content.ImageAttachments.all():
             versions = Version.objects.get_for_object(attachment)
             obj_version1 = versions.get(revision=version1.revision)
             obj_version2 = versions.get(revision=version2.revision)
@@ -388,7 +387,7 @@ class LatexHistoryCompareView(BaseContentHistoryCompareView):
     """
     model = Latex
     compare_fields = ['description', 'language', 'tags', 'readonly',
-                      'public', 'images', 'textfield', 'source']
+                      'public', 'image', 'textfield', 'source', 'license']
 
     def __init__(self):
         """Initializer

@@ -69,7 +69,7 @@ urlpatterns = [
             re_path(r'add/(?P<type>' + '|'.join(list(CONTENT_TYPES.keys())) + ')/$',
                     views.content.AddContentView.as_view(), name='content-add'),
             path('<int:content_id>/', include([
-                path('attachment/<int:imageattachment_id>/<int:pk>',
+                path('attachment/<int:pk>',
                      views.content.AttachedImageView.as_view(),
                      name='attachment'),
                 path('rate/<int:pk>/',

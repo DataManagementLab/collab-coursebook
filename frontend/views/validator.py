@@ -32,41 +32,22 @@ class Validator:
         latex_content.save()
 
     @staticmethod
-    def validate_attachment(view, attachment_form, image_formset, content_obj):
+    def validate_attachment(content, image_formset):
         """Validate attachment
 
         Validates the image attachments and stores them into the database.
 
         :param view: The view that wants to validate the data
         :type view: View
-        :param attachment_form: The attachment form
-        :type attachment_form: ModelForm
         :param image_formset: The image form set
         :type image_formset: BaseModelFormSet
-        :param content_obj: The content
-        :type content_obj: Content
 
         :return: the redirection to the invalid page if the image form set or
         the attachment form is not valid
         :rtype: None or HttpResponseRedirect
         """
-        if attachment_form.is_valid():
-            # Evaluates the attachment form
-            content_attachment = attachment_form.save(commit=False)
-            content_attachment.save()
-            content_obj.attachment = content_attachment
-            images = []
-            # Evaluates all forms of the formset and append to image set
-            if image_formset.is_valid():
-                for form in image_formset:
-                    used_form = form.save(commit=False)
-                    used_form.save()
-                    images.append(used_form)
-            else:
-                return view.form_invalid(image_formset)
-
-            # Stores the attached images in DB
-            content_obj.attachment.images.set(images)
-            return None
-
-        return view.form_invalid(attachment_form)
+        if image_formset.is_valid():
+            for form in image_formset:
+                used_form = form.save(commit=False)
+                used_form.content = content
+                used_form.save()

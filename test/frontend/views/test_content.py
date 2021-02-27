@@ -39,10 +39,10 @@ class CleanAttachmentTestCase(TestCase):
         attachment = utils.generate_attachment(2)
         self.assertEqual(attachment.images.count(), 2)
 
-        formset = form.SingleImageFormSet(queryset=model.SingleImageAttachment.objects.none())
+        formset = form.ImageAttachmentFormSet(queryset=model.ImageAttachment.objects.none())
         clean_attachment(attachment, formset)
         self.assertEqual(attachment.images.count(), 0)
-        self.assertEqual(model.SingleImageAttachment.objects.count(), 0)
+        self.assertEqual(model.ImageAttachment.objects.count(), 0)
 
 
 class AddContentViewTestCase(MediaTestCase):
@@ -179,7 +179,7 @@ class DeleteContentViewTestCase(MediaTestCase):
         after sending a POST request to content-delete.
         """
         content = utils.create_content(model.TextField.TYPE)
-        content.attachment = utils.generate_attachment(2)
+        utils.generate_attachment(content, 2)
         content.save()
         model.TextField.objects.create(textfield='Lorem Ipsum', content=content)
         self.assertEqual(Content.objects.count(), 2)
@@ -252,7 +252,7 @@ class EditContentViewTestCase(MediaTestCase):
         content page.
         """
         content = utils.create_content(model.TextField.TYPE)
-        content.attachment = utils.generate_attachment(2)
+        utils.generate_attachment(content, 2)
         content.save()
         model.TextField.objects.create(textfield='Text', source='src', content=content)
 

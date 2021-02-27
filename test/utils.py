@@ -43,7 +43,7 @@ def generate_image_file(image_file_number):
     return ImageFile(file)
 
 
-def generate_attachment(image_count):
+def generate_attachment(content, image_count):
     """ Generate an Image Attachment.
 
     Generates an image attachment with the given number of images which can be used for testing.
@@ -54,13 +54,9 @@ def generate_attachment(image_count):
     :return: the generated image Attachment
     :rtype: ImageAttachment
     """
-    attachment = model.ImageAttachment.objects.create()
     for i in range(image_count):
         image = generate_image_file(i)
-        singe_image = model.SingleImageAttachment.objects.create(image=image)
-        attachment.images.add(singe_image)
-    attachment.save()
-    return attachment
+        model.ImageAttachment.objects.create(content=content, image=image)
 
 
 def setup_database():
