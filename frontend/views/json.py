@@ -36,7 +36,7 @@ class JsonHandler:
                     if not Topic.objects.filter(id=sub_topic['id']).exists():
                         raise ValidationError(
                             f'The sub topic with the id {sub_topic["id"]} does not exists')
-            return None
+        return None
 
     @staticmethod
     def json_to_topics_structure(course, json_data):
