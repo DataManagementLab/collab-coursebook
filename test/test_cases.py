@@ -34,3 +34,12 @@ class MediaTestCase(TestCase):
         """
         shutil.rmtree(utils.MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
+
+    def assertContainsHtml(self, response, *args):
+        for html in args:
+            try:
+                self.assertContains(response, html, html=True)
+            except AssertionError as e:
+                print(e)
+                raise
+

@@ -262,6 +262,7 @@ class EditCourseStructureView(DetailView, FormMixin):
         :return: the json data if there request is an ajax, else an bad http response
         :rtype:  JsonResponse
         """
+        self.object = self.get_object()
         form_create_topic = self.get_form()
         if form_create_topic.is_valid():
             # AJAX request

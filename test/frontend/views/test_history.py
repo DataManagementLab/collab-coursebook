@@ -9,7 +9,7 @@ from test.test_cases import MediaTestCase
 from django.test import TestCase
 from django.urls import reverse
 
-from base.models import Content, Course
+from base.models import Content, Course, CourseStructureEntry, Topic, Category
 import content.forms as form
 import content.models as model
 
@@ -17,6 +17,17 @@ from frontend.forms import AddContentForm
 
 from frontend.views.content import clean_attachment
 
+class BaseHistoryCompareViewTestCase(MediaTestCase):
+
+
+    def test_initial_state(self):
+        self.assertTrue(is_registered(Course))
+        self.assertTrue(is_registered(Content))
+        self.assertTrue(is_registered(model.TextField))
+        self.assertTrue(is_registered(model.Latex))
+        self.assertTrue(is_registered(model.ImageContent))
+        self.assertTrue(is_registered(model.PDFContent))
+        self.assertTrue(is_registered(model.YTVideoContent))
 
 class ContentHistoryCompareViewTestCase(MediaTestCase):
     """ history compare test cases
@@ -71,22 +82,6 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # print(self.version_ids1)
         # print(self.version_ids2)
 
-    def assertContainsHtml(self, response, *args):
-        for html in args:
-            try:
-                self.assertContains(response, html, html=True)
-            except AssertionError as e:
-                print(e)
-                raise
-
-    def test_initial_state(self):
-        self.assertTrue(is_registered(Course))
-        self.assertTrue(is_registered(Content))
-        self.assertTrue(is_registered(model.TextField))
-        self.assertTrue(is_registered(model.Latex))
-        self.assertTrue(is_registered(model.ImageContent))
-        self.assertTrue(is_registered(model.PDFContent))
-        self.assertTrue(is_registered(model.YTVideoContent))
 
     def test_version_create_textfield(self):
         """ test cases for
@@ -94,7 +89,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
 
         """
 
-        # after this change the number of versions of text1 should be 2
+        # after set up the number of versions of text1 should be 2
         self.assertEqual(Version.objects.get_for_object(self.text1).count(), 2)
         # the revision ids for text1 should be 1 and 2
         self.assertEqual(list(self.revision_ids1), [2, 1])
@@ -178,7 +173,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
 
         """
 
-        # after this change the number of versions of latex1 should be 2
+        # after set up the number of versions of latex1 should be 2
         self.assertEqual(Version.objects.get_for_object(self.latex1).count(), 2)
         # the revision ids for latex1 should be 1 and 2
         self.assertEqual(list(self.revision_ids2), [4, 3])
@@ -232,7 +227,89 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         self.assertIsNotNone(queryset3)
 
 
-    def test_revert_and_compare_course(self):
+class CourseHistoryCompareViewTestCase(MediaTestCase):
+
+    # TODO test review
+    def setUp(self):
+        super().setUp()
+
+        self.cat = Category.objects.create(title="Category~*")
+        # set up a course item to test
+        with reversion.create_revision():
+            self.course1 = Course.objects.create(title='Course Test', description='desc', category=self.cat)
+
+            self.topic1 = Topic.objects.create(title="Topic1", category=self.cat)
+            self.topic2 = Topic.objects.create(title="Topic2", category=self.cat)
+            self.topic3 = Topic.objects.create(title="Topic3", category=self.cat)
+
+            course_struc_entry_1 = CourseStructureEntry(course=self.course1, index=1, topic=self.topic1)
+            course_struc_entry_2 = CourseStructureEntry(course=self.course1, index=2, topic=self.topic2)
+            course_struc_entry_3 = CourseStructureEntry(course=self.course1, index="2/1", topic=self.topic3)
+            course_struc_entry_1.save(), course_struc_entry_2.save(), course_struc_entry_3.save()
+            set_comment('initial version')
+
+        # create a new version and make 1 change to course1
+        with reversion.create_revision():
+            self.course1.description = 'test test'
+            self.course1.save()
+            set_comment('change desc')
+
+        self.queryset = Version.objects.get_for_object(self.course1)
+        self.revision_ids1 = self.queryset.values_list("revision_id", flat=True)
+        self.version_ids1 = self.queryset.values_list("pk", flat=True)
+
+        self.cat_id = self.cat.pk
+        # print(list(self.version_ids1))
+
+    def test_version_create_course(self):
+        """ test cases for
+
+
+        """
+
+        # after set up the number of versions of course1 should be 2
+        self.assertEqual(Version.objects.get_for_object(self.course1).count(), 2)
+        # the revision ids for text1 should be 1 and 2
+        self.assertEqual(list(self.revision_ids1), [2, 1])
+        self.assertEqual(self.course1.description, 'test test')
+
+    def test_revert_course(self):
         with reversion.create_revision():
             course1 = utils.create_content(Course)
             set_comment('initial version')
+
+        # performing the revert with post
+        path = reverse('frontend:course-history', kwargs={
+            'pk': self.course1.pk
+        })
+
+        data = {'rev_pk': '1'}
+        self.client.post(path, data)
+
+        # check the state of text1 after the revert
+        self.course1.refresh_from_db()
+
+        self.queryset = Version.objects.get_for_object(self.course1)
+        self.version_ids1 = self.queryset.values_list("pk", flat=True)
+        # the number of versions should be 3 now
+        self.assertEqual(self.version_ids1.count(), 3)
+        # the textfield should be identical to the original
+        self.assertEqual(self.course1.description, 'desc')
+        # the category should not be changed after revert
+        self.assertEqual(self.course1.category_id, self.cat_id)
+
+    def test_compare_course(self):
+        # performing compare
+        path = reverse('frontend:course-history', kwargs={
+            'pk': self.course1.pk
+        })
+        data = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[1]}
+        response = self.client.get(path, data)
+
+        # check if the differences will be correctly collected
+        self.assertContainsHtml(
+            response,
+            "<del>- desc</del>",  # change for description
+            "<ins>+ test test</ins>",
+            "<blockquote>change desc</blockquote>",  # change log
+        )
