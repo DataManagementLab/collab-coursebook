@@ -28,7 +28,7 @@ class AddCourseForm(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: list[str]
+        :type Meta.fields: str or list[str]
         """
         model = Course
         fields = ['title', 'description', 'image', 'owners',
@@ -151,7 +151,7 @@ class CreateTopicForm(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: List(str)
+        :type Meta.fields: str or list[str]
         """
         model = Topic
         fields = ['title', 'category']

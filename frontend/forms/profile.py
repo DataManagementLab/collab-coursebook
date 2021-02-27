@@ -24,7 +24,7 @@ class AddProfile(forms.ModelForm):
         :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: list[str]
+        :type Meta.fields: str or list[str]
         :attr Meta.widgets: Customization of the model form
         :type Meta.widgets: dict[str, Widget]
         """

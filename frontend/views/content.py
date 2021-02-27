@@ -16,9 +16,10 @@ from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 
-from content.forms import CONTENT_TYPE_FORMS, ImageAttachmentFormSet
-from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
-from content.models import ImageAttachment
+from content.attachment.forms import ImageAttachmentFormSet
+from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
+from content.forms import CONTENT_TYPE_FORMS
+from content.models import CONTENT_TYPES
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
