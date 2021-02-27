@@ -17,7 +17,8 @@
 {% endblock %}
 
 {% block title %}
-    {% trans 'Edit' %} - {{ course.title }}
+    {% trans 'Edit Course Structure' %}
+
 {% endblock %}
 
 {% block content %}
@@ -25,7 +26,7 @@
 
     <div id="title" style="text-align: center">
         <h2 style="font-weight: bold">
-            {% trans 'Edit Course Structure' %}
+            {% trans 'Edit Course Structure' %} - {{ course.title }}
         </h2>
     </div>
 
