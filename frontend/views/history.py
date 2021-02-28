@@ -22,6 +22,7 @@ from reversion.models import Version
 from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Course, Content, Topic
+from content.attachment.models import ImageAttachment
 
 from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex, CONTENT_TYPES
 from export.views import generate_pdf_response
@@ -134,8 +135,8 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         # Remove sequence of ?+ or ?- at the end of the result of the compare which is not
         # relevant for the comparison
         for field in diff:
-            field['diff'] = SafeString(re.sub(r'</ins>\n\?\s*\+*\n*', '</ins>\n', field['diff']))
-            field['diff'] = SafeString(re.sub(r'</del>\n\?\s*-*\n*', '</del>\n', field['diff']))
+            field['diff'] = SafeString(re.sub(r'</ins>\n\?[\s^+]*', '</ins>\n', field['diff']))
+            field['diff'] = SafeString(re.sub(r'</del>\n\?[\s^-]*', '</del>\n', field['diff']))
         return diff, has_unfollowed_fields
 
 
@@ -250,6 +251,8 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
                         pdf = generate_pdf_response(request.user.profile,
                                                     deserialized_obj.object.content)
                         deserialized_obj.object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+                    elif isinstance(deserialized_obj.object, ImageAttachment):
+                        deserialized_obj.object.content_id = pk
                     deserialized_obj.save()
 
         content = Content.objects.get(pk=pk)
