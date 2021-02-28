@@ -10,9 +10,17 @@ from test.test_cases import MediaTestCase
 
 
 class CourseViewAndEditStructureViewTestCase(MediaTestCase):
+    """ test cases for CourseView and EditCourseStructureView
 
-    #TODO test review views\course.py
+    Defines the test cases for CourseView and EditCourseStructureView
+    """
+
+    # TODO test review views\course.py
     def setUp(self):
+        """Setup
+
+        Sets up the test database.
+        """
         super().setUp()
 
         self.user = User.objects.get(pk=1)
@@ -33,15 +41,19 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
                           {'value': 'Topic2 (Category~*)', 'id': 3,
                            'children': [{'value': 'Topic3 (Category~*)', 'id': 4}]}]
 
-    def test_course_view(self):
+    def test_ajax_and_check_course_view(self):
+        """Test CourseView post case 1
+
+        Tests CourseView post if request is ajax and check is true.
+        """
         path = reverse('frontend:course', kwargs={
             'pk': self.course1.pk})
 
         topic_list = [
-                {"value": "Topic1 (Category~*)", "id": 2},
-                {"value": "Topic2 (Category~*)", "id": 3},
-                {"value": "Topic3 (Category~*)", "id": 4}
-            ]
+            {"value": "Topic1 (Category~*)", "id": 2},
+            {"value": "Topic2 (Category~*)", "id": 3},
+            {"value": "Topic3 (Category~*)", "id": 4}
+        ]
         data = {
             'topic_list': json.dumps(topic_list)
         }
@@ -55,6 +67,10 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
         self.assertNotEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
 
     def test_bad_response_course_view(self):
+        """Test CourseView post case 2
+
+        Tests CourseView post if request is ajax and check is false.
+        """
         path = reverse('frontend:course', kwargs={
             'pk': self.course1.pk})
 
@@ -71,7 +87,11 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
         # it should be a bad response
         self.assertEqual(response.status_code, 400)
 
-    def test_invalid_form_course_view(self):
+    def test_invalid_form_not_ajax_course_view(self):
+        """Test CourseView post case 3
+
+        Tests CourseView post if form is invalid and request not ajax.
+        """
         path = reverse('frontend:course', kwargs={
             'pk': self.course1.pk})
 
@@ -86,8 +106,33 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
         response = self.client.post(path, data)
         self.assertContains(response, "form-group is-invalid")
 
+    def test_ajax_and_check_and_ids_course_view(self):
+        """Test CourseView post case 4
+
+        Tests CourseView post if request is ajax and check and ids[] is true.
+        """
+        path = reverse('frontend:course', kwargs={
+            'pk': self.course1.pk})
+
+        topic_list = [
+            {"value": "Topic1 (Category~*)", "id": 2},
+            {"value": "Topic2 (Category~*)", "id": 3},
+            {"value": "Topic3 (Category~*)", "id": 4}
+        ]
+        data = {
+            'topic_list': json.dumps(topic_list),
+            'ids[]': [1, 2, 3, 4, 5]
+        }
+        self.client.post(path, data,
+                         **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        ids = Topic.objects.all().values_list("pk", flat=True)
+        self.assertEqual(list(ids), [2, 3, 4])
+
     def test_edit_course_structure_view(self):
-        # print(list(Topic.objects.all().values_list("pk", flat=True)))
+        """Test EditCourseStructureView post case 1
+
+        Tests EditCourseStructureView post if form is valid.
+        """
         path = reverse('frontend:course-edit-structure', kwargs={
             'pk': self.course1.pk})
 
@@ -104,7 +149,10 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
         self.assertEqual(json_response['topic_id'], 5)
 
     def test_edit_course_structure_invalid_view(self):
-        # test for an invalid form
+        """Test EditCourseStructureView post case 2
+
+        Tests EditCourseStructureView post if form is invalid.
+        """
         path = reverse('frontend:course-edit-structure', kwargs={
             'pk': self.course1.pk})
         data = {'title': 'Topic5', 'category': 9}
@@ -113,10 +161,12 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
         # the form should be invalid of our view
         self.assertFalse(form_create_topic.is_valid())
         self.assertContains(response, "form-group is-invalid")
-        # print(response.status_code)
 
     def test_add_and_remove_favorite(self):
+        """Test add_remove_favourites case 1
 
+        Tests function based view add_remove_favourites when add favorite
+        """
         self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
 
         path = reverse('frontend:favourite_course', kwargs={
@@ -126,10 +176,19 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
         self.client.post(path, data)
         self.assertEqual(self.user.profile.stared_courses.all().count(), 1)
 
+    def test_remove_favorite(self):
+        """Test add_remove_favourites case 2
+
+        Tests function based view add_remove_favourites when remove favorite
+        """
+        self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
+
         path = reverse('frontend:favourite_course', kwargs={
             'pk': self.course1.pk})
         data = {'user': self.user,
                 'pk': self.course1.pk}
         self.client.post(path, data)
-        self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
+        self.assertEqual(self.user.profile.stared_courses.all().count(), 1)
 
+        self.client.post(path, data)
+        self.assertEqual(self.user.profile.stared_courses.all().count(), 0)

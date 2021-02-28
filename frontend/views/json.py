@@ -23,7 +23,7 @@ class JsonHandler:
         :param json_data: The json data containing topics and sub topics
         :type json_data: list[str, dict[str, int]]
 
-        :return: true if all topics in the json data exists
+        :return: None if all topics in the json data exists
         :rtype: None or ValidationError
         """
         # Main topics

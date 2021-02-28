@@ -355,7 +355,8 @@ class CourseView(DetailView, FormMixin):
                     JsonHandler.json_to_topics_structure(self.object, json_obj)
 
             # Clean unused topics
-            ids = request.POST.get('ids[]')
+            # TODO hier sollte getlist statt get sein, sonst nur der letzte Element wird geholt
+            ids = request.POST.getlist('ids[]')
             if ids:
                 JsonHandler.clean_topics(ids)
 
