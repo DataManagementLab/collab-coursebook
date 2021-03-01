@@ -60,7 +60,7 @@ function removeItem(event) {
  */
 function parseItems(obj) {
     // Cannot parse an empty json object
-    if (obj === '[null]') {
+    if (obj === '[]') {
         return;
     }
     // Parses json, dynamically generate a nestable list
