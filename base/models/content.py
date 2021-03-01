@@ -449,8 +449,9 @@ class Content(models.Model):
         :rtype: float
         """
         rating = Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
+        print(rating)
         if rating is not None:
-            return rating
+            return int(rating)
         return -1
 
     def get_rate_count(self):

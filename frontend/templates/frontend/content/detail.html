@@ -189,7 +189,7 @@
             </span>
         {% endif %}
     </h5>
-    <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
+    <div class="starrating risingstar d-flex justify-content-end flex-row-reverse label:hover">
         {% for i in 5|rev_range %}
             <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
                    {% if i <= content.get_rate %}class="active" {% endif %}/>
