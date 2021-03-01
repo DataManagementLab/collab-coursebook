@@ -1,10 +1,14 @@
-from django.contrib.auth.models import User
+"""Purpose of this file
+
+This file contains the test cases for /frontend/views/json.py.
+"""
+
 from django.core.exceptions import ValidationError
 
 from frontend.views.json import JsonHandler
-from test import utils
+
 from base.models import CourseStructureEntry, Topic, Course, Category
-from frontend.views import json
+
 from test.test_cases import MediaTestCase
 
 
@@ -288,7 +292,7 @@ class JsonHandlerTestCase(MediaTestCase):
         Tests the function json_to_topics_structure that the new entries will be
         added to the data base and the rest will be updated.
         """
-        topic4 = Topic.objects.create(title="Topic4", category=self.cat)
+        Topic.objects.create(title="Topic4", category=self.cat)
         json_data = [{'value': 'Topic1 (Category)', 'id': 2},
                      {'value': 'Topic2 (Category)', 'id': 3,
                       'children': [{'value': 'Topic3 (Category)', 'id': 4},
