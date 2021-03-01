@@ -11,7 +11,7 @@ from base.models import CourseStructureEntry, Topic, Course, Category
 
 from test.test_cases import MediaTestCase
 
-
+# TODO test review
 class JsonHandlerTestCase(MediaTestCase):
     """ test cases for JsonHandler
 
@@ -145,9 +145,10 @@ class JsonHandlerTestCase(MediaTestCase):
         Tests the function clean_topics if the result of it deletes many topics
         since the topics were not used in the course structure.
         """
-        Topic.objects.create(title="Topic4", category=self.cat)
-        Topic.objects.create(title="Topic5", category=self.cat)
-        Topic.objects.create(title="Topic6", category=self.cat)
+        title = 'Topic'
+        index = 4
+        for i in range(3):
+            Topic.objects.create(title=f'{title}{index}', category=self.cat)
         ids = [1, 2, 3, 4, 5, 6, 7, 8]
         JsonHandler.clean_topics(ids)
         ids = Topic.objects.all().values_list("pk", flat=True)
