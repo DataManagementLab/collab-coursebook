@@ -18,7 +18,6 @@ class JsonHandlerTestCase(MediaTestCase):
     Defines the test cases for JsonHandler
     """
 
-    # TODO test review
     def setUp(self):
         """Setup
 
@@ -34,7 +33,6 @@ class JsonHandlerTestCase(MediaTestCase):
 
         course_struc_entry_1 = CourseStructureEntry(course=self.course1, index=1, topic=self.topic1)
         course_struc_entry_2 = CourseStructureEntry(course=self.course1, index=2, topic=self.topic2)
-        # TODO: fixed the document of CourseStructureEntry.index, # -> / since we use '/' as splitter
         course_struc_entry_3 = CourseStructureEntry(course=self.course1, index="2/1", topic=self.topic3)
         course_struc_entry_1.save(), course_struc_entry_2.save(), course_struc_entry_3.save()
         # there is already one topic before this set up, so our topics start with 2
