@@ -20,6 +20,15 @@
             &nbsp;
         {% endif %}
         <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white">
+            {% if user.profile.pic %}
+                <img src="{{ user.profile.pic.url }}" class="rounded-circle"
+                    style="width: 35px; height: 35px; object-fit: cover;"
+                    alt="{% trans 'User profile picture' %}">
+                {% else %}
+                    {% fa5_icon 'user' 'far' %}
+                {% endif %}
+        </a>
+        <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white">
             {{ user.get_username }}
         </a>
 

@@ -22,6 +22,8 @@
     {% if profile.pic %}
         <img src="{{ profile.pic.url }}" class="img-thumbnail" style="width: 30%; height: 250px; object-fit: cover;"
              alt="{% trans 'User profile picture' %}">
+        {% else %}
+        {% fa5_icon 'user' 'far' %}
     {% endif %}
 
     <p>
