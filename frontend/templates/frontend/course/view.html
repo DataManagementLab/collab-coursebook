@@ -13,11 +13,12 @@
 {% endblock %}
 
 {% block imports %}
+    {# CSS #}
     <link href="{% static 'css/view_course.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
-    <!-- Course markings and actions -->
+    {# Course markings and actions #}
     <div class="float-right text-right">
         <div class="dropdown show">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
@@ -60,7 +61,7 @@
         </div>
     </div>
 
-    <!-- Course header: Title, owners, description -->
+    {# Course header: Title, owners, description #}
     <h1>
         {{ course.title }}
     </h1>
@@ -74,7 +75,7 @@
         {% endfor %}
     </h5>
 
-    <!-- Todo Add Course Image -->
+    {# TODO Add Course Image #}
 
     <p>
     <h2>
@@ -82,7 +83,7 @@
     </h2>
     {{ course.description | linebreaks }}
 
-    <!-- Table of contents -->
+    {# Table of contents #}
     <div class="row" style="margin-top: 20px;">
         <div class="col-md-4">
             <ol class="list-group" style="font-weight: bold;">
@@ -94,7 +95,7 @@
                                     {{ entry.topic.contents.count }}
                                 </span>
                             </a>
-                            <!-- Show (up to one level of) subtopics in ToC -->
+                            {# Show (up to one level of) subtopics in ToC #}
                             {% if entry.subtopics %}
                                 <ol class="list-group">
                                     {% for subtopic in entry.subtopics %}
@@ -119,14 +120,14 @@
         </div>
     </div>
 
-    <!-- Display coursebook -->
+    {# Display coursebook  #}
     {% include 'frontend/course/coursebook.html' %}
 
-    <!-- Display course contents -->
+    {# Display course contents #}
     {% for entry in structure %}
         <div id='{{ entry.topic.pk }}' style="margin-top: 30px;">
             {% with forloop.counter as outer_index %}
-                <!-- Filters, Ordering, Add contents -->
+                {# Filters, Ordering, Add contents #}
                 <div class="float-right text-right">
                     <form id="filter+sort" class="form-inline" method="post"
                           action="{% url 'frontend:course' course.id %}">
@@ -146,7 +147,7 @@
                     {% include "frontend/course/topic_contents.html" %}
                 {% endwith %}
 
-                <!-- Show subtopics -->
+                {#  Show subtopics #}
                 {% if entry.subtopics %}
                     {% for subtopic in entry.subtopics %}
                         <div id='{{ subtopic.topic.pk }}' style="margin-top: 15px;">
