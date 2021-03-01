@@ -8,6 +8,7 @@ import re
 
 from builtins import staticmethod
 
+from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.core.files.base import ContentFile
 from django.db import transaction
@@ -26,6 +27,31 @@ from content.attachment.models import ImageAttachment
 
 from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex, CONTENT_TYPES
 from export.views import generate_pdf_response
+
+
+def compare_removed_added_attachments(attachments, ins_del, index):
+    """Compare removed or added attachments
+
+    Compares newly added or removed attachments which don't have a counterpart in the other version
+    and creates a html diff
+
+    :param attachments: The newly added or removed attachments
+    :type attachments: list
+    :param ins_del: either 'ins' or 'del', indicating whether the given attachments were added or removed
+    :type ins_del: str
+    :param index: the index at which the added or removed attachments start
+    :type index: int
+    """
+    diff = []
+    for attachment in attachments:
+        field_dict = attachment.field_dict
+        for field in ImageAttachment()._meta.fields:
+            field_name = field.name
+            if field_name in field_dict and field_dict[field_name]:
+                html = SafeString(f'<pre class="highlight"><{ins_del}>{field_dict[field_name]}</{ins_del}></pre>')
+                diff.append({"field": field, "attachment": index, "diff": html})
+        index += 1
+    return diff
 
 
 class Reversion:  # pylint: disable=too-few-public-methods
@@ -201,15 +227,29 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         diff += diff2
         has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
 
-        for attachment in content.ImageAttachments.all():
-            versions = Version.objects.get_for_object(attachment)
-            obj_version1 = versions.get(revision=version1.revision)
-            obj_version2 = versions.get(revision=version2.revision)
-            diff2, has_unfollowed_fields2 = super().compare(attachment,
-                                                            obj_version1,
-                                                            obj_version2)
+        content_type = ContentType.objects.get(model='imageattachment')
+
+        # get all image attachments versions from both revisions as list
+        versions1 = version1.revision.version_set.filter(content_type=content_type).order_by('object_id')[::1]
+        versions2 = version2.revision.version_set.filter(content_type=content_type).order_by('object_id')[::1]
+        index = 1
+        for attachment_version1, attachment_version2 in zip(versions1, versions2):
+            diff2, has_unfollowed_fields2 = super().compare(ImageAttachment(),
+                                                            attachment_version1,
+                                                            attachment_version2)
+            for field in diff2:
+                field['attachment'] = index
+            index += 1
             diff += diff2
             has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+
+        added_attachments = len(versions2) - len(versions1)
+        if added_attachments > 0:
+            added_attachments = versions2[-added_attachments:]
+            diff += compare_removed_added_attachments(added_attachments, 'ins', index)
+        elif added_attachments < 0:
+            removed_attachments = versions1[added_attachments:]
+            diff += compare_removed_added_attachments(removed_attachments, 'del', index)
 
         return diff, has_unfollowed_fields
 
@@ -230,11 +270,18 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         """
         topic_id = self.kwargs['topic_id']
         pk = self.kwargs['pk']  # pylint: disable=invalid-name
-        rev_pk = request.POST.get('rev_pk')
+        ver_pk = request.POST.get('ver_pk')
         with transaction.atomic(), reversion.create_revision():
-            revision_id = Version.objects.get(pk=rev_pk).revision_id
+            versions = Version.objects.get(pk=ver_pk).revision.version_set.all()
 
-            for version in Version.objects.filter(revision_id=revision_id):
+            # revert added attachments
+            content = Content.objects.get(pk=pk)
+            content_type = ContentType.objects.get(model='imageattachment')
+            for attachment in content.ImageAttachments.all():
+                if not versions.filter(content_type=content_type, object_id=attachment.pk).exists():
+                    attachment.delete()
+
+            for version in versions:
                 date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
                 reversion.set_comment(_("<== Version: {}".format(date_time)))
 
@@ -255,10 +302,10 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
                         deserialized_obj.object.content_id = pk
                     deserialized_obj.save()
 
-        content = Content.objects.get(pk=pk)
-        content.preview = CONTENT_TYPES.get(content.type) \
-            .objects.get(pk=content.pk).generate_preview()
-        content.save()
+            content = Content.objects.get(pk=pk)
+            content.preview = CONTENT_TYPES.get(content.type) \
+                .objects.get(pk=content.pk).generate_preview()
+            content.save()
 
         return HttpResponseRedirect(reverse_lazy(
             'frontend:content',
@@ -312,9 +359,9 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
         :rtype: HttpResponseRedirect
         """
         pk = self.kwargs['pk']  # pylint: disable=invalid-name
-        rev_pk = request.POST.get('rev_pk')
+        ver_pk = request.POST.get('ver_pk')
         with transaction.atomic(), reversion.create_revision():
-            version = Version.objects.get(id=rev_pk)
+            version = Version.objects.get(id=ver_pk)
 
             date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
             reversion.set_comment(_("<== Version: {}".format(date_time)))
@@ -436,7 +483,7 @@ class TextfieldHistoryCompareView(BaseContentHistoryCompareView):
     """
     model = TextField
     compare_fields = ['description', 'language', 'tags', 'readonly',
-                      'public', 'images', 'textfield', 'source']
+                      'public', 'image', 'textfield', 'source', 'license']
 
     def __init__(self):
         super().__init__('content', 'textfield-history')

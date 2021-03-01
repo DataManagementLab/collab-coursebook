@@ -574,4 +574,5 @@ reversion.register(Course,
 
 reversion.register(Content,
                    fields=['description', 'language',
-                           'tags', 'readonly', 'public'])
+                           'tags', 'readonly', 'public'],
+                   follow=['ImageAttachments'])
