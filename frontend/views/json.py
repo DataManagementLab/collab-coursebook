@@ -141,7 +141,8 @@ class JsonHandler:
 
         # Appends the first topic: 'if last_main_topic is not None' does not get
         # called if there is only one main topic
-        json_obj.append(last_main_topic)
+        if last_main_topic is not None:
+            json_obj.append(last_main_topic)
         return json_obj
 
     @staticmethod

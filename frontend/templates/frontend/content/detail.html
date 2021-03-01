@@ -22,6 +22,11 @@
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="
+
+
+
+
+
                         {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">
                     {% fa5_icon 'eye' 'far' %} {% trans "Reading Mode" %}
                 </a>
@@ -48,7 +53,7 @@
                         </a>
                     {% endif %}
 
-                    <!-- Who are allowed to view the history?  -->
+                    {# Who are allowed to view the history? #}
                     {% if content.type == 'Textfield' %}
                         <a class="dropdown-item"
                            href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
@@ -92,16 +97,7 @@
         </div>
     </div>
 
-    <a href="
-
-
-
-
-
-
-
-
-            {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
+    <a href="{% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
        class="">
         {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
     </a>
@@ -130,7 +126,7 @@
         </span>
     </h5>
 
-    <!-- Delete inline, for 'Delete Confirmation' bootstrap modal-->
+    {# Delete inline, for 'Delete Confirmation' bootstrap modal #}
     <div class="modal fade" id="deleteContentModal" tabindex="1" role="dialog" aria-labelledby="deleteContentModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -173,12 +169,12 @@
         </div>
     </div>
 
-    <!-- Attachment -->
+    {# Attachment #}
     {% include "frontend/content/detail_attachment.html" %}
 
     <br>
 
-    <!-- Rating -->
+    {# Rating #}
     <h5>
         <a name="rating">
             {% trans "Rating" %}
@@ -220,7 +216,7 @@
 
     </div>
 
-    <!-- Comment -->
+    {# Comment #}
     {% for comment in comments %}
         {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
     {% endfor %}

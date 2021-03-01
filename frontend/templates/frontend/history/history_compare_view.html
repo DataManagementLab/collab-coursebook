@@ -9,7 +9,7 @@
         {% endblocktrans %}
     </p>
 
-    <!-- Show fields differences -->
+    {# Fields differences #}
     {% for field_diff in compare_data %}
         <h3>
             {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
@@ -32,7 +32,7 @@
         </div>
     {% endfor %}
 
-    <!-- Show comment -->
+    {# Change log  #}
     <h4>
         {% trans "Change log:" %}
     </h4>
@@ -41,7 +41,7 @@
     </blockquote>
 
 
-    <!-- Buttons for previous and next compare -->
+    {#  Previous and next compare options #}
     {% if prev_url %}
         <button onclick="location.href='{{ prev_url }}'" class="btn btn-primary add-item">
             {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "previous" %}
@@ -54,13 +54,13 @@
         </button>
     {% endif %}
 
-    <!-- Buttons for revert -->
+    {# Revert option  #}
     <button type="button" class="btn btn-warning" data-toggle="modal"
             data-target="#revert-modal">
         {% fa5_icon 'history' 'fas' %} {% trans "Revert to Version 1" %}
     </button>
 
-    <!-- Modal for course/content revert -->
+    {#  Modal for course/content revert #}
     <div class="modal fade" id="revert-modal" tabindex="1" role="dialog"
          aria-labelledby="revert-modal-label"
          aria-hidden="true">
@@ -99,6 +99,7 @@
     <br>
     <br>
 
+    {# Back to history list option #}
     <button onclick="location.href='{{ history_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Go back to history list" %}
     </button>

@@ -6,11 +6,10 @@
 {% load static %}
 {% load fontawesome_5 %}
 
-{# Load CSS and JavaScript #}
-
 {% block title %}{% trans "Create a new course" %} - Collab Coursebook{% endblock %}
 
 {% block imports %}
+    {# CSS #}
     <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
 {% endblock %}

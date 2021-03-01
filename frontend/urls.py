@@ -2,8 +2,9 @@
 
 This file defines the URL mapping.
 """
-
+from django.conf.urls.i18n import i18n_patterns
 from django.urls import path, re_path, include
+from django.views.i18n import JavaScriptCatalog
 
 from content.models import CONTENT_TYPES
 
@@ -140,4 +141,6 @@ urlpatterns = [
              views.CourseListForPeriodView.as_view(),
              name='period-courses'),
     ])),
+
+    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
 ]
