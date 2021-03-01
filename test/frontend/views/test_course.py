@@ -9,13 +9,12 @@ from frontend.views.json import JsonHandler
 from test.test_cases import MediaTestCase
 
 
-class CourseViewAndEditStructureViewTestCase(MediaTestCase):
-    """ test cases for CourseView and EditCourseStructureView
+class BaseCourseViewTestCase(MediaTestCase):
+    """ base test cases for CourseView and EditCourseStructureView
 
     Defines the test cases for CourseView and EditCourseStructureView
     """
 
-    # TODO test review views\course.py
     def setUp(self):
         """Setup
 
@@ -41,6 +40,15 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
                           {'value': 'Topic2 (Category~*)', 'id': 3,
                            'children': [{'value': 'Topic3 (Category~*)', 'id': 4}]}]
 
+
+class CourseViewTestCase(BaseCourseViewTestCase):
+    """ test cases for CourseView
+
+    Defines the test cases for CourseView
+    """
+
+    # TODO test review views\course.py
+
     def test_ajax_and_check_course_view(self):
         """Test CourseView post case 1
 
@@ -64,7 +72,11 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
         # print(JsonHandler.topics_structure_to_json(self.course1))
         self.assertEqual(response.status_code, 200)
         # after post the structure of topics should also be accordingly changed
-        self.assertNotEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
+        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("index", flat=True)),
+                         ['1', '2', '3'])
+        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("topic_id", flat=True)),
+                         [2, 3, 4])
+        self.assertIsNotNone(CourseStructureEntry.objects.get(index='3', topic=self.topic3))
 
     def test_bad_response_course_view(self):
         """Test CourseView post case 2
@@ -127,6 +139,13 @@ class CourseViewAndEditStructureViewTestCase(MediaTestCase):
                          **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
         ids = Topic.objects.all().values_list("pk", flat=True)
         self.assertEqual(list(ids), [2, 3, 4])
+
+
+class EditStructureViewTestView(BaseCourseViewTestCase):
+    """ test cases for EditCourseStructureView
+
+    Defines the test cases for EditCourseStructureView
+    """
 
     def test_edit_course_structure_view(self):
         """Test EditCourseStructureView post case 1
