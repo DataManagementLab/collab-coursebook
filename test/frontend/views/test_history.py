@@ -1,3 +1,8 @@
+"""Purpose of this file
+
+This file contains the test cases for /frontend/views/history.py.
+"""
+
 import reversion
 
 from reversion import set_comment, is_registered
@@ -6,28 +11,23 @@ from reversion.models import Version
 from test import utils
 from test.test_cases import MediaTestCase
 
-from django.test import TestCase
 from django.urls import reverse
 
 from base.models import Content, Course, CourseStructureEntry, Topic, Category
-import content.forms as form
+
 import content.models as model
-
-from frontend.forms import AddContentForm
-
-from frontend.views.content import clean_attachment
 
 
 class BaseHistoryCompareViewTestCase(MediaTestCase):
     """BaseHistoryCompareView test case
 
-    Defines the test cases for BaseHistoryCompareView
+    Defines the test cases for view BaseHistoryCompareView.
     """
 
     def test_initial_state(self):
-        """Test initial states
+        """Test case - initial states
 
-        Tests if the relevant models are registered
+        Tests if the relevant models are registered.
         """
         self.assertTrue(is_registered(Course))
         self.assertTrue(is_registered(Content))
@@ -41,10 +41,9 @@ class BaseHistoryCompareViewTestCase(MediaTestCase):
 class ContentHistoryCompareViewTestCase(MediaTestCase):
     """ history compare test cases
 
-    Defines test cases for ContentHistoryCompareView
+    Defines test cases for the view ContentHistoryCompareView.
     """
 
-    # TODO test review
     def setUp(self):
         """Setup
 
@@ -92,10 +91,10 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         self.revision_ids2 = self.queryset2.values_list("revision_id", flat=True)
         self.version_ids2 = self.queryset2.values_list("pk", flat=True)
 
-    def test_version_create_textfield(self):
-        """ test case for version create
+    def test_textfield_version_create(self):
+        """Create version test case - Textfield
 
-        Tests if the versions are correctly generated for text1
+        Tests if the versions are correctly generated for text1.
         """
 
         # after set up the number of versions of text1 should be 2
@@ -103,10 +102,10 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # the revision ids for text1 should be 1 and 2
         self.assertEqual(list(self.revision_ids1), [2, 1])
 
-    def test_revert_textfield(self):
-        """ test case for content revert 1
+    def test_textfield_revert_changes(self):
+        """Revert version test case - Textfield changes
 
-        Tests content revert with one change within TextField model
+        Tests content revert with one change within TextField model.
         """
         # performing the revert with post
         path = reverse('frontend:textfield-history', kwargs={
@@ -127,12 +126,11 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # topic id should not be changed
         self.assertEqual(self.text1.content.topic_id, self.topic_id)
 
-    def test_0_revert_textfield(self):
-        """ test case for content revert 2
+    def test_textfield_revert_no_changes(self):
+        """Revert version test case - Textfield no changes
 
-        Tests content revert with no change within TextField model
+        Tests content revert with no change within TextField model.
         """
-
         # save a new version but don't make any change
         with reversion.create_revision():
             self.text1.save()
@@ -156,12 +154,11 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # topic id should not be changed
         self.assertEqual(self.text1.content.topic_id, self.topic_id)
 
-    def test_more_revert_textfield(self):
-        """ test case for content revert 3
+    def test_textfield_revert_many_fields(self):
+        """Revert version test case - Textfield many fields changed
 
-        Tests content revert with more than one change within TextField model
+        Tests content revert with more than one change within TextField model.
         """
-
         # save a new version but don't make any change
         with reversion.create_revision():
             self.text1.textfield = 'jo jo'
@@ -189,8 +186,8 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # topic id should not be changed
         self.assertEqual(self.text1.content.topic_id, self.topic_id)
 
-    def test_compare_textfield(self):
-        """ test case for content history compare 1
+    def test_textfield_compare_change_one(self):
+        """Compare test case - Textfield one change
 
         Tests content history compare with one change within TextField model
         """
@@ -208,10 +205,10 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
             "<blockquote>change text</blockquote>",  # change log
         )
 
-    def test_0_compare_textfield(self):
-        """ test case for content compare 2
+    def test_textfield_compare_no_change(self):
+        """Compare test case - Textfield no change
 
-        Tests content history compare with no change within TextField model
+        Tests content history compare with no change within TextField model.
         """
         # save a new version but don't make any change
         with reversion.create_revision():
@@ -226,10 +223,10 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         self.assertContainsHtml(response,
                                 "There are no differences.")
 
-    def test_compare_content_textfield(self):
-        """ test case for content history compare 3
+    def test_textfield_compare_many_change(self):
+        """Compare test case - Textfield many changes
 
-        Tests content history compare with more than 1 changes from Content and TextField model
+        Tests content history compare with more than 1 changes from Content and TextField model.
         """
         # test with more changes including content-field
         with reversion.create_revision():
@@ -270,20 +267,20 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
             "<blockquote>test with more changes including content-field</blockquote>",  # change log
         )
 
-    def test_version_create_latex(self):
-        """ test cases for version create
+    def test_latex_version_create(self):
+        """Create version test case - LaTeX
 
-        Tests if the versions are correctly generated for text1
+        Tests if the versions are correctly generated for latex1.
         """
         # after set up the number of versions of latex1 should be 2
         self.assertEqual(Version.objects.get_for_object(self.latex1).count(), 2)
         # the revision ids for latex1 should be 1 and 2
         self.assertEqual(list(self.revision_ids2), [4, 3])
 
-    def test_revert_latex(self):
-        """ test cases for latex revert
+    def test_latex_revert_changes(self):
+        """Revert version test case - LaTeX changes
 
-        Tests latex revert
+        Tests latex revert with changes within the Latex model.
         """
         # performing the revert with post
         path = reverse('frontend:latex-history', kwargs={
@@ -307,9 +304,9 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         self.assertIsNotNone(self.latex1.pdf)
 
     def test_compare_with_attachment(self):
-        """ test cases for content history compare with attachment
+        """Compare test case - Content history compare with attachment
 
-        Tests content history compare with attachment
+        Tests content history compare with attachment.
         """
         with reversion.create_revision():
             self.text1.content.attachment.images.get(pk=1).source = 'new source text'
@@ -339,10 +336,9 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
 class CourseHistoryCompareViewTestCase(MediaTestCase):
     """ CourseHistoryCompareView Test Cases
 
-    Defines Test Cases for CourseHistoryCompareView
+    Defines Test Cases for the view CourseHistoryCompareView.
     """
 
-    # TODO test review
     def setUp(self):
         """Setup
 
@@ -378,9 +374,9 @@ class CourseHistoryCompareViewTestCase(MediaTestCase):
         self.cat_id = self.cat.pk
 
     def test_version_create_course(self):
-        """ test cases for course version create
+        """Create course test case - Version
 
-        tests if the versions of the course are correctly generated
+        Tests if the versions of the course are correctly generated.
         """
 
         # after set up the number of versions of course1 should be 2
@@ -389,10 +385,10 @@ class CourseHistoryCompareViewTestCase(MediaTestCase):
         self.assertEqual(list(self.revision_ids1), [2, 1])
         self.assertEqual(self.course1.description, 'test test')
 
-    def test_1_revert_course(self):
-        """ test cases for course revert 1
+    def test_revert_course_change_one(self):
+        """Revert course test case - One change
 
-        tests course revert when there is exactly 1 change
+        Tests course revert when there is exactly 1 change.
         """
         # performing the revert with post
         path = reverse('frontend:course-history', kwargs={
@@ -413,30 +409,10 @@ class CourseHistoryCompareViewTestCase(MediaTestCase):
         # the category should not be changed after revert
         self.assertEqual(self.course1.category_id, self.cat_id)
 
-    def test_1_compare_course(self):
-        """ test cases for course history compare 1
+    def test_revert_course_no_change(self):
+        """Revert test cases - No changes
 
-        tests course course history compare when there is exactly 1 change
-        """
-        # performing compare
-        path = reverse('frontend:course-history', kwargs={
-            'pk': self.course1.pk
-        })
-        data = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[1]}
-        response = self.client.get(path, data)
-
-        # check if the differences will be correctly collected
-        self.assertContainsHtml(
-            response,
-            "<del>- desc</del>",  # change for description
-            "<ins>+ test test</ins>",
-            "<blockquote>change desc</blockquote>",  # change log
-        )
-
-    def test_0_revert_course(self):
-        """ test cases for course revert 2
-
-        tests course revert when there is no change
+        Tests course revert when there is no change.
         """
         # save a new version but don't make any change
         with reversion.create_revision():
@@ -462,28 +438,10 @@ class CourseHistoryCompareViewTestCase(MediaTestCase):
         # the category should not be changed after revert
         self.assertEqual(self.course1.category_id, self.cat_id)
 
-    def test_0_compare_course(self):
-        """ test cases for course history compare 2
+    def test_revert_course_many_changes(self):
+        """Revert test cases - Many changes
 
-        tests course course history compare when there is no change
-        """
-        with reversion.create_revision():
-            self.course1.save()
-            set_comment('nothing changed')
-        # performing compare
-        path = reverse('frontend:course-history', kwargs={
-            'pk': self.course1.pk
-        })
-        data = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[1]}
-        response = self.client.get(path, data)
-
-        self.assertContainsHtml(response,
-                                "There are no differences.")
-
-    def test_more_revert_course(self):
-        """ test cases for course revert 3
-
-        tests course revert when more than 1 change
+        Tests course revert when more than 1 change.
         """
         with reversion.create_revision():
             self.course1.description = 'new descc xixi'
@@ -511,10 +469,48 @@ class CourseHistoryCompareViewTestCase(MediaTestCase):
         # the category should not be changed after revert
         self.assertEqual(self.course1.category_id, self.cat_id)
 
-    def test_more_compare_course(self):
-        """ test cases for course history compare 1
+    def test_compare_course_change_one(self):
+        """Compare test cases - One change
 
-        tests course course history compare when there is exactly 1 change
+        Tests course course history compare when there is exactly 1 change.
+        """
+        # performing compare
+        path = reverse('frontend:course-history', kwargs={
+            'pk': self.course1.pk
+        })
+        data = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[1]}
+        response = self.client.get(path, data)
+
+        # check if the differences will be correctly collected
+        self.assertContainsHtml(
+            response,
+            "<del>- desc</del>",  # change for description
+            "<ins>+ test test</ins>",
+            "<blockquote>change desc</blockquote>",  # change log
+        )
+
+    def test_compare_course_no_change(self):
+        """Compare test cases - No changes
+
+        Tests course course history compare when there is no changes.
+        """
+        with reversion.create_revision():
+            self.course1.save()
+            set_comment('nothing changed')
+        # performing compare
+        path = reverse('frontend:course-history', kwargs={
+            'pk': self.course1.pk
+        })
+        data = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[1]}
+        response = self.client.get(path, data)
+
+        self.assertContainsHtml(response,
+                                "There are no differences.")
+
+    def test_compare_course_many_changes(self):
+        """Compare test cases - Many changes
+
+        Tests course course history compare when there is more than 1 changes.
         """
         with reversion.create_revision():
             self.course1.description = 'new descc xixi'
