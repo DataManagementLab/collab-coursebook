@@ -38,100 +38,111 @@ class JsonHandlerTestCase(MediaTestCase):
                           {'value': 'Topic2 (Category)', 'id': 3,
                            'children': [{'value': 'Topic3 (Category)', 'id': 4}]}]
 
-    def test_correct_validate_topics(self):
-        """Test validate_topics case 1
+    def test_validate_topics_correct(self):
+        """Validate topics test case - Correct topics
 
-        Tests validate_topics if topic and sub_topic exist.
+        Tests the function validate_topics if the topics are correct that means the
+        topics exists in the database. This means the function return None if the
+        validation was successful.
         """
-        # return should be None
+        # Return should be None
         self.assertIsNone(JsonHandler.validate_topics(self.json_data))
 
-    def test_topic_miss_validate_topics(self):
-        """Test validate_topics case 2
+    def test_validate_topics_only_main_invalid(self):
+        """Validate topics test case - Invalid main topic but valid sub topics
 
-        Tests validate_topics if topic doesn't exist but sub_topic exists.
+        Tests the function validate_topics if a only main topic is invalid. This means the topic
+        does not exists in the data base but its sub topics exists.
         """
 
-        json_data2 = [{'value': 'Topic1 (Category)', 'id': 2},
-                      {'value': 'Topic2 (Category)', 'id': 6,
-                       'children': [{'value': 'Topic3 (Category)', 'id': 4}]}]
-        # TODO: found a little bug and fixed it
-        self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data2)
+        json_data = [{'value': 'Topic1 (Category)', 'id': 2},
+                     {'value': 'Topic2 (Category)', 'id': 6,
+                      'children': [{'value': 'Topic3 (Category)', 'id': 4}]}]
+        self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data)
 
-    def test_topic_miss_validate_topics(self):
-        """Test validate_topics case 3
+    def test_validate_topics_only_sub_invalid(self):
+        """Validate topics test case - Valid main topic but invalid sub topic
 
-        Tests validate_topics if topic exits but sub_topic doesn't exist.
+        Tests the function validate_topics if a only main topic is invalid. This means the main
+        topic does exists in the data base but a sub topic does not.
         """
-        json_data2 = [{'value': 'Topic1 (Category)', 'id': 2},
-                      {'value': 'Topic2 (Category)', 'id': 3,
-                       'children': [{'value': 'Topic3 (Category)', 'id': 6}]}]
+        json_data = [{'value': 'Topic1 (Category)', 'id': 2},
+                     {'value': 'Topic2 (Category)', 'id': 3,
+                      'children': [{'value': 'Topic3 (Category)', 'id': 6}]}]
+        self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data)
 
-        self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data2)
+    def test_clean_topics_no_deletion(self):
+        """Clean topics test case - No deletion
 
-    def test_0_clean_topics(self):
-        """Test clean_topics case 1
-
-        Tests clean_topics if 0 element to be deleted.
+        Tests the function clean_topics if the result of it does not not delete any topics
+        since the topics were used in the course structure.
         """
         ids = [2, 3, 4]
         JsonHandler.clean_topics(ids)
         ids = Topic.objects.all().values_list("pk", flat=True)
-        # the not used id 1 should still be there
+        # The not used id 1 should still be there
+        # See also at setup
         self.assertEqual(list(ids), [1, 2, 3, 4])
 
-    def test_1_clean_topics(self):
-        """Test clean_topics case 2
+    def test_clean_topics_deletion_one(self):
+        """Clean topics test case - Deletion of one topic
 
-        Tests clean_topics if exactly 1 element to be deleted.
+        Tests the function clean_topics if the result of it deletes one topic
+        since the topic were not used in the course structure.
         """
         ids = [1, 2, 3, 4]
         JsonHandler.clean_topics(ids)
         ids = Topic.objects.all().values_list("pk", flat=True)
-        # the not used id 1 will now be deleted
+        # The not used id 1 will now be deleted
         self.assertEqual(list(ids), [2, 3, 4])
 
-    def test_more_clean_topics(self):
-        """Test clean_topics case 3
+    def test_clean_topics_deletion_many(self):
+        """Clean topics test case - Deletion of many topics
 
-        Tests clean_topics if more than 1 element to be deleted.
+        Tests the function clean_topics if the result of it deletes many topics
+        since the topics were not used in the course structure.
         """
         Topic.objects.create(title="Topic4", category=self.cat)
         ids = [1, 2, 3, 4, 5, 6]
         JsonHandler.clean_topics(ids)
         ids = Topic.objects.all().values_list("pk", flat=True)
-        # unused ids 1 and 5 should be deleted, and 6 has not effect
+        # Unused ids 1 and 5 should be deleted, and 6 has not effect
         self.assertEqual(list(ids), [2, 3, 4])
 
-    def test_0_clean_structure_sub_topic(self):
-        """Test clean_structure_sub_topic case 1
+    def test_clean_structure_sub_topic_no_deletion(self):
+        """Clean structure sub topics test case - No deletion
 
-        Tests clean_structure_sub_topic if 0 element to be deleted.
+        Tests the function clean_structure_sub_topic if the result of it does not delete any sub
+        topics since the main topic does not exists topic in the course structure.
         """
         JsonHandler.clean_structure_sub_topic(self.course1, 2, 2)
         # the course should be same as before
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
 
-    def test_1_clean_structure_sub_topic(self):
-        """Test clean_structure_sub_topic case 2
+    def test_clean_structure_sub_topic_deletion_one(self):
+        """Clean structure sub topics test case - Deletion of one sub topic
 
-        Tests clean_structure_sub_topic if exactly 1 element to be deleted.
+        Tests the function clean_structure_sub_topic if the result of it does delete one sub
+        topic since the main topic does exists topic in the course structure.
         """
         JsonHandler.clean_structure_sub_topic(self.course1, 2, 1)
-        # the course should only has two topics now
+        # The course should only has two topics now
         self.assertEqual(self.course1.topics.all().count(), 2)
 
-    def test_more_clean_structure_sub_topic(self):
-        """Test clean_structure_sub_topic case 3
+    def test_clean_structure_sub_topic_deletion_many(self):
+        """Clean structure sub topics test case - Deletion of many sub topics
 
         Tests clean_structure_sub_topic if more than 1 element to be deleted.
         """
-        topic4 = Topic.objects.create(title="Topic4", category=self.cat)
-        topic5 = Topic.objects.create(title="Topic5", category=self.cat)
-        course_struc_entry_4 = CourseStructureEntry(course=self.course1, index="2/2", topic=topic4)
-        course_struc_entry_5 = CourseStructureEntry(course=self.course1, index="2/3", topic=topic5)
-        course_struc_entry_4.save(), course_struc_entry_5.save()
-        # the two new subtopics should be added
+        index = 2
+        sub_index = 2
+        title = 'Topic'
+        title_index = 4
+        for i in range(2):
+            topic = Topic.objects.create(title=f'{title}{title_index + i}', category=self.cat)
+            entry = CourseStructureEntry(course=self.course1, index=f'{index}/{sub_index + i}', topic=topic)
+            entry.save()
+        # The two new sub topics should be added
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1),
                          [{'value': 'Topic1 (Category)', 'id': 2},
                           {'value': 'Topic2 (Category)', 'id': 3,
@@ -141,96 +152,106 @@ class JsonHandlerTestCase(MediaTestCase):
                                         ]}]
                          )
         JsonHandler.clean_structure_sub_topic(self.course1, 2, 2)
-        # the course should be same as before
+        # The course should be same as before
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
 
-    def test_0_clean_structure_topic(self):
-        """Test clean_structure_topic case 1
+    def test_clean_structure_topics_no_deletion(self):
+        """Clean structure topics test case - No deletion
 
-        Tests clean_structure_topic if 0 element to be deleted.
+        Tests the function clean_structure_sub_topic if the result of it does not delete any
+        topics since the topic does not exists in the course structure.
         """
         JsonHandler.clean_structure_topic(self.course1, 5)
-        # there should be no topics deleted
+        # There should be no topics deleted
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
 
-    def test_1_clean_structure_topic(self):
-        """Test clean_structure_topic case 2
+    def test_clean_structure_topics_deletion_one(self):
+        """Clean structure topics test case - Deletion of one topic
 
-        Tests clean_structure_topic if exactly 1 element to be deleted.
+        Tests the function clean_structure_sub_topic if the result of it does delete a topic
+        topics since the topic exists in the course structure.
         """
         JsonHandler.clean_structure_topic(self.course1, 2)
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1),
                          [{'value': 'Topic1 (Category)', 'id': 2}])
 
-    def test_more_clean_structure_topic(self):
-        """Test clean_structure_topic case 3
+    def test_clean_structure_topics_deletion_many(self):
+        """Clean structure topics test case - Deletion of many topic
 
-        Tests clean_structure_topic if more than 1 element to be deleted.
+        Tests the function clean_structure_sub_topic if the result of it does delete many topic
+        topics since the topics exists in the course structure.
         """
-        topic4 = Topic.objects.create(title="Topic4", category=self.cat)
-        course_struc_entry_4 = CourseStructureEntry(course=self.course1, index="3", topic=topic4)
-        course_struc_entry_4.save()
+        topic = Topic.objects.create(title="Topic4", category=self.cat)
+        entry = CourseStructureEntry(course=self.course1, index="3", topic=topic)
+        entry.save()
         JsonHandler.clean_structure_topic(self.course1, 2)
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1),
                          [{'value': 'Topic1 (Category)', 'id': 2}])
 
-    def test_0_topics_structure_to_json(self):
-        """Test topics_structure_to_json case 1
+    def test_topics_structure_to_json_empty(self):
+        """Topics structure to json test case - Empty structure
 
-        Tests topics_structure_to_json if 0 topic in the course
+        Tests the function topics_structure_to_json if it returns an empty list
+        if the structure is empty.
         """
         JsonHandler.clean_structure_topic(self.course1, 1)
-        # TODO: under this situation is [None] intended?
-        self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), [None])
+        length = len(JsonHandler.topics_structure_to_json(self.course1))
+        self.assertEqual(length, 0)
 
-    def test_1_topics_structure_to_json(self):
-        """Test topics_structure_to_json case 2
+    def test_topics_structure_to_json_last_main(self):
+        """Topics structure to json test case - Last main topic
 
-        Tests topics_structure_to_json if only 1 topic in the course
+        Tests the function topics_structure_to_json if the checked topic is
+        the last main topic and is marked as last main topic
         """
         JsonHandler.clean_structure_topic(self.course1, 2)
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1),
                          [{'value': 'Topic1 (Category)', 'id': 2}])
 
-    def test_2_topics_structure_to_json(self):
-        """Test topics_structure_to_json case 3
+    def test_topics_structure_to_json_main_with_sub_one(self):
+        """Topics structure to json test case - One main topic with sub topics
 
-        Tests topics_structure_to_json if more than 1 topic in the course and no child
+        Tests the function topics_structure_to_json if the checked topic is
+        the first main topic and is appended to the result and contains children.
         """
         JsonHandler.clean_structure_sub_topic(self.course1, 2, 1)
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1),
                          [{'value': 'Topic1 (Category)', 'id': 2},
                           {'value': 'Topic2 (Category)', 'id': 3}])
 
-    def test_children_topics_structure_to_json(self):
-        """Test topics_structure_to_json case 4
+    def test_topics_structure_to_json_main_with_sub_many(self):
+        """Topics structure to json test case - Many main topic with sub topics
 
-        Tests topics_structure_to_json if more than topics in the course and with child(ren)
+        Tests the function topics_structure_to_json if the many main topics with children
+        are correctly parsed.
         """
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
 
-    def test_0_json_to_topics_structure(self):
-        """Test json_to_topics_structure case 1
+    def test_json_to_topics_structure_empty(self):
+        """Json to topics structure - Empty json data
 
-        Tests json_to_topics_structure if given json_data is empty
+        Tests the function json_to_topics_structure if the topic list is still empty
+        after its call.
         """
         JsonHandler.json_to_topics_structure(self.course1, [])
         self.assertEqual(list(self.course1.topics.all()), [])
 
-    def test_1_json_to_topics_structure(self):
-        """Test json_to_topics_structure case 2
+    def test_json_to_topics_structure_update_main(self):
+        """Json to topics structure - Update main topic
 
-        Tests json_to_topics_structure if given json_data has only 1 and existing element
+        Tests the function json_to_topics_structure that the existing entry will be
+        updated with its new order of topic id.
         """
         json_data = [{'value': 'Topic1 (Category)', 'id': 2}]
         JsonHandler.json_to_topics_structure(self.course1, json_data)
         self.assertEqual(self.course1.topics.all().count(), 1)
 
-    def test_update_json_to_topics_structure(self):
-        """Test json_to_topics_structure case 3
+    def test_update_json_to_topics_structure_update_main_create_sub(self):
+        """Json to topics structure - Update main topic and creating sub topic
 
-        Tests json_to_topics_structure if given json_data has more than 1 existing element and with update for former
-        topics (including child(ren))
+        Tests the function json_to_topics_structure that the existing entry will be
+        updated with its new order of topic id and the sub topics does not exists,
+        therefore a new entry will be created.
         """
         json_data = [{'value': 'Topic2 (Category)', 'id': 3,
                       'children': [{'value': 'Topic3 (Category)', 'id': 4}]},
@@ -238,18 +259,20 @@ class JsonHandlerTestCase(MediaTestCase):
         JsonHandler.json_to_topics_structure(self.course1, json_data)
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), json_data)
 
-    def test_old_json_to_topics_structure(self):
-        """Test json_to_topics_structure case 4
+    def test_update_json_to_topics_structure_update_main_sub(self):
+        """Json to topics structure - Update main topic and creating sub topic
 
-        Tests json_to_topics_structure if given json_data has no change to existing structure
+        Tests the function json_to_topics_structure that the existing entry will be
+        updated with its new order of topic id and the sub topics are also updated.
         """
         JsonHandler.json_to_topics_structure(self.course1, self.json_data)
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
 
-    def test_new_json_to_topics_structure(self):
-        """Test json_to_topics_structure case 5
+    def test_json_to_topics_structure_new_main(self):
+        """Json to topics structure - New main topics
 
-        Tests json_to_topics_structure if given json_data has new topic entry for the existing structure
+        Tests the function json_to_topics_structure that the new entries will be
+        added to the data base and the rest will be updated.
         """
         Topic.objects.create(title="Topic4", category=self.cat)
         json_data = [{'value': 'Topic1 (Category)', 'id': 2},
@@ -260,9 +283,10 @@ class JsonHandlerTestCase(MediaTestCase):
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), json_data)
 
     def test_new_children_json_to_topics_structure(self):
-        """Test json_to_topics_structure case 6
+        """Json to topics structure - New sub topics
 
-        Tests json_to_topics_structure if given json_data has new sub topic entry for the existing structure
+        Tests the function json_to_topics_structure that the new entries will be
+        added to the data base and the rest will be updated.
         """
         topic4 = Topic.objects.create(title="Topic4", category=self.cat)
         json_data = [{'value': 'Topic1 (Category)', 'id': 2},
@@ -271,5 +295,5 @@ class JsonHandlerTestCase(MediaTestCase):
                                    {'value': 'Topic4 (Category)', 'id': 5}]}
                      ]
         JsonHandler.json_to_topics_structure(self.course1, json_data)
-        # the new structure should subject to the new json data
+        # The new structure should subject to the new json data
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), json_data)
