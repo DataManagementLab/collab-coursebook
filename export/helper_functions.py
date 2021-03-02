@@ -103,7 +103,7 @@ class Latex:
         :rtype: list[str]
         """
         # Decode bytes to string and split the string by the delimiter '\n'
-        lines = lob.decode(Latex.encoding).splitlines()
+        lines = lob.decode(Latex.encoding, errors='ignore').splitlines()
         found = []
         for line in lines:
             # LaTeX log errors contains '!'
