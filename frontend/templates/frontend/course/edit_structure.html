@@ -12,7 +12,7 @@
 
 
 {% block imports %}
-    <script src="{% url 'frontend:javascript-catalog' %}"></script>
+    <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
     <script type="text/javascript" src="{% static 'js/request.js' %}"></script>
 {% endblock %}
 
@@ -184,8 +184,7 @@
                 },
                 error: function (data) {
                     const message = gettext("Error during data transfer to the server - status: %s");
-                    alert(interpolate(message, [data.status]));
-                    showNotification(interpolate(message, [topic]), "alert-danger");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
             });
         }
@@ -206,9 +205,9 @@
                 },
                 error: function (data) {
                     const message = gettext("Error during data transfer to the server - status: %s");
-                    showNotification(interpolate(message, [topic]), "alert-danger");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
-            })
+            });
         }
 
         /**
@@ -228,9 +227,9 @@
                 },
                 error: function (data) {
                     const message = gettext("Error during data transfer to the server - status: %s");
-                    showNotification(interpolate(message, [topic]), "alert-danger");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
-            })
+            });
         }
 
         $(document).ready(function () {
