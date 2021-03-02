@@ -9,7 +9,7 @@
 {% block content %}
     <div class="float-right">
         {% if user == profile.user %}
-            <a href="{% url 'frontend:profile-edit' %}" class="btn btn-primary">
+            <a href="{% url 'frontend:profile-edit' profile.pk %}" class="btn btn-primary">
                 {% fa5_icon "edit" "far" %} {% trans "Edit" %}
             </a>
         {% endif %}

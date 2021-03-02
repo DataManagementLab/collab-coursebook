@@ -83,5 +83,3 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         :rtype: Profile
         """
         return Profile.objects.get(user=self.request.user)
-
-

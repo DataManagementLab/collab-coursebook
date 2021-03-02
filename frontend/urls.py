@@ -24,12 +24,14 @@ urlpatterns = [
     path('search/',
          views.search.SearchView.as_view(),
          name='search'),
-    path('profile/<int:pk>/',
-         views.ProfileView.as_view(),
-         name="profile"),
-    path('profile/edit/',
-         views.ProfileEditView.as_view(),
-         name="profile-edit"),
+    path('profile/<int:pk>/', include([
+        path('',
+             views.ProfileView.as_view(),
+             name='profile'),
+        path('edit',
+             views.ProfileEditView.as_view(),
+             name='profile-edit'),
+    ])),
 
     path('courses/', include([
         re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$',
