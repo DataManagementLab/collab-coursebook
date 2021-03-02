@@ -9,7 +9,7 @@
 {% block content %}
     <div class="float-right">
         {% if user == profile.user %}
-            <a href="{% url 'frontend:profile-edit' %}" class="btn btn-success">
+            <a href="{% url 'frontend:profile-edit' %}" class="btn btn-primary">
                 {% fa5_icon "edit" "far" %} {% trans "Edit" %}
             </a>
         {% endif %}
@@ -20,18 +20,19 @@
     </h1>
 
     {% if profile.pic %}
-        <img src="{{ profile.pic.url }}" class="img-thumbnail" style="width: 30%; height: 250px; object-fit: cover;"
+        <img src="{{ profile.pic.url }}" class="img-thumbnail" style="
+         display:block; margin-left: auto; margin-right: auto;
+         width: 30%; height: 250px; object-fit: cover;"
              alt="{% trans 'User profile picture' %}">
         {% else %}
-        {% fa5_icon 'user' 'far' %}
+        {% fa5_icon 'user' 'far' %} {% trans "No image available" %} {% fa5_icon 'user' 'far' %}
     {% endif %}
-
-    <p>
-    <h2>
-        {% trans "Biography" %}
-    </h2>
-    {{ profile.bio | linebreaks }}
-
+    {% if profile.bio %}
+        <div style="text-align: center">
+            <h2>{% trans "Biography" %}</h2>
+            {{ profile.bio | linebreaks }}
+        </div>
+    {% endif %}
     <div style="clear: both;">
 
     </div>

@@ -75,13 +75,21 @@
         {% endfor %}
     </h5>
 
-    {# TODO Add Course Image #}
+    {% if course.image %}
+        <img src="{{ course.image.url }}" class="img-thumbnail" style="
+         display:block; margin-left: auto; margin-right: auto;
+         width: 30%; height: 250px; object-fit: cover;"
+             alt="{% trans 'Course picture' %}">
+        {% else %}
+        {% fa5_icon "chalkboard-teacher" "fas" %} {% trans "No image available" %} {% fa5_icon "chalkboard-teacher" "fas" %}
+    {% endif %}
 
-    <p>
-    <h2>
-        {% trans "Description" %}
-    </h2>
-    {{ course.description | linebreaks }}
+    {% if course.description %}
+        <div style="text-align: center">
+            <h2>{% trans "Description" %}</h2>
+            {{ course.description | linebreaks }}
+        </div>
+    {% endif %}
 
     {# Table of contents #}
     <div class="row" style="margin-top: 20px;">
