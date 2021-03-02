@@ -21,8 +21,6 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'frontend/utils/notification.html' %}
-
     <div id="title" style="text-align: center">
         <h2 style="font-weight: bold">
             {% trans 'Edit Course Structure' %} - {{ course.title }}
@@ -99,19 +97,19 @@
          */
         function addTopic() {
             // Gets the selected topic
-            const element = document.querySelector('#id_topic_name');
+            const element = document.querySelector("#id_topic_name");
             const selected = element.options[element.selectedIndex];
             const id = selected.value;
             const topic = element.options[element.selectedIndex].textContent;
-            const data = $('#nestable3').nestable('serialize');
+            const data = $("#nestable3").nestable("serialize");
 
             // Checks if topic is valid to be added
             if (!isTopicValid(id, topic, data)) {
                 return;
             }
             addItem(topic, id);
-            const message = gettext('The topic %s was successfully added to the course structure.');
-            showNotification(interpolate(message, [topic]));
+            const message = gettext("The topic %s was successfully added to the course structure.");
+            showNotification(interpolate(message, [topic]), "alert-info");
         }
 
         /**
@@ -135,12 +133,12 @@
             for (let i = 0; i < data.length; i++) {
                 const entry = data[i];
                 // Duplicates id
-                if (entry['id'] === id) {
+                if (entry["id"] === id) {
                     return false;
                 }
                 // Sub topics
-                else if (entry['children'] !== undefined) {
-                    if (!isTopicValid(id, topic, entry['children'])) {
+                else if (entry["children"] !== undefined) {
+                    if (!isTopicValid(id, topic, entry["children"])) {
                         return false;
                     }
                 }
@@ -155,12 +153,12 @@
          */
         function create(event) {
             event.preventDefault();
-            const topic = document.getElementById('id_title');
-            const category = document.getElementById('id_category');
+            const topic = document.getElementById("id_title");
+            const category = document.getElementById("id_category");
             sendRequest({
-                url: '{% url "frontend:course-edit-structure" course.id %}',
-                type: 'POST',
-                data: {'title': topic.value, 'category': category.value},
+                url: "{% url 'frontend:course-edit-structure' course.id %}",
+                type: "POST",
+                data: {"title": topic.value, "category": category.value},
 
                 success: function (data) {
                     const json = JSON.parse(JSON.stringify(data));
@@ -171,7 +169,7 @@
                     NEW_ELEMENTS.push(topic_id);
 
                     // Ordered entries
-                    const select = document.getElementById('id_topic_name');
+                    const select = document.getElementById("id_topic_name");
 
                     for (let i = 0; i < topics.length; i++) {
                         const entry = topics[i];
@@ -185,8 +183,9 @@
                     addTopic()
                 },
                 error: function (data) {
-                    const message = gettext('Error during data transfer to the server - status: %s');
+                    const message = gettext("Error during data transfer to the server - status: %s");
                     alert(interpolate(message, [data.status]));
+                    showNotification(interpolate(message, [topic]), "alert-danger");
                 }
             });
         }
@@ -198,16 +197,16 @@
             for (let i = 0; i < NEW_ELEMENTS.length; i++)
                 console.log(NEW_ELEMENTS[i]);
             sendRequest({
-                url: '{% url "frontend:course" course.id %}',
-                type: 'POST',
-                data: {'ids': NEW_ELEMENTS},
+                url: "{% url 'frontend:course' course.id %}",
+                type: "POST",
+                data: {"ids": NEW_ELEMENTS},
 
                 success: function () {
-                    window.location.href = '{% url "frontend:course" course.id %}'
+                    window.location.href = "{% url 'frontend:course' course.id %}"
                 },
                 error: function (data) {
-                    const message = gettext('Error during data transfer to the server - status: %s');
-                    alert(interpolate(message, [data.status]));
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [topic]), "alert-danger");
                 }
             })
         }
@@ -216,21 +215,20 @@
          * Configures the post information with the serialized nestable data.
          */
         function save() {
-            const nestable = $('#nestable3').nestable('serialize');
+            const nestable = $('#nestable3').nestable("serialize");
             const json_obj = window.JSON.stringify(nestable);
             sendRequest({
-                url: '{% url 'frontend:course' course.id %}',
-                type: 'POST',
-                data: {'topic_list': json_obj, 'ids': NEW_ELEMENTS},
-                ContentType: 'application/json',
+                url: "{% url 'frontend:course' course.id %}",
+                type: "POST",
+                data: {"topic_list": json_obj, "ids": NEW_ELEMENTS},
+                ContentType: "application/json",
 
                 success: function (data) {
                     window.location.href = "{% url 'frontend:course' course.id %}"
                 },
                 error: function (data) {
-                    const message = gettext('Error during data transfer to the server - status: %s');
-                    alert(interpolate(message, [data.status]));
-                    alert(json_obj);
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [topic]), "alert-danger");
                 }
             })
         }
@@ -245,11 +243,8 @@
             $('#nestable3').nestable({maxDepth: DEPTH});
 
             /* Register actions */
-
-            // Defines actions on remove click
-            $('#dd-empty-placeholder').on('click', '.close', removeItem);
-
-            $('#post-form-edit-structure-create-topic').on('submit', create);
+            $("#dd-empty-placeholder").on("click", ".close", removeItem);
+            $("#post-form-edit-structure-create-topic").on("submit", create);
 
             // Clean nestable
             cleanNestable();
