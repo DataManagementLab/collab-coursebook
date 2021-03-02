@@ -13,7 +13,7 @@
         {% bootstrap_form form %}
         {% buttons %}
 
-            <a href="{% url 'frontend:profile' pk=user.pk %}" class="btn btn-secondary">
+            <a href="{% url 'frontend:profile' pk=user.pk %}" class="btn btn-primary">
                 {% fa5_icon "times" 'fas' %} {% trans "Cancel" %}
             </a>
             <button type="submit" class="save btn btn-primary float-right">
