@@ -2,3 +2,7 @@
     content: '*';
     color: red;
 }
+
+.navbar-inline-list {
+    margin: 10px;
+}
