@@ -26,7 +26,7 @@
                 {{ profile.bio | linebreaks }}
             {% endif %}
         </div>
-        {% if course.pic %}
+        {% if profile.pic %}
             <img src="{{ profile.pic.url }}" class="ml-3" style="
         width: 250px; height: 250px; object-fit: cover; border-radius: calc(0.25rem - 1px);"
                  alt="{% trans 'User profile picture' %}">
