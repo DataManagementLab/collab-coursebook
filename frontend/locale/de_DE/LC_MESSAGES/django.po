@@ -241,7 +241,6 @@ msgstr "Anhänge"
 
 #: .\templates\frontend\content\edit.html:52
 #: .\templates\frontend\course\edit_structure.html:89
-#: .\templates\frontend\course\view.html:34
 msgid "Save"
 msgstr "Speichern"
 
@@ -362,10 +361,6 @@ msgstr "Zurück"
 #: .\templates\frontend\course\edit_structure.html:354
 msgid "Fehler bei der Datenübertragung zum Server - Status:"
 msgstr ""
-
-#: .\templates\frontend\course\view.html:33
-msgid "Unsave"
-msgstr "Nicht Speichern"
 
 #: .\templates\frontend\course\view.html:46
 msgid "Edit Course"
@@ -779,3 +774,9 @@ msgstr "Profil aktualisiert"
 
 msgid "Course %(title)s successfully duplicated."
 msgstr "Kurs %(title)s erfolgreich dupliziert"
+
+msgid "Add to favourite"
+msgstr "Zu Favouriten hinzufügen"
+
+msgid "Remove from favourite"
+msgstr "Aus Favouriten entfernen"

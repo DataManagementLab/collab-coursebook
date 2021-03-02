@@ -31,8 +31,8 @@
                     <a class="dropdown-item"
                        href="{% url 'frontend:favourite_course' pk=course.pk %}">
                         {% if course in user.profile.stared_courses.all %}{% fa5_icon 'bookmark' 'fas' %}
-                            {% trans "Unsave" %}
-                            {% else %}{% fa5_icon 'bookmark' 'far' %} {% trans "Save" %}{% endif %}</a>
+                            {% trans "Remove from favourite" %}
+                            {% else %}{% fa5_icon 'bookmark' 'far' %} {% trans "Add to favourite" %}{% endif %}</a>
                     {% if user.is_superuser or isCurrentUserOwner %}
                         <a href="{% url 'frontend:course-duplicate' pk=course.pk %}"
                            class="btn btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
@@ -146,7 +146,7 @@
               action="{% url 'frontend:course' course.id %}">
             {% csrf_token %}
             {% for f in filter_sort %}
-                <div class="form-group" style="padding-right: 10px">
+                <div class="form-group" style="margin-right: 10px">
                     <div style="padding-right: 10px">
                         {{ f.label }}
                     </div>

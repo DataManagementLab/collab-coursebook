@@ -1,4 +1,8 @@
 .form-required label:after {
     content: '*';
-    color: red;
+    color: var(--red);
+}
+
+.navbar-inline-list {
+    margin: 10px;
 }
