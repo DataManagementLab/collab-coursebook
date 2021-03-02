@@ -152,8 +152,8 @@ class Course(models.Model):
     owners = models.ManyToManyField(Profile, related_name='owned_courses',
                                     verbose_name=_("Owners"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
-                                           help_text=_("Is the course protected and "
-                                                       "can only be edited by the owners?"),
+                                           help_text=_("This course is restricted and "
+                                                       "can only be edited by the owners"),
                                            blank=True,
                                            default=False)
 
@@ -377,12 +377,12 @@ class Content(models.Model):
                                   related_name='contents',
                                   blank=True)
 
-    readonly = models.BooleanField(verbose_name=_("Readonly"),
-                                   help_text=_("Can this content be updated?"),
+    readonly = models.BooleanField(verbose_name=_("Set to Read-Only"),
+                                   help_text=_("This content shouldn't be edited"),
                                    default=False)
-    public = models.BooleanField(verbose_name=_("Show in public courses?"),
-                                 help_text=_("May this content be displayed in courses "
-                                             "that don't require registration?"),
+    public = models.BooleanField(verbose_name=_("Show in public courses"),
+                                 help_text=_("This content will be displayed in courses "
+                                             "that don't require registration"),
                                  default=False)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
                                          default=timezone.now,

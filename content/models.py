@@ -327,7 +327,6 @@ class YTVideoContent(BaseContentModel):
             return self.url.split("=")[1]
         if len(split_url) > 2:
             return self.url.split("=")[1].split("&")[0]
-        print(self.url.split("/")[3])
         return self.url.split("/")[3]
 
     def __str__(self):

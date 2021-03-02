@@ -35,7 +35,7 @@
                             {% else %}{% fa5_icon 'bookmark' 'far' %} {% trans "Add to favourite" %}{% endif %}</a>
                     {% if user.is_superuser or isCurrentUserOwner %}
                         <a href="{% url 'frontend:course-duplicate' pk=course.pk %}"
-                           class="btn btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
+                           class="btn form-control btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
                     {% endif %}
 
                     <div class="dropdown-divider">
