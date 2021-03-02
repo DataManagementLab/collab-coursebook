@@ -4,7 +4,8 @@
 {% if user.is_authenticated %}
     <div class="float-right" style="color: #ffffff;font-weight: bold;">
         <form class="form-inline float-left" action="{% url 'frontend:search' %}">
-            <input class="form-control navbar-inline-list" type="search" name="q" placeholder="{% trans 'Search' %}" aria-label="Search">
+            <input class="form-control navbar-inline-list" type="search" name="q" placeholder="{% trans 'Search' %}"
+                   aria-label="Search">
             <button class="btn btn-outline-success navbar-inline-list" style="margin: 0px 5px" type="submit">
                 {% fa5_icon 'search' 'fas' %}
             </button>
@@ -19,7 +20,8 @@
             </a>
             &nbsp;
         {% endif %}
-        <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white navbar-inline-list">
+        <a href="{% url 'frontend:profile' pk=user.profile.pk %}"
+           class="text-decoration-none text-white navbar-inline-list">
             {% if user.profile.pic %}
                 <img src="{{ user.profile.pic.url }}" class="rounded-circle"
                      style="width: 35px; height: 35px; object-fit: cover;"
@@ -27,8 +29,6 @@
             {% else %}
                 {% fa5_icon 'user' 'far' %}
             {% endif %}
-        </a>
-        <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white navbar-inline-list">
             {{ user.get_username }}
         </a>
 
