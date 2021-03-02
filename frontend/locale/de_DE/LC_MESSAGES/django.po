@@ -30,6 +30,14 @@ msgstr "Dein Kommentar"
 msgid "Change Log"
 msgstr "Änderungsprotokoll"
 
+#: .\forms\content.py:54
+msgid "Please write down your changes of this content"
+msgstr "Bitte notieren Sie Ihre Änderungen an diesem Inhalt"
+
+#: .\forms\course.py:62
+msgid "Please write down your changes of this course"
+msgstr "Bitte notieren Sie Ihre Änderungen an diesem Kurs"
+
 #: .\forms\course.py:111
 msgid "Text"
 msgstr "Text"

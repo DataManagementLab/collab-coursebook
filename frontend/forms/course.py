@@ -59,7 +59,7 @@ class EditCourseForm(forms.ModelForm):
         required=True,
         widget=forms.Textarea(
             attrs={'style': 'height: 35px'}),
-        label=_('Change Log')
+        label=_('Change Log'), help_text=_('Please write down your changes of this course')
     )
     field_order = ['title', 'description', 'image',
                    'owners', 'restrict_changes', 'category', 'period', 'change_log']
