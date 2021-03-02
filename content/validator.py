@@ -4,6 +4,7 @@ This file describes the validators needed for the models.
 """
 import os
 import magic
+import re
 from django.core.exceptions import ValidationError
 
 
@@ -34,3 +35,9 @@ class Validator:  # pylint: disable=too-few-public-methods)
         ext = os.path.splitext(file.name)[1]
         if ext.lower() not in valid_file_extensions:
             raise ValidationError('Unacceptable file extension.')
+
+    @staticmethod
+    def validate_youtube_url(url):
+        valid_url = re.match(r"^(http(s)?://)?(www\.|m\.)?youtu(\.?)be(\.com)?/.*", url)
+        if valid_url is None:
+            raise ValidationError('Invalid URL')
