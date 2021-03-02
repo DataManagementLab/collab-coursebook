@@ -140,58 +140,68 @@
     {# Display coursebook  #}
     {% include 'frontend/course/coursebook.html' %}
 
-    <div class="text-right" style="margin-top: 16px;">
+
+    <div class="mt-3" style="margin-top: 16px;">
         <form id="filter+sort" class="form-inline" method="post"
               action="{% url 'frontend:course' course.id %}">
             {% csrf_token %}
-            {% bootstrap_form form %}
+            {% for f in filter_sort %}
+                <div class="form-group" style="padding-right: 10px">
+                    <div style="padding-right: 10px">
+                        {{ f.label }}
+                    </div>
+                    {{ f }}
+                </div>
+            {% endfor %}
         </form>
     </div>
 
     {# Display course contents #}
-    {% for entry in structure %}
-        <div id='{{ entry.topic.pk }}' style="margin-top: 16px;">
-            {% with forloop.counter as outer_index %}
-                {# Filters, Ordering, Add contents #}
-                <div class="float-right text-right">
-                    {% with entry.topic as entry_topic %}
-                        {% add_content_button user course.id entry_topic.id %}
+    <div class="mt-3" style="margin-top: 16px;">
+        {% for entry in structure %}
+            <div id='{{ entry.topic.pk }}'>
+                {% with forloop.counter as outer_index %}
+                    {# Filters, Ordering, Add contents #}
+                    <div class="float-right text-right">
+                        {% with entry.topic as entry_topic %}
+                            {% add_content_button user course.id entry_topic.id %}
+                        {% endwith %}
+                    </div>
+                    <h3 class="text-info">
+                        {{ outer_index }}. {{ entry.topic.title }}
+                    </h3>
+                    {% with entry.topic_contents as topic_contents %}
+                        {% include "frontend/course/topic_contents.html" %}
                     {% endwith %}
-                </div>
-                <h3 class="text-info">
-                    {{ outer_index }}. {{ entry.topic.title }}
-                </h3>
-                {% with entry.topic_contents as topic_contents %}
-                    {% include "frontend/course/topic_contents.html" %}
-                {% endwith %}
 
-                {#  Show subtopics #}
-                {% if entry.subtopics %}
-                    {% for subtopic in entry.subtopics %}
-                        <div id='{{ subtopic.topic.pk }}' style="margin-top: 15px;">
-                            <div class="float-right text-right">
-                                {% with subtopic.topic as subtopic_topic %}
-                                    {% add_content_button user course.id subtopic_topic.id %}
+                    {#  Show subtopics #}
+                    {% if entry.subtopics %}
+                        {% for subtopic in entry.subtopics %}
+                            <div id='{{ subtopic.topic.pk }}'>
+                                <div class="float-right text-right">
+                                    {% with subtopic.topic as subtopic_topic %}
+                                        {% add_content_button user course.id subtopic_topic.id %}
+                                    {% endwith %}
+                                </div>
+                                <h4 class="text-info">
+                                    {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
+                                </h4>
+
+                                {% with subtopic.topic_contents as topic_contents %}
+                                    {% include "frontend/course/topic_contents.html" %}
                                 {% endwith %}
                             </div>
-                            <h4 class="text-info">
-                                {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
-                            </h4>
-
-                            {% with subtopic.topic_contents as topic_contents %}
-                                {% include "frontend/course/topic_contents.html" %}
-                            {% endwith %}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
-    {% empty %}
-        <h3>
-            {% trans "No Topics" %}
-        </h3>
-        <p>
-            {% trans "This course doesn't have topics at the moment." %}
-        </p>
-    {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% empty %}
+            <h3>
+                {% trans "No Topics" %}
+            </h3>
+            <p>
+                {% trans "This course doesn't have topics at the moment." %}
+            </p>
+        {% endfor %}
+    </div>
 {% endblock %}s
