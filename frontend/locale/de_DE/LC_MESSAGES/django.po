@@ -629,6 +629,10 @@ msgstr "Profilbild"
 msgid "Course picture"
 msgstr "Kursbild"
 
+#: .\templates\frontend\course\view.html:101
+msgid "Table of Contents"
+msgstr "Inhaltsverzeichnis"
+
 #: .\templates\frontend\profile\profile.html:28
 msgid "Biography"
 msgstr "Biographie"
