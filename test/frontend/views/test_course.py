@@ -1,43 +1,10 @@
 import json
 
-from django.contrib.auth.models import User
 from django.urls import reverse
 
-from base.models import Course, Category, CourseStructureEntry, Topic
+from base.models import CourseStructureEntry, Topic
 from frontend.forms.course import CreateTopicForm
-from test.test_cases import MediaTestCase
-
-# TODO test review
-class BaseCourseViewTestCase(MediaTestCase):
-    """ Base test cases for CourseView and EditCourseStructureView
-
-    Defines the test cases for view  CourseView and EditCourseStructureView
-    """
-
-    def setUp(self):
-        """Setup
-
-        Sets up the test database.
-        """
-        super().setUp()
-
-        self.user = User.objects.get(pk=1)
-
-        self.cat = Category.objects.create(title="Category~*")
-        self.course1 = Course.objects.create(title='Course Test', description='desc', category=self.cat)
-        self.course1.owners.add(self.user.profile)
-        self.topic1 = Topic.objects.create(title="Topic1", category=self.cat)
-        self.topic2 = Topic.objects.create(title="Topic2", category=self.cat)
-        self.topic3 = Topic.objects.create(title="Topic3", category=self.cat)
-
-        course_struc_entry_1 = CourseStructureEntry(course=self.course1, index=1, topic=self.topic1)
-        course_struc_entry_2 = CourseStructureEntry(course=self.course1, index=2, topic=self.topic2)
-        course_struc_entry_3 = CourseStructureEntry(course=self.course1, index="2/1", topic=self.topic3)
-        course_struc_entry_1.save(), course_struc_entry_2.save(), course_struc_entry_3.save()
-
-        self.json_data = [{'value': 'Topic1 (Category~*)', 'id': 2},
-                          {'value': 'Topic2 (Category~*)', 'id': 3,
-                           'children': [{'value': 'Topic3 (Category~*)', 'id': 4}]}]
+from test.test_cases import BaseCourseViewTestCase
 
 
 class CourseViewTestCase(BaseCourseViewTestCase):
@@ -45,17 +12,28 @@ class CourseViewTestCase(BaseCourseViewTestCase):
 
     Defines the test cases for view  CourseView
     """
+    def setUp(self):
+        """Setup
 
-    # TODO test review views\course.py
+        Sets up the test database.
+        """
+        super().setUp()
+        self.path = reverse('frontend:course', kwargs={
+            'pk': self.course1.pk})
+        topic_list = [
+            {"value": "Topic1 (Category~*)", "id": 2},
+            {"value": "Topic2 (Category~*)", "id": 3},
+            {"value": "Topic3 (Category~*)", "id": 9}
+        ]
+        self.invalid_data = {
+            'topic_list': json.dumps(topic_list)
+        }
 
     def test_ajax_and_check_course_view(self):
         """CourseView post test case - request is ajax and check is True
 
         Tests CourseView post if request is ajax and check is True.
         """
-        path = reverse('frontend:course', kwargs={
-            'pk': self.course1.pk})
-
         topic_list = [
             {"value": "Topic1 (Category~*)", "id": 2},
             {"value": "Topic2 (Category~*)", "id": 3},
@@ -64,9 +42,8 @@ class CourseViewTestCase(BaseCourseViewTestCase):
         data = {
             'topic_list': json.dumps(topic_list)
         }
-        # before the post check the structure
-        # self.assertEqual(JsonHandler.topics_structure_to_json(self.course1), self.json_data)
-        response = self.client.post(path, data,
+
+        response = self.client.post(self.path, data,
                                     **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
         self.assertEqual(response.status_code, 200)
         # after post the structure of topics should also be accordingly changed
@@ -81,18 +58,7 @@ class CourseViewTestCase(BaseCourseViewTestCase):
 
         Tests CourseView post if request is ajax and check is false.
         """
-        path = reverse('frontend:course', kwargs={
-            'pk': self.course1.pk})
-
-        topic_list = [
-            {"value": "Topic1 (Category~*)", "id": 2},
-            {"value": "Topic2 (Category~*)", "id": 3},
-            {"value": "Topic3 (Category~*)", "id": 9}
-        ]
-        data = {
-            'topic_list': json.dumps(topic_list)
-        }
-        response = self.client.post(path, data,
+        response = self.client.post(self.path, self.invalid_data,
                                     **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
         # it should be a bad response
         self.assertEqual(response.status_code, 400)
@@ -102,18 +68,7 @@ class CourseViewTestCase(BaseCourseViewTestCase):
 
         Tests CourseView post if form is invalid and request not ajax.
         """
-        path = reverse('frontend:course', kwargs={
-            'pk': self.course1.pk})
-
-        topic_list = [
-            {"value": "Topic1 (Category~*)", "id": 2},
-            {"value": "Topic2 (Category~*)", "id": 3},
-            {"value": "Topic3 (Category~*)", "id": 9}
-        ]
-        data = {
-            'topic_list': json.dumps(topic_list)
-        }
-        response = self.client.post(path, data)
+        response = self.client.post(self.path, self.invalid_data)
         self.assertContains(response, "form-group is-invalid")
 
     def test_ajax_and_check_and_ids_course_view(self):
@@ -121,9 +76,6 @@ class CourseViewTestCase(BaseCourseViewTestCase):
 
         Tests CourseView post if request is ajax and check and ids[] are true.
         """
-        path = reverse('frontend:course', kwargs={
-            'pk': self.course1.pk})
-
         topic_list = [
             {"value": "Topic1 (Category~*)", "id": 2},
             {"value": "Topic2 (Category~*)", "id": 3},
@@ -133,7 +85,7 @@ class CourseViewTestCase(BaseCourseViewTestCase):
             'topic_list': json.dumps(topic_list),
             'ids[]': [1, 2, 3, 4, 5]
         }
-        self.client.post(path, data,
+        self.client.post(self.path, data,
                          **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
         ids = Topic.objects.all().values_list("pk", flat=True)
         self.assertEqual(list(ids), [2, 3, 4])
@@ -185,24 +137,10 @@ class FavoriteTestCase(BaseCourseViewTestCase):
 
     Defines the test cases for function based view add_remove_favourites
     """
-    def test_add_and_remove_favorite(self):
-        """ add_remove_favourites test case - add
+    def test_add_remove_favorite(self):
+        """add_remove_favourites test case
 
-        Tests function based view add_remove_favourites when add favorite
-        """
-        self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
-
-        path = reverse('frontend:favourite_course', kwargs={
-            'pk': self.course1.pk})
-        data = {'user': self.user,
-                'pk': self.course1.pk}
-        self.client.post(path, data)
-        self.assertEqual(self.user.profile.stared_courses.all().count(), 1)
-
-    def test_remove_favorite(self):
-        """add_remove_favourites test case - remove
-
-        Tests function based view add_remove_favourites when remove favorite
+        Tests function based view add_remove_favourites
         """
         self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
 

@@ -21,7 +21,7 @@ class JsonHandler:
         Checks if the topics from the json data exists in the database.
 
         :param json_data: The json data containing topics and sub topics
-        :type json_data: list[dict[str, int]]
+        :type json_data: list[dict[str, Any]]
 
         :return: None if all topics in the json data exists
         :rtype: None or ValidationError
@@ -29,13 +29,13 @@ class JsonHandler:
         # Main topics
         for topic in json_data:
             if not Topic.objects.filter(id=topic['id']).exists():
-                raise ValidationError(f'The topic with the id {topic["id"]} does not exists')
+                raise ValidationError(f'The topic with the id {topic["id"]} does not exist')
             # Sub topics
             if 'children' in topic:
                 for sub_topic in topic['children']:
                     if not Topic.objects.filter(id=sub_topic['id']).exists():
                         raise ValidationError(
-                            f'The sub topic with the id {sub_topic["id"]} does not exists')
+                            f'The sub topic with the id {sub_topic["id"]} does not exist')
         return None
 
     @staticmethod
@@ -51,17 +51,15 @@ class JsonHandler:
         :param course: The Course where the structure should be modified
         :type course: Course
         :param json_data: The json data
-        :type json_data: list[dict[str, int]]
+        :type json_data: list[dict[str, Any]]
 
         :return: true if the structure was changed after its call
         :rtype: bool
         """
         course_id = course.id
         index = 0
-        print('###############################')
         # Main topics
         for topic in json_data:
-            print('1. Loop')
             index += 1
             current_id = topic['id']
             current_index = f'{index}'
@@ -70,10 +68,8 @@ class JsonHandler:
                 course_id=course_id)
             # Updates the entry in the data base if it exists, else we create a new entry
             if current_topic.exists():
-                print('1. If')
                 current_topic.update(topic_id=current_id)
             else:
-                print('1. Else')
                 CourseStructureEntry.objects.create(
                     index=current_index,
                     course_id=course_id,
@@ -81,9 +77,7 @@ class JsonHandler:
             # Sub topics
             sub_index = 0
             if 'children' in topic:
-                print('2. If')
                 for sub_topic in topic['children']:
-                    print('2. Loop')
                     sub_index += 1
                     current_id = sub_topic['id']
                     current_index = f'{index}/{sub_index}'
@@ -92,20 +86,16 @@ class JsonHandler:
                         course_id=course_id)
                     # Updates the entry in the data base if it exists, else we create a new entry
                     if current_topic.exists():
-                        print('3. If')
                         current_topic.update(topic_id=current_id)
                     else:
-                        print('4. If')
                         CourseStructureEntry.objects.create(
                             index=current_index,
                             course_id=course_id,
                             topic_id=current_id)
-            print('2. Loop Exit')
             # Clean sub topic fragments
             JsonHandler.clean_structure_sub_topic(course=course,
                                                   index=index,
                                                   sub_index=sub_index + 1)
-        print('1. Loop Exit')
         # Clean topic fragments
         JsonHandler.clean_structure_topic(course=course, index=index + 1)
         return True
