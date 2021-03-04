@@ -62,7 +62,7 @@ class BaseCourseViewTestCase(MediaTestCase):
 
         self.user = User.objects.get(pk=1)
 
-        self.cat = Category.objects.create(title="Category~*")
+        self.cat = Category.objects.create(title="Category")
         # set up a course item to test
         with reversion.create_revision():
             self.course1 = Course.objects.create(title='Course Test', description='desc', category=self.cat)
@@ -77,7 +77,3 @@ class BaseCourseViewTestCase(MediaTestCase):
             course_struc_entry_3 = CourseStructureEntry(course=self.course1, index="2/1", topic=self.topic3)
             course_struc_entry_1.save(), course_struc_entry_2.save(), course_struc_entry_3.save()
             set_comment('initial version')
-
-        self.json_data = [{'value': 'Topic1 (Category~*)', 'id': 2},
-                          {'value': 'Topic2 (Category~*)', 'id': 3,
-                           'children': [{'value': 'Topic3 (Category~*)', 'id': 4}]}]

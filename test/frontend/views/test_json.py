@@ -7,38 +7,27 @@ from django.core.exceptions import ValidationError
 
 from frontend.views.json import JsonHandler
 
-from base.models import CourseStructureEntry, Topic, Course, Category
+from base.models import CourseStructureEntry, Topic
 
-from test.test_cases import MediaTestCase
+from test.test_cases import BaseCourseViewTestCase
+
 
 # TODO test review
-class JsonHandlerTestCase(MediaTestCase):
+class JsonHandlerTestCase(BaseCourseViewTestCase):
     """ test cases for JsonHandler
 
     Defines the test cases for JsonHandler
     """
 
-    def setUp(self):
-        """Setup
-
-        Sets up the test database.
-        """
-        super().setUp()
-
-        self.cat = Category.objects.create(title="Category")
-        self.course1 = Course.objects.create(title='Course Test', description='desc', category=self.cat)
-        self.topic1 = Topic.objects.create(title="Topic1", category=self.cat)
-        self.topic2 = Topic.objects.create(title="Topic2", category=self.cat)
-        self.topic3 = Topic.objects.create(title="Topic3", category=self.cat)
-
-        course_struc_entry_1 = CourseStructureEntry(course=self.course1, index=1, topic=self.topic1)
-        course_struc_entry_2 = CourseStructureEntry(course=self.course1, index=2, topic=self.topic2)
-        course_struc_entry_3 = CourseStructureEntry(course=self.course1, index="2/1", topic=self.topic3)
-        course_struc_entry_1.save(), course_struc_entry_2.save(), course_struc_entry_3.save()
-        # there is already one topic before this set up, so our topics start with 2
-        self.json_data = [{'value': 'Topic1 (Category)', 'id': 2},
-                          {'value': 'Topic2 (Category)', 'id': 3,
-                           'children': [{'value': 'Topic3 (Category)', 'id': 4}]}]
+    def add_subtopics(self):
+        index = 2
+        sub_index = 2
+        title = 'Topic'
+        title_index = 4
+        for i in range(4):
+            topic = Topic.objects.create(title=f'{title}{title_index + i}', category=self.cat)
+            entry = CourseStructureEntry(course=self.course1, index=f'{index}/{sub_index + i}', topic=topic)
+            entry.save()
 
     def test_validate_topics_correct(self):
         """Validate topics test case - Correct topics
@@ -48,7 +37,10 @@ class JsonHandlerTestCase(MediaTestCase):
         validation was successful.
         """
         # Return should be None
-        self.assertIsNone(JsonHandler.validate_topics(self.json_data))
+        json_data = [{'value': 'Topic1 (Category)', 'id': 2},
+                     {'value': 'Topic2 (Category)', 'id': 3,
+                      'children': [{'value': 'Topic3 (Category)', 'id': 4}]}]
+        self.assertIsNone(JsonHandler.validate_topics(json_data))
 
     def test_validate_topics_only_main_invalid(self):
         """Validate topics test case - Invalid main topic but valid sub topics
@@ -81,8 +73,8 @@ class JsonHandlerTestCase(MediaTestCase):
         """
 
         json_data = [{'value': 'Topic1 (Category)', 'id': 2},
-                      {'value': 'Topic2 (Category)', 'id': 6,
-                       'children': [{'value': 'Topic3 (Category)', 'id': 7}]}]
+                     {'value': 'Topic2 (Category)', 'id': 6,
+                      'children': [{'value': 'Topic3 (Category)', 'id': 7}]}]
         self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data)
 
     def test_validate_topics_many_main_invalid(self):
@@ -93,10 +85,10 @@ class JsonHandlerTestCase(MediaTestCase):
         """
 
         json_data = [{'value': 'Topic1 (Category)', 'id': 5},
-                      {'value': 'Topic2 (Category)', 'id': 8,
-                       'children': [{'value': 'Topic3 (Category)', 'id': 4}]},
-                      {'value': 'Topic6 (Category)', 'id': 9},
-                      {'value': 'Topic7 (Category)', 'id': 10}]
+                     {'value': 'Topic2 (Category)', 'id': 8,
+                      'children': [{'value': 'Topic3 (Category)', 'id': 4}]},
+                     {'value': 'Topic6 (Category)', 'id': 9},
+                     {'value': 'Topic7 (Category)', 'id': 10}]
         self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data)
 
     def test_validate_topics_many_sub_invalid(self):
@@ -107,11 +99,11 @@ class JsonHandlerTestCase(MediaTestCase):
         """
 
         json_data = [{'value': 'Topic1 (Category)', 'id': 2},
-                      {'value': 'Topic2 (Category)', 'id': 3,
-                       'children': [{'value': 'Topic3 (Category)', 'id': 4},
-                                    {'value': 'Topic6 (Category)', 'id': 9},
-                                    {'value': 'Topic7 (Category)', 'id': 10}]}
-                      ]
+                     {'value': 'Topic2 (Category)', 'id': 3,
+                      'children': [{'value': 'Topic3 (Category)', 'id': 4},
+                                   {'value': 'Topic6 (Category)', 'id': 9},
+                                   {'value': 'Topic7 (Category)', 'id': 10}]}
+                     ]
         self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data)
 
     def test_clean_topics_no_deletion(self):
@@ -183,14 +175,7 @@ class JsonHandlerTestCase(MediaTestCase):
 
         Tests clean_structure_sub_topic if more than 1 element to be deleted.
         """
-        index = 2
-        sub_index = 2
-        title = 'Topic'
-        title_index = 4
-        for i in range(4):
-            topic = Topic.objects.create(title=f'{title}{title_index + i}', category=self.cat)
-            entry = CourseStructureEntry(course=self.course1, index=f'{index}/{sub_index + i}', topic=topic)
-            entry.save()
+        self.add_subtopics()
         # The four new sub topics should be added
         ids_1 = self.course1.topics.all().values_list("pk", flat=True)
         self.assertEqual(list(ids_1), [2, 3, 4, 5, 6, 7, 8])
@@ -229,14 +214,7 @@ class JsonHandlerTestCase(MediaTestCase):
         Tests the function clean_structure_sub_topic if the result of it does delete many topic
         topics since the topics exists in the course structure.
         """
-        index = 2
-        sub_index = 2
-        title = 'Topic'
-        title_index = 4
-        for i in range(4):
-            topic = Topic.objects.create(title=f'{title}{title_index + i}', category=self.cat)
-            entry = CourseStructureEntry(course=self.course1, index=f'{index}/{sub_index + i}', topic=topic)
-            entry.save()
+        self.add_subtopics()
         JsonHandler.clean_structure_topic(self.course1, 2)
         ids = self.course1.topics.all().values_list("pk", flat=True)
         self.assertEqual(list(ids), [2])
@@ -315,11 +293,11 @@ class JsonHandlerTestCase(MediaTestCase):
             entry = CourseStructureEntry(course=self.course1, index=f'{index}/{sub_index + i}', topic=topic)
             entry.save()
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1),
-                            [{'value': 'Topic1 (Category)', 'id': 2,
-                              'children': [{'value': 'Topic4 (Category)', 'id': 5},
-                                           {'value': 'Topic5 (Category)', 'id': 6}]},
-                             {'value': 'Topic2 (Category)', 'id': 3,
-                              'children': [{'value': 'Topic3 (Category)', 'id': 4}]}])
+                         [{'value': 'Topic1 (Category)', 'id': 2,
+                           'children': [{'value': 'Topic4 (Category)', 'id': 5},
+                                        {'value': 'Topic5 (Category)', 'id': 6}]},
+                          {'value': 'Topic2 (Category)', 'id': 3,
+                           'children': [{'value': 'Topic3 (Category)', 'id': 4}]}])
 
     def test_json_to_topics_structure_empty(self):
         """Json to topics structure - Empty json data
@@ -357,16 +335,7 @@ class JsonHandlerTestCase(MediaTestCase):
         for topic in CourseStructureEntry.objects.all():
             if topic.index == '2/1':
                 topic.delete()
-        json_data = [{'value': 'Topic2 (Category)', 'id': 3,
-                      'children': [{'value': 'Topic3 (Category)', 'id': 4}]},
-                     {'value': 'Topic1 (Category)', 'id': 2}]
-        JsonHandler.json_to_topics_structure(self.course1, json_data)
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("index", flat=True)),
-                         ['1', '2', '1/1'])
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("topic_id", flat=True)),
-                         [2, 3, 4])
-        self.assertIsNotNone(CourseStructureEntry.objects.get(index='1/1', topic=self.topic3))
-        self.assertIsNotNone(CourseStructureEntry.objects.get(index='1', topic=self.topic2))
+        self.test_update_json_to_topics_structure_update_main_sub()
 
     def test_update_json_to_topics_structure_update_main_sub(self):
         """Json to topics structure - Update main topic and creating sub topic
