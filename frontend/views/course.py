@@ -341,7 +341,7 @@ class CourseView(DetailView, FormMixin):
             return self.form_valid(form)
 
         # Edit course structure cancel/save
-        elif request.is_ajax():
+        if request.is_ajax():
             check = True
             # Update course structure
             topic_list = request.POST.get('topic_list')
@@ -355,7 +355,6 @@ class CourseView(DetailView, FormMixin):
                     JsonHandler.json_to_topics_structure(self.object, json_obj)
 
             # Clean unused topics
-            # TODO hier sollte getlist statt get sein, sonst nur der letzte Element wird geholt
             ids = request.POST.getlist('ids[]')
             if ids:
                 JsonHandler.clean_topics(ids)
@@ -538,7 +537,8 @@ def add_remove_favourites(request, pk):  # pylint: disable=invalid-name
     # If the course is already in the favourite set, remove it
     if course in profile.stared_courses.all():
         profile.stared_courses.remove(course)
-        message = _("Course %(title)s successfully removed from favourites") % {'title': course.title}
+        message = \
+            _("Course %(title)s successfully removed from favourites") % {'title': course.title}
         messages.success(request, message, extra_tags="alert-success")
 
     # Otherwise add it to the favourite set
