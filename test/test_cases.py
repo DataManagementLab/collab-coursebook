@@ -3,16 +3,15 @@
 This file contains the custom test cases used to reduce redundant code..
 """
 import shutil
+from test import utils
 
 import reversion
 from reversion import set_comment
 
-from base.models import Category, Course, Topic, CourseStructureEntry
-from test import utils
-
+from django.test import TestCase, override_settings
 from django.contrib.auth.models import User  # pylint: disable=imported-auth-user
 
-from django.test import TestCase, override_settings
+from base.models import Category, Course, Topic, CourseStructureEntry
 
 
 @override_settings(MEDIA_ROOT=utils.MEDIA_ROOT)
@@ -39,13 +38,19 @@ class MediaTestCase(TestCase):
         shutil.rmtree(utils.MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
 
-    def assertContainsHtml(self, response, *args):
+    def assert_contains_html(self, response, *args):
+        """assert contains html
+
+        Assert that a response indicates that some content was retrieved successfully,
+        (i.e., the HTTP status code was as expected)
+        and that all args occur in the content of the response.
+        :param response: the response which should contain the args
+        :type response: TemplateResponse
+        :param args: the args which should be contained in the response
+        :type args: Any
+        """
         for html in args:
-            try:
-                self.assertContains(response, html, html=True)
-            except AssertionError as e:
-                print(e)
-                raise
+            self.assertContains(response, html, html=True)
 
 
 class BaseCourseViewTestCase(MediaTestCase):
@@ -65,15 +70,21 @@ class BaseCourseViewTestCase(MediaTestCase):
         self.cat = Category.objects.create(title="Category")
         # set up a course item to test
         with reversion.create_revision():
-            self.course1 = Course.objects.create(title='Course Test', description='desc', category=self.cat)
+            self.course1 = Course.objects.create(title='Course Test',
+                                                 description='desc', category=self.cat)
             self.course1.owners.add(self.user.profile)
 
             self.topic1 = Topic.objects.create(title="Topic1", category=self.cat)
             self.topic2 = Topic.objects.create(title="Topic2", category=self.cat)
             self.topic3 = Topic.objects.create(title="Topic3", category=self.cat)
 
-            course_struc_entry_1 = CourseStructureEntry(course=self.course1, index=1, topic=self.topic1)
-            course_struc_entry_2 = CourseStructureEntry(course=self.course1, index=2, topic=self.topic2)
-            course_struc_entry_3 = CourseStructureEntry(course=self.course1, index="2/1", topic=self.topic3)
-            course_struc_entry_1.save(), course_struc_entry_2.save(), course_struc_entry_3.save()
+            course_struc_entry_1 = CourseStructureEntry(course=self.course1,
+                                                        index=1, topic=self.topic1)
+            course_struc_entry_2 = CourseStructureEntry(course=self.course1,
+                                                        index=2, topic=self.topic2)
+            course_struc_entry_3 = CourseStructureEntry(course=self.course1,
+                                                        index="2/1", topic=self.topic3)
+            course_struc_entry_1.save()
+            course_struc_entry_2.save()
+            course_struc_entry_3.save()
             set_comment('initial version')

@@ -3,32 +3,19 @@
 This file contains the test cases for /frontend/views/json.py.
 """
 
+from test.test_cases import BaseCourseViewTestCase
 from django.core.exceptions import ValidationError
 
 from frontend.views.json import JsonHandler
 
 from base.models import CourseStructureEntry, Topic
 
-from test.test_cases import BaseCourseViewTestCase
 
+class ValidateTopicsTestCase(BaseCourseViewTestCase):
+    """ test cases for JsonHandler.validate_topics
 
-# TODO test review
-class JsonHandlerTestCase(BaseCourseViewTestCase):
-    """ test cases for JsonHandler
-
-    Defines the test cases for JsonHandler
+    Defines the test cases for JsonHandler.validate_topics
     """
-
-    def add_subtopics(self):
-        index = 2
-        sub_index = 2
-        title = 'Topic'
-        title_index = 4
-        for i in range(4):
-            topic = Topic.objects.create(title=f'{title}{title_index + i}', category=self.cat)
-            entry = CourseStructureEntry(course=self.course1, index=f'{index}/{sub_index + i}', topic=topic)
-            entry.save()
-
     def test_validate_topics_correct(self):
         """Validate topics test case - Correct topics
 
@@ -68,8 +55,9 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
     def test_validate_topics_main_and_sub_invalid(self):
         """Validate topics test case - Invalid main topic and invalid sub topic
 
-        Tests the function validate_topics if a main topic and its sub topic are invalid. This means the main
-        topic does not exists in the data base and the sub topic does not neither.
+        Tests the function validate_topics if a main topic and its sub topic are invalid.
+        This means the main topic does not exists in the data base and the sub topic
+        does not either.
         """
 
         json_data = [{'value': 'Topic1 (Category)', 'id': 2},
@@ -106,6 +94,29 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
                      ]
         self.assertRaises(ValidationError, JsonHandler.validate_topics, json_data)
 
+
+class CleanTestCase(BaseCourseViewTestCase):
+    """ test cases for JsonHandlers clean methods
+
+    Defines the test cases for JsonHandler.clean_structure_topic,
+    clean_structure_sub_topic, clean_topics
+    """
+
+    def add_subtopics(self):
+        """Add Subtopics
+
+        Adds 4 subtopics to topic 2
+        """
+        index = 2
+        sub_index = 2
+        title = 'Topic'
+        title_index = 4
+        for i in range(4):
+            topic = Topic.objects.create(title=f'{title}{title_index + i}', category=self.cat)
+            entry = CourseStructureEntry(course=self.course1,
+                                         index=f'{index}/{sub_index + i}', topic=topic)
+            entry.save()
+
     def test_clean_topics_no_deletion(self):
         """Clean topics test case - No deletion
 
@@ -140,7 +151,7 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
         title = 'Topic'
         index = 4
         for i in range(3):
-            Topic.objects.create(title=f'{title}{index}', category=self.cat)
+            Topic.objects.create(title=f'{title}{index + i}', category=self.cat)
         ids = [1, 2, 3, 4, 5, 6, 7, 8]
         JsonHandler.clean_topics(ids)
         ids = Topic.objects.all().values_list("pk", flat=True)
@@ -219,6 +230,14 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
         ids = self.course1.topics.all().values_list("pk", flat=True)
         self.assertEqual(list(ids), [2])
 
+
+class JsonTestCase(BaseCourseViewTestCase):
+    """ test cases for JsonHandlers Json Methods
+
+    Defines the test cases for JsonHandler.json_to_topics_structure,
+    topics_structure_to_json
+    """
+
     def test_topics_structure_to_json_empty(self):
         """Topics structure to json test case - Empty structure
 
@@ -290,7 +309,8 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
         sub_index = 1
         for i in range(2):
             topic = Topic.objects.create(title=f'{title}{title_index + i}', category=self.cat)
-            entry = CourseStructureEntry(course=self.course1, index=f'{index}/{sub_index + i}', topic=topic)
+            entry = CourseStructureEntry(course=self.course1,
+                                         index=f'{index}/{sub_index + i}', topic=topic)
             entry.save()
         self.assertEqual(JsonHandler.topics_structure_to_json(self.course1),
                          [{'value': 'Topic1 (Category)', 'id': 2,
@@ -318,9 +338,11 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
                      {'value': 'Topic1 (Category)', 'id': 2,
                      'children': [{'value': 'Topic3 (Category)', 'id': 4}]}]
         JsonHandler.json_to_topics_structure(self.course1, json_data)
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("index", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("index", flat=True)),
                          ['1', '2', '2/1'])
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("topic_id", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("topic_id", flat=True)),
                          [2, 3, 4])
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='2/1', topic=self.topic3))
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='1', topic=self.topic2))
@@ -347,9 +369,11 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
                       'children': [{'value': 'Topic3 (Category)', 'id': 4}]},
                      {'value': 'Topic1 (Category)', 'id': 2}]
         JsonHandler.json_to_topics_structure(self.course1, json_data)
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("index", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("index", flat=True)),
                          ['1', '2', '1/1'])
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("topic_id", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("topic_id", flat=True)),
                          [2, 3, 4])
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='1/1', topic=self.topic3))
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='1', topic=self.topic2))
@@ -366,9 +390,11 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
                       'children': [{'value': 'Topic3 (Category)', 'id': 4}]},
                      {'value': 'Topic4 (Category)', 'id': 5}]  # entry for a new topic
         JsonHandler.json_to_topics_structure(self.course1, json_data)
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("index", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("index", flat=True)),
                          ['1', '2', '2/1', '3'])
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("topic_id", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("topic_id", flat=True)),
                          [2, 3, 4, 5])
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='3', topic=topic4))
 
@@ -389,9 +415,11 @@ class JsonHandlerTestCase(BaseCourseViewTestCase):
                      ]
         JsonHandler.json_to_topics_structure(self.course1, json_data)
         # the new structure should subject to the new json data
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("index", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("index", flat=True)),
                          ['1', '2', '2/1', '1/1', '2/2'])
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("topic_id", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("topic_id", flat=True)),
                          [2, 3, 4, 5, 6])
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='2/2', topic=topic4))
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='1/1', topic=topic5))

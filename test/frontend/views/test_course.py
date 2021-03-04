@@ -1,10 +1,14 @@
+"""Purpose of this file
+
+This file contains the test cases for /frontend/views/course.py.
+"""
 import json
 
+from test.test_cases import BaseCourseViewTestCase
 from django.urls import reverse
 
 from base.models import CourseStructureEntry, Topic
 from frontend.forms.course import CreateTopicForm
-from test.test_cases import BaseCourseViewTestCase
 
 
 class CourseViewTestCase(BaseCourseViewTestCase):
@@ -47,9 +51,11 @@ class CourseViewTestCase(BaseCourseViewTestCase):
                                     **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
         self.assertEqual(response.status_code, 200)
         # after post the structure of topics should also be accordingly changed
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("index", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("index", flat=True)),
                          ['1', '2', '3'])
-        self.assertEqual(list(CourseStructureEntry.objects.all().values_list("topic_id", flat=True)),
+        self.assertEqual(list(CourseStructureEntry.objects.all()
+                              .values_list("topic_id", flat=True)),
                          [2, 3, 4])
         self.assertIsNotNone(CourseStructureEntry.objects.get(index='3', topic=self.topic3))
 
