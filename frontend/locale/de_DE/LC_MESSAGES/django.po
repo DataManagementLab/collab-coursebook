@@ -25,6 +25,14 @@ msgstr "Dein Kommentar"
 msgid "Change Log"
 msgstr "Änderungsprotokoll"
 
+#: .\forms\content.py:54
+msgid "Please write down your changes of this content"
+msgstr "Bitte notieren Sie Ihre Änderungen an diesem Inhalt"
+
+#: .\forms\course.py:62
+msgid "Please write down your changes of this course"
+msgstr "Bitte notieren Sie Ihre Änderungen an diesem Kurs"
+
 #: .\forms\course.py:111
 msgid "Text"
 msgstr "Text"
@@ -235,9 +243,9 @@ msgstr "Kommentar hinzufügen"
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: .\templates\frontend\content\edit.html:51
-#: .\templates\frontend\course\edit_structure.html:81
 #: .\templates\frontend\course\view.html:35
+#: .\templates\frontend\content\edit.html:52
+#: .\templates\frontend\course\edit_structure.html:89
 msgid "Save"
 msgstr "Speichern"
 
@@ -325,7 +333,11 @@ msgstr "Ändern"
 msgid "Edit Course Structure"
 msgstr "Kursstruktur bearbeiten"
 
-#: .\templates\frontend\course\edit_structure.html:35
+#: .\templates\frontend\course\edit_structure.html:70
+msgid "Course Structure"
+msgstr "Kursstruktur"
+
+#: .\templates\frontend\course\edit_structure.html:36
 msgid "Add Topic to Structure"
 msgstr "Thema zur Kursstruktur hinzufügen"
 
@@ -354,11 +366,13 @@ msgstr "Thema erstellen"
 msgid "Back"
 msgstr "Zurück"
 
-#: .\templates\frontend\course\view.html:34
-msgid "Unsave"
-msgstr "Nicht Speichern"
+#: .\templates\frontend\course\edit_structure.html:297
+#: .\templates\frontend\course\edit_structure.html:325
+#: .\templates\frontend\course\edit_structure.html:354
+msgid "Fehler bei der Datenübertragung zum Server - Status:"
+msgstr ""
 
-#: .\templates\frontend\course\view.html:47
+#: .\templates\frontend\course\view.html:46
 msgid "Edit Course"
 msgstr "Kurs bearbeiten"
 
@@ -642,7 +656,11 @@ msgstr "Profilbild"
 msgid "Language"
 msgstr "Sprache"
 
-#: .\templates\frontend\profile\profile.html:32
+#: .\templates\frontend\course\view.html:101
+msgid "Table of Contents"
+msgstr "Inhaltsverzeichnis"
+
+#: .\templates\frontend\profile\profile.html:28
 msgid "Biography"
 msgstr "Biographie"
 
@@ -796,5 +814,11 @@ msgstr "Profil aktualisiert"
 #~ msgid "sort by:"
 #~ msgstr "sortieren nach"
 
-#~ msgid "Course %(title)s successfully duplicated."
-#~ msgstr "Kurs %(title)s erfolgreich dupliziert"
+msgid "Course %(title)s successfully duplicated."
+msgstr "Kurs %(title)s erfolgreich dupliziert"
+
+msgid "Add to favourite"
+msgstr "Zu Favouriten hinzufügen"
+
+msgid "Remove from favourite"
+msgstr "Aus Favouriten entfernen"

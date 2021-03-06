@@ -298,7 +298,7 @@ class YTVideoContent(BaseContentModel):
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
 
-    url = models.URLField(verbose_name=_("Video URL"))
+    url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
     class Meta:
         """Meta options
@@ -325,7 +325,9 @@ class YTVideoContent(BaseContentModel):
         split_url = self.url.split("=")
         if len(split_url) == 2:
             return self.url.split("=")[1]
-        return self.url.split("=")[1].split("&")[0]
+        if len(split_url) > 2:
+            return self.url.split("=")[1].split("&")[0]
+        return self.url.split("/")[3]
 
     def __str__(self):
         """String representation

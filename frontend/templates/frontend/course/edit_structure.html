@@ -12,7 +12,7 @@
 
 
 {% block imports %}
-    <script src="{% url 'frontend:javascript-catalog' %}"></script>
+    <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
     <script type="text/javascript" src="{% static 'js/request.js' %}"></script>
 {% endblock %}
 
@@ -21,8 +21,6 @@
 {% endblock %}
 
 {% block content %}
-    {% include 'frontend/utils/notification.html' %}
-
     <div id="title" style="text-align: center">
         <h2 style="font-weight: bold">
             {% trans 'Edit Course Structure' %} - {{ course.title }}
@@ -67,6 +65,11 @@
 
     {# Structure Editor #}
     <div class="container-fluid">
+        <div style="text-align: center">
+            <h3 style="font-weight: bold">
+                {% trans 'Course Structure' %}
+            </h3>
+        </div>
         <div class="row">
             {% include 'frontend/utils/nestable_list.html' %}
         </div>
@@ -74,8 +77,8 @@
 
     <br>
 
-    <button onclick="cancel()" class=" btn btn-primary">
-        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Back' %}
+    <button onclick="cancel()" class=" btn btn-danger">
+        {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
     </button>
     <button onclick="save()" type="submit" class="btn btn-primary">
         {% fa5_icon 'save' %} {% trans 'Save' %}
@@ -111,7 +114,7 @@
             }
             addItem(topic, id);
             const message = gettext("The topic %s was successfully added to the course structure.");
-            showNotification(interpolate(message, [topic]));
+            showNotification(interpolate(message, [topic]), "alert-info");
         }
 
         /**
@@ -186,7 +189,7 @@
                 },
                 error: function (data) {
                     const message = gettext("Error during data transfer to the server - status: %s");
-                    alert(interpolate(message, [data.status]));
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
             });
         }
@@ -201,24 +204,24 @@
                 data: {"ids": NEW_ELEMENTS},
 
                 success: function () {
-                    window.location.href = "{% url 'frontend:course' course.id %}";
+                    window.location.href = "{% url 'frontend:course' course.id %}"
                 },
                 error: function (data) {
                     const message = gettext("Error during data transfer to the server - status: %s");
-                    alert(interpolate(message, [data.status]));
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
-            })
+            });
         }
 
         /**
          * Configures the post information with the serialized nestable data.
          */
         function save() {
-            const nestable = $("#nestable3").nestable("serialize");
+            const nestable = $('#nestable3').nestable("serialize");
             const json_obj = window.JSON.stringify(nestable);
             sendRequest({
                 url: "{% url 'frontend:course' course.id %}",
-                type: 'POST',
+                type: "POST",
                 data: {"topic_list": json_obj, "ids": NEW_ELEMENTS},
                 ContentType: "application/json",
 
@@ -227,10 +230,9 @@
                 },
                 error: function (data) {
                     const message = gettext("Error during data transfer to the server - status: %s");
-                    alert(interpolate(message, [data.status]));
-                    alert(json_obj);
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
-            })
+            });
         }
 
         $(document).ready(function () {
@@ -243,10 +245,7 @@
             $("#nestable3").nestable({maxDepth: DEPTH});
 
             /* Register actions */
-
-            // Defines actions on remove click
             $("#dd-empty-placeholder").on("click", ".close", removeItem);
-
             $("#post-form-edit-structure-create-topic").on("submit", create);
 
             // Clean nestable

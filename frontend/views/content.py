@@ -93,6 +93,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     form_class = AddContentForm
     success_url = reverse_lazy('frontend:dashboard')
     context_object_name = 'content'
+    object = None
 
     def get_success_message(self, cleaned_data):
         """Success message
@@ -135,7 +136,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Retrieves the form for content type
         content_type = self.kwargs['type']
-        context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
+        if 'content_type_form' not in context:
+            context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
@@ -148,8 +150,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context['course'] = course
 
         # Setup formset
-        formset = ImageAttachmentFormSet(queryset=ImageAttachment.objects.none())
-        context['item_forms'] = formset
+        if 'item_forms' not in context:
+            formset = ImageAttachmentFormSet(queryset=ImageAttachment.objects.none())
+            context['item_forms'] = formset
 
         return context
 
@@ -182,6 +185,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Reads input from included forms
         add_content_form = AddContentForm(request.POST)
+        image_formset = ImageAttachmentFormSet(request.POST, request.FILES)
 
         # Checks if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
@@ -200,9 +204,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
-                # Reads input from all forms
-                image_formset = ImageAttachmentFormSet(request.POST, request.FILES)
-
                 # Validates attachments
                 redirect = Validator.validate_attachment(content,
                                                          image_formset)
@@ -229,11 +230,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                       topic_id,
                       content.id)))
 
-        # add_content_form invalid
-        if not add_content_form.is_valid():
-            return self.form_invalid(add_content_form)
-        # content_type_form invalid
-        return self.form_invalid(content_type_form)
+        return self.render_to_response(
+                self.get_context_data(form=add_content_form, content_type_form=content_type_form,
+                                      item_forms=image_formset))
 
 
 class EditContentView(LoginRequiredMixin, UpdateView):
@@ -342,7 +341,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
 
-        if content_type in IMAGE_ATTACHMENT_TYPES:
+        if content_type in IMAGE_ATTACHMENT_TYPES and 'item_forms' not in context:
 
             # Identifies the pk's of attached images
             pk_set = []
@@ -389,6 +388,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Reversion comment
             Reversion.update_comment(request)
+            image_formset = ImageAttachmentFormSet(
+                data=request.POST,
+                files=request.FILES)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
@@ -398,10 +400,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
-
-                    image_formset = ImageAttachmentFormSet(
-                        data=request.POST,
-                        files=request.FILES)
 
                     # Removes images from database
                     clean_attachment(content, image_formset)
@@ -429,7 +427,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Don't save and render error messages for both forms
             return self.render_to_response(
-                self.get_context_data(form=form, content_type_form=content_type_form))
+                self.get_context_data(form=form, content_type_form=content_type_form, item_forms=image_formset))
 
         # Redirect to error page (should not happen for valid content types)
         return self.handle_error()

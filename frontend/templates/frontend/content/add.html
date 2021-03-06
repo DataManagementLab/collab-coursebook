@@ -14,7 +14,6 @@
 {% block content %}
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}
-        {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
         <br>
         {% if attachment_allowed %}
@@ -41,7 +40,7 @@
         {% endif %}
 
         <br>
-
+        {% bootstrap_form form %}
         {{ form.media }}
 
         <div>
