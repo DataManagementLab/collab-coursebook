@@ -12,6 +12,10 @@
     {# Fields differences #}
     {% for field_diff in compare_data %}
         <h3>
+            {% if field_diff.attachment %}
+                {# TODO translate? #}
+                {% trans "Attachment" %} {{ field_diff.attachment }} -
+            {% endif %}
             {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
         </h3>
         {% if field_diff.field.help_text %}
@@ -82,7 +86,7 @@
                 <div class="modal-footer">
                     <form method="post" id="post-form-revert" class="post-form" enctype=multipart/form-data>
                         {% csrf_token %}
-                        <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
+                        <input type="hidden" name="ver_pk" value="{{ version1.pk }}">
                         <button class="btn btn-secondary" data-dismiss="modal">
                             {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
