@@ -335,6 +335,10 @@ msgstr "Ändern"
 msgid "Edit Course Structure"
 msgstr "Kursstruktur bearbeiten"
 
+#: .\templates\frontend\course\edit_structure.html:70
+msgid "Course Structure"
+msgstr "Kursstruktur"
+
 #: .\templates\frontend\course\edit_structure.html:36
 msgid "Add Topic to Structure"
 msgstr "Thema zur Kursstruktur hinzufügen"

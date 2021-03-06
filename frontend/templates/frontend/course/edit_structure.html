@@ -65,6 +65,11 @@
 
     {# Structure Editor #}
     <div class="container-fluid">
+        <div style="text-align: center">
+            <h3 style="font-weight: bold">
+                {% trans 'Course Structure' %}
+            </h3>
+        </div>
         <div class="row">
             {% include 'frontend/utils/nestable_list.html' %}
         </div>
@@ -72,8 +77,8 @@
 
     <br>
 
-    <button onclick="cancel()" class=" btn btn-primary">
-        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Back' %}
+    <button onclick="cancel()" class=" btn btn-danger">
+        {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
     </button>
     <button onclick="save()" type="submit" class="btn btn-primary">
         {% fa5_icon 'save' %} {% trans 'Save' %}
