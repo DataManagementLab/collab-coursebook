@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 14:55+0100\n"
+"POT-Creation-Date: 2021-03-03 22:19+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\forms\comment.py:49
-msgid "No image available"
-msgstr "Kein Bild verfügbar"
-
-#: .\forms\comment.py:49
+#: .\forms\comment.py:48
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
-#: .\forms\course.py:62
-#: .\forms\content.py:54
+#: .\forms\content.py:54 .\forms\course.py:62
 msgid "Change Log"
 msgstr "Änderungsprotokoll"
 
@@ -50,7 +45,7 @@ msgstr "YouTube-Video"
 msgid "Date"
 msgstr "Datum"
 
-#: .\forms\course.py:114 .\templates\frontend\content\detail.html:197
+#: .\forms\course.py:114 .\templates\frontend\content\detail.html:180
 msgid "Rating"
 msgstr "Bewertung"
 
@@ -66,24 +61,24 @@ msgstr "Sortieren nach"
 msgid "Topics"
 msgstr "Themen"
 
-#: .\templates\frontend\base.html:31
+#: .\templates\frontend\base.html:34
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
 msgstr ""
 "Sind Sie sicher, dass Sie die Sprache ändern möchten? Ihre Änderungen gehen "
 "dann verloren!"
 
-#: .\templates\frontend\base.html:60
+#: .\templates\frontend\base.html:66
 msgid "Impress"
 msgstr "Impressum"
 
-#: .\templates\frontend\base.html:65
+#: .\templates\frontend\base.html:71
 msgid "This software is open source"
 msgstr "Diese Software ist Open Source"
 
 #: .\templates\frontend\comment\delete_confirm.html:9
-#: .\templates\frontend\content\detail.html:101
-#: .\templates\frontend\content\detail.html:153
+#: .\templates\frontend\content\detail.html:93
+#: .\templates\frontend\content\detail.html:136
 msgid "Delete"
 msgstr "Löschen"
 
@@ -96,21 +91,23 @@ msgid "Are you sure you want to delete the following comment?"
 msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 
 #: .\templates\frontend\comment\delete_confirm.html:29
-#: .\templates\frontend\content\detail.html:171
+#: .\templates\frontend\content\detail.html:154
 #: .\templates\frontend\course\delete_confirm.html:28
+#: .\templates\frontend\course\view.html:216
 #: .\templates\frontend\history\history_compare_view.html:91
 msgid "Confirm"
 msgstr "Bestätigen"
 
 #: .\templates\frontend\comment\delete_confirm.html:32
 #: .\templates\frontend\comment\edit.html:24
-#: .\templates\frontend\content\add.html:54
-#: .\templates\frontend\content\detail.html:168
-#: .\templates\frontend\content\edit.html:55
-#: .\templates\frontend\course\create.html:31
+#: .\templates\frontend\content\add.html:53
+#: .\templates\frontend\content\detail.html:151
+#: .\templates\frontend\content\edit.html:54
+#: .\templates\frontend\course\create.html:30
 #: .\templates\frontend\course\delete_confirm.html:31
 #: .\templates\frontend\course\duplicate.html:33
 #: .\templates\frontend\course\edit.html:33
+#: .\templates\frontend\course\view.html:213
 #: .\templates\frontend\history\history_compare_view.html:87
 #: .\templates\frontend\profile\profile_edit.html:20
 msgid "Cancel"
@@ -131,65 +128,64 @@ msgstr "Abschicken"
 msgid "Image Attachments"
 msgstr "Bildanhänge"
 
-#: .\templates\frontend\content\add.html:36
-#: .\templates\frontend\content\edit.html:38
+#: .\templates\frontend\content\add.html:35
+#: .\templates\frontend\content\edit.html:37
 msgid "Add attachment"
 msgstr "Anhang hinzufügen"
 
-#: .\templates\frontend\content\add.html:39
-#: .\templates\frontend\content\edit.html:41
+#: .\templates\frontend\content\add.html:38
+#: .\templates\frontend\content\edit.html:40
 msgid "Remove attachment"
 msgstr "Anhang entfernen"
 
-#: .\templates\frontend\content\add.html:51
-#: .\templates\frontend\course\create.html:28
+#: .\templates\frontend\content\add.html:50
+#: .\templates\frontend\course\create.html:27
 #: .\templates\frontend\course\duplicate.html:30
 msgid "Create"
 msgstr "Erstellen"
 
-#: .\templates\frontend\content\attachment_embedding_help.html:17
+#: .\templates\frontend\content\attachment_embedding_help.html:13
 msgid "In order to include an attached image i in your latex file, use"
 msgstr ""
 "Damit Sie eine angehängte Bilddatei in Ihrem LaTeX-Code einbinden können, "
 "können Sie"
 
-#: .\templates\frontend\content\attachment_embedding_help.html:19
+#: .\templates\frontend\content\attachment_embedding_help.html:15
 msgid "inside"
 msgstr "innerhalb von"
 
-#: .\templates\frontend\content\attachment_embedding_help.html:21
+#: .\templates\frontend\content\attachment_embedding_help.html:17
 msgid ""
 "instead of the actual path. Be aware that the image count begins at 0. "
 "Example:"
 msgstr "verwenden. Die Bilddateien werden ab dem Index 0 gezählt. Beispiel:"
 
 #: .\templates\frontend\content\detail.html:20
-#: .\templates\frontend\course\view.html:25
+#: .\templates\frontend\course\view.html:26
 msgid "Actions"
 msgstr "Aktionen"
 
-#: .\templates\frontend\content\detail.html:39
+#: .\templates\frontend\content\detail.html:31
 msgid "Reading Mode"
 msgstr "Lesemodus"
 
-#: .\templates\frontend\content\detail.html:45
-#: .\templates\frontend\content\detail.html:50
+#: .\templates\frontend\content\detail.html:37
+#: .\templates\frontend\content\detail.html:42
 #: .\templates\frontend\course\coursebook.html:21
 msgid "Coursebook"
 msgstr "Kursbuch"
 
-#: .\templates\frontend\content\detail.html:60
-#: .\templates\frontend\course\edit_structure.html:23
-#: .\templates\frontend\profile\profile.html:12
+#: .\templates\frontend\content\detail.html:52
+#: .\templates\frontend\profile\profile.html:13
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: .\templates\frontend\content\detail.html:68
-#: .\templates\frontend\content\detail.html:75
-#: .\templates\frontend\content\detail.html:82
-#: .\templates\frontend\content\detail.html:88
-#: .\templates\frontend\content\detail.html:95
-#: .\templates\frontend\course\view.html:52
+#: .\templates\frontend\content\detail.html:60
+#: .\templates\frontend\content\detail.html:67
+#: .\templates\frontend\content\detail.html:74
+#: .\templates\frontend\content\detail.html:80
+#: .\templates\frontend\content\detail.html:87
+#: .\templates\frontend\course\view.html:53
 msgid "View History"
 msgstr "Versionsgeschichte"
 
@@ -197,15 +193,15 @@ msgstr "Versionsgeschichte"
 msgid "Back to course"
 msgstr "Zurück zum Kurs"
 
-#: .\templates\frontend\content\detail.html:127
+#: .\templates\frontend\content\detail.html:110
 msgid "By"
 msgstr "Von"
 
-#: .\templates\frontend\content\detail.html:142
+#: .\templates\frontend\content\detail.html:125
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: .\templates\frontend\content\detail.html:158
+#: .\templates\frontend\content\detail.html:141
 #, python-format
 msgid ""
 "\n"
@@ -218,20 +214,20 @@ msgstr ""
 "Diese Aktion kann nicht rückgängig gemacht werden.\n"
 "                        "
 
-#: .\templates\frontend\content\detail.html:183
-#: .\templates\frontend\course\view.html:81
+#: .\templates\frontend\content\detail.html:166
+#: .\templates\frontend\course\view.html:89
 msgid "Description"
 msgstr "Beschreibung"
 
-#: .\templates\frontend\content\detail.html:205
+#: .\templates\frontend\content\detail.html:188
 msgid "No rating yet"
 msgstr "Bisher keine Bewertungen"
 
-#: .\templates\frontend\content\detail.html:219
+#: .\templates\frontend\content\detail.html:202
 msgid "Comments"
 msgstr "Kommentare"
 
-#: .\templates\frontend\content\detail.html:227
+#: .\templates\frontend\content\detail.html:210
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
 
@@ -239,9 +235,9 @@ msgstr "Kommentar hinzufügen"
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: .\templates\frontend\content\edit.html:52
-#: .\templates\frontend\course\edit_structure.html:89
-#: .\templates\frontend\course\view.html:34
+#: .\templates\frontend\content\edit.html:51
+#: .\templates\frontend\course\edit_structure.html:81
+#: .\templates\frontend\course\view.html:35
 msgid "Save"
 msgstr "Speichern"
 
@@ -265,8 +261,8 @@ msgstr "Exportieren"
 msgid "Your coursebook is empty"
 msgstr "Dein Kursbuch ist leer"
 
-#: .\templates\frontend\course\create.html:11
-#: .\templates\frontend\course\create.html:19
+#: .\templates\frontend\course\create.html:9
+#: .\templates\frontend\course\create.html:18
 #: .\templates\frontend\course_lists\card_create_course.html:21
 msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"
@@ -311,7 +307,7 @@ msgstr "Inhalte hinzufügen"
 
 #: .\templates\frontend\course\duplicate.html:11
 #: .\templates\frontend\course\duplicate.html:20
-#: .\templates\frontend\course\view.html:37
+#: .\templates\frontend\course\view.html:38
 msgid "Duplicate Course"
 msgstr "Kurs duplizieren"
 
@@ -324,81 +320,101 @@ msgstr "Kurs bearbeiten"
 msgid "Change"
 msgstr "Ändern"
 
-#: .\templates\frontend\course\edit_structure.html:29
+#: .\templates\frontend\course\edit_structure.html:20
+#: .\templates\frontend\course\edit_structure.html:28
 msgid "Edit Course Structure"
 msgstr "Kursstruktur bearbeiten"
 
-#: .\templates\frontend\course\edit_structure.html:36
+#: .\templates\frontend\course\edit_structure.html:35
 msgid "Add Topic to Structure"
 msgstr "Thema zur Kursstruktur hinzufügen"
 
-#: .\templates\frontend\course\edit_structure.html:41
+#: .\templates\frontend\course\edit_structure.html:40
 msgid "Expand Structure"
 msgstr "Struktur aufklappen"
 
-#: .\templates\frontend\course\edit_structure.html:44
+#: .\templates\frontend\course\edit_structure.html:43
 msgid "Collapse Structure"
 msgstr "Struktur zuklappen"
 
-#: .\templates\frontend\course\edit_structure.html:47
+#: .\templates\frontend\course\edit_structure.html:46
 msgid "Add Topic"
 msgstr "Thema hinzufügen"
 
-#: .\templates\frontend\course\edit_structure.html:53
+#: .\templates\frontend\course\edit_structure.html:52
 msgid "Add a new Topic"
 msgstr "Ein neues Thema erstellen"
 
-#: .\templates\frontend\course\edit_structure.html:60
+#: .\templates\frontend\course\edit_structure.html:59
 msgid "Create Topic"
 msgstr "Thema erstellen"
 
-#: .\templates\frontend\course\edit_structure.html:86
+#: .\templates\frontend\course\edit_structure.html:78
 #: .\templates\frontend\history\history.html:17
 msgid "Back"
 msgstr "Zurück"
 
-#: .\templates\frontend\course\edit_structure.html:297
-#: .\templates\frontend\course\edit_structure.html:325
-#: .\templates\frontend\course\edit_structure.html:354
-msgid "Fehler bei der Datenübertragung zum Server - Status:"
-msgstr ""
-
-#: .\templates\frontend\course\view.html:33
+#: .\templates\frontend\course\view.html:34
 msgid "Unsave"
 msgstr "Nicht Speichern"
 
-#: .\templates\frontend\course\view.html:46
+#: .\templates\frontend\course\view.html:47
 msgid "Edit Course"
 msgstr "Kurs bearbeiten"
 
-#: .\templates\frontend\course\view.html:49
+#: .\templates\frontend\course\view.html:50
 msgid "Edit Structure"
 msgstr "Struktur bearbeiten"
 
-#: .\templates\frontend\course\view.html:55
+#: .\templates\frontend\course\view.html:56
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
-#: .\templates\frontend\course\view.html:115
+#: .\templates\frontend\course\view.html:82
+msgid "Course picture"
+msgstr "Kursbild"
+
+#: .\templates\frontend\course\view.html:84
+#: .\templates\frontend\profile\profile.html:28
+msgid "No image available"
+msgstr "Kein Bild verfügbar"
+
+#: .\templates\frontend\course\view.html:124
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
-#: .\templates\frontend\course\view.html:142
+#: .\templates\frontend\course\view.html:151
 msgid "Sort by: "
 msgstr "Sortieren nach: "
 
-#: .\templates\frontend\course\view.html:143
-#: .\templates\frontend\course\view.html:161
+#: .\templates\frontend\course\view.html:152
+#: .\templates\frontend\course\view.html:170
 msgid "Filter by: "
 msgstr "Filtern nach: "
 
-#: .\templates\frontend\course\view.html:175
+#: .\templates\frontend\course\view.html:184
 msgid "No Topics"
 msgstr "Keine Themen"
 
-#: .\templates\frontend\course\view.html:178
+#: .\templates\frontend\course\view.html:187
 msgid "This course doesn't have topics at the moment."
 msgstr "Der Kurs hat momentan keine Themen."
+
+#: .\templates\frontend\course\view.html:198
+msgid "Delete Confirmation"
+msgstr "Löschbestätigung"
+
+#: .\templates\frontend\course\view.html:203
+msgid ""
+"\n"
+"                            Are you sure you want to delete this course? "
+"Only the structure is deleted - the topics are retained.\n"
+"                        "
+msgstr ""
+"\n"
+"        Sind Sie sicher, dass Sie diesen Kurs löschen möchten? Nur die "
+"Kursstruktur wird gelöscht. Die Themen bleiben erhalten.\n"
+"        "
 
 #: .\templates\frontend\course_lists\card_category.html:34
 #: .\templates\frontend\course_lists\card_period.html:23
@@ -493,7 +509,7 @@ msgid "Your Courses"
 msgstr "Deine Kurse"
 
 #: .\templates\frontend\dashboard.html:26
-#: .\templates\frontend\profile\profile.html:49
+#: .\templates\frontend\profile\profile.html:55
 msgid "Stared Courses"
 msgstr "Favorisierte Kurse"
 
@@ -518,7 +534,7 @@ msgid "Date/time"
 msgstr "Datum/Uhrzeit"
 
 #: .\templates\frontend\history\history_compare_header.html:27
-#: .\templates\frontend\profile\profile.html:18
+#: .\templates\frontend\profile\profile.html:19
 msgid "User"
 msgstr "Benutzer*in"
 
@@ -589,11 +605,11 @@ msgstr ""
 "machen.\n"
 "                        "
 
-#: .\templates\frontend\history\history_compare_view.html:103
+#: .\templates\frontend\history\history_compare_view.html:104
 msgid "Go back to history list"
 msgstr "Zurück zur Versionsgeschichte"
 
-#: .\templates\frontend\index.html:18 .\templates\frontend\navbar.html:58
+#: .\templates\frontend\index.html:18 .\templates\frontend\navbar.html:67
 msgid "Logout"
 msgstr "Ausloggen"
 
@@ -617,23 +633,20 @@ msgstr "Suche"
 msgid "Admin Menu"
 msgstr "Admin-Menü"
 
-#: .\templates\frontend\navbar.html:34
-msgid "Language"
-msgstr "Sprache"
-
-#: .\templates\frontend\profile\profile.html:23
+#: .\templates\frontend\navbar.html:26
+#: .\templates\frontend\profile\profile.html:26
 msgid "User profile picture"
 msgstr "Profilbild"
 
-#: .\templates\frontend\course\view.html:82
-msgid "Course picture"
-msgstr "Kursbild"
+#: .\templates\frontend\navbar.html:43
+msgid "Language"
+msgstr "Sprache"
 
-#: .\templates\frontend\profile\profile.html:28
+#: .\templates\frontend\profile\profile.html:32
 msgid "Biography"
 msgstr "Biographie"
 
-#: .\templates\frontend\profile\profile.html:38
+#: .\templates\frontend\profile\profile.html:42
 msgid "Owned Courses"
 msgstr "Eigene Kurse"
 
@@ -669,52 +682,62 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: .\views\content.py:174
+#: .\views\content.py:108
+#, python-format
 msgid "Content %(title)s successfully added"
 msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
-#: .\views\content.py:119 .\views\content.py:317
+#: .\views\content.py:120 .\views\content.py:312
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: .\views\content.py:303
+#: .\views\content.py:298
 msgid "You are not allowed to edit this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
-#: .\views\content.py:445
+#: .\views\content.py:427
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: .\views\content.py:700
+#: .\views\content.py:678
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 
-#: .\views\course.py:59
+#: .\views\course.py:61
+#, python-format
+msgid ""
+"Course %(title1)s successfully created. All settings and contents of the "
+"course %(title)s were copied."
+msgstr ""
+"Kurs %(title1)s erfolgreich erstellt. Alle Einstellungen und Inhalte des "
+"Kurses %(title)s wurden kopiert."
+
+#: .\views\course.py:136
+#, python-format
 msgid "Course %(title)s successfully created"
 msgstr "Kurs %(title)s erfolgreich angelegt"
 
-#: .\views\course.py:134
-msgid "Course %(title)s successfully deleted"
-msgstr "Kurs %(title)s erfolgreich gelöscht"
-
-#: .\views\course.py:188
+#: .\views\course.py:191
+#, python-format
 msgid "Course %(title)s successfully edited"
 msgstr "Kurs %(title)s erfolgreich bearbeitet"
 
-#: .\views\course.py:524
+#: .\views\course.py:512
+#, python-format
+msgid "Course %(title)s successfully deleted"
+msgstr "Kurs %(title)s erfolgreich gelöscht"
+
+#: .\views\course.py:539
+#, python-format
 msgid "Course %(title)s successfully removed from favourites"
 msgstr "Kurs %(title)s erfolgreich aus den Favoriten entfernt"
 
-#: .\views\course.py:530
+#: .\views\course.py:545
+#, python-format
 msgid "Course %(title)s successfully added to favourites"
 msgstr "Kurs %(title)s erfolgreich zu den Favoriten hinzugefügt"
 
-msgid "Course %(title1)s successfully created. All settings and "
- "contents of the course %(title)s were copied."
-msgstr "Kurs %(title1)s erfolgreich erstellt. Alle Einstellungen "
-"und Inhalte des Kurses %(title)s wurden kopiert."
-
-#: .\views\history.py:214 .\views\history.py:293
+#: .\views\history.py:239 .\views\history.py:320
 msgid "<== Version: {}"
 msgstr "<== Version: {}"
 
@@ -773,5 +796,5 @@ msgstr "Profil aktualisiert"
 #~ msgid "sort by:"
 #~ msgstr "sortieren nach"
 
-msgid "Course %(title)s successfully duplicated."
-msgstr "Kurs %(title)s erfolgreich dupliziert"
+#~ msgid "Course %(title)s successfully duplicated."
+#~ msgstr "Kurs %(title)s erfolgreich dupliziert"

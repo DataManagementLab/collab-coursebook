@@ -52,8 +52,8 @@
                         <a href="{% url 'frontend:course-history' pk=course.pk %}" class="dropdown-item">
                             {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
-                        <a href="{% url 'frontend:course-delete' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon 'trash' 'fas' %} {% trans 'Delete Course' %}
+                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
+                           data-target="#deleteCourseModal">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}
                         </a>
                     {% endif %}
                 {% endif %}
@@ -187,4 +187,37 @@
             {% trans "This course doesn't have topics at the moment." %}
         </p>
     {% endfor %}
+
+    {# Delete inline, for 'Delete Confirmation' bootstrap modal #}
+    <div class="modal fade" id="deleteCourseModal" tabindex="1" role="dialog" aria-labelledby="deleteCourseModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteCourseModalLabel">
+                        {% trans "Delete Confirmation" %}
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        {% blocktrans %}
+                            Are you sure you want to delete this course? Only the structure is deleted - the topics are retained.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <form action="{% url 'frontend:course-delete' pk=object.id %}" method="post"
+                          class="mb-0">
+                        {% csrf_token %}
+                        <button class="btn btn-secondary" data-dismiss="modal">
+                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                        </button>
+                        <button
+                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}s

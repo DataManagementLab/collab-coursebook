@@ -463,7 +463,7 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
     :type CourseDeleteView.template_name: str
     """
     model = Course
-    template_name = 'frontend/course/delete_confirm.html'
+    template_name = 'frontend/course/view.html'
 
     def get_success_url(self):
         """Success url
