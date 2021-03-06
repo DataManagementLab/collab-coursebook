@@ -6,7 +6,7 @@
 {# Message notification #}
 {% if messages %}
     {% for message in messages %}
-        <script>
+        <script type='text/javascript'>
             showNotification("{{ message }}", "{{ message.tags | message_bootstrap_class }}");
         </script>
     {% endfor %}

@@ -40,7 +40,8 @@
 {% block bottom_script %}
     {# Load JavaScript #}
     <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
-    <script>
+
+    <script type='text/javascript'>
         $(function () {
             $(".chosen-select").chosen();
         });
