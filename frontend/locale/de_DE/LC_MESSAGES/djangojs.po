@@ -24,3 +24,11 @@ msgstr "Das Thema %s wurde erfolgreich zur Kursstruktur hinzugefügt."
 #: ./templates/frontend/course/edit_structure.html/:228
 msgid "Error during data transfer to the server - status: %s"
 msgstr "Fehler bei der Datenübertragung zum Server - Status: %s"
+
+#: .\views\course.py:524
+msgid "Course %(title)s successfully removed from favourites"
+msgstr "Kurs %(title)s erfolgreich aus den Favoriten entfernt"
+
+#: .\views\course.py:530
+msgid "Course %(title)s successfully added to favourites"
+msgstr "Kurs %(title)s erfolgreich zu den Favoriten hinzugefügt"

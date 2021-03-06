@@ -745,16 +745,6 @@ msgstr "Kurs %(title)s erfolgreich bearbeitet"
 msgid "Course %(title)s successfully deleted"
 msgstr "Kurs %(title)s erfolgreich gelöscht"
 
-#: .\views\course.py:539
-#, python-format
-msgid "Course %(title)s successfully removed from favourites"
-msgstr "Kurs %(title)s erfolgreich aus den Favoriten entfernt"
-
-#: .\views\course.py:545
-#, python-format
-msgid "Course %(title)s successfully added to favourites"
-msgstr "Kurs %(title)s erfolgreich zu den Favoriten hinzugefügt"
-
 #: .\views\history.py:239 .\views\history.py:320
 msgid "<== Version: {}"
 msgstr "<== Version: {}"
