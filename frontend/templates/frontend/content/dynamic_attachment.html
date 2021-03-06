@@ -4,6 +4,7 @@
 
 {# Load JavaScript #}
 <script type="text/javascript" src="{% static 'js/attachment.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/form.js' %}"></script>
 
 <script>
     // Add attachment
@@ -18,4 +19,8 @@
             {% bootstrap_form item_forms.empty_form %}
         </table>
     </div>
+    {# Required marker #}
+    <script type="text/javascript">
+        markRequired('form-group');
+</script>
 </script>
