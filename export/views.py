@@ -5,12 +5,10 @@ This file contains functions related to generating views.
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
 from base.models import Course, Favorite
 from export.helper_functions import Latex
-
-from django.utils.translation import gettext_lazy as _
-
 
 
 def generate_coursebook(request, pk, template="content/export/base.tex", context=None):  # pylint: disable=invalid-name

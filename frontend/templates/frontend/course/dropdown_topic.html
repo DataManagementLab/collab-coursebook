@@ -8,16 +8,16 @@
     <div class="dropdown show">
         <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-            {% trans "Add Content" %}
+            {% trans 'Add Content' %}
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
             {% if user.is_authenticated %}
-                {% for content in content_data %}
-                    <a class="dropdown-item"
-                       href="{% url 'frontend:content-add' course_id=course_id topic_id=topic_id type=content.0 %}">
-                        {% trans content.1 %}
-                    </a>
-                {% endfor %}
+            {% for content in content_data %}
+            <a class="dropdown-item"
+               href="{% url 'frontend:content-add' course_id=course_id topic_id=topic_id type=content.0 %}">
+                {% trans content.1 %}
+            </a>
+            {% endfor %}
             {% endif %}
         </div>
     </div>

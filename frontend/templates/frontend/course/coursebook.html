@@ -6,30 +6,30 @@
 
 <div class="mt-3">
     {% with user|get_coursebook:course as topic_contents %}
-        {% if topic_contents|length > 0 %}
-            <a href="{% url 'frontend:coursebook-generate' course.id %}" target="_blank"
-               class="btn btn-primary float-right text-right">
-                {% trans 'Export' %}
-            </a>
-        {% endif %}
-        <button class="btn btn-primary float-left mr-1" type="button" data-toggle="collapse"
-                data-target="#collapseCoursebook"
-                aria-expanded="false" aria-controls="collapseCoursebook">
-            {% fa5_icon 'bars' 'fas' %}
-        </button>
-        <h2>
-            {% trans 'Coursebook' %}
-        </h2>
-        <div class="collapse show" id="collapseCoursebook">
-            <div class="card card-body">
-                {% if topic_contents|length > 0 %}
-                    {% include "frontend/course/topic_contents.html" %}
-                {% else %}
-                    <p>
-                        {% trans 'Your coursebook is empty' %}
-                    </p>
-                {% endif %}
-            </div>
+    {% if topic_contents|length > 0 %}
+    <a href="{% url 'frontend:coursebook-generate' course.id %}" target="_blank"
+       class="btn btn-primary float-right text-right">
+        {% trans 'Export' %}
+    </a>
+    {% endif %}
+    <button class="btn btn-primary float-left mr-1" type="button" data-toggle="collapse"
+            data-target="#collapseCoursebook"
+            aria-expanded="false" aria-controls="collapseCoursebook">
+        {% fa5_icon 'bars' 'fas' %}
+    </button>
+    <h2>
+        {% trans 'Coursebook' %}
+    </h2>
+    <div class="collapse show" id="collapseCoursebook">
+        <div class="card card-body">
+            {% if topic_contents|length > 0 %}
+            {% include 'frontend/course/topic_contents.html' %}
+            {% else %}
+            <p>
+                {% trans 'Your coursebook is empty' %}
+            </p>
+            {% endif %}
         </div>
+    </div>
     {% endwith %}
 </div>

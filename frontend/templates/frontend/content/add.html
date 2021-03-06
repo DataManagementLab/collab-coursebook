@@ -8,7 +8,7 @@
 {% load i18n %}
 
 {% block imports %}
-    <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
+<link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
@@ -38,28 +38,37 @@
                     {% trans "Remove attachment" %}
                 </button>
             </div>
-        {% endif %}
-
-        <br>
-
-        {{ form.media }}
-
-        <div>
-            <button type="submit"
-                    class="btn btn-primary float-right">
-                {% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}
-            </button>
-            <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">
-                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
-            </a>
+            {% endfor %}
         </div>
-    </form>
-
-    {% if attachment_allowed %}
-        {% include "frontend/content/dynamic_attachment.html" %}
+        <button id="add-item-button" class="btn btn-primary add-item">
+            {% trans "Add attachment" %}
+        </button>
+        <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">
+            {% trans "Remove attachment" %}
+        </button>
+    </div>
     {% endif %}
 
-    {% if is_latex_content %}
-        {% include "frontend/content/attachment_embedding_help.html" %}
-    {% endif %}
+    <br>
+
+    {{ form.media }}
+
+    <div>
+        <button type="submit"
+                class="btn btn-primary float-right">
+            {% fa5_icon 'plus-circle' 'fas' %} {% trans 'Create' %}
+        </button>
+        <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">
+            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
+        </a>
+    </div>
+</form>
+
+{% if attachment_allowed %}
+{% include 'frontend/content/dynamic_attachment.html' %}
+{% endif %}
+
+{% if is_latex_content %}
+{% include 'frontend/content/attachment_embedding_help.html' %}
+{% endif %}
 {% endblock %}

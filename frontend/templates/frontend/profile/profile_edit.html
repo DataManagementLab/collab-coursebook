@@ -1,4 +1,4 @@
-{% extends "frontend/base_logged_in.html" %}
+{% extends 'frontend/base_logged_in.html' %}
 
 {% load static %}
 {% load i18n %}
@@ -13,14 +13,14 @@
     {% bootstrap_form form %}
     {% buttons %}
     <button type="reset" class="btn btn-danger">
-        {% fa5_icon "undo-alt" 'fas' %} {% trans "Reset" %}
+        {% fa5_icon "undo-alt" 'fas' %} {% trans 'Reset' %}
     </button>
 
     <a href="{% url 'frontend:profile' pk=user.pk %}" class="btn btn-secondary">
-        {% fa5_icon "times" 'fas' %} {% trans "Cancel" %}
+        {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
     </a>
     <button type="submit" class="save btn btn-primary float-right">
-        {% fa5_icon "check" 'fas' %} {% trans "Submit" %}
+        {% fa5_icon 'check' 'fas' %} {% trans 'Submit' %}
     </button>
     {% endbuttons %}
 </form>

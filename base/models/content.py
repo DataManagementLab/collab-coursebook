@@ -528,7 +528,7 @@ class CourseStructureEntry(models.Model):
 
     :attr CourseStructureEntry.course: The course whose structure is meant
     :type CourseStructureEntry.course: ForeignKey - Course
-    :attr CourseStructureEntry.index: The position that is meant (e.g. "1#2" -> second under topic
+    :attr CourseStructureEntry.index: The position that is meant (e.g. "1/2" -> second under topic
     of the first topic)
     :type CourseStructureEntry.index: CharField
     :attr CourseStructureEntry.topic: The topic at the specified position/index

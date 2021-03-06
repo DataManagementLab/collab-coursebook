@@ -21,22 +21,21 @@ class JsonHandler:
         Checks if the topics from the json data exists in the database.
 
         :param json_data: The json data containing topics and sub topics
-        :type json_data: list[str, dict[str, int]]
+        :type json_data: list[dict[str, Any]]
 
-        :return: true if all topics in the json data exists
+        :return: None if all topics in the json data exists
         :rtype: None or ValidationError
         """
         # Main topics
         for topic in json_data:
             if not Topic.objects.filter(id=topic['id']).exists():
-                raise ValidationError(f'The topic with the id {topic["id"]} does not exists')
+                raise ValidationError(f'The topic with the id {topic["id"]} does not exist')
             # Sub topics
             if 'children' in topic:
                 for sub_topic in topic['children']:
                     if not Topic.objects.filter(id=sub_topic['id']).exists():
                         raise ValidationError(
-                            f'The sub topic with the id {sub_topic["id"]} does not exists')
-            return None
+                            f'The sub topic with the id {sub_topic["id"]} does not exist')
 
     @staticmethod
     def json_to_topics_structure(course, json_data):
@@ -51,14 +50,13 @@ class JsonHandler:
         :param course: The Course where the structure should be modified
         :type course: Course
         :param json_data: The json data
-        :type json_data: list[str, dict[str, int]]
+        :type json_data: list[dict[str, Any]]
 
         :return: true if the structure was changed after its call
         :rtype: bool
         """
         course_id = course.id
         index = 0
-
         # Main topics
         for topic in json_data:
             index += 1
@@ -93,7 +91,6 @@ class JsonHandler:
                             index=current_index,
                             course_id=course_id,
                             topic_id=current_id)
-
             # Clean sub topic fragments
             JsonHandler.clean_structure_sub_topic(course=course,
                                                   index=index,

@@ -8,8 +8,8 @@
 {% load i18n %}
 
 {% block imports %}
-    <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
-    <link href="{% static 'css/gallery_detail.css' %}" type="text/css" rel="stylesheet"/>
+<link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
+<link href="{% static 'css/gallery_detail.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
@@ -94,12 +94,60 @@
                     {% endif %}
                 {% endif %}
             </div>
+
+            {% if user|check_edit_content_permission:content %}
+            <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
+                {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit' %}
+            </a>
+            {% endif %}
+
+            <!-- Who are allowed to view the history?  -->
+            {% if content.type == 'Textfield' %}
+            <a class="dropdown-item"
+               href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
+                {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+            </a>
+            {% endif %}
+
+            {% if content.type == 'YouTubeVideo' %}
+            <a class="dropdown-item"
+               href="{% url 'frontend:ytvideo-history' course.id topic.id content.id %}">
+                {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+            </a>
+            {% endif %}
+
+            {% if content.type == 'Image' %}
+            <a class="dropdown-item"
+               href="{% url 'frontend:image-history' course.id topic.id content.id %}">
+                {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+            </a>
+            {% endif %}
+
+            {% if content.type == 'PDF' %}
+            <a class="dropdown-item" href="{% url 'frontend:pdf-history' course.id topic.id content.id %}">
+                {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+            </a>
+            {% endif %}
+
+            {% if content.type == 'Latex' %}
+            <a class="dropdown-item"
+               href="{% url 'frontend:latex-history' course.id topic.id content.id %}">
+                {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+            </a>
+            {% endif %}
+
+            {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
+            <a href="#" class="dropdown-item text-danger" data-toggle="modal"
+               data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
+</div>
 
     <a href="{% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
        class="">
-        {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
+        {% fa5_icon 'chevron-left' 'fas' %} {% trans 'Back to course' %} <i>{{ course.title }}</i>
     </a>
 
     <h1 style="word-wrap: break-word;margin-top: 20px;margin-bottom: 20px;">
@@ -107,22 +155,22 @@
     </h1>
 
     <h5>
-        {% trans "By" %} <i>{{ content.author }}</i>
+        {% trans 'By' %} <i>{{ content.author }}</i>
         &nbsp;&middot;&nbsp;
         <span class="badge badge-primary">
             {{ content.language }}
         </span>
-        {% if content.tags.count > 0 %}
-            &nbsp;&middot;&nbsp;
-            {% for tag in content.tags.all %}
-                <span class="badge badge-info">
+    {% if content.tags.count > 0 %}
+    &nbsp;&middot;&nbsp;
+    {% for tag in content.tags.all %}
+    <span class="badge badge-info">
                     {{ tag }}
                 </span>
-            {% endfor %}
-        {% endif %}
-        &nbsp;&middot;&nbsp;
-        <span class="text-muted">
-            {% trans "Created at" %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
+    {% endfor %}
+    {% endif %}
+    &nbsp;&middot;&nbsp;
+    <span class="text-muted">
+            {% trans 'Created at' %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
         </span>
     </h5>
 
@@ -148,44 +196,45 @@
                           class="mb-0">
                         {% csrf_token %}
                         <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
                         <button
-                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans 'Confirm' %}
                         </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <div style="margin-top: 50px;margin-bottom: 50px;">
-        {% include content.type|content_view %}
-        <div class="mt-5">
-            <h4>
-                {% trans "Description" %}
-            </h4>
-            {{ content.description|linebreaks }} <!-- resolves to s -->
-        </div>
+<div style="margin-top: 50px;margin-bottom: 50px;">
+    {% include content.type|content_view %}
+    <div class="mt-5">
+        <h4>
+            {% trans 'Description' %}
+        </h4>
+        {{ content.description|linebreaks }} <!-- resolves to s -->
     </div>
+</div>
 
     {# Attachment #}
-    {% include "frontend/content/detail_attachment.html" %}
+    {% include 'frontend/content/detail_attachment.html' %}
 
-    <br>
+<br>
 
     {# Rating #}
     <h5>
         <a name="rating">
-            {% trans "Rating" %}
+            {% trans 'Rating' %}
         </a>
         {% if content.get_rate != -1 %}
             <span class="badge float-right text-right">
                 {{ content.get_rate }}/5
             </span>
-        {% else %}
-            <span class="badge float-right text-right">
-                {% trans "No rating yet" %}
+    {% else %}
+    <span class="badge float-right text-right">
+                {% trans 'No rating yet' %}
             </span>
         {% endif %}
     </h5>
@@ -207,7 +256,7 @@
             {% csrf_token %}
             {% bootstrap_form comment_form %}
             <button name="action" value="submit" class="btn btn-outline-primary">
-                {% fa5_icon 'comment-dots' 'far' %} {% trans "Add comment" %}
+                {% fa5_icon 'comment-dots' 'far' %} {% trans 'Add comment' %}
             </button>
         </form>
     {% endif %}
@@ -220,4 +269,26 @@
     {% for comment in comments %}
         {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
     {% endfor %}
+</div>
+<h5 style="margin-top: 30px;">
+    <a name="comments">
+        {% trans 'Comments' %}
+    </a>
+</h5>
+{% if user.is_authenticated %}
+<form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    <button name="action" value="submit" class="btn btn-outline-primary">
+        {% fa5_icon 'comment-dots' 'far' %} {% trans 'Add comment' %}
+    </button>
+</form>
+{% endif %}
+
+<div class="clearfix mb-4"></div>
+
+<!-- Comment -->
+{% for comment in comments %}
+{% include 'frontend/comment/comment.html' with course_id=course.id content_id=content.id %}
+{% endfor %}
 {% endblock %}

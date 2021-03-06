@@ -1,4 +1,4 @@
-{% extends "frontend/base_logged_in.html" %}
+{% extends 'frontend/base_logged_in.html' %}
 
 {% load static %}
 {% load i18n %}
@@ -9,14 +9,14 @@
 {% block content %}
     <div class="float-right">
         {% if user == profile.user %}
-            <a href="{% url 'frontend:profile-edit' %}" class="btn btn-primary">
-                {% fa5_icon "edit" "far" %} {% trans "Edit" %}
+            <a href="{% url 'frontend:profile-edit' %}" class="btn btn-success">
+                {% fa5_icon 'edit' 'far' %} {% trans 'Edit' %}
             </a>
         {% endif %}
     </div>
 
     <h1>
-        {% trans "User" %}: {{ profile.user.get_username }}
+        {% trans 'User' %}: {{ profile.user.get_username }}
     </h1>
 
     {% if profile.pic %}
@@ -33,31 +33,35 @@
             {{ profile.bio | linebreaks }}
         </div>
     {% endif %}
-    <div style="clear: both;">
 
-    </div>
+    <p>
+    <h2>
+        {% trans 'Biography' %}
+    </h2>
+    {{ profile.bio | linebreaks }}
+
+    <div style="clear: both;"></div>
 
     <h3 class="text-info"
         style="margin-top: 30px;">
-        {% fa5_icon "chalkboard-teacher" "fas" %} {% trans "Owned Courses" %}
+        {% fa5_icon 'chalkboard-teacher' 'fas' %} {% trans 'Owned Courses' %}
     </h3>
     <div class="row">
         {% for course in profile.owned_courses.all %}
             {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
-            {% include "frontend/course_lists/card_course.html" %}
+            {% include 'frontend/course_lists/card_course.html' %}
         {% endfor %}
     </div>
 
-    <!-- TODO: <Iteration 5> -->
     {% if user|check_profile_permissions:profile %}
         <h3 class="text-success"
                 style="margin-top: 40px;">
-                {% fa5_icon "bookmark" "fas" %} {% trans "Stared Courses" %}
+                {% fa5_icon 'bookmark' 'fas' %} {% trans 'Stared Courses' %}
         </h3>
         <div class="row">
             {% for course in profile.stared_courses.all %}
                 {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
-                {% include "frontend/course_lists/card_course.html" %}
+                {% include 'frontend/course_lists/card_course.html' %}
             {% endfor %}
         </div>
     {% endif %}

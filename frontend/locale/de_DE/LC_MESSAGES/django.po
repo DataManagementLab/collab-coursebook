@@ -194,8 +194,8 @@ msgid "View History"
 msgstr "Versionsgeschichte"
 
 #: .\templates\frontend\content\detail.html:119
-msgid "Back to course "
-msgstr "Zurück zum Kurs "
+msgid "Back to course"
+msgstr "Zurück zum Kurs"
 
 #: .\templates\frontend\content\detail.html:127
 msgid "By"
