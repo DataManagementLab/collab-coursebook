@@ -147,3 +147,7 @@ msgstr "Auf YouTube ansehen"
 #: .\templates\content\view\invalid.html:4
 msgid "Invalid type"
 msgstr "Ungültiger Typ"
+
+#: .\templates\content\view\invalid.html:8
+msgid "The type of content you are trying to view is not supported and cannot be displayed"
+msgstr "Der Inhaltstyp, den Sie sich anschauen wollen, wird nicht unterstützt und kann nicht angezeigt werden"

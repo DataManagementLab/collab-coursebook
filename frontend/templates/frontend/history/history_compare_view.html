@@ -4,7 +4,7 @@
 
 {% if request.GET.version_id1 %}
     <p class="help">
-        {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") date2=version2.revision.date_created|date:_("DATETIME_FORMAT") %}
+        {% blocktrans with date1=version1.revision.date_created|date:_('DATETIME_FORMAT') date2=version2.revision.date_created|date:_('DATETIME_FORMAT') %}
             Compare Version 1: <strong>{{ date1 }}</strong> with Version 2: <strong>{{ date2 }}</strong>:
         {% endblocktrans %}
     </p>
@@ -26,7 +26,7 @@
         <div class="module">
             <p>
                 <strong>
-                    {% trans "There are no differences." %}
+                    {% trans 'There are no differences.' %}
                 </strong>
             </p>
         </div>
@@ -34,30 +34,30 @@
 
     <!-- Show comment -->
     <h4>
-        {% trans "Change log:" %}
+        {% trans 'Change log:' %}
     </h4>
     <blockquote>
-        {{ version2.revision.comment|default:_("(no comment exists)") }}
+        {{ version2.revision.comment|default:_('(no comment exists)') }}
     </blockquote>
 
 
     <!-- Buttons for previous and next compare -->
     {% if prev_url %}
         <button onclick="location.href='{{ prev_url }}'" class="btn btn-primary add-item">
-            {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "previous" %}
+            {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'previous' %}
         </button>
     {% endif %}
 
     {% if next_url %}
         <button onclick="location.href='{{ next_url }}'" class="btn btn-primary add-item">
-            {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans "next" %}
+            {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans 'next' %}
         </button>
     {% endif %}
 
     <!-- Buttons for revert -->
     <button type="button" class="btn btn-warning" data-toggle="modal"
             data-target="#revert-modal">
-        {% fa5_icon 'history' 'fas' %} {% trans "Revert to Version 1" %}
+        {% fa5_icon 'history' 'fas' %} {% trans 'Revert to Version 1' %}
     </button>
 
     <!-- Modal for course/content revert -->
@@ -67,13 +67,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="revert-modal-label">{% trans "Reversion of" %}
+                    <h5 class="modal-title" id="revert-modal-label">{% trans 'Reversion of' %}
                         <i>{{ version1.content_type.name }}</i>?
                     </h5>
                 </div>
                 <div class="modal-body">
                     <p>
-                        {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") type=version1.content_type.name %}
+                        {% blocktrans with date1=version1.revision.date_created|date:_('DATETIME_FORMAT') type=version1.content_type.name %}
                             Are you sure you want to revert to Version <strong>{{ date1 }}</strong>?
                             You can also undo the revert later.
                         {% endblocktrans %}
@@ -84,11 +84,11 @@
                         {% csrf_token %}
                         <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
                         <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
                         <button
                                 type="submit"
-                                class="btn btn-warning"> {% fa5_icon 'history' 'fas' %} {% trans "Confirm" %}
+                                class="btn btn-warning"> {% fa5_icon 'history' 'fas' %} {% trans 'Confirm' %}
                         </button>
                     </form>
                 </div>
@@ -100,6 +100,6 @@
     <br>
 
     <button onclick="location.href='{{ history_url }}'" class="btn btn-primary add-item">
-        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Go back to history list" %}
+        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Go back to history list' %}
     </button>
 {% endif %}

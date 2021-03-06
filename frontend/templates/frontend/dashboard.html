@@ -1,4 +1,4 @@
-{% extends "frontend/base_logged_in.html" %}
+{% extends 'frontend/base_logged_in.html' %}
 
 {% load static %}
 {% load i18n %}
@@ -11,43 +11,43 @@
     </h1>
 
     <h3 class="text-danger" style="margin-top: 40px;">
-        {% fa5_icon "chalkboard-teacher" "fas" %} {% trans "Your Courses" %}
+        {% fa5_icon 'chalkboard-teacher' 'fas' %} {% trans 'Your Courses' %}
     </h3>
     <div class="row">
         {% for course in user.profile.owned_courses.all %}
             {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
-            {% include "frontend/course_lists/card_course.html" %}
+            {% include 'frontend/course_lists/card_course.html' %}
         {% endfor %}
-        {% include "frontend/course_lists/card_create_course.html" %}
+        {% include 'frontend/course_lists/card_create_course.html' %}
     </div>
 
     {% if user.profile.stared_courses.count > 0 %}
         <h3 class="text-success" style="margin-top: 40px;">
-            {% fa5_icon "bookmark" "fas" %} {% trans "Stared Courses" %}
+            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Stared Courses' %}
         </h3>
         <div class="row">
             {% for course in user.profile.stared_courses.all %}
-                {% include "frontend/course_lists/card_course.html" %}
+                {% include 'frontend/course_lists/card_course.html' %}
             {% endfor %}
         </div>
     {% endif %}
 
     <h3 class="text-info" style="margin-top: 40px;">
-        {% fa5_icon "school" "fas" %} {% trans "All Courses by Period" %}
+        {% fa5_icon 'school' 'fas' %} {% trans 'All Courses by Period' %}
     </h3>
     <div class="row">
         {% for period in periods %}
-            {% include "frontend/course_lists/card_period.html" %}
+            {% include 'frontend/course_lists/card_period.html' %}
         {% endfor %}
     </div>
 
     <h3 class="text-warning" style="margin-top: 40px;">
-        {% fa5_icon "school" "fas" %} {% trans "All Courses by Category" %}
+        {% fa5_icon 'school' 'fas' %} {% trans 'All Courses by Category' %}
     </h3>
     <div class="row">
         {% for category in categories %}
             {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
-            {% include "frontend/course_lists/card_category.html" %}
+            {% include 'frontend/course_lists/card_category.html' %}
         {% endfor %}
     </div>
 {% endblock %}

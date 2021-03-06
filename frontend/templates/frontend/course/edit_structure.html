@@ -139,7 +139,7 @@
             const item = {value: value, id: id}
 
             // Adds to HTML
-            const placeholder = document.getElementById('dd-empty-placeholder');
+            const placeholder = document.getElementById("dd-empty-placeholder");
             placeholder.innerHTML += buildItem(item);
         }
 
@@ -154,7 +154,7 @@
                 return;
             }
             // Parses json, dynamically generate a nestable list
-            const placeholder = document.getElementById('dd-empty-placeholder');
+            const placeholder = document.getElementById("dd-empty-placeholder");
             $.each(JSON.parse(obj), function (index, item) {
                 // Adds to HTML
                 placeholder.innerHTML += buildItem(item);
@@ -167,10 +167,10 @@
          */
         function removeItem(event) {
             // Finds the closest list item to the clicked location
-            const element = $(this).closest('li')
+            const element = $(this).closest("li");
             // Removes the element with the given id
-            const id = element.attr('data-id');
-            $("#nestable3").nestable('remove', id);
+            const id = element.attr("data-id");
+            $("#nestable3").nestable("remove", id);
         }
 
         /**
@@ -178,11 +178,11 @@
          */
         function addTopic() {
             // Gets the selected topic
-            const element = document.querySelector('#id_topic_name');
+            const element = document.querySelector("#id_topic_name");
             const selected = element.options[element.selectedIndex];
             const id = selected.value;
             const topic = element.options[element.selectedIndex].textContent;
-            const data = $("#nestable3").nestable('serialize');
+            const data = $("#nestable3").nestable("serialize");
 
             // Checks if topic is valid to be added
             if (!isTopicValid(id, topic, data)) {
@@ -213,12 +213,12 @@
             for (let i = 0; i < data.length; i++) {
                 const entry = data[i];
                 // Duplicates id
-                if (entry['id'] === id) {
+                if (entry["id"] === id) {
                     return false;
                 }
                 // Sub topics
-                else if (entry['children'] !== undefined) {
-                    if (!isTopicValid(id, topic, entry['children'])) {
+                else if (entry["children"] !== undefined) {
+                    if (!isTopicValid(id, topic, entry["children"])) {
                         return false;
                     }
                 }
@@ -248,12 +248,12 @@
          */
         function getCookie(name) {
             let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
                 for (let i = 0; i < cookies.length; i++) {
                     const cookie = cookies[i].trim();
                     // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                         break;
                     }
@@ -273,16 +273,16 @@
                 beforeSend: function (xhr, settings) {
                     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                         // Only send the token to relative URLs i.e. locally.
-                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
                     }
                 }
             });
-            const topic = document.getElementById('id_title');
-            const category = document.getElementById('id_category');
+            const topic = document.getElementById("id_title");
+            const category = document.getElementById("id_category");
             $.ajax({
-                url: '{% url 'frontend:course-edit-structure' course.id %}',
-                type: 'POST',
-                data: {'title': topic.value, 'category': category.value},
+                url: "{% url 'frontend:course-edit-structure' course.id %}",
+                type: "POST",
+                data: {"title": topic.value, "category": category.value},
 
                 success: function (data) {
                     const json = JSON.parse(JSON.stringify(data));
@@ -294,7 +294,7 @@
                     console.log(topic_id);
 
                     // Ordered entries
-                    const select = document.getElementById('id_topic_name');
+                    const select = document.getElementById("id_topic_name");
 
                     for (let i = 0; i < topics.length; i++) {
                         const entry = topics[i];
@@ -307,7 +307,7 @@
                     }
                 },
                 error: function (data) {
-                    alert('{% trans "Fehler bei der Datenübertragung zum Server - Status:" %}' + ' ' + data.status);
+                    alert("{% trans 'Fehler bei der Datenübertragung zum Server - Status:' %}" + " " + data.status);
                 }
             });
         }
@@ -322,20 +322,20 @@
                 beforeSend: function (xhr, settings) {
                     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                         // Only send the token to relative URLs i.e. locally.
-                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
                     }
                 }
             });
             $.ajax({
-                url: '{% url 'frontend:course' course.id %}',
-                type: 'POST',
-                data: {'ids': track},
+                url: "{% url 'frontend:course' course.id %}",
+                type: "POST",
+                data: {"ids": track},
 
                 success: function () {
                     window.location.href = "{% url 'frontend:course' course.id %}"
                 },
                 error: function (data) {
-                    alert('{% trans "Fehler bei der Datenübertragung zum Server - Status:" %}' + ' ' + data.status);
+                    alert("{% trans 'Fehler bei der Datenübertragung zum Server - Status:' %}" + " " + data.status);
                 }
             });
         }
@@ -344,27 +344,27 @@
          * Configures the post information with the serialized nestable data.
          */
         function save() {
-            const nestable = $('#nestable3').nestable('serialize');
+            const nestable = $("#nestable3").nestable("serialize");
             const json_obj = window.JSON.stringify(nestable);
             $.ajaxSetup({
                 beforeSend: function (xhr, settings) {
                     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
                         // Only send the token to relative URLs i.e. locally.
-                        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
                     }
                 }
             });
             $.ajax({
-                url: '{% url 'frontend:course' course.id %}',
-                type: 'POST',
-                data: {'topic_list': json_obj, 'ids': track},
-                ContentType: 'application/json',
+                url: "{% url 'frontend:course' course.id %}",
+                type: "POST",
+                data: {"topic_list": json_obj, "ids": track},
+                ContentType: "application/json",
 
                 success: function (data) {
                     window.location.href = "{% url 'frontend:course' course.id %}"
                 },
                 error: function (data) {
-                    alert('{% trans "Fehler bei der Datenübertragung zum Server - Status:" %}' + ' ' + data.status);
+                     alert("{% trans 'Fehler bei der Datenübertragung zum Server - Status:' %}" + " " + data.status);
                     alert(json_obj);
                 }
             });
@@ -377,14 +377,14 @@
             parseItems(json_obj);
 
             // Activate nestable
-            $('#nestable3').nestable({maxDepth: depth});
+            $("#nestable3").nestable({maxDepth: depth});
 
             /* Register actions */
 
             // Defines actions on remove click
-            $('#dd-empty-placeholder').on('click', '.close', removeItem);
+            $("#dd-empty-placeholder").on("click", ".close", removeItem);
 
-            $('#post-form-edit-structure-create-topic').on('submit', create);
+            $("#post-form-edit-structure-create-topic").on("submit", create);
 
             // Clean nestable
             cleanNestable();

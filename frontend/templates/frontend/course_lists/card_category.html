@@ -22,7 +22,7 @@
     <div class="card-body">
         <h5 class="card-title">
             <a href="{% url 'frontend:category-courses' pk=category.pk %}">
-                {{ category.title|slice:":33" }}
+                {{ category.title|slice:':33' }}
                 {% if category.title|length >= 33 %}
                     ...
                 {% endif %}
@@ -31,6 +31,6 @@
     </div>
 
     <div class="card-footer bg-transparent text-primary" style="font-size: 14px;">
-        {% trans "Courses" %}: {{ category.courses.count }}
+        {% trans 'Courses' %}: {{ category.courses.count }}
     </div>
 </div>

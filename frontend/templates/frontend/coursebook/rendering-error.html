@@ -6,21 +6,21 @@
 
 
 {% block title %}
-    {% trans "Error" %} - Collab Coursebook
+    {% trans 'Error' %} - Collab Coursebook
 {% endblock %}
 
 {% block content %}
     <h1>
-        {% trans "Error" %}
+        {% trans 'Error' %}
     </h1>
     <p>
-        {% trans "An error occurred while generating your coursebook. Please see the log file below." %}
+        {% trans 'An error occurred while generating your coursebook. Please see the log file below.' %}
     </p>
     <p>
         {{ content|linebreaks }}
     </p>
     <h3>
-        {% trans "Latex Template" %}
+        {% trans 'Latex Template' %}
     </h3>
     <p>
         {{ tex_template|linebreaksbr }}

@@ -58,10 +58,10 @@
                 <th scope="row">
                     {% if action.url %}
                         <a href="{{ action.url }}">
-                            {{ action.revision.date_created|date:_("DATETIME_FORMAT") }}
+                            {{ action.revision.date_created|date:_('DATETIME_FORMAT') }}
                         </a>
                     {% else %}
-                        {{ action.revision.date_created|date:_("DATETIME_FORMAT") }}
+                        {{ action.revision.date_created|date:_('DATETIME_FORMAT') }}
                     {% endif %}
                 </th>
                 <td>

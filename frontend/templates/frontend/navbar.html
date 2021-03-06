@@ -11,11 +11,11 @@
         </form>
 
         <a href="{% url 'frontend:courses' %}" class="btn btn-primary" style="">
-            {% trans "All Courses" %}
+            {% trans 'All Courses' %}
         </a>
         {% if user.is_superuser %}
             <a href="{% url 'admin:index' %}" class="btn btn-danger" style="">
-                {% trans "Admin Menu" %}
+                {% trans 'Admin Menu' %}
             </a>
             &nbsp;
         {% endif %}
@@ -55,7 +55,7 @@
 
                     </div>
                     <a href="{% url 'cas_ng_logout' %}" class="dropdown-item" style="">
-                        {% trans "Logout" %}
+                        {% trans 'Logout' %}
                     </a>
                 </div>
             </div>

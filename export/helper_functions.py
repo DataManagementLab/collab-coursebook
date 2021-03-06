@@ -131,7 +131,7 @@ class Latex:
         :type export_flag: bool
         :param template_type: The type of the template to use
         :type template_type: str
-        :type no_error: Tru if we are rendering a non error content (log)
+        :param no_error: True if we are rendering a non error content (log)
         :type no_error: bool
 
         :return: the rendered template

@@ -20,7 +20,7 @@
     <div class="card-body">
         <h5 class="card-title">
             <a href="{% url 'frontend:course' pk=course.pk %}">
-                {{ course.title|slice:":33" }}
+                {{ course.title|slice:':33' }}
                 {% if course.title|length >= 33 %}
                     ...
                 {% endif %}
@@ -37,7 +37,7 @@
         </h6>
 
         <p class="card-text" style="color: #444444">
-            {{ course.description|slice:":150" }}
+            {{ course.description|slice:':150' }}
             {% if course.description|length >= 146 %}
                 ...
             {% endif %}
@@ -48,13 +48,11 @@
          style="font-size: 14px; color: #343a40 ">
         <div style="float: left">
             <!-- TODO Insert correct topic referencing -->
-            {% trans "Contents" %}: {{ course.topics.all|count_content }}
+            {% trans 'Contents' %}: {{ course.topics.all|count_content }}
         </div>
         <div style="float: right" title="Creation Date">
             {{ course.creation_date|date:'d.m.Y' }}
         </div>
-        <div style="clear: both;">
-
-        </div>
+        <div style="clear: both;"></div>
     </div>
 </div>

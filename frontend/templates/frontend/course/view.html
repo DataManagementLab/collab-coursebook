@@ -22,7 +22,7 @@
         <div class="dropdown show">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                {% trans "Actions" %}
+                {% trans 'Actions' %}
             </button>
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
@@ -30,11 +30,11 @@
                     <a class="dropdown-item"
                        href="{% url 'frontend:favourite_course' pk=course.pk %}">
                         {% if course in user.profile.stared_courses.all %}{% fa5_icon 'bookmark' 'fas' %}
-                            {% trans "Unsave" %}
-                            {% else %}{% fa5_icon 'bookmark' 'far' %} {% trans "Save" %}{% endif %}</a>
+                            {% trans 'Unsave' %}
+                            {% else %}{% fa5_icon 'bookmark' 'far' %} {% trans 'Save' %}{% endif %}</a>
                     {% if user.is_superuser or isCurrentUserOwner %}
                         <a href="{% url 'frontend:course-duplicate' pk=course.pk %}"
-                           class="btn btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
+                           class="btn btn-warning">{% fa5_icon 'copy' 'fas' %} {% trans 'Duplicate Course' %}</a>
                     {% endif %}
 
                     <div class="dropdown-divider">
@@ -43,16 +43,16 @@
 
                     {% if user|check_edit_course_permission:course %}
                         <a href="{% url 'frontend:course-edit' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Course" %}
+                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit Course' %}
                         </a>
                         <a href="{% url 'frontend:course-edit-structure' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon "pencil-alt" "fas" %} {% trans "Edit Structure" %}
+                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit Structure' %}
                         </a>
                         <a href="{% url 'frontend:course-history' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon "history" "fas" %} {% trans "View History" %}
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
                         <a href="{% url 'frontend:course-delete' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}
+                            {% fa5_icon 'trash' 'fas' %} {% trans 'Delete Course' %}
                         </a>
                     {% endif %}
                 {% endif %}
@@ -78,7 +78,7 @@
 
     <p>
     <h2>
-        {% trans "Description" %}
+        {% trans 'Description' %}
     </h2>
     {{ course.description | linebreaks }}
 
@@ -112,7 +112,7 @@
                     </li>
                 {% empty %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        {% trans "No topics yet" %}
+                        {% trans 'No topics yet' %}
                     </li>
                 {% endfor %}
             </ol>
@@ -138,12 +138,12 @@
                     </form>
                 </div>
                 <h3 class="text-info">
-                    {{ outer_index }}. {{ entry.topic.title }} {% if sorting != "None" %}(
-                    {% trans "Sort by: " %} {% trans sorting %}){% endif %}{% if filtering != "None" %}(
-                    {% trans "Filter by: " %} {% trans filtering %}){% endif %}
+                    {{ outer_index }}. {{ entry.topic.title }} {% if sorting != 'None' %}(
+                    {% trans 'Sort by: ' %} {% trans sorting %}){% endif %}{% if filtering != 'None' %}(
+                    {% trans 'Filter by: ' %} {% trans filtering %}){% endif %}
                 </h3>
                 {% with entry.topic_contents as topic_contents %}
-                    {% include "frontend/course/topic_contents.html" %}
+                    {% include 'frontend/course/topic_contents.html' %}
                 {% endwith %}
 
                 <!-- Show subtopics -->
@@ -157,13 +157,13 @@
                             </div>
                             <h4 class="text-info">
                                 {{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
-                                {% if sorting != "None" %}({% trans sorting %}) {% endif %}
-                                {% if filtering != "None" %}( {% trans "Filter by: " %} {% trans filtering %}
+                                {% if sorting != 'None' %}({% trans sorting %}) {% endif %}
+                                {% if filtering != 'None' %}( {% trans 'Filter by: ' %} {% trans filtering %}
                                     ){% endif %}
                             </h4>
 
                             {% with subtopic.topic_contents as topic_contents %}
-                                {% include "frontend/course/topic_contents.html" %}
+                                {% include 'frontend/course/topic_contents.html' %}
                             {% endwith %}
                         </div>
                     {% endfor %}
@@ -172,7 +172,7 @@
         </div>
     {% empty %}
         <h3>
-            {% trans "No Topics" %}
+            {% trans 'No Topics' %}
         </h3>
         <p>
             {% trans "This course doesn't have topics at the moment." %}

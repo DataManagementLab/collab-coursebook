@@ -14,14 +14,14 @@
 
 {% block content %}
     <button onclick="location.href='{{ back_url }}'" class="btn btn-primary add-item">
-        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Back" %}
+        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Back' %}
     </button>
 
     <h2 style="font-weight: bold" align="center">
-        {% trans "History" %}
+        {% trans 'History' %}
     </h2>
 
-    {% include "frontend/history/history_compare_header.html" %}
+    {% include 'frontend/history/history_compare_header.html' %}
 
-    {% include "frontend/history/history_compare_view.html" %}
+    {% include 'frontend/history/history_compare_view.html' %}
 {% endblock content %}
