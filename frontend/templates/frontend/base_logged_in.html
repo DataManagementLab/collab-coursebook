@@ -2,12 +2,17 @@
 
 {% block general_content %}
     <div class="container-fluid" style="background-color: #0a3d62;padding-top:2em;padding-bottom:3em;color:#ffffff;">
+        {# Navigation bar #}
         <div class="container" style="border-top: 0.5em solid #ffffff;padding-top:2em;">
             {% include 'frontend/navbar.html' %}
         </div>
     </div>
+    {# Content container #}
     <div class="container" style="padding-top: 2em;min-height:75vh;margin-bottom:50px;">
+        {# Message notifcation #}
         {% include 'frontend/messages.html' %}
+
+        {# Content #}
         {% block content %}
             {# Insert content here #}
         {% endblock %}

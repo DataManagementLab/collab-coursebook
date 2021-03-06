@@ -6,43 +6,43 @@
 {% load static %}
 {% load fontawesome_5 %}
 
-{# Load CSS and JavaScript #}
-
 {% block title %}{% trans 'Edit course' %} - Collab Coursebook{% endblock %}
 
 {% block imports %}
-<link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
-<link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
+    {# Load CSS #}
+    <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
 {% endblock %}
 
 {% block content %}
-<h1>
-    {% trans 'Edit course' %}
-</h1>
+    <h1>
+        {% trans 'Edit course' %}
+    </h1>
 
-<form method="post" class="post-form" enctype=multipart/form-data>
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {{ form.media }}
+    {# Edit course information #}
+    <form method="post" class="post-form" enctype=multipart/form-data>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {{ form.media }}
 
-    <div>
-        <button type="submit" class="btn btn-primary float-right">
-            {% fa5_icon 'plus-circle' 'fas' %} {% trans 'Change' %}
-        </button>
-        <a href="{% url 'frontend:course' course.pk %}" class="btn btn-danger">
-            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
-        </a>
-    </div>
-</form>
+        {# Options #}
+        <div>
+            <button type="submit" class="btn btn-primary float-right">
+                {% fa5_icon 'plus-circle' 'fas' %} {% trans 'Change' %}
+            </button>
+            <a href="{% url 'frontend:course' course.pk %}" class="btn btn-danger">
+                {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
+            </a>
+        </div>
+    </form>
 {% endblock %}
 
 {% block bottom_script %}
-<script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}">
-
-</script>
-<script>
-    $(function () {
-        $(".chosen-select").chosen();
-    });
-</script>
+    {# Load JavaScript #}
+    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
+    <script>
+        $(function () {
+            $(".chosen-select").chosen();
+        });
+    </script>
 {% endblock %}

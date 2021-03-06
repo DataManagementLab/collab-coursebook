@@ -7,18 +7,21 @@
 {% load cc_frontend_tags %}
 
 {% block content %}
+    {# Edit option #}
     <div class="float-right">
         {% if user == profile.user %}
             <a href="{% url 'frontend:profile-edit' profile.pk %}" class="btn btn-primary">
-                {% fa5_icon "edit" "far" %} {% trans "Edit" %}
+                {% fa5_icon 'edit' 'far' %} {% trans 'Edit' %}
             </a>
         {% endif %}
     </div>
 
+    {# User name #}
     <h1>
         {% trans 'User' %}: {{ profile.user.get_username }}
     </h1>
 
+    {# Biography and User profile pciture #}
     <div class="media">
         <div class="media-body" style="padding-right: 20px">
             {% if profile.bio %}
@@ -37,29 +40,11 @@
 
     <div style="clear: both;">
 
-    <p>
-    <h2>
-        {% trans 'Biography' %}
-    </h2>
-    {{ profile.bio | linebreaks }}
-
-    <div style="clear: both;"></div>
-
-    <h3 class="text-info"
-        style="margin-top: 30px;">
-        {% fa5_icon 'chalkboard-teacher' 'fas' %} {% trans 'Owned Courses' %}
-    </h3>
-    <div class="row">
-        {% for course in profile.owned_courses.all %}
-            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
-            {% include 'frontend/course_lists/card_course.html' %}
-        {% endfor %}
-    </div>
-
+    {# Stared courses #}
     {% if user|check_profile_permissions:profile %}
         <h3 class="text-success"
             style="margin-top: 40px;">
-            {% fa5_icon "bookmark" "fas" %} {% trans "Stared Courses" %}
+            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Stared Courses' %}
         </h3>
         <div class="row">
             {% for course in profile.stared_courses.all %}

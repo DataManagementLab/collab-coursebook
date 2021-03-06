@@ -8,19 +8,25 @@
 {% load i18n %}
 
 {% block imports %}
+    {# Load CSS #}
     <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
+    {# Content form #}
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}
+        {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
         <br>
+        {# Dynamic attachment for content types with attachments #}
         {% if attachment_allowed %}
             <div>
-                <h2 style="font-weight: bold" align="center">
-                    {% trans "Image Attachments" %}
-                </h2>
+                <div style="text-align: center">
+                    <h2 style="font-weight: bold">
+                        {% trans 'Image Attachments' %}
+                    </h2>
+                </div>
                 {{ item_forms.management_form }}
                 <div id="items-form-container">
                     {% for item_form in item_forms %}
@@ -30,35 +36,39 @@
                         </div>
                     {% endfor %}
                 </div>
+                {# Attachments option #}
                 <button id="add-item-button" class="btn btn-primary add-item">
-                    {% trans "Add attachment" %}
+                    {% trans 'Add attachment' %}
                 </button>
                 <button id="remove-item-button" class="btn btn-primary remove-item" style="visibility: hidden">
-                    {% trans "Remove attachment" %}
+                    {% trans 'Remove attachment' %}
                 </button>
             </div>
         {% endif %}
 
         <br>
-        {% bootstrap_form form %}
+
         {{ form.media }}
 
+        {# Form option #}
         <div>
             <button type="submit"
                     class="btn btn-primary float-right">
-                {% fa5_icon 'plus-circle' 'fas' %} {% trans "Create" %}
+                {% fa5_icon 'plus-circle' 'fas' %} {% trans 'Create' %}
             </button>
-            <a href='{% url "frontend:course" pk=course.pk %}' class="btn btn-danger">
-                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+            <a href="{% url 'frontend:course' pk=course.pk %}" class="btn btn-danger">
+                {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
             </a>
         </div>
     </form>
 
+    {# Dynamic attachment template #}
     {% if attachment_allowed %}
-        {% include "frontend/content/dynamic_attachment.html" %}
+        {% include 'frontend/content/dynamic_attachment.html' %}
     {% endif %}
 
+    {# LaTeX embedded help for attachment #}
     {% if is_latex_content %}
-        {% include "frontend/content/attachment_embedding_help.html" %}
+        {% include 'frontend/content/attachment_embedding_help.html' %}
     {% endif %}
 {% endblock %}

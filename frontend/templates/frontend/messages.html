@@ -1,7 +1,9 @@
+{# Load the tag library #}
 {% load cc_frontend_tags %}
 
 {% include 'frontend/utils/notification.html' %}
 
+{# Message notification #}
 {% if messages %}
     {% for message in messages %}
         <script>

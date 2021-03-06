@@ -32,6 +32,7 @@ function getCookie(name) {
  * @param args the arguments as dictionary
  */
 function sendRequest(args) {
+    // Get CSRF token
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
@@ -40,6 +41,7 @@ function sendRequest(args) {
             }
         }
     });
+    // Ajax request
     $.ajax({
         url: args.url,
         type: 'POST',

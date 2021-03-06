@@ -1,17 +1,17 @@
 {% extends 'frontend/base_logged_in.html' %}
 
+{# Load the tag library #}
 {% load i18n %}
 {% load bootstrap4 %}
 {% load static %}
 {% load fontawesome_5 %}
-
 {% load cc_frontend_tags %}
 
 
-{# title block #}
-{% block title %}{% trans 'Courses' %} - Collab Coursebook{% endblock %}
+{% block title %}
+    {% trans 'Courses' %} - Collab Coursebook
+{% endblock %}
 
-{# content block #}
 {% block content %}
     <div class="row mt-3">
         <div class="col-md">
