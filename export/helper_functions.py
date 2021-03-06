@@ -11,7 +11,7 @@ from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
 
-from export.templatetags.cc_export_tags import export_template, tex_escape
+from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
 
 
 class Latex:
@@ -76,7 +76,7 @@ class Latex:
                 rendered_tpl = template.render(context).encode(Latex.encoding)
                 # Prerender errors templates
                 rendered_tpl += Latex.pre_render(len(error_log), context['export_pdf'],
-                                                 Latex.error_template)
+                                                 Latex.error_template, False)
                 rendered_tpl += r"\end{document}".encode(Latex.encoding)
 
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
@@ -96,9 +96,8 @@ class Latex:
         Checks the given log if there are error messages and returns the messages.
         If there are none, an empty list will be returned.
 
-        Parameters:
-            :param lob: A list of bytes representing the PDF LaTeX compile log
-            :type lob: list[byte]
+        :param lob: A list of bytes representing the PDF LaTeX compile log
+        :type lob: bytes
 
         :return: the error messages from the log (stdout)
         :rtype: list[str]
@@ -119,20 +118,21 @@ class Latex:
         return found
 
     @staticmethod
-    def pre_render(content, export_flag, template_type=None):
+    def pre_render(content, export_flag, template_type=None, no_error=True):
         """Prerender
 
         Prerender the given content and its corresponding template. If there
         is no template specified, the template will associated with the type
         of the content.
 
-        Parameters:
-            :param content: The content to be rendered
-            :type content: any
-            :param export_flag: True if export, False if simple content compilation
-            :type export_flag: bool
-            :param template_type: The type of the template to use
-            :type template_type: str
+        :param content: The content to be rendered
+        :type content: any
+        :param export_flag: True if export, False if simple content compilation
+        :type export_flag: bool
+        :param template_type: The type of the template to use
+        :type template_type: str
+        :type no_error: Tru if we are rendering a non error content (log)
+        :type no_error: bool
 
         :return: the rendered template
         :rtype: bytes
@@ -148,5 +148,21 @@ class Latex:
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data
         rendered_tpl = template.render(context)
-        rendered_tpl = re.sub('{~~', '{', rendered_tpl).encode(Latex.encoding)
-        return rendered_tpl
+        rendered_tpl = re.sub('{~~', '{', rendered_tpl)
+
+        # Check that we are not compiling an error template (otherwise the content would be an int)
+        if no_error:
+
+            # If there exists an attachment, replace all placeholders in the tex file with
+            # image path
+            if content.attachment is not None and content.attachment.images.count() > 0:
+                pictures = content.attachment.images.all()
+
+                for idx, picture in enumerate(pictures):
+                    path = ret_path(picture.image.url)
+                    rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
+                                          rf"\\includegraphics\1{{{path}}}",
+                                          rendered_tpl)
+
+        # Encode the template with Latex Encoding
+        return rendered_tpl.encode(Latex.encoding)

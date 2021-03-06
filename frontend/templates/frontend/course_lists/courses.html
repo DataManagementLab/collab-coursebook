@@ -15,7 +15,9 @@
 {% block content %}
     <div class="row mt-3">
         <div class="col-md">
-            <h1>All Courses{% if sort %} ({{ sort }}){% endif %}</h1>
+            <h1>
+                All Courses{% if sort %} ({{ sort }}){% endif %}
+            </h1>
         </div>
         <div class="col-md-auto my-auto">
             <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -23,14 +25,23 @@
                 {% trans "Sort by:" %} {{ sort }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='date-new' %}">Date (newest)</a>
-                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='date-old' %}">Date (oldest)</a>
-                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='title-a' %}">Title (A-Z)</a>
-                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='title-z' %}">Title (Z-A)</a>
+                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='date-new' %}">
+                    Date (newest)
+                </a>
+                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='date-old' %}">
+                    Date (oldest)
+                </a>
+                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='title-a' %}">
+                    Title (A-Z)
+                </a>
+                <a class="dropdown-item" href="{% url 'frontend:courses-sort' sort='title-z' %}">
+                    Title (Z-A)
+                </a>
             </div>
             {% if user.is_authenticated %}
-                <a class="btn btn-secondary" href="{% url "frontend:add-course" %}"
-                   title="Add new Course">{% fa5_icon 'plus' 'fas' %} {% trans "Add Course" %}</a>
+                <a class="btn btn-secondary" href="{% url 'frontend:add-course' %}" title="Add new Course">
+                    {% fa5_icon 'plus' 'fas' %} {% trans "Add Course" %}
+                </a>
             {% endif %}
         </div>
     </div>

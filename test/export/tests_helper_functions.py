@@ -5,7 +5,7 @@ This file contains the test cases for /export/helper_functions.py.
 
 import os
 
-import test.utils as utils
+from test import utils
 
 from django.test import TestCase
 
@@ -47,7 +47,10 @@ class LaTeXTestCase(TestCase):
 
         Tests that the function prerender pre renders the content of the error template correctly.
         """
-        pre_render = helper.Latex.pre_render(42, False, helper.Latex.error_template)
+        pre_render = helper.Latex.pre_render(content=42,
+                                             export_flag=False,
+                                             template_type=helper.Latex.error_template,
+                                             no_error=False)
         self.assertIn('42 errors were found during compilation.',
                       pre_render.decode(helper.Latex.encoding))
 

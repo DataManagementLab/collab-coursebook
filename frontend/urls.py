@@ -47,6 +47,9 @@ urlpatterns = [
             path('edit/',
                  views.course.EditCourseView.as_view(),
                  name='course-edit'),
+            path('edit/structure',
+                 views.course.EditCourseStructureView.as_view(),
+                 name='course-edit-structure'),
             path('history/',
                  views.history.CourseHistoryCompareView.as_view(),
                  name='course-history'),
@@ -56,6 +59,10 @@ urlpatterns = [
             path('coursebook/',
                  generate_coursebook_response,
                  name='coursebook-generate'),
+            path('favourite/',
+                 views.course.add_remove_favourites,
+                 name='favourite_course')
+
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 
@@ -80,6 +87,7 @@ urlpatterns = [
                 path('coursebook/remove/',
                      views.coursebook.remove_from_coursebook,
                      name='coursebook-remove'),
+
             ])),
             path('<pk>/',
                  views.ContentView.as_view(),

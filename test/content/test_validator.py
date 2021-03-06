@@ -5,8 +5,8 @@ This file contains the test cases for this /content/validator.py.
 
 import os
 
+from test import utils
 from test.test_cases import MediaTestCase
-import test.utils as utils
 
 from django.core.exceptions import ValidationError
 

@@ -41,7 +41,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         :return: the context data
         :rtype: dict[str, Any]
         """
-        ctx = super().get_context_data(**kwargs)
-        ctx["periods"] = Period.objects.all()
-        ctx["categories"] = Category.objects.all()
-        return ctx
+        context = super().get_context_data(**kwargs)
+        context["periods"] = Period.objects.all()
+        context["categories"] = Category.objects.all()
+        return context

@@ -24,6 +24,19 @@ class Profile(models.Model):
     :attr Profile.stared_courses: The courses that the user stared
     :type Profile.stared_courses: ManyToManyField - Course
     """
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
@@ -33,7 +46,7 @@ class Profile(models.Model):
     def __str__(self):
         """String representation
 
-        Returns he string representation of this object.
+        Returns the string representation of this object.
 
         :return: the string representation of this object
         :rtype: str
@@ -54,7 +67,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     :param created: True if the profile was created
     :type created: bool
     :param kwargs: The keyword arguments
-    :type kwargs: ANY
+    :type kwargs: Any
     """
     if created:
         Profile.objects.create(user=instance)
@@ -71,7 +84,7 @@ def save_user_profile(sender, instance, **kwargs):
     :param instance: The user instance to be saved
     :type instance: User
     :param kwargs: The keyword arguments
-    :type kwargs: ANY
+    :type kwargs: Any
     """
     profile = Profile.objects.get(user=instance)
     profile.save()

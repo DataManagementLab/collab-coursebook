@@ -22,7 +22,7 @@ from content.models import SingleImageAttachment, ImageAttachment
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
-from frontend.views.history import update_comment
+from frontend.views.history import Reversion
 from frontend.views.validator import Validator
 
 
@@ -45,7 +45,7 @@ def clean_attachment(attachment_object, image_formset):
             remove_object.delete()
 
 
-def rate_content(request, course_id, topic_id, content_id, pk):
+def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disable=invalid-name
     """Rate content
 
     Lets the user rate content.
@@ -74,7 +74,6 @@ def rate_content(request, course_id, topic_id, content_id, pk):
         + '#rating')
 
 
-# pylint: disable=too-many-ancestors
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add content view
 
@@ -90,7 +89,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     :type AddContentView.context_object_name: str
     """
     model = Content
-    template_name = 'frontend/content/addcontent.html'
+    template_name = 'frontend/content/add.html'
     form_class = AddContentForm
     success_url = reverse_lazy('frontend:dashboard')
     context_object_name = 'content'
@@ -106,7 +105,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :return: the success message when the profile was updated
         :rtype: __proxy__
         """
-        return _(f"Content '{cleaned_data['type']}' successfully added")
+        message = _("Content %(title)s successfully added") % {'title': cleaned_data['type']}
+        return message
 
     def handle_error(self):
         """Error handling
@@ -140,6 +140,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
+        # Checks if content type is of type Latex
+        context['is_latex_content'] = content_type == 'Latex'
+
         # Retrieves attachment_form
         context['attachment_form'] = AddContentFormAttachedImage
 
@@ -147,7 +150,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
-        # setup formset
+        # Setup formset
         formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
         context['item_forms'] = formset
 
@@ -198,12 +201,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content_type_data.content = content
             content_type_data.save()
 
-            # If the content type is LaTeX, compile the LaTeX Code and store in DB
-            if content_type == 'Latex':
-                Validator.validate_latex(get_user(request),
-                                         content,
-                                         content_type_data)
-
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
                 # Reads input from all forms
@@ -217,6 +214,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                                          content)
                 if redirect is not None:
                     return redirect
+
+            # If the content type is LaTeX, compile the LaTeX Code and store in DB
+            if content_type == 'Latex':
+                Validator.validate_latex(get_user(request),
+                                         content,
+                                         content_type_data)
 
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
@@ -252,7 +255,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
     :type EditContentView.form_class: Form
     """
     model = Content
-    template_name = 'frontend/content/editcontent.html'
+    template_name = 'frontend/content/edit.html'
     form_class = EditContentForm
 
     def get_content_url(self):
@@ -342,6 +345,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
+        # Checks if content type is of type Latex
+        context['is_latex_content'] = content_type == 'Latex'
+
         if content_type in IMAGE_ATTACHMENT_TYPES:
 
             # Retrieves attachment_form
@@ -392,19 +398,13 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                                                          files=self.request.FILES)
 
             # Reversion comment
-            update_comment(request)
+            Reversion.update_comment(request)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
                 content = form.save()
                 content_type = content.type
                 content_type_data = content_type_form.save()
-
-                # If the content type is LaTeX, compile the LaTeX Code and store in DB
-                if content_type == 'Latex':
-                    Validator.validate_latex(get_user(request),
-                                             content,
-                                             content_type_data)
 
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -431,6 +431,12 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     if redirect is not None:
                         return redirect
 
+                # If the content type is LaTeX, compile the LaTeX Code and store in DB
+                if content_type == 'Latex':
+                    Validator.validate_latex(get_user(request),
+                                             content,
+                                             content_type_data)
+
                 # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \
                     .objects.get(pk=content.pk).generate_preview()
@@ -448,7 +454,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return self.handle_error()
 
 
-# pylint: disable=too-many-ancestors
 class ContentView(DetailView):
     """Content view
 
@@ -466,7 +471,7 @@ class ContentView(DetailView):
 
     context_object_name = 'content'
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post request
 
         Creates comment in database.
@@ -485,7 +490,6 @@ class ContentView(DetailView):
         translate_form = TranslateForm(request.POST)
         self.object = self.get_object()
 
-        # pylint: disable=no-member
         if comment_form.is_valid():
             text = comment_form.cleaned_data['text']
             Comment.objects.create(content=self.get_object(), creation_date=timezone.now(),
@@ -637,7 +641,6 @@ class AttachedImageView(DetailView):
         return context
 
 
-# pylint: disable=too-many-ancestors
 class DeleteContentView(LoginRequiredMixin, DeleteView):
     """Delete content view
 
@@ -675,11 +678,10 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         course_id = self.kwargs['course_id']
         return reverse_lazy('frontend:course', args=(course_id,))
 
-    # Check if the user is allowed to view the delete page
     def dispatch(self, request, *args, **kwargs):
         """Dispatch
 
-        Overwrites dispatch: Check if a user is allowed to visit the page.
+        Checks if the user is allowed to view the delete page.
 
         :param request: The given request
         :type request: HttpRequest
@@ -737,7 +739,6 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         return super().delete(self, request, *args, **kwargs)
 
 
-# pylint: disable=too-many-ancestors
 class ContentReadingModeView(LoginRequiredMixin, DetailView):
     """Content reading mode view
 
@@ -749,7 +750,7 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
     :type ContentReadingModeView.template_name: str
     """
     model = Content
-    template_name = "frontend/content/readingmode.html"
+    template_name = "frontend/content/reading_mode.html"
 
     def get_context_data(self, **kwargs):
         """Context data

@@ -10,8 +10,7 @@ from django.views.generic import ListView
 from base.models import Course, Category, Period
 
 
-# pylint: disable=too-many-ancestors
-class CourseListView(ListView):
+class CourseListView(ListView):  # pylint: disable=too-many-ancestors)
     """Course list view
 
     Displays the courses page with all available course.
@@ -80,8 +79,7 @@ class CourseListView(ListView):
         return context
 
 
-# pylint: disable=too-many-ancestors
-class CourseListForCategoryView(CourseListView):
+class CourseListForCategoryView(CourseListView):  # pylint: disable=too-many-ancestors)
     """Course list for category view
 
     Displays the courses list for category page.
@@ -137,8 +135,7 @@ class CourseListForCategoryView(CourseListView):
         return ctx
 
 
-# pylint: disable=too-many-ancestors
-class CourseListForPeriodView(CourseListView):
+class CourseListForPeriodView(CourseListView):  # pylint: disable=too-many-ancestors)
     """Course list for category view
 
     Displays the courses list for period page.

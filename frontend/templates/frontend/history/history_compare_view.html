@@ -5,58 +5,41 @@
 {% if request.GET.version_id1 %}
     <p class="help">
         {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") date2=version2.revision.date_created|date:_("DATETIME_FORMAT") %}
-            Compare <strong>{{ date1 }}</strong> with <strong>{{ date2 }}</strong>:
+            Compare Version 1: <strong>{{ date1 }}</strong> with Version 2: <strong>{{ date2 }}</strong>:
         {% endblocktrans %}
     </p>
 
     <!-- Show fields differences -->
-        {% for field_diff in compare_data %}
-            <h3>
-                {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
-                {% if field_diff.is_related and not field_diff.follow %}
-                    <sup class="follow">
-                        *
-                    </sup>
-                {% endif %}
-            </h3>
-            {% if field_diff.field.help_text %}
-                <p class="help">
-                    {{ field_diff.field.help_text }}
-                </p>
-            {% endif %}
-            <div class="module">
-                {{ field_diff.diff }}
-            </div>
-        {% empty %}
-            <div class="module">
-                <p>
-                    <strong>
-                        {% trans "There are no differences." %}
-                    </strong>
-                </p>
-            </div>
-        {% endfor %}
+    {% for field_diff in compare_data %}
+        <h3>
+            {% firstof field_diff.field.verbose_name field_diff.field.related_name %}
+        </h3>
+        {% if field_diff.field.help_text %}
+            <p class="help">
+                {{ field_diff.field.help_text }}
+            </p>
+        {% endif %}
+        <div class="module">
+            {{ field_diff.diff }}
+        </div>
+    {% empty %}
+        <div class="module">
+            <p>
+                <strong>
+                    {% trans "There are no differences." %}
+                </strong>
+            </p>
+        </div>
+    {% endfor %}
 
     <!-- Show comment -->
     <h4>
-        {% trans "Edit comment:" %}
+        {% trans "Change log:" %}
     </h4>
     <blockquote>
         {{ version2.revision.comment|default:_("(no comment exists)") }}
     </blockquote>
 
-    <!-- Unfollowed fields note -->
-    {% if has_unfollowed_fields %}
-        <h4 class="follow">
-            {% trans "Note:" %}
-        </h4>
-        <p class="follow">
-            {% blocktrans %}
-                Fields/entries marked with <sup class="follow">*</sup> are not under reversion control.
-                It may be that not all marked information are correct.
-            {% endblocktrans %}
-        </p>
-    {% endif %}
 
     <!-- Buttons for previous and next compare -->
     {% if prev_url %}
@@ -71,11 +54,50 @@
         </button>
     {% endif %}
 
-    <button onclick="location.href='{{ save_url }}'" class="btn btn-primary add-item">
-        {% fa5_icon 'history' %} {% trans "Revert to this version" %}
+    <!-- Buttons for revert -->
+    <button type="button" class="btn btn-warning" data-toggle="modal"
+            data-target="#revert-modal">
+        {% fa5_icon 'history' 'fas' %} {% trans "Revert to Version 1" %}
     </button>
 
-    <br><br>
+    <!-- Modal for course/content revert -->
+    <div class="modal fade" id="revert-modal" tabindex="1" role="dialog"
+         aria-labelledby="revert-modal-label"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="revert-modal-label">{% trans "Reversion of" %}
+                        <i>{{ version1.content_type.name }}</i>?
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        {% blocktrans with date1=version1.revision.date_created|date:_("DATETIME_FORMAT") type=version1.content_type.name %}
+                            Are you sure you want to revert to Version <strong>{{ date1 }}</strong>?
+                            You can also undo the revert later.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <form method="post" id="post-form-revert" class="post-form" enctype=multipart/form-data>
+                        {% csrf_token %}
+                        <input type="hidden" name="rev_pk" value="{{ version1.pk }}">
+                        <button class="btn btn-secondary" data-dismiss="modal">
+                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                        </button>
+                        <button
+                                type="submit"
+                                class="btn btn-warning"> {% fa5_icon 'history' 'fas' %} {% trans "Confirm" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
 
     <button onclick="location.href='{{ history_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans "Go back to history list" %}

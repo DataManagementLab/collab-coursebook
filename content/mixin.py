@@ -4,15 +4,13 @@ This file describes the generated preview operation.
 """
 
 
-# pylint: disable=too-few-public-methods
-class GeneratePreviewMixin:
+class GeneratePreviewMixin:  # pylint: disable=too-few-public-methods
     """Generate preview mixin
 
     Provides method to generate previews.
     """
 
-    # pylint: disable=no-self-use
-    def generate_preview(self):
+    def generate_preview(self):  # pylint: disable=no-self-use
         """Generate preview
 
         Generate a preview of the model.

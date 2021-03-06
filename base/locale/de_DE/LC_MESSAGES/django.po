@@ -64,7 +64,7 @@ msgstr "Beschreibung"
 
 #: .\models\content.py:55 .\models\content.py:155 .\models\social.py:49
 msgid "Creation Date"
-msgstr "Erstellt um"
+msgstr "Erstellt am"
 
 #: .\models\content.py:58 .\models\content.py:84
 msgid "Topics"
@@ -72,7 +72,7 @@ msgstr "Themen"
 
 #: .\models\content.py:61
 msgid "Owners"
-msgstr "Besitzer*innen"
+msgstr "Besitzer*in"
 
 #: .\models\content.py:62
 msgid "Edit Restriction"
@@ -81,7 +81,7 @@ msgstr "Bearbeitung eingeschränkt"
 #: .\models\content.py:63
 msgid "Is the course protected and can only be edited by the owners?"
 msgstr ""
-"Ist dieser Kurs geschützt und kann nur von den Besitzer*innen bearbeitet "
+"Ist dieser Kurs geschützt und kann nur von der Besitzer*in bearbeitet "
 "werden?"
 
 #: .\models\content.py:83 .\models\content.py:138 .\models\content.py:245
@@ -102,7 +102,7 @@ msgstr "Symbol"
 
 #: .\models\content.py:117
 msgid "Symbol to show with this tag (optional)"
-msgstr "Symbol, das mit diesem Tag angezeigt wird (optional)"
+msgstr "Symbol, das zusammen mit diesem Tag angezeigt wird (optional)"
 
 #: .\models\content.py:135 .\models\coursebook.py:15
 msgid "Content"
@@ -126,7 +126,7 @@ msgstr "Sprache"
 
 #: .\models\content.py:148
 msgid "Readonly"
-msgstr "Nur lesbar"
+msgstr "Schreibgeschützt"
 
 #: .\models\content.py:148
 msgid "Can this content be updated?"
@@ -134,13 +134,13 @@ msgstr "Kann dieser Inhalt verändert werden?"
 
 #: .\models\content.py:150
 msgid "Show in public courses?"
-msgstr "In öffentlichen Kursen anzeigen?"
+msgstr "In öffentlichen Kursen zugänglich machen?"
 
 #: .\models\content.py:151
 msgid ""
 "May this content be displayed in courses that don't require registration?"
 msgstr ""
-"Darf Inhalt in Kursen angezeigt werden, die keine Registrierung erfordern?"
+"Darf dieser Inhalt in Kursen angezeigt werden, die keine Autorisierung erfordern?"
 
 #: .\models\content.py:153
 msgid "Attachment"
@@ -152,11 +152,11 @@ msgstr "Vorschau"
 
 #: .\models\content.py:240
 msgid "Course Structure Entry"
-msgstr "Kursstruktureintrag"
+msgstr "Eintrag im Kursverzeichnis"
 
 #: .\models\content.py:241
 msgid "Course Structure Entries"
-msgstr "Kursstruktureinträge"
+msgstr "Einträge im Kursverzeichnis"
 
 #: .\models\content.py:244
 msgid "Index"
@@ -176,7 +176,7 @@ msgstr "Benutzer*in"
 
 #: .\models\profile.py:11
 msgid "Biography"
-msgstr "Biographie"
+msgstr "Biografie"
 
 #: .\models\profile.py:12
 msgid "Profile picture"
@@ -184,7 +184,15 @@ msgstr "Profilbild"
 
 #: .\models\profile.py:13
 msgid "Stared courses:"
-msgstr "Markierte Kurse"
+msgstr "Favorisierte Kurse"
+
+#: .\models\profile.py:37
+msgid "Profile"
+msgstr "Profil"
+
+#: .\models\profile.py:38
+msgid "Profiles"
+msgstr "Profile"
 
 #: .\models\social.py:13 .\models\social.py:26
 msgid "Rating"
@@ -200,7 +208,7 @@ msgstr "Bewerteter Inhalt"
 
 #: .\models\social.py:25
 msgid "Raiting user"
-msgstr "Bewertende*r Benutzer*in"
+msgstr "Bewertende Benutzer*in"
 
 #: .\models\social.py:41
 msgid "Comment"

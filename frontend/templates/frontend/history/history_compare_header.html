@@ -6,6 +6,7 @@
 {% if compare_view %}
     <form method="GET" action="{{ action }}">
 {% endif %}
+
 {% if compare_view %}
     <table class="table table-borderless table-hover table-primary" id="change-history">
         <thead class="table-active">
@@ -51,8 +52,6 @@
                                        checked="checked"
                                         {% endif %}/>
                             </div>
-                        {% else %}
-                            <i>-</i>
                         {% endif %}
                     </td>
                 {% endif %}

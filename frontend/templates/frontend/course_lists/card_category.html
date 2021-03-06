@@ -6,20 +6,22 @@
 {% load cc_frontend_tags %}
 
 <div class="card ml-3 mt-3" style="width: 20rem;">
-    <a href="{% url "frontend:category-courses" pk=category.pk %}">
+    <a href="{% url 'frontend:category-courses' pk=category.pk %}">
         <div class="card-img-top">
             {% if category.image %}
                 <img src="{{ category.image.url }}" class="card-img-top" alt="Course Title Image" width="286"
                      height="180" style="width:100%;height:180px;object-fit: cover;">
             {% else %}
-                <div class="card-img-top {{ bgcolor }}" style="width:100%;height:180px;object-fit: cover;"></div>
+                <div class="card-img-top {{ bgcolor }}" style="width:100%;height:180px;object-fit: cover;">
+                
+                </div>
             {% endif %}
         </div>
     </a>
 
     <div class="card-body">
         <h5 class="card-title">
-            <a href="{% url "frontend:category-courses" pk=category.pk %}">
+            <a href="{% url 'frontend:category-courses' pk=category.pk %}">
                 {{ category.title|slice:":33" }}
                 {% if category.title|length >= 33 %}
                     ...

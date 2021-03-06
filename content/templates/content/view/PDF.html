@@ -6,10 +6,18 @@
     </div>
 </div>
 
-<b>{% trans "Source" %}:</b>
-<p>{{ content.pdfcontent.source }}</p>
+<b>
+    {% trans "Source" %}:
+</b>
+<p>
+    {{ content.pdfcontent.source }}
+</p>
 
 {% if content.pdfcontent.license %}
-    <b>{% trans "License" %}:</b>
-    <p>{{ content.pdfcontent.license }}</p>
+    <b>
+        {% trans "License" %}:
+    </b>
+    <p>
+        {{ content.pdfcontent.license }}
+    </p>
 {% endif %}

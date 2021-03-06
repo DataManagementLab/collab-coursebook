@@ -4,38 +4,80 @@ This file contains forms associated with the course.
 """
 
 from django import forms
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
 
-from base.models import Course
+from base.models import Course, Topic
 
 from content.widgets import ModifiedClearableFileInput
 
+from frontend.forms.history import HistoryForm
 
-class AddAndEditCourseForm(forms.ModelForm):
-    """Add and edit course form
 
-    This model represents the add form for adding and editing a course.
+class AddCourseForm(forms.ModelForm):
+    """Add course form
+
+    This model represents the add form for adding a course.
     """
 
     # Default value is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
 
-    # pylint: disable=too-few-public-methods
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         """Meta options
 
         This class handles all possible meta options that you can give to this model.
 
-        :attr Meta.model (Model): The model to which this form corresponds
+        :attr Meta.model: The model to which this form corresponds
         :type Meta.model: Model
         :attr Meta.fields: Including fields into the form
-        :type Meta.fields: list[str]
+        :type Meta.fields: str or list[str]
         """
         model = Course
         fields = ['title', 'description', 'image', 'owners',
                   'restrict_changes', 'category', 'period']
         widgets = {
-            'image': ModifiedClearableFileInput(attrs={'required':'false'})
+            'image': ModifiedClearableFileInput(attrs={'required': 'false'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Use better multiple select input for owners
+        self.fields["owners"].widget.attrs = {'class': 'chosen-select'}
+
+
+class EditCourseForm(HistoryForm):
+    """Edit course form
+
+    This model represents the edit form for editing a course.
+
+    :attr EditCourseForm.fields: Including fields into the form
+    :type EditCourseForm.fields: List[str]
+    """
+
+    field_order = ['title', 'description', 'image',
+                   'owners', 'restrict_changes', 'category', 'period', 'change_log']
+
+    # Default value is -1: if this value gets overwritten the form
+    # Edits the existing course with the title in the database
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.field_order: The order of the fields
+        :type Meta.field_order: List(str)
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+
+        model = Course
+        fields = ['title', 'description', 'image', 'owners',
+                  'restrict_changes', 'category', 'period']
+        widgets = {
+            'image': ModifiedClearableFileInput(attrs={'required': 'false'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -59,17 +101,50 @@ class FilterAndSortForm(forms.Form):
     :type FilterAndSortForm.sort: CharField
     """
 
-    FILTER_CHOICE = [('None', '------'), ('Text', _('Text')), ('Image', _('Image')),
-                     ('Latex', _('Latex-Textfield')), ('YouTube-Video', _('YouTube-Video')),
+    FILTER_CHOICE = [('None', '------'), ('Text', _("Text")), ('Image', _("Image")),
+                     ('Latex', _("LaTeX-Textfield")), ('YouTube-Video', _("YouTube-Video")),
                      ('PDF', 'PDF')]  # + Content.STYLE
-    SORTING_CHOICE = [('None', '-----'), ('Date', _('Date')), ('Rating', _('Rating'))]
-    filter = forms.CharField(label=_('Filter by'),
+    SORTING_CHOICE = [('None', '-----'), ('Date', _("Date")), ('Rating', _("Rating"))]
+    filter = forms.CharField(label=_("Filter by"),
                              widget=forms.Select(choices=FILTER_CHOICE,
                                                  attrs={'class': 'form-control',
                                                         'style': 'width:auto',
                                                         'onchange': 'this.form.submit();'}))
-    sort = forms.CharField(label=_('Sort by'),
+    sort = forms.CharField(label=_("Sort by"),
                            widget=forms.Select(choices=SORTING_CHOICE,
                                                attrs={'class': 'form-control',
                                                       'style': 'width:auto',
                                                       'onchange': 'this.form.submit();'}))
+
+
+class TopicChooseForm(forms.Form):
+    """Topic choose form
+
+    Represents a combo box containing all topics group by category title and ordered by their title.
+
+    :attr TopicChooseForm.topic_name: The combo box
+    :type TopicChooseForm.topic_name: ModelChoiceField
+    """
+    topic_name = forms.ModelChoiceField(required=False,
+                                        queryset=Topic.objects.order_by('category__title', 'title'),
+                                        label=_('Topics'))
+
+
+class CreateTopicForm(forms.ModelForm):
+    """Create topic form
+
+    Represents a form to create new topics.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        """
+        model = Topic
+        fields = ['title', 'category']

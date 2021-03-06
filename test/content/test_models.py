@@ -15,9 +15,8 @@ from base.models import Content
 import content.models as model
 
 
-# pylint: disable=too-few-public-methods)
 @override_settings(MEDIA_ROOT=utils.MEDIA_ROOT)
-class LatexTestCase(MediaTestCase):
+class LatexTestCase(MediaTestCase):  # pylint: disable=too-few-public-methods)
     """LaTeX test case
 
     Defines the test cases for the model Latex.

@@ -15,7 +15,6 @@ class CommentForm(forms.ModelForm):
     This model represents form for entering comments.
     """
 
-    # pylint: disable=too-few-public-methods
     class Meta:
         """Meta options
 
@@ -38,6 +37,12 @@ class CommentForm(forms.ModelForm):
         """Initializer
 
         Initialize the comment form with pre configuration for the label and placeholder.
+
+        :type request: HttpRequest
+        :param args: The arguments
+        :type args: Any
+        :param kwargs: The keyword arguments
+        :type kwargs: dict[str, Any]
         """
         super().__init__(*args, **kwargs)
         self.fields['text'].label = False

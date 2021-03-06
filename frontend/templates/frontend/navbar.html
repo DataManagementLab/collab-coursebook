@@ -3,24 +3,32 @@
 
 {% if user.is_authenticated %}
     <div class="float-right" style="color: #ffffff;font-weight: bold;">
-
         <form class="form-inline float-left" action="{% url 'frontend:search' %}">
             <input class="form-control" type="search" name="q" placeholder="{% trans 'Search' %}" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">{% fa5_icon 'search' 'fas' %}</button>
+            <button class="btn btn-outline-success" type="submit">
+                {% fa5_icon 'search' 'fas' %}
+            </button>
         </form>
 
-        <a href="{% url "frontend:courses" %}" class="btn btn-primary" style="">{% trans "All Courses" %}</a>
+        <a href="{% url 'frontend:courses' %}" class="btn btn-primary" style="">
+            {% trans "All Courses" %}
+        </a>
         {% if user.is_superuser %}
-            <a href="{% url "admin:index" %}" class="btn btn-danger" style="">{% trans "Admin Menu" %}</a>
+            <a href="{% url 'admin:index' %}" class="btn btn-danger" style="">
+                {% trans "Admin Menu" %}
+            </a>
             &nbsp;
         {% endif %}
-        <a href="{% url 'frontend:profile' pk=user.profile.pk %}"
-           class="text-decoration-none text-white">{{ user.get_username }}</a>
+        <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white">
+            {{ user.get_username }}
+        </a>
 
         <div class="btn-group" role="group">
             <div class="btn-group" role="group">
                 <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"></button>
+                        aria-haspopup="true" aria-expanded="false">
+
+                </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupNavbar" style="">
                     <div class="dropdown-header">
                         {% trans "Language" %}:
@@ -42,13 +50,21 @@
                             </button>
                         {% endfor %}
                     </form>
-                    <div class="dropdown-divider"></div>
-                    <a href="{% url "cas_ng_logout" %}" class="dropdown-item" style="">{% trans "Logout" %}</a>
+
+                    <div class="dropdown-divider">
+
+                    </div>
+                    <a href="{% url 'cas_ng_logout' %}" class="dropdown-item" style="">
+                        {% trans "Logout" %}
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 {% endif %}
 
-<a href="{% url "frontend:dashboard" %}" style="color: #ffffff;text-decoration: none;"><h4
-        style="font-weight: bold;display: inline;">Collab Coursebook</h4></a>
+<a href="{% url 'frontend:dashboard' %}" style="color: #ffffff;text-decoration: none;">
+    <h4 style="font-weight: bold;display: inline;">
+        Collab Coursebook
+    </h4>
+</a>

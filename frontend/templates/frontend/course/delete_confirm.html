@@ -1,0 +1,34 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% load i18n %}
+
+{% block title %}
+    {% blocktrans with title=object.title %}
+        Delete {{ title }}?
+    {% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+    <h1>
+        {% blocktrans with title=object.title %}
+            Delete {{ title }}?
+        {% endblocktrans %}
+    </h1>
+    <p class="text-center">
+        {% blocktrans %}
+            Are you sure you want to delete this course? Only the structure is deleted - the topics are retained.
+        {% endblocktrans %}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger float-right">
+            {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+        </button>
+        <a href="{% url 'frontend:course' pk=object.id %}" class="btn btn-secondary">
+            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+        </a>
+    </form>
+{% endblock %}

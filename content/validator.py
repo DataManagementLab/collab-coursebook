@@ -7,8 +7,7 @@ import magic
 from django.core.exceptions import ValidationError
 
 
-# pylint: disable=too-few-public-methods)
-class Validator:
+class Validator:  # pylint: disable=too-few-public-methods)
     """Validator
 
     Handles all validation related operation related to models.

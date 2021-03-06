@@ -3,15 +3,16 @@
 This file contains the test cases for /frontend/forms/content.py.
 """
 
+from test import utils
 from test.test_cases import MediaTestCase
-import test.utils as utils
 
 from django.test import TestCase
 from django.urls import reverse
 
+from base.models import Content, Course
 import content.forms as form
 import content.models as model
-from base.models import Content, Course
+
 from frontend.forms import AddContentForm
 
 from frontend.views.content import clean_attachment

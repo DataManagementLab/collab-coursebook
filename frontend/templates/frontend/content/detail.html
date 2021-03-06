@@ -22,20 +22,25 @@
 
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" href="
-
-
-                        {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
-                    Reading Mode</a>
+                        {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">
+                    {% fa5_icon 'eye' 'far' %} {% trans "Reading Mode" %}
+                </a>
                 {% if user.is_authenticated %}
                     {% if favorite %}
                         <a class="dropdown-item"
-                           href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'minus' 'fas' %}Coursebook</a>
+                           href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">
+                            {% fa5_icon 'minus' 'fas' %} {% trans 'Coursebook' %}
+                        </a>
                     {% else %}
                         <a class="dropdown-item"
-                           href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">{% fa5_icon 'plus' 'fas' %}Coursebook</a>
+                           href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">
+                            {% fa5_icon 'plus' 'fas' %} {% trans 'Coursebook' %}
+                        </a>
                     {% endif %}
 
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-divider">
+
+                    </div>
 
                     {% if user|check_edit_content_permission:content %}
                         <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
@@ -83,7 +88,6 @@
                            data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
                     {% endif %}
                 {% endif %}
-
             </div>
         </div>
     </div>
@@ -92,25 +96,38 @@
 
 
 
+
+
+
+
+
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
        class="">
         {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
     </a>
 
-    <h1 style="word-wrap: break-word;margin-top: 20px;margin-bottom: 20px;">{{ content.topic }}</h1>
+    <h1 style="word-wrap: break-word;margin-top: 20px;margin-bottom: 20px;">
+        {{ content.topic }}
+    </h1>
 
     <h5>
         {% trans "By" %} <i>{{ content.author }}</i>
         &nbsp;&middot;&nbsp;
-        <span class="badge badge-primary">{{ content.language }}</span>
+        <span class="badge badge-primary">
+            {{ content.language }}
+        </span>
         {% if content.tags.count > 0 %}
             &nbsp;&middot;&nbsp;
             {% for tag in content.tags.all %}
-                <span class="badge badge-info">{{ tag }}</span>
+                <span class="badge badge-info">
+                    {{ tag }}
+                </span>
             {% endfor %}
         {% endif %}
         &nbsp;&middot;&nbsp;
-        <span class="text-muted">{% trans "Created at" %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i></span>
+        <span class="text-muted">
+            {% trans "Created at" %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
+        </span>
     </h5>
 
     <!-- Delete inline, for 'Delete Confirmation' bootstrap modal-->
@@ -119,7 +136,9 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteContentModalLabel">{% trans "Delete" %} <i>{{ content }}</i>?</h5>
+                    <h5 class="modal-title" id="deleteContentModalLabel">
+                        {% trans "Delete" %} <i>{{ content }}</i>?
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <p>
@@ -147,7 +166,9 @@
     <div style="margin-top: 50px;margin-bottom: 50px;">
         {% include content.type|content_view %}
         <div class="mt-5">
-            <h4> {% trans "Description" %}</h4>
+            <h4>
+                {% trans "Description" %}
+            </h4>
             {{ content.description|linebreaks }} <!-- resolves to s -->
         </div>
     </div>
@@ -158,11 +179,18 @@
     <br>
 
     <!-- Rating -->
-    <h5><a name="rating">{% trans "Rating" %}</a>
+    <h5>
+        <a name="rating">
+            {% trans "Rating" %}
+        </a>
         {% if content.get_rate != -1 %}
-            <span class="badge float-right text-right">{{ content.get_rate }}/5</span>
+            <span class="badge float-right text-right">
+                {{ content.get_rate }}/5
+            </span>
         {% else %}
-            <span class="badge float-right text-right">{% trans "No rating yet" %}</span>
+            <span class="badge float-right text-right">
+                {% trans "No rating yet" %}
+            </span>
         {% endif %}
     </h5>
     <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
@@ -173,23 +201,27 @@
                    onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
         {% endfor %}
     </div>
-    <h5 style="margin-top: 30px;"><a name="comments">{% trans "Comments" %}</a></h5>
+    <h5 style="margin-top: 30px;">
+        <a name="comments">
+            {% trans "Comments" %}
+        </a>
+    </h5>
     {% if user.is_authenticated %}
         <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
-
             {% bootstrap_form comment_form %}
-            <button name="action" value="submit"
-                    class="btn btn-outline-primary">{% fa5_icon 'comment-dots' 'far' %} {% trans "Add comment" %}
+            <button name="action" value="submit" class="btn btn-outline-primary">
+                {% fa5_icon 'comment-dots' 'far' %} {% trans "Add comment" %}
             </button>
         </form>
     {% endif %}
 
-    <div class="clearfix mb-4"></div>
+    <div class="clearfix mb-4">
+
+    </div>
 
     <!-- Comment -->
     {% for comment in comments %}
         {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
     {% endfor %}
-
 {% endblock %}

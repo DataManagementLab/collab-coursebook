@@ -8,6 +8,7 @@ content of the course book and can be registered in admin.py.
 from django.conf import settings
 from django.db import models
 from django.db.models import Avg, Count
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 import reversion
@@ -132,12 +133,12 @@ class Course(models.Model):
     :type Course.period: ForeignKey - Period
     """
     title = models.CharField(max_length=200,
-                             verbose_name="Title",
+                             verbose_name=_("Title"),
                              unique=True)
     description = models.TextField(verbose_name=_("Description"))
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
-                                         auto_now_add=True,
+                                         default=timezone.now,
                                          blank=True)
 
     image = models.ImageField(verbose_name=_("Title Image"),
@@ -182,6 +183,16 @@ class Course(models.Model):
         verbose_name = _("Course")
         verbose_name_plural = _("Courses")
         ordering = ['title']
+
+    def get_sorted_topic_list(self):
+        """Sorted topic list
+
+        Returns a sorted topic query.
+
+        :return: the sorted topic list
+        :rtype: QuerySet
+        """
+        return self.topics.order_by('child_topic__index')
 
     def __str__(self):
         """String representation
@@ -372,9 +383,8 @@ class Content(models.Model):
                                    help_text=_("Can this content be updated?"),
                                    default=False)
     public = models.BooleanField(verbose_name=_("Show in public courses?"),
-                                 help_text=
-                                 _("May this content be displayed in courses "
-                                   "that don't require registration?"),
+                                 help_text=_("May this content be displayed in courses "
+                                             "that don't require registration?"),
                                  default=False)
 
     attachment = models.OneToOneField('content.ImageAttachment',
@@ -383,7 +393,7 @@ class Content(models.Model):
                                       blank=True,
                                       null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
-                                         auto_now_add=True,
+                                         default=timezone.now,
                                          blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"),
                                 blank=True,
@@ -503,7 +513,6 @@ class Content(models.Model):
         Rating.objects.filter(user_id=user.user.id, content_id=self.id).delete()
         rating = Rating.objects.create(user=user, content=self, rating=rating)  # user = profile
         rating.save()
-        # pylint: disable=no-member
         self.save()
 
     def get_index_in_course(self, course):
@@ -527,7 +536,7 @@ class CourseStructureEntry(models.Model):
 
     :attr CourseStructureEntry.course: The course whose structure is meant
     :type CourseStructureEntry.course: ForeignKey - Course
-    :attr CourseStructureEntry.index: The position that is meant (e.g. "1#2" -> second under topic
+    :attr CourseStructureEntry.index: The position that is meant (e.g. "1/2" -> second under topic
     of the first topic)
     :type CourseStructureEntry.index: CharField
     :attr CourseStructureEntry.topic: The topic at the specified position/index
@@ -537,7 +546,7 @@ class CourseStructureEntry(models.Model):
                                on_delete=models.CASCADE)
     index = models.CharField(verbose_name=_("Index"),
                              max_length=50)
-    topic = models.ForeignKey(Topic, verbose_name=_("Topic"),
+    topic = models.ForeignKey(Topic, related_name='child_topic', verbose_name=_("Topic"),
                               on_delete=models.DO_NOTHING)
 
     class Meta:
@@ -568,8 +577,8 @@ class CourseStructureEntry(models.Model):
 # else we can specify configuration
 reversion.register(Course,
                    fields=['title', 'description', 'image', 'topics',
-                           'owners', 'restrict_changes', 'category', 'period'])
+                           'restrict_changes'])
 
 reversion.register(Content,
-                   fields=['author', 'description', 'language',
+                   fields=['description', 'language',
                            'tags', 'readonly', 'public', 'attachment'])

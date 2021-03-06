@@ -9,8 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from base.models import Course, CourseStructureEntry
 
 
-# pylint: disable=too-many-ancestors
-class SearchView(ListView, LoginRequiredMixin):
+class SearchView(ListView, LoginRequiredMixin):  # pylint: disable=too-many-ancestors
     """Search view
 
     This model represents the search for course and topic titles.
