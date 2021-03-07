@@ -16,7 +16,6 @@
     {# Content form #}
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}
-        {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
         <br>
         {# Dynamic attachment for content types with attachments #}
@@ -45,6 +44,7 @@
                 </button>
             </div>
         {% endif %}
+        {% bootstrap_form form %}
 
         <br>
 

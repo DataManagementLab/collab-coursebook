@@ -15,7 +15,6 @@
 {% block content %}
     <form method="post" enctype=multipart/form-data>
         {% csrf_token %}
-        {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
 
         <br>
@@ -43,6 +42,7 @@
                 </button>
             </div>
         {% endif %}
+        {% bootstrap_form form %}
 
         <br>
 
