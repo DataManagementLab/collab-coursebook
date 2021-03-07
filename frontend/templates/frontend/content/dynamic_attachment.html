@@ -1,5 +1,6 @@
 {# Load the tag library #}
 {% load bootstrap4 %}
+{% load i18n %}
 {% load static %}
 
 {# Load JavaScript #}
@@ -19,8 +20,4 @@
             {% bootstrap_form item_forms.empty_form %}
         </table>
     </div>
-    {# Required marker #}
-    <script type="text/javascript">
-        markRequired('form-group');
-</script>
 </script>
