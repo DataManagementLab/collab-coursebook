@@ -21,11 +21,9 @@
         {# Dynamic attachment for content types with attachments #}
         {% if attachment_allowed %}
             <div>
-                <div style="text-align: center">
-                    <h2 style="font-weight: bold">
-                        {% trans 'Image Attachments' %}
-                    </h2>
-                </div>
+                <h2>
+                    {% trans 'Image Attachments' %}
+                </h2>
                 {{ item_forms.management_form }}
                 <div id="items-form-container">
                     {% for item_form in item_forms %}
