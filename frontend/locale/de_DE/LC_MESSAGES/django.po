@@ -163,9 +163,7 @@ msgid "inside"
 msgstr "innerhalb von"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:17
-msgid ""
-"instead of the actual path. Be aware that the image count begins at 0. "
-"Example:"
+msgid "instead of the actual path. Be aware that the image count begins at 0. Example:"
 msgstr "verwenden. Die Bilddateien werden ab dem Index 0 gezählt. Beispiel:"
 
 #: .\templates\frontend\content\detail.html:20
