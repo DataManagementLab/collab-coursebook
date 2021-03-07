@@ -133,7 +133,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :rtype: dict[str, Any]
          """
         context = super().get_context_data(**kwargs)
-
         # Retrieves the form for content type
         content_type = self.kwargs['type']
         if 'content_type_form' not in context:
@@ -148,6 +147,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
+
+        # Topic
+        context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
 
         # Setup formset
         if 'item_forms' not in context:
@@ -231,8 +233,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                       content.id)))
 
         return self.render_to_response(
-                self.get_context_data(form=add_content_form, content_type_form=content_type_form,
-                                      item_forms=image_formset))
+            self.get_context_data(form=add_content_form, content_type_form=content_type_form,
+                                  item_forms=image_formset))
 
 
 class EditContentView(LoginRequiredMixin, UpdateView):
@@ -327,6 +329,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['topic_id'] = self.kwargs['topic_id']
         content_type = self.get_object().type
 
+        # Topic
+        context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
+        
         # Adds the form only to context data if not already in it
         # (when passed by post method containing error messages)
         if 'content_type_form' not in context:

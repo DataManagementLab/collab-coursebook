@@ -14,6 +14,19 @@
 
 {% block content %}
     <form method="post" enctype=multipart/form-data>
+        {# Topic #}
+        <div class="form-group">
+            <label for="topic">
+                {% trans 'Topic' %}
+            </label>
+            <textfield
+                    disabled
+                    name="topic"
+                    class="form-control"
+                    style="height: 35px"
+                    id="topic">{{ topic }}
+            </textfield>
+        </div>
         {% csrf_token %}
         {% bootstrap_form content_type_form %}
 
