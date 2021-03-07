@@ -29,32 +29,7 @@ from content.models import ImageContent, TextField, YTVideoContent, PDFContent, 
 from export.views import generate_pdf_response
 
 
-def compare_removed_added_attachments(attachments, ins_del, index):
-    """Compare removed or added attachments
-
-    Compares newly added or removed attachments which don't have a counterpart in the other version
-    and creates a html diff
-
-    :param attachments: The newly added or removed attachments
-    :type attachments: list
-    :param ins_del: either 'ins' or 'del', indicating whether the given attachments were added or removed
-    :type ins_del: str
-    :param index: the index at which the added or removed attachments start
-    :type index: int
-    """
-    diff = []
-    for attachment in attachments:
-        field_dict = attachment.field_dict
-        for field in ImageAttachment()._meta.fields:
-            field_name = field.name
-            if field_name in field_dict and field_dict[field_name]:
-                html = SafeString(f'<pre class="highlight"><{ins_del}>{field_dict[field_name]}</{ins_del}></pre>')
-                diff.append({"field": field, "attachment": index, "diff": html})
-        index += 1
-    return diff
-
-
-class Reversion:  # pylint: disable=too-few-public-methods
+class Reversion:
     """Reversion utilities
 
     This class provides utility operation related to reversion.
@@ -76,6 +51,31 @@ class Reversion:  # pylint: disable=too-few-public-methods
         # else the default comment message will be used
         if change_log:
             reversion.set_comment(change_log)
+
+    @staticmethod
+    def compare_removed_added_attachments(attachments, ins_del, index):
+        """Compare removed or added attachments
+
+        Compares newly added or removed attachments which don't have a counterpart in the other version
+        and creates a html diff
+
+        :param attachments: The newly added or removed attachments
+        :type attachments: list
+        :param ins_del: either 'ins' or 'del', indicating whether the given attachments were added or removed
+        :type ins_del: str
+        :param index: the index at which the added or removed attachments start
+        :type index: int
+        """
+        diff = []
+        for attachment in attachments:
+            field_dict = attachment.field_dict
+            for field in ImageAttachment()._meta.fields:
+                field_name = field.name
+                if field_name in field_dict and field_dict[field_name]:
+                    html = SafeString(f'<pre class="highlight"><{ins_del}>{field_dict[field_name]}</{ins_del}></pre>')
+                    diff.append({"field": field, "attachment": index, "diff": html})
+            index += 1
+        return diff
 
 
 class BaseHistoryCompareView(HistoryCompareDetailView):
@@ -246,10 +246,10 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         added_attachments = len(versions2) - len(versions1)
         if added_attachments > 0:
             added_attachments = versions2[-added_attachments:]
-            diff += compare_removed_added_attachments(added_attachments, 'ins', index)
+            diff += Reversion.compare_removed_added_attachments(added_attachments, 'ins', index)
         elif added_attachments < 0:
             removed_attachments = versions1[added_attachments:]
-            diff += compare_removed_added_attachments(removed_attachments, 'del', index)
+            diff += Reversion.compare_removed_added_attachments(removed_attachments, 'del', index)
 
         return diff, has_unfollowed_fields
 

@@ -3,11 +3,6 @@
 {% load fontawesome_5 %}
 
 {% if request.GET.version_id1 %}
-    <p class="help">
-        {% blocktrans with date1=version1.revision.date_created|date:_('DATETIME_FORMAT') date2=version2.revision.date_created|date:_('DATETIME_FORMAT') %}
-            Compare Version 1: <strong>{{ date1 }}</strong> with Version 2: <strong>{{ date2 }}</strong>:
-        {% endblocktrans %}
-    </p>
 
     {# Fields differences #}
     {% for field_diff in compare_data %}
@@ -44,6 +39,20 @@
         {{ version2.revision.comment|default:_('(no comment exists)') }}
     </blockquote>
 
+    {# Compare information #}
+    <h4>
+        {% trans 'Compare information' %}:
+    </h4>
+    <blockquote>
+        <p class="help">
+            {% trans 'Compare Version 1' %}:
+            <strong>{{ version1.revision.date_created|date:_('DATETIME_FORMAT') }}</strong> {% trans 'with Version 2' %}
+            <strong>{{ version2.revision.date_created|date:_('DATETIME_FORMAT') }}</strong>
+            <br>
+            {% trans 'Revert to Version 1' %} -
+            <strong>{{ version1.revision.date_created|date:_('DATETIME_FORMAT') }}</strong>
+        </p>
+    </blockquote>
 
     {#  Previous and next compare options #}
     {% if prev_url %}

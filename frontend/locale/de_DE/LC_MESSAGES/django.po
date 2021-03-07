@@ -773,3 +773,18 @@ msgstr "Zu Favouriten hinzufügen"
 
 msgid "Remove from favourite"
 msgstr "Aus Favouriten entfernen"
+
+#: .templates/frontend/history/history_compare_view.html:44
+msgid "Compare information"
+msgstr "Informationen zum Vergleich:"
+
+#: .templates/frontend/history/history_compare_view.html:48
+msgid "Compare Version 1:"
+msgstr "Vergleich Version 1"
+
+#: .templates/frontend/history/history_compare_view.html:49
+msgid "with Version 2"
+msgstr "mit Version 2"
+#: .templates/frontend/history/history_compare_view.html:52
+msgid "Revert to Version 1"
+msgstr "Zurückkehren zu Version 1"
