@@ -48,20 +48,20 @@
     {#  Previous and next compare options #}
     {% if prev_url %}
         <button onclick="location.href='{{ prev_url }}'" class="btn btn-primary add-item">
-            {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'previous' %}
+            {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Previous Versions' %}
         </button>
     {% endif %}
 
     {% if next_url %}
         <button onclick="location.href='{{ next_url }}'" class="btn btn-primary add-item">
-            {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans 'next' %}
+            {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans 'Next Versions' %}
         </button>
     {% endif %}
 
     {# Revert option  #}
     <button type="button" class="btn btn-warning" data-toggle="modal"
             data-target="#revert-modal">
-        {% fa5_icon 'history' 'fas' %} {% trans 'Revert to Version 1' %}
+        {% fa5_icon 'history' 'fas' %} {% trans 'Overwrite fields with these changes?' %}
     </button>
 
     {#  Modal for course/content revert #}
