@@ -9,15 +9,45 @@
 
 <script>
     // Add attachment
-    $(".add-item").click(addAttachment);
+    $(".add-item").click(function (event) {
+        addAttachment(event);
+        markRequired("form-group");
+    });
     // Remove attachment
-    $(".remove-item").click(removeAttachment);
+    $(".remove-item").click(function (event) {
+        removeAttachment(event);
+        markRequired("form-group");
+    });
 </script>
 
 <script type="text/html" id="item-template">
     <div id="item-__prefix__">
         <table class="table table-borderless">
             {% bootstrap_form item_forms.empty_form %}
-        </table>
+            {% if is_latex_content %}
+                <button type="button" class="btn btn-info"
+                        onclick="copyEmbeddedAttachment(this)">{% trans 'Copy Attachment-Embedding' %}</button>
+                </table>
+            {% endif %}
     </div>
+</script>
+
+<script type="text/javascript">
+    /**
+     * Copies the clicked embedded attachment and returns its command which can be inserted
+     * in the LaTeX code to add embedded attachments.
+     *
+     * @param element the button to copy enable the copy option
+     */
+    function copyEmbeddedAttachment(element) {
+        const parent = element.parentElement;
+        const id = parent.id.replace("item-", "");
+        const command = "\\includegraphics[width=\\textwidth]{Image-" + id + "}";
+        const tmp = document.createElement('textarea');
+        tmp.value = command;
+        document.body.appendChild(tmp);
+        tmp.select();
+        document.execCommand("copy");
+        document.body.removeChild(tmp);
+    }
 </script>
