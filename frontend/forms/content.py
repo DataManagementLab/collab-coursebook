@@ -44,8 +44,8 @@ class EditContentForm(HistoryForm):
     :attr EditContentForm.field_order: The order of the fields
     :type EditContentForm.field_order: list(str)
     """
-    field_order = ['change_log', 'description', 'language', 'tags',
-                   'readonly', 'public']
+    field_order = ['description', 'language', 'tags',
+                   'readonly', 'public', 'change_log']
 
     class Meta:
         """Meta options
