@@ -6,3 +6,7 @@
 .navbar-inline-list {
     margin: 10px;
 }
+
+.form-group textarea::placeholder {
+    opacity: 0.7;
+}
