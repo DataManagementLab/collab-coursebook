@@ -3,29 +3,39 @@
 {% load static %}
 {% load i18n %}
 
-{# TODO  needs to be refactored #}
+
 {# Load CSS #}
 <link href="{% static 'css/popup.css' %}" type="text/css" rel="stylesheet"/>
 
-<script>
-    const popup_field = '<div class="popup">{% fa5_icon "question" "fas" %}' +
-        "<span class='popuptext' id='myPopup'> " +
-        "{% trans 'In order to include an attached image i in your latex file, use' %}" +
-        " \"Image-i\" " +
-        "{% trans 'inside' %}" +
-        " \\includegraphics " +
-        "{% trans 'instead of the actual path. Be aware that the image count begins at 0. Example:' %}" +
-        " \\includegraphics[width=\\textwidth]{Image-0}" +
-        "</span>" +
-        '</div>';
+<div id="latex-tooltip" class="popup">
+    {% fa5_icon "question" "fas" %}
+    <span class='popuptext' id='latex-tooltip-popup'>
+    {% trans 'In order to include an attached image i in your latex file, use' %} Image-i {% trans 'inside' %} {% trans 'instead of the actual path. Be aware that the image count begins at 0. Example:' %} \includegraphics[width=\textwidth]{Image-0}
+    </span>
+</div>
 
-    document.getElementById("id_textfield").outerHTML =
-        "&nbsp;&nbsp;" +
-        popup_field +
-        document.getElementById("id_textfield").outerHTML
+<script type="text/javascript">
+    /**
+     * Registers the tooltip to the given id.
+     *
+     * @param id the id where the tooltip should be registered
+     * @param tooltip the tooltop to be registered
+     */
+    function registerTooltip(id, tooltip) {
+        document.getElementById(id).outerHTML =
+            "&nbsp;&nbsp;" +
+            tooltip +
+            document.getElementById(id).outerHTML
+    }
 
-    $(".popup").click(function () {
-        const popup_intern = document.getElementById("myPopup");
-        popup_intern.classList.toggle("show");
+    $(document).ready(function () {
+        // Register
+        registerTooltip("id_textfield", document.getElementById("latex-tooltip").outerHTML);
+
+        // Show popup on click
+        $(".popup").click(function () {
+            const information = document.getElementById("latex-tooltip-popup");
+            information.classList.toggle("show");
+        });
     });
 </script>
