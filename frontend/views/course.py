@@ -423,7 +423,8 @@ class CourseView(DetailView, FormMixin):
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
-        context['filter_sort'] = FilterAndSortForm
+        data = {'filter': self.filtered_by, 'sort': self.sorted_by}
+        context['filter_sort'] = FilterAndSortForm(data=data)
         structure_entries = CourseStructureEntry. \
             objects.filter(course=context["course"]).order_by('index')
 
