@@ -261,6 +261,18 @@ msgstr "Vor"
 msgid "Previous"
 msgstr "Zurück"
 
+#: .\templates\frontend\history\history_compare_view.html:51
+msgid "Previous Versions"
+msgstr "Vorherige Versionen"
+
+#: .\templates\frontend\history\history.html:22
+msgid "Back to Course"
+msgstr "Zurück zum Kurs"
+
+#: .\templates\frontend\history\history_compare_view.html:57
+msgid "Next Versions"
+msgstr "Nächste Versionen"
+
 #: .\templates\frontend\course\coursebook.html:12
 msgid "Export"
 msgstr "Exportieren"
@@ -537,7 +549,7 @@ msgstr "Alle Kurse für die Kategorie"
 
 #: .\templates\frontend\history\history.html:21
 msgid "History"
-msgstr "Geschichte"
+msgstr "Versionsgeschichte"
 
 #: .\templates\frontend\history\history_compare_header.html:18
 msgid "Compare"
@@ -597,12 +609,12 @@ msgid "next"
 msgstr "vor"
 
 #: .\templates\frontend\history\history_compare_view.html:60
-msgid "Revert to Version 1"
-msgstr "Kehre zur Version 1 zurück"
+msgid "Overwrite fields with these changes?"
+msgstr "Felder überschreiben mit diesen Änderungen?"
 
 #: .\templates\frontend\history\history_compare_view.html:70
 msgid "Reversion of"
-msgstr "Änderung von"
+msgstr "Überschreiben vom"
 
 #: .\templates\frontend\history\history_compare_view.html:76
 #, python-format
@@ -614,8 +626,8 @@ msgid ""
 "                        "
 msgstr ""
 "\n"
-"Sind Sie sich sicher, dass Sie zu der Version <strong>%(date1)s</strong>?\n"
-"zurückkehren möchten? Sie können Ihre Änderungen auch später noch rückgängig "
+"Sind Sie sich sicher, dass Sie die aktuelle Version mit der Version vom <strong>%(date1)s</strong>\n"
+"überschreiben möchten? Sie können Ihre Änderungen auch später noch rückgängig "
 "machen.\n"
 "                        "
 
@@ -752,57 +764,6 @@ msgstr "<== Version: {}"
 #: .\views\profile.py:72
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
-
-#~ msgid "Revert to version: {}"
-#~ msgstr "Kehre zur Version 1 zurück"
-
-#~ msgid "Latex"
-#~ msgstr "LaTeX-Textfeld"
-
-#~ msgid "newest"
-#~ msgstr "neuste"
-
-#~ msgid "oldest"
-#~ msgstr "älteste"
-
-#~ msgid ""
-#~ "Are you sure you want to revert to this Version? You can also undo the "
-#~ "revert later.\n"
-#~ msgstr ""
-#~ "Sind Sie sich sicher, dass Sie zu der Version zurückkehren möchten? Sie "
-#~ "können Ihre Änderungen auch später noch rückgängig machen.\n"
-
-#~ msgid "This content type is not allowed!"
-#~ msgstr "Dieser Inhalttyp ist nicht erlaubt!"
-
-#~ msgid "Edit comment:"
-#~ msgstr "Änderungsprotokoll: "
-
-#~ msgid "Revert to the older version"
-#~ msgstr "Auf der alten Version zurückkehren"
-
-#~ msgid "sort by: "
-#~ msgstr "sortieren nach: "
-
-#~ msgid "Note:"
-#~ msgstr "Notiz:"
-
-#~ msgid ""
-#~ "\n"
-#~ "                Fields/entries marked with <sup class=\"follow\">*</sup> "
-#~ "are not under reversion control.\n"
-#~ "                It may be that not all marked information are correct.\n"
-#~ "            "
-#~ msgstr ""
-#~ "\n"
-#~ "                Mit <sup class=\"follow\">*</sup> gekennzeichneten Felder/"
-#~ "Einträge sind nicht unter Kontrolle von Reversion. \n"
-#~ "                Es kann sein, dass nicht alle gekennzeichnete "
-#~ "Informationen korrekt sind.\n"
-#~ "            "
-
-#~ msgid "sort by:"
-#~ msgstr "sortieren nach"
 
 msgid "Course %(title)s successfully duplicated."
 msgstr "Kurs %(title)s erfolgreich dupliziert"

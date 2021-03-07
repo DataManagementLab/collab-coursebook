@@ -16,17 +16,14 @@
     {# Content form #}
     <form method="post" class="post-form" enctype=multipart/form-data>
         {% csrf_token %}
-        {% bootstrap_form form %}
         {% bootstrap_form content_type_form %}
         <br>
         {# Dynamic attachment for content types with attachments #}
         {% if attachment_allowed %}
             <div>
-                <div style="text-align: center">
-                    <h2 style="font-weight: bold">
-                        {% trans 'Image Attachments' %}
-                    </h2>
-                </div>
+                <h2>
+                    {% trans 'Image Attachments' %}
+                </h2>
                 {{ item_forms.management_form }}
                 <div id="items-form-container">
                     {% for item_form in item_forms %}
@@ -44,7 +41,10 @@
                     {% trans 'Remove attachment' %}
                 </button>
             </div>
+            <br>
         {% endif %}
+
+        {% bootstrap_form form %}
 
         <br>
 
