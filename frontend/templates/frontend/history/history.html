@@ -18,13 +18,9 @@
     <button onclick="location.href='{{ back_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Back' %}
     </button>
-    <div style="text-align: center">
-        <h2 style="font-weight: bold">
-            {% trans 'History' %}
-        </h2>
-    </div>
+    <h2 style="margin-top: 20px;">{% trans 'History' %}</h2>
 
-    {# Comapre history view #}
+    {# Compare history view #}
     {% include 'frontend/history/history_compare_header.html' %}
 
     {% include 'frontend/history/history_compare_view.html' %}
