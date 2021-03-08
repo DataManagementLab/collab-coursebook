@@ -32,3 +32,43 @@ msgstr "Kurs %(title)s erfolgreich aus den Favoriten entfernt"
 #: .\views\course.py:530
 msgid "Course %(title)s successfully added to favourites"
 msgstr "Kurs %(title)s erfolgreich zu den Favoriten hinzugefügt"
+
+#: .\views\content.py:47
+msgid "There exists no example yet."
+msgstr "Es ist momentan kein Beispiel verfügbar."
+
+#: .\templates\attachment_embedding_help.html:18
+msgid "Instruction"
+msgstr "Instruktion"
+
+#: .\templates\attachment_embedding_help.html:27
+msgid "Information"
+msgstr "Information"
+
+#: .\templates\attachment_embedding_help.html:29
+msgid "Please insert only the LaTeX code within the document body since the preamble and the configuration are already set. Do not include any packages."
+msgstr "Bitte geben Sie nur den LaTeX Code innerhalb des Dokumentenkörpers an, da die Präambel und Konfigurationen bereits gesetzt wurden. Bitte fügen Sie keine weiteren Pakete hinzu."
+
+#: .\templates\attachment_embedding_help.html:42
+msgid "Copy Example"
+msgstr "Kopiere Beispiel"
+
+#: .\templates\attachment_embedding_help.html:47
+msgid "Embedded Attachment"
+msgstr "Eingebettete Anhänge"
+
+#: .\templates\attachment_embedding_help.html:49
+msgid "LaTeX specific options"
+msgstr "LaTeX spezifische Optionen"
+
+#: .\templates\attachment_embedding_help.html:55
+msgid "The number of the attachment. The first attachment you upload has the number 0."
+msgstr "Die Nummer des Anhangs. Der erste Anhang, den Sie hochladen hat die Nummer 0."
+
+#: .\templates\attachment_embedding_help.html:58
+msgid "Exampple"
+msgstr "Beispiel"
+
+#: .\templates\attachment_embedding_help.html:62
+msgid "If you add an attachment, you can click on the %(copy)s button to copy the LaTeX-code to use it as an embedded attachment in your code."
+msgstr "Falls Sie ein Anhang hinzufügen möchten, klicken Sie bitte auf Button %(copy)s um den LaTeX-Code zu kpieren und es als eingegebetten Anhang in den Code zu integrieren."
