@@ -23,6 +23,7 @@ from content.models import CONTENT_TYPES
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
+from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
 
@@ -43,6 +44,16 @@ def clean_attachment(content, image_formset):
         remove_source = content.ImageAttachments.order_by('id').reverse()[:clean]
         for remove_object in remove_source:
             remove_object.delete()
+
+
+LATEX_EXAMPLE_PATH = 'content/templates/form/examples/Latex_textfield.txt'
+LATEX_EXAMPLE = _('There exists no example yet.')
+
+try:
+    with open(LATEX_EXAMPLE_PATH, 'r') as file:
+        LATEX_EXAMPLE = js_escape(file.read())
+except FileNotFoundError:
+    pass
 
 
 def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disable=invalid-name
@@ -143,6 +154,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
+
+        if content_type == 'Latex':
+            context['latex_tooltip'] = LATEX_EXAMPLE
 
         # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
@@ -331,7 +345,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         # Topic
         context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
-        
+
         # Adds the form only to context data if not already in it
         # (when passed by post method containing error messages)
         if 'content_type_form' not in context:
@@ -345,6 +359,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
+        if content_type == 'Latex':
+            context['latex_tooltip'] = LATEX_EXAMPLE
 
         if content_type in IMAGE_ATTACHMENT_TYPES and 'item_forms' not in context:
 

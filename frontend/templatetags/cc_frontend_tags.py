@@ -3,6 +3,8 @@
 This file describes the configuration of frontend including the templates and tags.
 """
 
+import re
+
 from django import template
 from django.conf import settings
 
@@ -133,6 +135,7 @@ def check_edit_course_permission(user, course):
     return (user.profile in course.owners.all()) or (not course.restrict_changes
                                                      and ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE)
 
+
 @register.filter
 def check_profile_permissions(user, profile):
     """
@@ -206,3 +209,23 @@ def get_coursebook(user, course):
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
     return coursebook
+
+
+def js_escape(value):
+    """JavaScript escape
+
+    Escapes the characters from python string to JavaScrip string.
+
+    :param value: The string to be escaped
+    :type value: str
+
+    :return: the escaped string
+    :rtype: str
+    """
+    replacements = {
+        '\\': '\\\\',
+        '\n': '\\n'
+    }
+
+    regex = re.compile('|'.join(re.escape(key) for key in replacements))
+    return regex.sub(lambda match: replacements[match.group()], value)

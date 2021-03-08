@@ -4,17 +4,77 @@
 {% load i18n %}
 
 
-{# Load CSS #}
-<link href="{% static 'css/popup.css' %}" type="text/css" rel="stylesheet"/>
+{# Load JavaScript #}
+<script type="text/javascript" src="{% static 'js/copy.js' %}"></script>
 
-<div id="latex-tooltip" class="popup">
-    {% fa5_icon "question" "fas" %}
-    <span class='popuptext' id='latex-tooltip-popup'>
-    {% trans 'In order to include an attached image i in your latex file, use' %} Image-i {% trans 'inside' %} {% trans 'instead of the actual path. Be aware that the image count begins at 0. Example:' %} \includegraphics[width=\textwidth]{Image-0}
-    </span>
+<div id="latex-tooltip">
+    <a onclick="popupTooltip()" class="btn">
+        {% fa5_icon "question" "fas" size='fa-lg' %}
+    </a>
+    <div id="overlay" class="form-group" style="display: none">
+        <label for="latex-tooltip-information">
+            {% trans 'Instruction' %}
+        </label>
+        <textfield
+                disabled
+                name="topic"
+                class="form-control"
+                style="height: 20%"
+                id="latex-tooltip-information">
+            <h6>
+                {% trans 'Information' %}
+            </h6>
+            {% blocktrans %}
+                Please insert only the LaTeX code within the document body since the preamble and the configuration are
+                already set. Do not include any packages.
+            {% endblocktrans %}
+            <br>
+            <h6>
+                {% trans 'Example' %}
+            </h6>
+            {% blocktrans %}
+                Here is an example LaTeX code which can be copied by pressing the following button:
+            {% endblocktrans %}
+            <br>
+            <button type="button" class="btn btn-info"
+                    onclick="copy('{{ latex_tooltip }}')">{% trans 'Copy Example' %}
+            </button>
+            <br>
+            <br>
+            <h6>
+                {% trans 'Embedded attachment' %}
+            </h6>
+            {% trans 'Command:' %} \includegraphics[option]{Image-i}
+            <ul>
+                <li>
+                    option: {% trans 'LaTeX specific options' %}
+                </li>
+                <li>
+                    i: {% trans 'The number of the attachment. The first attachment you upload has the number 0.' %}
+                </li>
+                <li>
+                    {% trans 'Example' %}: \includegraphics[width=\textwidth]{Image-0}
+                </li>
+            </ul>
+            {% blocktrans with copy='"copy"' %}
+                If you add an attachment, you can click on the {{ copy }} button to copy the LaTeX-code to use it as an
+                embedded attachment in your code.
+            {% endblocktrans %}
+        </textfield>
+    </div>
 </div>
 
 <script type="text/javascript">
+    /**
+     * Shows or hides the popup tooltip depending its previous state. If it was unhidden,
+     * then it will be hidden after this calls and vice versa.
+     */
+    function popupTooltip() {
+        const element = document.getElementById("overlay");
+        console.log(element.style.display);
+        element.style.display = element.style.display === "block" ? "none" : "block";
+    }
+
     /**
      * Registers the tooltip to the given id.
      *
@@ -31,11 +91,5 @@
     $(document).ready(function () {
         // Register
         registerTooltip("id_textfield", document.getElementById("latex-tooltip").outerHTML);
-
-        // Show popup on click
-        $(".popup").click(function () {
-            const information = document.getElementById("latex-tooltip-popup");
-            information.classList.toggle("show");
-        });
     });
 </script>
