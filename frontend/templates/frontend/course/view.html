@@ -50,6 +50,11 @@
                            class="btn form-control btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
                     {% endif %}
 
+                    {# Export option #}
+                    <a href="{% url 'frontend:export-course' course.id %}" target="_blank" class="dropdown-item">
+                        {% fa5_icon 'file-export' 'fas' %} {% trans 'Export Course' %}
+                    </a>
+
                     <div class="dropdown-divider"></div>
 
                     {# Edit history and delete option #}
@@ -67,6 +72,7 @@
                            data-target="#deleteCourseModal">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}
                         </a>
                     {% endif %}
+
                 {% endif %}
             </div>
         </div>

@@ -8,7 +8,7 @@ from django.views.i18n import JavaScriptCatalog
 
 from content.models import CONTENT_TYPES
 
-from export.views import generate_coursebook_response
+from export.views import generate_coursebook_response, generate_course_export_response
 
 from frontend import views
 
@@ -62,6 +62,9 @@ urlpatterns = [
             path('coursebook/',
                  generate_coursebook_response,
                  name='coursebook-generate'),
+            path('export/',
+                 generate_course_export_response,
+                 name='export-course'),
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 
