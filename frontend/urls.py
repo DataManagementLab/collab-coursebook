@@ -24,6 +24,9 @@ urlpatterns = [
     path('search/',
          views.search.SearchView.as_view(),
          name='search'),
+    path('tutorial/',
+         views.TutorialView.as_view(),
+         name='tutorial'),
     path('profile/<int:pk>/', include([
         path('',
              views.ProfileView.as_view(),

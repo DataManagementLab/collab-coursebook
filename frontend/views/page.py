@@ -45,3 +45,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context["periods"] = Period.objects.all()
         context["categories"] = Category.objects.all()
         return context
+
+class TutorialView(TemplateView):
+    template_name = "frontend/tutorial.html"
