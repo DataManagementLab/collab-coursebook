@@ -786,3 +786,8 @@ msgstr "mit Version 2"
 #: .templates/frontend/history/history_compare_view.html:52
 msgid "Revert to Version 1"
 msgstr "Zurückkehren zu Version 1"
+
+#: .frontend/views/history.py: 286
+#: .frontend/views/history.py: 367
+msgid "Reverted to Version: %s"
+msgstr "Zurückgekehrt zu Version: %s"
