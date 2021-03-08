@@ -7,10 +7,12 @@
 {# Load JavaScript #}
 <script type="text/javascript" src="{% static 'js/copy.js' %}"></script>
 
-<div id="latex-tooltip">
+{# Tooltip content #}
+<script type="text/html" id="latex-tooltip">
     <a onclick="popupTooltip()" class="btn">
         {% fa5_icon "question" "fas" size='fa-lg' %}
     </a>
+    <br>
     <div id="overlay" class="form-group" style="display: none">
         <label for="latex-tooltip-information">
             {% trans 'Instruction' %}
@@ -62,7 +64,7 @@
             {% endblocktrans %}
         </textfield>
     </div>
-</div>
+</script>
 
 <script type="text/javascript">
     /**
@@ -71,7 +73,6 @@
      */
     function popupTooltip() {
         const element = document.getElementById("overlay");
-        console.log(element.style.display);
         element.style.display = element.style.display === "block" ? "none" : "block";
     }
 
@@ -79,17 +80,17 @@
      * Registers the tooltip to the given id.
      *
      * @param id the id where the tooltip should be registered
-     * @param tooltip the tooltop to be registered
+     * @param tooltip the tooltip to be registered
      */
     function registerTooltip(id, tooltip) {
         document.getElementById(id).outerHTML =
-            "&nbsp;&nbsp;" +
             tooltip +
             document.getElementById(id).outerHTML
     }
 
     $(document).ready(function () {
         // Register
-        registerTooltip("id_textfield", document.getElementById("latex-tooltip").outerHTML);
+        const tooltip = document.getElementById("latex-tooltip")
+        registerTooltip("id_textfield", tooltip.textContent);
     });
 </script>
