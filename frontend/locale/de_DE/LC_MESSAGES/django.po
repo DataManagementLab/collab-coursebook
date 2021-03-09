@@ -157,13 +157,11 @@ msgstr "Erstellen"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:18
 msgid "Instruction"
-msgstr ""
+msgstr "Instruktion"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:27
-#, fuzzy
-#| msgid "Compare information"
 msgid "Information"
-msgstr "Informationen zum Vergleich:"
+msgstr "Informationen"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:29
 msgid ""
@@ -173,11 +171,18 @@ msgid ""
 "                already set. Do not include any packages.\n"
 "            "
 msgstr ""
+"\n"
+"               Bitte geben Sie nur den LaTeX Code innerhalb des Dokumentenkörpers an, "
+"da die Präambel und Konfigurationen\n"
+"                bereits gesetzt wurden. Bitte fügen Sie keine weiteren Pakete hinzu.\n"
+"            "
+
+"Bitte geben Sie nur den LaTeX Code innerhalb des Dokumentenkörpers an, da die Präambel und Konfigurationen bereits gesetzt wurden. Bitte fügen Sie keine weiteren Pakete hinzu."
 
 #: .\templates\frontend\content\attachment_embedding_help.html:35
 #: .\templates\frontend\content\attachment_embedding_help.html:58
 msgid "Example"
-msgstr ""
+msgstr "Beispiel"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:37
 msgid ""
@@ -186,32 +191,34 @@ msgid ""
 "pressing the following button:\n"
 "            "
 msgstr ""
+"\n"
+"                Hier ist ein Beispiel LaTeX Code verfübar, welche kopiert werden kann, "
+"in dem der gegeben Button gedrückt wird:\n"
+"            "
 
 #: .\templates\frontend\content\attachment_embedding_help.html:42
 msgid "Copy Example"
-msgstr ""
+msgstr "Kopiere Beispiel"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:47
-#, fuzzy
-#| msgid "Add attachment"
 msgid "Embedded attachment"
-msgstr "Anhang hinzufügen"
+msgstr "Eingebettete Anhänge"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:49
-#, fuzzy
-#| msgid "Comment"
 msgid "Command:"
-msgstr "Kommentar"
+msgstr "Befehl"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:52
 msgid "LaTeX specific options"
-msgstr ""
+msgstr "LaTeX spezifische Optionen"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:55
 msgid ""
 "The number of the attachment. The first attachment you upload has the number "
 "0."
 msgstr ""
+"Die Nummer des Anhangs. Der erste Anhang, den Sie hochladen hat die Nummer "
+"0."
 
 #: .\templates\frontend\content\attachment_embedding_help.html:61
 #, python-format
@@ -222,6 +229,11 @@ msgid ""
 "                embedded attachment in your code.\n"
 "            "
 msgstr ""
+"\n"
+"                Falls Sie ein Anhang hinzufügen möchten, klicken Sie bitte auf Button %(copy)s "
+"um den LaTeX-Code zu kopieren und es als\n"
+"                eingegebetten Anhang in den Code zu integrieren.\n"
+"            "
 
 #: .\templates\frontend\content\detail.html:25
 #: .\templates\frontend\course\view.html:30
@@ -629,7 +641,7 @@ msgstr "(kein Kommentar)"
 
 #: .\templates\frontend\history\history_compare_view.html:44
 msgid "Compare information"
-msgstr "Informationen zum Vergleich:"
+msgstr "Informationen zum Vergleich"
 
 #: .\templates\frontend\history\history_compare_view.html:48
 #, fuzzy
@@ -758,7 +770,7 @@ msgstr "Kommentar erfolgreich bearbeitet."
 
 #: .\views\content.py:50
 msgid "There exists no example yet."
-msgstr ""
+msgstr "Es ist momentan kein Beispiel verfügbar."
 
 #: .\views\content.py:120
 #, python-format
