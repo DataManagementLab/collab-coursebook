@@ -363,7 +363,6 @@ class CourseView(DetailView, FormMixin):
             # Identify the profile and the course
             profile = get_user(request).profile
             course = get_object_or_404(Course, pk=request.POST.get('course_pk'))
-            print(course in profile.stared_courses.all())
             return JsonResponse(data={'save': course in profile.stared_courses.all()})
 
         self.object = self.get_object()
