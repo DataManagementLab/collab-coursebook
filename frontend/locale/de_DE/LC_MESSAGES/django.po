@@ -644,10 +644,8 @@ msgid "Compare information"
 msgstr "Informationen zum Vergleich"
 
 #: .\templates\frontend\history\history_compare_view.html:48
-#, fuzzy
-#| msgid "Compare Version 1:"
 msgid "Compare Version 1"
-msgstr "Vergleich Version 1"
+msgstr "Vergleich von Version 1"
 
 #: .\templates\frontend\history\history_compare_view.html:49
 msgid "with Version 2"
