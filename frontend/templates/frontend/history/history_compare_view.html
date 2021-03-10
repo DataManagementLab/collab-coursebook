@@ -8,7 +8,6 @@
     {% for field_diff in compare_data %}
         <h3>
             {% if field_diff.attachment %}
-                {# TODO translate? #}
                 {% trans "Attachment" %} {{ field_diff.attachment }} -
             {% endif %}
             {% firstof field_diff.field.verbose_name field_diff.field.related_name %}

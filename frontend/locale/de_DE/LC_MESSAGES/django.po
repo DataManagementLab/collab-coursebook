@@ -1429,6 +1429,10 @@ msgstr "Zurückgekehrt zu Version: %s"
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
 
+#: .\templates\frontend\tutorial.html:10
+msgid "Tutorial"
+msgstr "Tutorial"
+
 #~ msgid "Please write down your changes of this course"
 #~ msgstr "Bitte notieren Sie Ihre Änderungen an diesem Kurs"
 

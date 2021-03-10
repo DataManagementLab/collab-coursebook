@@ -70,21 +70,21 @@
         {# Form option #}
         <div>
             <button type="submit" class="btn btn-primary float-right">
-                {% fa5_icon 'plus-circle' 'fas' %} {% trans "Save" %}
+                {% fa5_icon 'plus-circle' 'fas' %} {% trans 'Save' %}
             </button>
             <a href="{% url 'frontend:content' course_id topic_id content.id %}" class="btn btn-danger">
-                {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
             </a>
         </div>
     </form>
 
     {# Dynamic attachment template #}
     {% if attachment_allowed %}
-        {% include "frontend/content/dynamic_attachment.html" %}
+        {% include 'frontend/content/dynamic_attachment.html' %}
     {% endif %}
 
     {# LaTeX embedded help for attachment #}
     {% if is_latex_content %}
-        {% include "frontend/content/attachment_embedding_help.html" %}
+        {% include 'frontend/content/attachment_embedding_help.html' %}
     {% endif %}
 {% endblock %}

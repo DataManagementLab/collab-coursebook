@@ -3,34 +3,40 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
+
 {% get_current_language as lang %}
-    <section>
-        <h3> {% trans 'Histroy' %} </h3>
-        {% with path='tutorial/'|add:lang|add:'/5.history.jpg' %}
-            <img src="{% static path %}" class="img-fluid" alt="edit course"/>
-        {% endwith %}
-        <div>
-            <p>
+
+<section>
+    <h3> {% trans 'Histroy' %} </h3>
+    {% with path='tutorial/'|add:lang|add:'/5.history.jpg' %}
+        <img src="{% static path %}" class="img-fluid" alt="edit course"/>
+    {% endwith %}
+    <div>
+        <p>
+            {% blocktrans %}
+                If you select “VIEW HISTORY” in the “ACTIONS” menu of the course, you will be redirected to a “History”
+                page like this.
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
                 {% blocktrans %}
-                    If you select “VIEW HISTORY” in the “ACTIONS” menu of the course, you will be redirected to a “History” page like this.
+                    in the presented table all versions of the corresponding course are displayed. Every time after you
+                    edit the course, there will be a version containing the new changes added to the table
                 {% endblocktrans %}
-            </p>
-            <ul>
-                <li>
-                    {% blocktrans %}
-                        in the presented table all versions of the corresponding course are displayed. Every time after you edit the course, there will be a version containing the new changes added to the table
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        You can select two different versions in part ② and then click on the “COMPARE” button (see ①) in order to view the differences between the two versions
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        After you click “COMPARE”, regardless how you have selected the two versions, the left version (Version 1) will always be the older one
-                    {% endblocktrans %}
-                </li>
-            </ul>
-        </div>
-    </section>
+            </li>
+            <li>
+                {% blocktrans %}
+                    You can select two different versions in part ② and then click on the “COMPARE” button (see ①) in
+                    order to view the differences between the two versions
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    After you click “COMPARE”, regardless how you have selected the two versions, the left version
+                    (Version 1) will always be the older one
+                {% endblocktrans %}
+            </li>
+        </ul>
+    </div>
+</section>

@@ -9,7 +9,7 @@ from django.forms.widgets import ClearableFileInput
 class ModifiedClearableFileInput(ClearableFileInput):
     """Widget for clearable file inputs
 
-    This model is an alternative widget for clearable file inputs in formset.
+    This model represents an alternative widget for clearable file inputs in formset.
 
     :attr ModifiedClearableFileInput.template_name: The path to the html template
     :type ModifiedClearableFileInput.template_name: str

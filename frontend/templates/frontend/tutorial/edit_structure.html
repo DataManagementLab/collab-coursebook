@@ -3,44 +3,52 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
+
 {% get_current_language as lang %}
-    <section>
-        <h3> {% trans 'Edit Structure' %} </h3>
-        {% with path='tutorial/'|add:lang|add:'/4.edit structure.jpg' %}
-            <img src="{% static path %}" class="img-fluid" alt="edit course"/>
-        {% endwith %}
-        <div>
-            <p>
+
+<section>
+    <h3> {% trans 'Edit Structure' %} </h3>
+    {% with path='tutorial/'|add:lang|add:'/4.edit structure.jpg' %}
+        <img src="{% static path %}" class="img-fluid" alt="edit course"/>
+    {% endwith %}
+    <div>
+        <p>
+            {% blocktrans %}
+                If you select “EDIT STRUCTURE” in the “ACTIONS” menu of the course, you will be redirected to an “Edit
+                Course Structure” page like this.
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
                 {% blocktrans %}
-                    If you select “EDIT STRUCTURE” in the “ACTIONS” menu of the course, you will be redirected to an “Edit Course Structure” page like this.
+                    in ① you can view all existing topics by selecting the dropdown-menu. Select one and click “ADD
+                    TOPIC” in order to add the topic to the course structure (shown in part ③)
                 {% endblocktrans %}
-            </p>
-            <ul>
-                <li>
-                    {% blocktrans %}
-                        in ① you can view all existing topics by selecting the dropdown-menu. Select one and click “ADD TOPIC” in order to add the topic to the course structure (shown in part ③)
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        in ① you can click “EXPAND STRUCTURE” to view all topics including the subtopics of the course in part ③, and click “COLLAPSE STRUCTURE” to view all topics excluding the subtopics of the course in part ③
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        in ② you can add new topics by denoting a title, selecting a category and then clicking “CREATE TOPIC”. The new topic will then be added to the list of all topics in part ①.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        in ③ you can see the current structure of the course. You can update the structure via Drag & Drop of the hamburger buttons in front of the topic names
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        Don’t forget to save your changes!
-                    {% endblocktrans %}
-                </li>
-            </ul>
-        </div>
-    </section>
+            </li>
+            <li>
+                {% blocktrans %}
+                    in ① you can click “EXPAND STRUCTURE” to view all topics including the subtopics of the course in
+                    part ③, and click “COLLAPSE STRUCTURE” to view all topics excluding the subtopics of the course in
+                    part ③
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    in ② you can add new topics by denoting a title, selecting a category and then clicking “CREATE
+                    TOPIC”. The new topic will then be added to the list of all topics in part ①.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    in ③ you can see the current structure of the course. You can update the structure via Drag & Drop
+                    of the hamburger buttons in front of the topic names
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    Don’t forget to save your changes!
+                {% endblocktrans %}
+            </li>
+        </ul>
+    </div>
+</section>

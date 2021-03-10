@@ -1,6 +1,6 @@
 """Purpose of this file
 
-This file describes the generated preview operation.
+This file describes the mixins for the models.
 """
 
 

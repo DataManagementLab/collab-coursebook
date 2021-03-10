@@ -16,13 +16,15 @@ def generate_coursebook(request, pk, exp_all,  # pylint: disable=invalid-name
                         context=None):
     """Generate course book
 
-    Generates a PDF file with name tags for students in the queryset.
+    Generates a PDF file with name tags for students in the queryset. There is also
+    a flag which indicates if the whole core or only the coursebook should be
+    exported.
 
     :param request: The given request
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
-    :param exp_all: True if whole course is exported, False if Coursebook is exported
+    :param exp_all: Indicator if the whole course or the course book should be exported
     :type exp_all: bool
     :param template: The path of the LaTeX template to use
     :type template: str

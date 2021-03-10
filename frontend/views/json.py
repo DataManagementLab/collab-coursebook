@@ -11,14 +11,16 @@ from base.models import CourseStructureEntry, Topic
 class JsonHandler:
     """Json handler
 
-    Handles all json related operations related to frontend views.
+    This class handles all json related operations related to frontend views.
     """
 
     @staticmethod
     def validate_topics(json_data):
         """Validate topics from json data
 
-        Checks if the topics from the json data exists in the database.
+        Checks if the topics from the json data exists in the database. If the topics
+        are not valid, that means topics does not exists in the course structure, a
+        validation error will be thrown.
 
         :param json_data: The json data containing topics and sub topics
         :type json_data: list[dict[str, Any]]
@@ -44,8 +46,9 @@ class JsonHandler:
         Creates a course structure from the json data and override the current stored
         entries in the database.
 
-        Example json data: [{'id': 1, 'children': [{'id': 3}]},
-        {'id': 1}]
+        Example json data:
+
+        - [{'id': 1, 'children': [{'id': 3}]}, {'id': 1}]
 
         :param course: The Course where the structure should be modified
         :type course: Course

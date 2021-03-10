@@ -6,33 +6,36 @@
 
 {% get_current_language as lang %}
 
-    <section>
-        <h3> {% trans 'Add Content' %} </h3>
-        {% with path='tutorial/'|add:lang|add:'/7.add latex.jpg' %}
-            <img src="{% static path %}" class="img-fluid" alt="add content"/>
-        {% endwith %}
-        <div>
-            <p>
+<section>
+    <h3> {% trans 'Add Content' %} </h3>
+    {% with path='tutorial/'|add:lang|add:'/7.add latex.jpg' %}
+        <img src="{% static path %}" class="img-fluid" alt="add content"/>
+    {% endwith %}
+    <div>
+        <p>
+            {% blocktrans %}
+                After selecting “ADD CONTENT” on the course site, you can choose a type of the content which you want to
+                create. Here we choose LaTeX content as an example:
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
                 {% blocktrans %}
-                    After selecting “ADD CONTENT” on the course site, you can choose a type of the content which you want to create. Here we choose LaTeX content as an example:
+                    in ① you can click on the “?” to see detailed instruction for the latex code field.
                 {% endblocktrans %}
-            </p>
-            <ul>
-                <li>
-                    {% blocktrans %}
-                        in ① you can click on the “?” to see detailed instruction for the latex code field.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        in ② you can select “ADD ATTACHMENT” to select an image file from your local computer as an attachment to this content.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        after you click on “ADD ATTACHMENT” there will also appear a “REMOVE ATTACHMENT” button, which allows you to remove the last attachment.
-                    {% endblocktrans %}
-                </li>
-            </ul>
-        </div>
-    </section>
+            </li>
+            <li>
+                {% blocktrans %}
+                    in ② you can select “ADD ATTACHMENT” to select an image file from your local computer as an
+                    attachment to this content.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    after you click on “ADD ATTACHMENT” there will also appear a “REMOVE ATTACHMENT” button, which
+                    allows you to remove the last attachment.
+                {% endblocktrans %}
+            </li>
+        </ul>
+    </div>
+</section>

@@ -50,10 +50,9 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_success_url(self):
         """Success URL
 
-        Returns the url for successful delete.
+        Returns the url for successful editing of the profile.
 
-        :return: the url of the content to which the deleted argument
-        belonged with tag to the comment section
+        :return:  the url for successful editing of the profile
         :rtype: __proxy__
         """
         return reverse_lazy('frontend:profile', kwargs={'pk': self.request.user.pk})
@@ -74,7 +73,7 @@ class ProfileEditView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_object(self, queryset=None):
         """Get object
 
-        Returns the profile object of this user.
+        Returns the profile object of this user profile.
 
         :param queryset: The given queryset
         :type queryset: QuerySet

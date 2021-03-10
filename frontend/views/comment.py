@@ -63,10 +63,10 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
     def get_success_url(self):
         """Success URL
 
-        Returns the url for successful delete.
+        Returns the url for successful deletion of the comment to which the deleted
+        argument belonged with tag to the comment section
 
-        :return: the url of the content to which the deleted argument
-        belonged with tag to the comment section
+        :return: the url of the content
         :rtype: str
         """
         course_id = self.kwargs['course_id']
@@ -81,12 +81,13 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data and adds course id to it
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
         :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data to which the course_id was added
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
@@ -119,7 +120,7 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
     def form_valid(self, form):
         """Form validation
 
-        Checks whether the form is valid. And saves the entered comment.
+        Checks whether the form is valid. If it was valid, save the entered comment.
 
         :param form: The form that should be checked
         :type form: CommentForm
@@ -171,12 +172,13 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets context data and adds the course_id
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data with added course_id
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)

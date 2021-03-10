@@ -25,9 +25,11 @@ class BaseContentModel(models.Model, GeneratePreviewMixin):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to the content.
+    Each model extended from this model contains a relation to a content. The extended models
+    defines the specific content types with their own presentation of the content.
 
 
-    :attr BaseContentModel.content: Describes the content of this model
+    :attr BaseContentModel.content: The content of this model
     :type BaseContentModel.content: OneToOneField - Content
     """
     content = models.OneToOneField(Content,
@@ -50,6 +52,7 @@ class BasePDFModel(models.Model):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to PDF.
+    Each model extended from this model contains a relation to pd file.
 
     :attr BasePDFModel.pdf: Describes the PDF file of this model
     :type BasePDFModel.pdf: FileField
@@ -94,6 +97,8 @@ class BaseSourceModel(models.Model):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to source.
+    Each model extended from this model contains a relation to a source. A source contains further
+    a license.
 
     :attr BaseSourceModel.source: Describes the source of this model
     :type BaseSourceModel.source: TextField
