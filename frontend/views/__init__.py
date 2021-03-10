@@ -17,7 +17,7 @@ from .comment import EditComment, DeleteComment
 from .history import CourseHistoryCompareView, PdfHistoryCompareView, ImageHistoryCompareView
 from .history import LatexHistoryCompareView, YTVideoHistoryCompareView
 
-from .page import StartView, DashboardView
+from .page import StartView, DashboardView, TutorialView
 
 from .profile import ProfileView, ProfileEditView
 
