@@ -13,39 +13,40 @@
     {% endwith %}
     <div>
         <p>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 If you select “EDIT STRUCTURE” in the “ACTIONS” menu of the course, you will be redirected to an “Edit
                 Course Structure” page like this.
             {% endblocktrans %}
         </p>
         <ul>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     in ① you can view all existing topics by selecting the dropdown-menu. Select one and click “ADD
                     TOPIC” in order to add the topic to the course structure (shown in part ③)
                 {% endblocktrans %}
             </li>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     in ① you can click “EXPAND STRUCTURE” to view all topics including the subtopics of the course in
                     part ③, and click “COLLAPSE STRUCTURE” to view all topics excluding the subtopics of the course in
                     part ③
                 {% endblocktrans %}
             </li>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     in ② you can add new topics by denoting a title, selecting a category and then clicking “CREATE
-                    TOPIC”. The new topic will then be added to the list of all topics in part ①.
+                    TOPIC”. The new topic will then be added to the list of all topics in part ① and to the current
+                    course structure in part ③.
                 {% endblocktrans %}
             </li>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     in ③ you can see the current structure of the course. You can update the structure via Drag & Drop
                     of the hamburger buttons in front of the topic names
                 {% endblocktrans %}
             </li>
             <li>
-                {% blocktrans %}
+                {% blocktrans trimmed %}
                     Don’t forget to save your changes!
                 {% endblocktrans %}
             </li>
