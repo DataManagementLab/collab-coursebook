@@ -11,10 +11,10 @@ from django.utils.translation import gettext_lazy as _
 
 from base.models import Content
 
-from content.models import TextField, Latex
+from content.models import BaseSourceModel, Latex, TextField
 
 
-class ImageAttachment(models.Model):
+class ImageAttachment(BaseSourceModel):
     """image attachment
 
     This model represents am imageAttachment.
@@ -40,10 +40,6 @@ class ImageAttachment(models.Model):
                                 on_delete=models.CASCADE)
     image = models.ImageField(verbose_name=_("Image"),
                               upload_to='uploads/contents/%Y/%m/%d/')
-    source = models.TextField(verbose_name=_("Source"))
-    license = models.CharField(verbose_name=_("License"),
-                               blank=True,
-                               max_length=200)
 
     class Meta:
         """Meta options

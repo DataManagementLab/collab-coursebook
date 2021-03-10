@@ -3,8 +3,9 @@
 This file describes the validators needed for the models.
 """
 import os
-import magic
 import re
+import magic
+
 from django.core.exceptions import ValidationError
 
 
@@ -38,6 +39,16 @@ class Validator:  # pylint: disable=too-few-public-methods)
 
     @staticmethod
     def validate_youtube_url(url):
+        """Validate YouTube url
+
+        Validates if the given url is a valid YouTube url.
+
+        :param url: The url to be checked
+        :param url: str
+
+        :return: a validation error if the given url is not a valid YouTube link
+        :rtype: None or ValidationError
+        """
         valid_url = re.match(r"^(http(s)?://)?(www\.|m\.)?youtu(\.?)be(\.com)?/.*", url)
         if valid_url is None:
             raise ValidationError('Invalid URL')

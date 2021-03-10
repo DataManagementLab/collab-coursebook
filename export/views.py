@@ -11,7 +11,9 @@ from base.models import Course, Favorite, Content
 from export.helper_functions import Latex
 
 
-def generate_coursebook(request, pk, exp_all, template="content/export/base.tex", context=None):  # pylint: disable=invalid-name
+def generate_coursebook(request, pk, exp_all,  # pylint: disable=invalid-name
+                        template="content/export/base.tex",
+                        context=None):
     """Generate course book
 
     Generates a PDF file with name tags for students in the queryset.
@@ -20,7 +22,7 @@ def generate_coursebook(request, pk, exp_all, template="content/export/base.tex"
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
-    :param exp_all: True iff whole course is exported, False iff Coursebook is exported
+    :param exp_all: True if whole course is exported, False if Coursebook is exported
     :type exp_all: bool
     :param template: The path of the LaTeX template to use
     :type template: str
@@ -45,17 +47,19 @@ def generate_coursebook(request, pk, exp_all, template="content/export/base.tex"
     # Check if we want to export the whole course or only the coursebook
     if exp_all:
         for topic in course.topics.all():
-            contents = [content for content in Content.objects.filter(topic=topic)]
+            contents = list(Content.objects.filter(topic=topic))
             for content in contents:
                 context['contents'].append(content)
     else:
         context['contents'] = [
-            favorite.content for favorite in Favorite.objects.filter(user=user.profile, course=course)]
+            favorite.content
+            for favorite in
+            Favorite.objects.filter(user=user.profile, course=course)
+        ]
 
     # Perform compilation given context and template
     (pdf, pdflatex_output, tex_template) = Latex.render(context, template, [])
     return pdf, pdflatex_output, tex_template
-
 
 
 def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pylint: disable=invalid-name
@@ -79,8 +83,6 @@ def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pyl
     return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
 
 
-
-
 def generate_course_export_response(request, pk, file_name=_("Course_Export")):  # pylint: disable=invalid-name
     """
     <TODO: Iteration 6>
@@ -89,8 +91,6 @@ def generate_course_export_response(request, pk, file_name=_("Course_Export")): 
     # Call the method for coursebook generation and write the output afterwards
     (pdf, pdflatex_output, tex_template) = generate_coursebook(request, pk, True)
     return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
-
-
 
 
 def write_response(request, pdf, pdflatex_output, tex_template, filename,

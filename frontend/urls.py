@@ -2,7 +2,7 @@
 
 This file defines the URL mapping.
 """
-from django.conf.urls.i18n import i18n_patterns
+
 from django.urls import path, re_path, include
 from django.views.i18n import JavaScriptCatalog
 

@@ -448,7 +448,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Don't save and render error messages for both forms
             return self.render_to_response(
-                self.get_context_data(form=form, content_type_form=content_type_form, item_forms=image_formset))
+                self.get_context_data(form=form,
+                                      content_type_form=content_type_form,
+                                      item_forms=image_formset))
 
         # Redirect to error page (should not happen for valid content types)
         return self.handle_error()

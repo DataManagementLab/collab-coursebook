@@ -320,27 +320,6 @@ class CourseView(DetailView, FormMixin):
         """
         return reverse_lazy('frontend:dashboard')
 
-    def post_favourite(self, request):
-        """Post favourite
-
-        Update the favourites of the user who sends this request. The course will be added or
-        removed from the favourite list after this call.
-
-        :param request: The given request
-        :type request: HttpRequest
-
-        :return: a successful http response
-        :rtype: HttpResponse
-        """
-        # Identify the profile and the course
-        profile = get_user(request).profile
-        course = get_object_or_404(Course, pk=request.POST.get('course_pk'))
-        if request.POST.get('save') == 'true':
-            profile.stared_courses.add(course)
-        else:
-            profile.stared_courses.remove(course)
-        return HttpResponse()
-
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
@@ -358,7 +337,14 @@ class CourseView(DetailView, FormMixin):
         """
         # Add/remove favourite
         if request.POST.get('save') is not None:
-            return self.post_favourite(request)
+            # Identify the profile and the course
+            profile = get_user(request).profile
+            course = get_object_or_404(Course, pk=request.POST.get('course_pk'))
+            if request.POST.get('save') == 'true':
+                profile.stared_courses.add(course)
+            else:
+                profile.stared_courses.remove(course)
+            return HttpResponse()
         if request.POST.get('course_pk') is not None:
             # Identify the profile and the course
             profile = get_user(request).profile

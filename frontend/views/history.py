@@ -56,12 +56,13 @@ class Reversion:
     def compare_removed_added_attachments(attachments, ins_del, index):
         """Compare removed or added attachments
 
-        Compares newly added or removed attachments which don't have a counterpart in the other version
-        and creates a html diff
+        Compares newly added or removed attachments which don't have a counterpart in the other
+        version and creates a html diff.
 
         :param attachments: The newly added or removed attachments
         :type attachments: list
-        :param ins_del: either 'ins' or 'del', indicating whether the given attachments were added or removed
+        :param ins_del: either 'ins' or 'del', indicating whether the given attachments were
+        added or removed
         :type ins_del: str
         :param index: the index at which the added or removed attachments start
         :type index: int
@@ -72,7 +73,8 @@ class Reversion:
             for field in ImageAttachment()._meta.fields:
                 field_name = field.name
                 if field_name in field_dict and field_dict[field_name]:
-                    html = SafeString(f'<pre class="highlight"><{ins_del}>{field_dict[field_name]}</{ins_del}></pre>')
+                    html = SafeString(f'<pre class="highlight"><{ins_del}>'
+                                      f'{field_dict[field_name]}</{ins_del}></pre>')
                     diff.append({"field": field, "attachment": index, "diff": html})
             index += 1
         return diff
@@ -201,6 +203,41 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         content_id = self.get_object().pk
         return reverse(f'frontend:{value}', args=(course_id, topic_id, content_id,))
 
+    def __compare_attachment(self, versions1, versions2):
+        """Compare attachment
+
+        Create a generic html diff from the attachments between version1 and version2.
+
+        :param versions1: The first version of attachments to compare
+        :type versions1: list[Version]
+        :param versions2: The second version of attachments to compare
+        :type versions2: list[Version]
+
+        :return: A diff of every changed field values
+        :rtype: list[dict[str, any]], bool
+        """
+        diff = []
+        has_unfollowed_fields = False
+        index = 1
+        for attachment_version1, attachment_version2 in zip(versions1, versions2):
+            diff2, has_unfollowed_fields2 = super().compare(ImageAttachment(),
+                                                            attachment_version1,
+                                                            attachment_version2)
+            for field in diff2:
+                field['attachment'] = index
+            index += 1
+            diff += diff2
+            has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+
+        added_attachments = len(versions2) - len(versions1)
+        if added_attachments > 0:
+            added_attachments = versions2[-added_attachments:]
+            diff += Reversion.compare_removed_added_attachments(added_attachments, 'ins', index)
+        elif added_attachments < 0:
+            removed_attachments = versions1[added_attachments:]
+            diff += Reversion.compare_removed_added_attachments(removed_attachments, 'del', index)
+        return diff, has_unfollowed_fields
+
     def compare(self, obj, version1, version2):
         """Compare two versions of an object
 
@@ -229,34 +266,26 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
         content_type = ContentType.objects.get(model='imageattachment')
 
-        # get all image attachments versions from both revisions as list
-        versions1 = version1.revision.version_set.filter(content_type=content_type).order_by('object_id')[::1]
-        versions2 = version2.revision.version_set.filter(content_type=content_type).order_by('object_id')[::1]
-        index = 1
-        for attachment_version1, attachment_version2 in zip(versions1, versions2):
-            diff2, has_unfollowed_fields2 = super().compare(ImageAttachment(),
-                                                            attachment_version1,
-                                                            attachment_version2)
-            for field in diff2:
-                field['attachment'] = index
-            index += 1
-            diff += diff2
-            has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+        # Get all image attachments versions from both revisions as list
+        compared_attachments = self.__compare_attachment(
+            versions1=version1.revision.version_set.filter(
+                content_type=content_type
+            ).order_by('object_id')[::1],
+            versions2=version2.revision.version_set.filter(
+                content_type=content_type
+            ).order_by('object_id')[::1]
+        )
 
-        added_attachments = len(versions2) - len(versions1)
-        if added_attachments > 0:
-            added_attachments = versions2[-added_attachments:]
-            diff += Reversion.compare_removed_added_attachments(added_attachments, 'ins', index)
-        elif added_attachments < 0:
-            removed_attachments = versions1[added_attachments:]
-            diff += Reversion.compare_removed_added_attachments(removed_attachments, 'del', index)
+        diff += compared_attachments[0]
+        has_unfollowed_fields = has_unfollowed_fields or compared_attachments[1]
 
         return diff, has_unfollowed_fields
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Submits the form and its its information to revert the current content to a previous state.
+        Submits the form and its its information to revert the current content to a
+        previous state.
 
         :param request: The given request
         :type request: HttpRequest
@@ -270,9 +299,8 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         """
         topic_id = self.kwargs['topic_id']
         pk = self.kwargs['pk']  # pylint: disable=invalid-name
-        ver_pk = request.POST.get('ver_pk')
         with transaction.atomic(), reversion.create_revision():
-            versions = Version.objects.get(pk=ver_pk).revision.version_set.all()
+            versions = Version.objects.get(pk=request.POST.get('ver_pk')).revision.version_set.all()
 
             # revert added attachments
             content = Content.objects.get(pk=pk)
