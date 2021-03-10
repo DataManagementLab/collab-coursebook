@@ -3,49 +3,54 @@
 {% load i18n %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
+
 {% get_current_language as lang %}
-    <section>
-        <h3> {% trans 'History Compare' %} </h3>
-        {% with path='tutorial/'|add:lang|add:'/6.history compare.jpg' %}
-            <img src="{% static path %}" class="img-fluid" alt="edit course"/>
-        {% endwith %}
-        <div>
-            <p>
+
+<section>
+    <h3> {% trans 'History Compare' %} </h3>
+    {% with path='tutorial/'|add:lang|add:'/6.history compare.jpg' %}
+        <img src="{% static path %}" class="img-fluid" alt="edit course"/>
+    {% endwith %}
+    <div>
+        <p>
+            {% blocktrans %}
+                After you click on the “COMPARE” button, text will appear below the table:
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
                 {% blocktrans %}
-                    After you click on the “COMPARE” button, text will appear below the table:
+                    in ① you can see the fields where changes were made.
                 {% endblocktrans %}
-            </p>
-            <ul>
-                <li>
-                    {% blocktrans %}
-                        in ① you can see the fields where changes were made.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        in ② you can see the details of the changes. The newly added texts are marked with green, the deleted texts are marked with red.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        in ③ you can see which two versions are being compared.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        in ④ you can select “PREVIOUS VERSIONS” to see the comparison between the previous two versions, or select “NEXT VERSIONS” to see the comparison between the next two versions.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        select “OVERWHITE FIELDS WITH THESE CHANGES” in order to revert to Version 1. After the revert has been completed, the status of the course will be reset to Version 1.
-                    {% endblocktrans %}
-                </li>
-                <li>
-                    {% blocktrans %}
-                        select “GO BACK TO HISTORY LIST” to close the compare view
-                    {% endblocktrans %}
-                </li>
-            </ul>
-        </div>
-    </section>
+            </li>
+            <li>
+                {% blocktrans %}
+                    in ② you can see the details of the changes. The newly added texts are marked with green, the
+                    deleted texts are marked with red.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    in ③ you can see which two versions are being compared.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    in ④ you can select “PREVIOUS VERSIONS” to see the comparison between the previous two versions, or
+                    select “NEXT VERSIONS” to see the comparison between the next two versions.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    select “OVERWHITE FIELDS WITH THESE CHANGES” in order to revert to Version 1. After the revert has
+                    been completed, the status of the course will be reset to Version 1.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans %}
+                    select “GO BACK TO HISTORY LIST” to close the compare view
+                {% endblocktrans %}
+            </li>
+        </ul>
+    </div>
+</section>

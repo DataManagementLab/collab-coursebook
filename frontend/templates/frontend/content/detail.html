@@ -128,7 +128,7 @@
         {% endif %}
         &nbsp;&middot;&nbsp;
         <span class="text-muted">
-            {% trans "Created at" %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
+            {% trans 'Created at' %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
         </span>
     </h5>
 
@@ -154,10 +154,10 @@
                           class="mb-0">
                         {% csrf_token %}
                         <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
                         <button
-                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans 'Confirm' %}
                         </button>
                     </form>
                 </div>
@@ -170,21 +170,21 @@
         {% include content.type|content_view %}
         <div class="mt-5">
             <h4>
-                {% trans "Description" %}
+                {% trans 'Description' %}
             </h4>
             {{ content.description|linebreaks }} <!-- resolves to s -->
         </div>
     </div>
 
     {# Attachment gallery #}
-    {% include "frontend/content/detail_attachment.html" %}
+    {% include 'frontend/content/detail_attachment.html' %}
 
     <br>
 
     {# Rating #}
     <h5>
         <a name="rating">
-            {% trans "Rating" %}
+            {% trans 'Rating' %}
         </a>
         {% if content.get_rate != -1 %}
             <span class="badge float-right text-right">
@@ -192,7 +192,7 @@
             </span>
         {% else %}
             <span class="badge float-right text-right">
-                {% trans "No rating yet" %}
+                {% trans 'No rating yet' %}
             </span>
         {% endif %}
     </h5>
@@ -206,7 +206,7 @@
     </div>
     <h5 style="margin-top: 30px;">
         <a name="comments">
-            {% trans "Comments" %}
+            {% trans 'Comments' %}
         </a>
     </h5>
     {% if user.is_authenticated %}
@@ -214,7 +214,7 @@
             {% csrf_token %}
             {% bootstrap_form comment_form %}
             <button name="action" value="submit" class="btn btn-outline-primary">
-                {% fa5_icon 'comment-dots' 'far' %} {% trans "Add comment" %}
+                {% fa5_icon 'comment-dots' 'far' %} {% trans 'Add comment' %}
             </button>
         </form>
     {% endif %}
@@ -223,6 +223,6 @@
 
     {# Comment #}
     {% for comment in comments %}
-        {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
+        {% include 'frontend/comment/comment.html' with course_id=course.id content_id=content.id %}
     {% endfor %}
 {% endblock %}
