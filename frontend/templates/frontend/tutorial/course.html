@@ -1,0 +1,83 @@
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% get_current_language as lang %}
+    <section>
+        <h3> {% trans 'Course' %} </h3>
+        {% with path='tutorial/'|add:lang|add:'/2.Course.jpg' %}
+            <img src="{% static path %}" class="img-fluid" alt="course"/>
+        {% endwith %}
+        <div>
+            <p>
+                {% blocktrans %}
+                    The key functions of the course site are as follows:
+                {% endblocktrans %}
+            </p>
+            <ul>
+                <li>
+                    {% blocktrans %}
+                        in ① you can select “ACTIONS” in order to access the following functions:
+                    {% endblocktrans %}
+                    <ul>
+                        <li>
+                            {% blocktrans %}
+                                “ADD TO/ REMOVE FROM FAVOURITE”: Add/Remove the viewed course to your list of favourite courses.
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans %}
+                                DUPLICATE COURSE: Duplicate this course
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans %}
+                                EXPORT COURSE: Export all course contents in a PDF
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans %}
+                                EDIT COURSE - more information in a later section
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans %}
+                                EDIT STRUCTURE - more information in a later section
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans %}
+                                VIEW HISTORY - more information in a later section
+                            {% endblocktrans %}
+                        </li>
+                        <li>
+                            {% blocktrans %}
+                                DELETE COURSE: Delete the course
+                            {% endblocktrans %}
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    {% blocktrans %}
+                        in ② you can click on the name of a specific topic for quick topic jumping, and click on the hamburger button to toggle/untoggle the topic list.
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans %}
+                        in the “Coursebook'' part you can see marked coursebook content. In ③ you can also click on the hamburger button in order to toggle/untoggle the coursebook section.
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans %}
+                        if there is any content in your “Coursebook”, there will be an “EXPORT” button (see ④), which you can select to download a pdf containing all coursebook content.
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans %}
+                        on the right side of each topic there is an “ADD CONTENT” button (see ⑤). Click to add new content to the corresponding topic.
+                    {% endblocktrans %}
+                </li>
+            </ul>
+        </div>
+    </section>

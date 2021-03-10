@@ -1,0 +1,31 @@
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% get_current_language as lang %}
+    <section>
+        <h3> {% trans 'Edit Course' %}</h3>
+        {% with path='tutorial/'|add:lang|add:'/3.edit course.jpg' %}
+            <img src="{% static path %}" class="img-fluid" alt="edit course"/>
+        {% endwith %}
+        <div>
+            <p>
+                {% blocktrans %}
+                If you click “EDIT COURSE” in the “ACTIONS” menu of the course, you will be redirected to an “Edit course” page like this.
+                {% endblocktrans %}
+            </p>
+            <ul>
+                <li>
+                    {% blocktrans %}
+                        fields marked with asterisks are required.
+                    {% endblocktrans %}
+                </li>
+                <li>
+                    {% blocktrans %}
+                        the text in “Change Log” will be shown later in the history list as comment.
+                    {% endblocktrans %}
+                </li>
+            </ul>
+        </div>
+    </section>

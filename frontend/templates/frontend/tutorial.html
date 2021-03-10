@@ -9,6 +9,32 @@
 {% block content %}
     <h1> Tutorial for Collab Coursebook </h1>
 
-    <p> This is an example </p>
+    <div>
+        <h5>
+            {% blocktrans %}
+            Welcome to the “Collab Coursebook” tutorial! In this tutorial we will present our website and clarify its various functions.
+            {% endblocktrans %}
+        </h5>
+    </div>
+    <hr>
+    {% include 'frontend/tutorial/navibar.html' %}
+    <hr>
+    {% include 'frontend/tutorial/course.html' %}
+    <hr>
+    {% include 'frontend/tutorial/edit_course.html' %}
+    <hr>
+    {% include 'frontend/tutorial/edit_structure.html' %}
+    <hr>
+    {% include 'frontend/tutorial/history.html' %}
+    <hr>
+    {% include 'frontend/tutorial/history_compare.html' %}
+    <hr>
+    {% include 'frontend/tutorial/add_content.html' %}
+    <hr>
+    {% include 'frontend/tutorial/content.html' %}
+
+
+
+
 
 {% endblock %}
