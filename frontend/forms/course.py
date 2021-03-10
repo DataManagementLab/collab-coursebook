@@ -121,6 +121,7 @@ class TopicChooseForm(forms.Form):
     """Topic choose form
 
     Represents a combo box containing all topics group by category title and ordered by their title.
+    The topics are sorted by their category and internally by their title.
 
     :attr TopicChooseForm.topic_name: The combo box
     :type TopicChooseForm.topic_name: ModelChoiceField

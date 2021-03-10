@@ -12,7 +12,8 @@ from base.models import Period, Category
 class StartView(TemplateView):
     """Dashboard view
 
-    This model represents the start view.
+    This model represents the start view. The starting view is the starting point
+    of this project.
 
     :attr StartView.template_name: The path to the html template
     :type StartView.template_name: str
@@ -33,9 +34,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
         :return: the context data
@@ -46,5 +48,14 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context["categories"] = Category.objects.all()
         return context
 
+
 class TutorialView(TemplateView):
+    """Tutorial view
+
+    This model represents the tutorial view. The tutorial view serves as a
+    support to make it easier for the user to deal with the page.
+
+    :attr TutorialView.template_name: The path to the html template
+    :type TutorialView.template_name: str
+    """
     template_name = "frontend/tutorial.html"

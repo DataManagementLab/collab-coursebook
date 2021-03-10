@@ -33,7 +33,7 @@ class CourseListView(ListView):  # pylint: disable=too-many-ancestors)
     def get_queryset(self):
         """Query set
 
-        Returns the list of courses sorted with sorting if a value is given
+        Returns the list of courses sorted with sorting if a value is given.
 
         :return: the list of courses
         :rtype: QuerySet
@@ -55,14 +55,15 @@ class CourseListView(ListView):  # pylint: disable=too-many-ancestors)
     def get_context_data(self, *, object_list=None, **kwargs):
         """Context data
 
-        Gets context data for the template.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
         :param object_list: The django object list
         :type object_list: list
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data()
@@ -120,14 +121,15 @@ class CourseListForCategoryView(CourseListView):  # pylint: disable=too-many-anc
     def get_context_data(self, *, object_list=None, **kwargs):
         """Context data
 
-        Gets context data for the template.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
         :param object_list: The django object list
         :type object_list: list
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context
+        :return: the context data
         :rtype: dict[str, Any]
         """
         ctx = super().get_context_data(object_list=object_list, **kwargs)
@@ -176,14 +178,15 @@ class CourseListForPeriodView(CourseListView):  # pylint: disable=too-many-ances
     def get_context_data(self, *, object_list=None, **kwargs):
         """Context data
 
-        Gets context data for the template.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
         :param object_list: The django object list
         :type object_list: list
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context
+        :return: the context data
         :rtype: dict[str, Any]
         """
         ctx = super().get_context_data(object_list=object_list, **kwargs)

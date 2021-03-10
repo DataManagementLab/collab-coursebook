@@ -17,7 +17,8 @@ from content.models import BaseSourceModel, Latex, TextField
 class ImageAttachment(BaseSourceModel):
     """image attachment
 
-    This model represents am imageAttachment.
+    This model represents am imageAttachment. Specific contains may contain
+    image attachments.
 
     :attr ImageAttachment.TYPE: Describes the type of this model
     :type ImageAttachment.TYPE: str
@@ -35,7 +36,8 @@ class ImageAttachment(BaseSourceModel):
     TYPE = "ImageAttachment"
     DESC = _("Image Attachment")
 
-    content = models.ForeignKey(Content, verbose_name=_("Content"),
+    content = models.ForeignKey(Content,
+                                verbose_name=_("Content"),
                                 related_name='ImageAttachments',
                                 on_delete=models.CASCADE)
     image = models.ImageField(verbose_name=_("Image"),
@@ -71,5 +73,7 @@ IMAGE_ATTACHMENT_TYPES = {
     Latex.TYPE
 }
 
+# Register models for reversion if it is not already done in admin,
+# else we can specify configuration
 reversion.register(ImageAttachment,
                    fields=['image', 'source', 'license'])

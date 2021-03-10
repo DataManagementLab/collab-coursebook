@@ -10,20 +10,27 @@ from django.utils.translation import gettext_lazy as _
 class Favorite(models.Model):
     """Favorite
 
-    Saving the favorites of a User per Course & Content
+    This model represents the favourites. A content can be favoured and will
+    be marked for the user.
 
-    :attr Favorite.user: Describes favourites of the user
+    :attr Favorite.user: The user who favours the content
     :type Favorite.user: ForeignKey - Profile
-    :attr Favorite.course: Describes the favourites courses of the user
+    :attr Favorite.course: The course containing the content
     :type Favorite.course: ForeignKey - Course
-    :attr Favorite.content: Describes the favourites contents of the user
+    :attr Favorite.content: The content which was favoured by the user
     :type Favorite.content: ForeignKey - Content
     """
 
-    user = models.ForeignKey("Profile", verbose_name=_("User"), on_delete=models.CASCADE,
+    user = models.ForeignKey("Profile",
+                             verbose_name=_("User"),
+                             on_delete=models.CASCADE,
                              related_name="user_favorites")
-    course = models.ForeignKey("Course", verbose_name=_("Course"), on_delete=models.CASCADE)
-    content = models.ForeignKey("Content", verbose_name=_("Content"), on_delete=models.CASCADE)
+    course = models.ForeignKey("Course",
+                               verbose_name=_("Course"),
+                               on_delete=models.CASCADE)
+    content = models.ForeignKey("Content",
+                                verbose_name=_("Content"),
+                                on_delete=models.CASCADE)
 
     class Meta:
         """Meta options

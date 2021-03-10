@@ -24,7 +24,9 @@ register = template.Library()
 def export_template(content_type):
     """Export template
 
-    Validate the type and retrieve the suitable template.
+    Validate the type and retrieve the suitable template. Additionally
+    to the content types, there exists an error template for errors
+    that occurred during rendering.
 
     :param content_type: The content type or error
     :type content_type: str
@@ -32,6 +34,9 @@ def export_template(content_type):
     returns: the path of the template
     rtype: str
     """
+    # Alternative solution if the current solution does not return the absolute path and caused a
+    # TemplateDoesNotExist
+    # base_path = os.path.abspath(os.path.join(os.path.abspath(content.__file__), os.pardir))
     base_path = os.path.dirname(content.__file__)
     path = base_path + "/templates/content/export"
 
@@ -45,12 +50,12 @@ def export_template(content_type):
 def ret_path(value):
     """Return path to image
 
-    Returns the correct (absolute) path to the image in media directory.
+    Returns the correct (absolute) path to the image in the media directory.
 
-    :param value: The path
+    :param value: The path of the image
     :type value: str
 
-    :return: the absolute path to the image in media directory
+    :return: the absolute path to the image in the media directory
     :rtype: str
     """
 

@@ -10,9 +10,11 @@ from django.utils.translation import gettext_lazy as _
 class Rating(models.Model):
     """Rating
 
-    This model represents the user ratings.
+    This model represents the user ratings. A rating consists of choices, which are represented
+    in a scala as numbers from 1 (Very Bad) to 5 (Very Good). Each number can be assigned to a
+    description of the rating.
 
-    :attr Rating.CHOICES: The choices of the ratings which is described as a scala from 1 to 5
+    :attr Rating.CHOICES: The choices of the ratings
     :type Rating.CHOICES: list[tuple[int, str]]
     :attr Rating.content: The content to rate
     :type Rating.content: ForeignKey - Content
@@ -30,10 +32,14 @@ class Rating(models.Model):
         (5, 'Very Good'),
     ]
 
-    content = models.ForeignKey("Content", verbose_name=_("Rated content"),
+    content = models.ForeignKey("Content",
+                                verbose_name=_("Rated content"),
                                 on_delete=models.CASCADE)
-    user = models.ForeignKey("Profile", verbose_name=_("Rating user"), on_delete=models.CASCADE)
-    rating = models.IntegerField(choices=CHOICES, verbose_name=_("Rating"))
+    user = models.ForeignKey("Profile",
+                             verbose_name=_("Rating user"),
+                             on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=CHOICES,
+                                 verbose_name=_("Rating"))
 
     class Meta:
         """Meta options
@@ -65,7 +71,9 @@ class Rating(models.Model):
 class Comment(models.Model):
     """Comment
 
-    Comment Model that saves user comments for a content.
+    This model represents the comments. A user can comment with a text to a content.
+    The usr is also possible to edit the comment which is why the last edit time will
+    be stored next to the creation date.
 
     :attr Comment.content: The content the comment belongs to
     :type Comment.content: ForeignKey - Content
@@ -78,16 +86,23 @@ class Comment(models.Model):
     :attr Comment.last_edit: The date when the comment was last edited
     :type Comment.last_edit: DateTimeField
     """
-    content = models.ForeignKey("Content", verbose_name=_("Comment for"), on_delete=models.CASCADE,
+    content = models.ForeignKey("Content",
+                                verbose_name=_("Comment for"),
+                                on_delete=models.CASCADE,
                                 related_name="comments")
-    author = models.ForeignKey("Profile", verbose_name=_("Author"),
-                               on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey("Profile",
+                               verbose_name=_("Author"),
+                               on_delete=models.CASCADE,
+                               related_name="comments")
 
     text = models.TextField(verbose_name=_("Comment Text"))
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
-                                         blank=True, auto_now_add=True)
-    last_edit = models.DateTimeField(blank=True, null=True, auto_now=True)
+                                         blank=True,
+                                         auto_now_add=True)
+    last_edit = models.DateTimeField(blank=True,
+                                     null=True,
+                                     auto_now=True)
 
     class Meta:
         """Meta options
@@ -114,11 +129,13 @@ class Comment(models.Model):
 
     @property
     def edited(self):
-        """Edit
+        """Edited state
 
-        Returns when the rating was last edited in seconds.
+        Returns an indicator if the comment was indicated. The comment was
+        edited when there is at least a difference of 1 seconds between the
+        creation time and the last edit.
 
-        :return: when the rating was last edited
-        :rtype: float
+        :return: true if the comment was edited
+        :rtype: bool
         """
         return (self.last_edit - self.creation_date).total_seconds() > 1

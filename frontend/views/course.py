@@ -30,7 +30,7 @@ from frontend.views.json import JsonHandler
 class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Duplicate course view
 
-     Duplicates a course.
+    Duplicates a course.
 
     :attr DuplicateCourseView.model: The model of the view
     :type DuplicateCourseView.model: Model
@@ -106,7 +106,7 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add course view
 
-    Adds a new course to the database
+    Adds a new course to the database.
 
     :attr AddCourseView.model: The model of the view
     :type AddCourseView.model: Model
@@ -194,17 +194,17 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         """Post
 
-        Defines what happens after form is posted. Sets object and the checks if form is valid.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
-        :return: the result from form_valid / form_invalid depending on the result from is_valid
-        :rtype: TemplateResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
         # Reversion comment
         Reversion.update_comment(request)
@@ -232,13 +232,14 @@ class EditCourseStructureView(DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data for the page.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :param kwargs: The additional arguments
+        :type kwargs: dict[str, Any]
 
-        :return: The context
-        :rtype: dict
+        :return: the context data
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         # Json object representing the topics of this course structure
@@ -250,17 +251,17 @@ class EditCourseStructureView(DetailView, FormMixin):
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Defines what happens after form is posted. Sets object and the checks if form is valid.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
-        :return: the json data if there request is an ajax, else an bad http response
-        :rtype:  JsonResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
         self.object = self.get_object()
         form_create_topic = self.get_form()
@@ -323,7 +324,7 @@ class CourseView(DetailView, FormMixin):
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Defines what happens after form is posted. Sets object and the checks if form is valid.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -332,8 +333,8 @@ class CourseView(DetailView, FormMixin):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the http response depending on the operation
-        :rtype: HttpResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
         # Add/remove favourite
         if request.POST.get('save') is not None:
@@ -399,12 +400,13 @@ class CourseView(DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data for the page.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: The context
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)

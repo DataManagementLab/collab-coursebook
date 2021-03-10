@@ -46,9 +46,13 @@ def clean_attachment(content, image_formset):
             remove_object.delete()
 
 
+# Tooltip for LaTeX
+# str: Path of the LaTeX example code
 LATEX_EXAMPLE_PATH = 'content/templates/form/examples/Latex_textfield.txt'
+# __proxy__: Message if the file was not found
 LATEX_EXAMPLE = _('There exists no example yet.')
 
+# Retrieve example code
 try:
     with open(LATEX_EXAMPLE_PATH, 'r') as file:
         LATEX_EXAMPLE = js_escape(file.read())
@@ -135,14 +139,15 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Returns the context data of the addition of content.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data of the addition of the content
+        :return: the context data
         :rtype: dict[str, Any]
-         """
+        """
         context = super().get_context_data(**kwargs)
         # Retrieves the form for content type
         content_type = self.kwargs['type']
@@ -175,7 +180,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         """Post
 
-        Submits the form and its uploaded files to store it into the database.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -184,8 +189,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the submitting or
-        to the invalid page if something wrong occurs
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         # Retrieves content type form
@@ -330,12 +334,13 @@ class EditContentView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Returns the context data of the editing.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data of the editing
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
@@ -377,9 +382,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        """Post request
+        """Post
 
-        Submits the form and its uploaded files to store it into the database.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -388,8 +393,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the submitting or
-        to the invalid page if something wrong occurs
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         self.object = self.get_object()
@@ -474,19 +478,19 @@ class ContentView(DetailView):
     context_object_name = 'content'
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        """Post request
+        """Post
 
-        Creates comment in database.
+        Defines the action after a post request.
 
         :param request: The given request
-        :type request: HttpResponse
+        :type request: HttpRequest
         :param args: The arguments
-        :type: Any
+        :type args: Any
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page
-        :rtype: HttpResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
         comment_form = CommentForm(request.POST)
         translate_form = TranslateForm(request.POST)
@@ -534,9 +538,10 @@ class ContentView(DetailView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
         :return: the context data
@@ -613,9 +618,10 @@ class AttachedImageView(DetailView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
         :return: the context data
@@ -702,7 +708,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         """Delete
 
-        Deletes the content when the user clicks the delete button
+        Deletes the content when the user clicks the delete button.
 
         :param request: The given request
         :attr request: HttpRequest
@@ -737,12 +743,13 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data for the response.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
