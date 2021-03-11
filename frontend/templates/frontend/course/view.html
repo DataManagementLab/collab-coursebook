@@ -162,7 +162,7 @@
         <form id="filter+sort" class="form-inline" method="post"
               action="{% url 'frontend:course' course.id %}">
             {% csrf_token %}
-            {% for f in filter_sort %}
+            {% for f in form %}
                 <div class="form-group" style="margin-right: 10px">
                     <div style="padding-right: 10px">
                         {{ f.label }}
