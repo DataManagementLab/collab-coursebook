@@ -237,13 +237,14 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # check if the selected versions corresponding the compared versions
         self.assert_contains_html(
             response,
-            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" value="{version_ids1[0]:d}" '
-            f'style="visibility:hidden" />',
-            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" value="{version_ids1[0]:d}" '
-            f'checked="checked" />',
-            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" value="{version_ids1[2]:d}" '
-            f'checked="checked" />',
-            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" value="{version_ids1[2]:d}" />',
+            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" '
+            f'value="{version_ids1[0]:d}" style="visibility:hidden" />',
+            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" '
+            f'value="{version_ids1[0]:d}" checked="checked" />',
+            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" '
+            f'value="{version_ids1[2]:d}" checked="checked" />',
+            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" '
+            f'value="{version_ids1[2]:d}" />',
         )
         # check if the differences will be correctly collected
         self.assert_contains_html(
@@ -290,15 +291,14 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # after revert the pdf file of latex should still exist
         self.assertIsNotNone(latex1.pdf)
 
-    # TODO next iteration #pylint: disable=fixme,pointless-string-statement
-    """def test_compare_with_attachment(self):
-        """"""Compare test case - Content history compare with attachment
+    def test_compare_with_attachment(self):
+        """Compare test case - Content history compare with attachment
 
         Tests content history compare with attachment.
-        """"""
+        """
         text1 = model.TextField.objects.get(pk=2)
         with reversion.create_revision():
-            text1.content.attachment.images.get(pk=1).source = 'new source text'
+            text1.content.ImageAttachments.get(pk=1).source = 'new source text'
             text1.save()
             set_comment('attachment edited')
 
@@ -307,15 +307,14 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # performing the compare between the last two versions
         data3 = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[1]}
         response = self.client.get(self.textfield_path, data3)
-        # TODO the changes of attachment source is not showing at current status #pylint: disable=fixme
         self.assert_contains_html(
             response,
             # "<ins>+ new source text</ins>",  # change for source
             "<blockquote>attachment edited</blockquote>",  # change log
         )
-        queryset3 = Version.objects.get_for_object(text1.content.attachment)
+        queryset3 = Version.objects.get_for_object(text1.content.ImageAttachments.get(pk=1))
         # the versions of the attachment should also exist in database
-        self.assertNotEqual(queryset3.values_list("pk", flat=True).count(), 0)"""
+        self.assertNotEqual(queryset3.values_list("pk", flat=True).count(), 0)
 
 
 class CourseHistoryCompareViewTestCase(BaseCourseViewTestCase):
