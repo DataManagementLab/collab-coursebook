@@ -22,12 +22,13 @@ def get_placeholder(content_type, widget):
     Reads the the file which represents placeholder of the corresponding
     widget of the specified content type. If the file could not be read,
     return an empty string.
+
     The path of the file structured as follows:
     directory + content type + _ + widget name + file type
 
-    :param content_type: the type of the content of the placeholder
+    :param content_type: The type of the content of the placeholder
     :type content_type: str
-    :param widget: the widget of the placeholder
+    :param widget: The widget of the placeholder
     :type widget: str
 
     :return: the placeholder value

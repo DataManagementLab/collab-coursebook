@@ -68,19 +68,16 @@ def setup_database():
     Course.objects.create(title='Course', description='desc', category=cat)
     Topic.objects.create(title="Topic", category=cat)
     content = create_content(model.Latex.TYPE)
-    content.save()
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
     Validator.validate_latex(user, content, latex)
 
 
-def create_content(content_type, attachment=None):
+def create_content(content_type):
     """Create content
 
     :param content_type: The type of the content
     :type content_type: str
-    :param attachment: The attachment of the content
-    :type attachment: ImageAttachment
 
     Create a dummy content with the given content type and attachment.
 
@@ -91,5 +88,4 @@ def create_content(content_type, attachment=None):
                                   topic=Topic.objects.first(),
                                   type=content_type,
                                   description='this is a description',
-                                  language='de',
-                                  attachment=attachment)
+                                  language='de')

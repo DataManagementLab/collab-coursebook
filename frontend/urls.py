@@ -2,13 +2,13 @@
 
 This file defines the URL mapping.
 """
-from django.conf.urls.i18n import i18n_patterns
+
 from django.urls import path, re_path, include
 from django.views.i18n import JavaScriptCatalog
 
 from content.models import CONTENT_TYPES
 
-from export.views import generate_coursebook_response
+from export.views import generate_coursebook_response, generate_course_export_response
 
 from frontend import views
 
@@ -24,6 +24,9 @@ urlpatterns = [
     path('search/',
          views.search.SearchView.as_view(),
          name='search'),
+    path('tutorial/',
+         views.TutorialView.as_view(),
+         name='tutorial'),
     path('profile/<int:pk>/', include([
         path('',
              views.ProfileView.as_view(),
@@ -62,6 +65,9 @@ urlpatterns = [
             path('coursebook/',
                  generate_coursebook_response,
                  name='coursebook-generate'),
+            path('export/',
+                 generate_course_export_response,
+                 name='export-course'),
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
 

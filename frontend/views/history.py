@@ -56,14 +56,15 @@ class Reversion:
     def compare_removed_added_attachments(attachments, ins_del, index):
         """Compare removed or added attachments
 
-        Compares newly added or removed attachments which don't have a counterpart in the other version
-        and creates a html diff
+        Compares newly added or removed attachments which do not have a counterpart in the other
+        version and creates a html diff. The value of the indicator is either either 'ins' or 'del',
+        indicating whether the given attachments were added or removed .
 
         :param attachments: The newly added or removed attachments
         :type attachments: list
-        :param ins_del: either 'ins' or 'del', indicating whether the given attachments were added or removed
+        :param ins_del: Indicator whether the given attachments were added or removed
         :type ins_del: str
-        :param index: the index at which the added or removed attachments start
+        :param index: The index at which the added or removed attachments start
         :type index: int
         """
         diff = []
@@ -72,7 +73,8 @@ class Reversion:
             for field in ImageAttachment()._meta.fields:
                 field_name = field.name
                 if field_name in field_dict and field_dict[field_name]:
-                    html = SafeString(f'<pre class="highlight"><{ins_del}>{field_dict[field_name]}</{ins_del}></pre>')
+                    html = SafeString(f'<pre class="highlight"><{ins_del}>'
+                                      f'{field_dict[field_name]}</{ins_del}></pre>')
                     diff.append({"field": field, "attachment": index, "diff": html})
             index += 1
         return diff
@@ -117,12 +119,13 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Returns the context data of the history.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data of the history
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data()
@@ -201,37 +204,22 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         content_id = self.get_object().pk
         return reverse(f'frontend:{value}', args=(course_id, topic_id, content_id,))
 
-    def compare(self, obj, version1, version2):
-        """Compare two versions of an object
+    def __compare_attachment(self, versions1, versions2):
+        """Compare attachment
 
-        Create a generic html diff from the obj between version1 and version2
+        Create a generic html differences from the attachments between version 1 and
+        version 2.
 
-        :param obj: The object to compare
-        :type obj: BaseContentModel
-        :param version1: The first version to compare
-        :type version1: Version
-        :param version2: The second version to compare
-        :type version2: Version
+        :param versions1: The first version of attachments to compare
+        :type versions1: list[Version]
+        :param versions2: The second version of attachments to compare
+        :type versions2: list[Version]
 
-        :return: A diff of every changed field values
-        :rtype: list(dict(str, any)), bool
+        :return: the differences of every changed field values
+        :rtype: list[dict[str, any]], bool
         """
-        content = obj.content
-        versions = Version.objects.get_for_object(content)
-        obj_version1 = versions.get(revision=version1.revision)
-        obj_version2 = versions.get(revision=version2.revision)
-
-        diff, has_unfollowed_fields = super().compare(content, obj_version1, obj_version2)
-        diff2, has_unfollowed_fields2 = super().compare(obj, version1, version2)
-
-        diff += diff2
-        has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
-
-        content_type = ContentType.objects.get(model='imageattachment')
-
-        # get all image attachments versions from both revisions as list
-        versions1 = version1.revision.version_set.filter(content_type=content_type).order_by('object_id')[::1]
-        versions2 = version2.revision.version_set.filter(content_type=content_type).order_by('object_id')[::1]
+        diff = []
+        has_unfollowed_fields = False
         index = 1
         for attachment_version1, attachment_version2 in zip(versions1, versions2):
             diff2, has_unfollowed_fields2 = super().compare(ImageAttachment(),
@@ -250,13 +238,57 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         elif added_attachments < 0:
             removed_attachments = versions1[added_attachments:]
             diff += Reversion.compare_removed_added_attachments(removed_attachments, 'del', index)
+        return diff, has_unfollowed_fields
+
+    def compare(self, obj, version1, version2):
+        """Compare two versions of an object
+
+        Create a generic html differences from the obj between version 1 and version 2. The
+        purpose of the object ist to retrieve the fields to be compared with the function of
+        the compare from the super class.
+
+        :param obj: The object to compare
+        :type obj: BaseContentModel
+        :param version1: The first version to compare
+        :type version1: Version
+        :param version2: The second version to compare
+        :type version2: Version
+
+        :return: the differences of every changed field values
+        :rtype: list(dict(str, any)), bool
+        """
+        content = obj.content
+        versions = Version.objects.get_for_object(content)
+        obj_version1 = versions.get(revision=version1.revision)
+        obj_version2 = versions.get(revision=version2.revision)
+
+        diff, has_unfollowed_fields = super().compare(content, obj_version1, obj_version2)
+        diff2, has_unfollowed_fields2 = super().compare(obj, version1, version2)
+
+        diff += diff2
+        has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+
+        content_type = ContentType.objects.get(model='imageattachment')
+
+        # Get all image attachments versions from both revisions as list
+        compared_attachments = self.__compare_attachment(
+            versions1=version1.revision.version_set.filter(
+                content_type=content_type
+            ).order_by('object_id')[::1],
+            versions2=version2.revision.version_set.filter(
+                content_type=content_type
+            ).order_by('object_id')[::1]
+        )
+
+        diff += compared_attachments[0]
+        has_unfollowed_fields = has_unfollowed_fields or compared_attachments[1]
 
         return diff, has_unfollowed_fields
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Submits the form and its its information to revert the current content to a previous state.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -265,14 +297,13 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the reversion was successful
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         topic_id = self.kwargs['topic_id']
         pk = self.kwargs['pk']  # pylint: disable=invalid-name
-        ver_pk = request.POST.get('ver_pk')
         with transaction.atomic(), reversion.create_revision():
-            versions = Version.objects.get(pk=ver_pk).revision.version_set.all()
+            versions = Version.objects.get(pk=request.POST.get('ver_pk')).revision.version_set.all()
 
             # revert added attachments
             content = Content.objects.get(pk=pk)
@@ -283,7 +314,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
 
             for version in versions:
                 date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-                reversion.set_comment(_("<== Version: {}".format(date_time)))
+                reversion.set_comment(_("Reverted to Version: %s") % date_time)
 
                 for deserialized_obj in serializers.deserialize('json', version.serialized_data):
                     if isinstance(deserialized_obj.object, Content):
@@ -346,7 +377,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Submits the form and its its information to revert the current course to a previous state.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -355,7 +386,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the reversion was successful
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         pk = self.kwargs['pk']  # pylint: disable=invalid-name
@@ -364,7 +395,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
             version = Version.objects.get(id=ver_pk)
 
             date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-            reversion.set_comment(_("<== Version: {}".format(date_time)))
+            reversion.set_comment(_("Reverted to Version: %s") % date_time)
 
             for deserialized_obj in serializers.deserialize('json', version.serialized_data):
                 if isinstance(deserialized_obj.object, Course):

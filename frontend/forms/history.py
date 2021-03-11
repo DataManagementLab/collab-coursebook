@@ -8,11 +8,12 @@ from django.utils.translation import gettext_lazy as _
 
 class HistoryForm(forms.ModelForm):
     """History form
-    This model represents the history form which enables a change log option
-    to note the changes made.
 
-    :attr HistoryForm.change_log: The change log field which contains
-    a detailed message what was edited
+    This model represents the history form which enables a change log option
+    to note the changes made. The change log contains a detailed message what
+    was edited.
+
+    :attr HistoryForm.change_log: The change log
     :type HistoryForm.change_log: CharField
     """
     change_log = forms.CharField(

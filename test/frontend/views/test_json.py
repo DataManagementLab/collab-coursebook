@@ -44,8 +44,8 @@ class ValidateTopicsTestCase(BaseCourseViewTestCase):
     def test_validate_topics_only_sub_invalid(self):
         """Validate topics test case - Valid main topic but invalid sub topic
 
-        Tests the function validate_topics if a main topic is valid but its sub topic is invalid. This means the main
-        topic does exists in the data base but a sub topic does not.
+        Tests the function validate_topics if a main topic is valid but its sub topic is invalid.
+        This means the main topic does exists in the data base but a sub topic does not.
         """
         json_data = [{'value': 'Topic1 (Category)', 'id': 2},
                      {'value': 'Topic2 (Category)', 'id': 3,

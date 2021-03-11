@@ -11,13 +11,14 @@ from django.utils.translation import gettext_lazy as _
 
 from base.models import Content
 
-from content.models import TextField, Latex
+from content.models import BaseSourceModel, Latex, TextField
 
 
-class ImageAttachment(models.Model):
+class ImageAttachment(BaseSourceModel):
     """image attachment
 
-    This model represents am imageAttachment.
+    This model represents am imageAttachment. Specific contains may contain
+    image attachments.
 
     :attr ImageAttachment.TYPE: Describes the type of this model
     :type ImageAttachment.TYPE: str
@@ -35,15 +36,12 @@ class ImageAttachment(models.Model):
     TYPE = "ImageAttachment"
     DESC = _("Image Attachment")
 
-    content = models.ForeignKey(Content, verbose_name=_("Content"),
+    content = models.ForeignKey(Content,
+                                verbose_name=_("Content"),
                                 related_name='ImageAttachments',
                                 on_delete=models.CASCADE)
     image = models.ImageField(verbose_name=_("Image"),
                               upload_to='uploads/contents/%Y/%m/%d/')
-    source = models.TextField(verbose_name=_("Source"))
-    license = models.CharField(verbose_name=_("License"),
-                               blank=True,
-                               max_length=200)
 
     class Meta:
         """Meta options
@@ -75,5 +73,7 @@ IMAGE_ATTACHMENT_TYPES = {
     Latex.TYPE
 }
 
+# Register models for reversion if it is not already done in admin,
+# else we can specify configuration
 reversion.register(ImageAttachment,
                    fields=['image', 'source', 'license'])

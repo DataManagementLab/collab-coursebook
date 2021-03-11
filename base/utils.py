@@ -13,9 +13,9 @@ def create_topic_and_subtopic_list(topics, course):
 
     Creates an ordered list of (sub-)topics.
 
-    :param topics: The used topics
+    :param topics: The used topics which should be sorted
     :type topics: list
-    :param course: The course
+    :param course: The course containing the topics
     :type course: Course
 
     :return: a sorted list of topics
@@ -58,7 +58,12 @@ def structure_to_tuple(structure):
     """Structure to tuple
 
     Returns the index of structure as a tuple. The index determines if the topic is a
-    main topic or a sub topic.
+    main or a sub topic.
+
+    For example:
+
+    - 1 is a main topic
+    - 1/1 is a sub topic
 
     :param structure: The index of the structure
     :type structure: str
@@ -72,13 +77,13 @@ def structure_to_tuple(structure):
 
 
 def create_course_from_form(self, form):
-    """Course from form
+    """Create course from form
 
     Creates a new course in the database from the form.
 
     :param self: The given request
     :type self: request
-    :param form: The form
+    :param form: The form to be stored
     :type form: Form
 
     :return: the course object
@@ -95,7 +100,7 @@ def create_course_from_form(self, form):
 
 
 def get_user(request):
-    """User
+    """Get user
 
     Returns the current user.
 
@@ -109,18 +114,22 @@ def get_user(request):
 
 
 def check_owner_permission(request, course, messages):
-    """Owner permission
+    """Check owner permission
 
-    Checks if the logged in user is the owner of the course and returns an according boolean.
+    Checks if the logged in user is an owner of the course and, depending on this,
+    returns a Boolean value indicating that the the user is truly an owner of the
+    course or not.
+
+    If the user is not an owner, an error message will be sent.
 
     :param request: The given request
     :type request: HttpRequest
-    :param course: The course for which it should be checked
+    :param course: The course we check if the user is actually an owner of the course
     :type course: Course
-    :param messages: The messages to be able to set an error message
+    :param messages: The message sent as a result of the given failed request
     :type messages: TODO
 
-    :return: true if the owner has no permission and a message should be displayed
+    :return: true if the owner has no permission
     :rtype: bool
     """
     if get_user(request) not in course.owners.all():

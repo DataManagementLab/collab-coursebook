@@ -81,7 +81,7 @@
                     {% else %}
                         {{ action.revision.date_created|date:_('DATETIME_FORMAT') }}
                     {% endif %}
-                </th>
+                </td>
                 <td scope="row" style="text-align: center">
                     {% if action.revision.user %}
                         {{ action.revision.user.get_username }}

@@ -18,8 +18,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     Represents the course model in the admin panel.
 
-    :attr CourseAdmin.list_display: Controls which fields are displayed on the change
-    list page of the admin
+    :attr CourseAdmin.list_display: Controls which fields are displayed
     :type CourseAdmin.list_display: list[str]
     :attr CourseAdmin.readonly_fields: Controls which fields are non-editable
     :type CourseAdmin.readonly_fields: list[str]
@@ -44,7 +43,7 @@ class ContentAdmin(admin.ModelAdmin):
 
     :attr ContentAdmin.readonly_fields: Controls which fields are non-editable
     :type ContentAdmin.readonly_fields: list[str]
-    :attr ContentAdmin.exclude: Controls which fields should be excluded from the form
+    :attr ContentAdmin.exclude: Controls which fields should be excluded
     :type ContentAdmin.exclude: list[str]
     """
     readonly_fields = ['creation_date']
@@ -69,14 +68,11 @@ class CourseStructureAdmin(admin.ModelAdmin):
 
     Represents the course structure model in the admin panel.
 
-    :attr CourseAdmin.list_display: Controls which fields are displayed on the change
-    list page of the admin
+    :attr CourseAdmin.list_display: Controls which fields are displayed
     :type CourseAdmin.list_display: list[str]
-    :attr CourseStructureAdmin.list_display_links: Controls if and which fields in list_display
-    should be linked to the "change" page for an object
+    :attr CourseStructureAdmin.list_display_links: Controls which displayed fields should be linked
     :type CourseStructureAdmin.list_display_links: list[str]
-    :attr CourseStructureAdmin.list_filter: Activates filters in the right sidebar of the change
-    list page
+    :attr CourseStructureAdmin.list_filter: Controls the filter options on the sidebar
     :type CourseStructureAdmin.list_filter: list[str]
     """
     list_display = ['index', 'course', 'topic']
@@ -90,11 +86,9 @@ class FavoriteAdmin(admin.ModelAdmin):
 
     Represents the favourite model in the admin panel.
 
-    :attr FavoriteAdmin.list_display: Controls which fields are displayed on the change
-    list page of the admin
+    :attr FavoriteAdmin.list_display: Controls which fields are displayed
     :type FavoriteAdmin.list_display: list[str]
-    :attr FavoriteAdmin.list_display_links: Controls if and which fields in list_display
-    should be linked to the "change" page for an object
+    :attr FavoriteAdmin.list_display_links: Controls which displayed fields should be linked
     :type FavoriteAdmin.list_display_links: list[str]
     """
     list_display = ['user', 'course', 'content']
@@ -107,9 +101,8 @@ class PeriodAdmin(admin.ModelAdmin):
 
     Represents the period model in the admin panel.
 
-    :attr PeriodAdmin.list_display_links: Controls if and which fields in list_display
-    should be linked to the "change" page for an object
-    :type PeriodAdmin.list_display_links: list[str]
+    :attr PeriodAdmin.list_display: Controls which fields are displayed
+    :type PeriodAdmin.list_display: list[str]
     """
     list_display = ['title', 'start', 'end']
 

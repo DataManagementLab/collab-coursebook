@@ -54,7 +54,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # set up a textfield item to test
         with reversion.create_revision():
             content1 = utils.create_content(model.TextField.TYPE)
-            content1.attachment = utils.generate_attachment(2)
+            utils.generate_attachment(content1, 2)
             text1 = model.TextField.objects.create(content=content1,
                                                    textfield='Hello!',
                                                    source='test')
@@ -112,7 +112,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         Tests content revert with one change within TextField model.
         """
         # performing the revert with post
-        data = {'rev_pk': '2'}
+        data = {'ver_pk': '2'}
         self.client.post(self.textfield_path, data)
 
         # check the state of text1 after the revert
@@ -134,7 +134,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         Assert that the textfield gets reverted to the 2nd version successfully
         """
         # performing the revert to the 2nd version with post
-        data = {'rev_pk': '6'}
+        data = {'ver_pk': '6'}
         self.client.post(self.textfield_path, data)
 
         # check the state of text1 after the revert
@@ -225,25 +225,25 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
             set_comment('test with more changes including content-field')
 
         queryset = Version.objects.get_for_object(text1)
-        self.version_ids1 = queryset.values_list("pk", flat=True)
-        self.revision_ids1 = queryset.values_list("revision_id", flat=True)
+        version_ids1 = queryset.values_list("pk", flat=True)
+        revision_ids1 = queryset.values_list("revision_id", flat=True)
         # the number of versions and revisions should be 3 now
-        self.assertEqual(self.version_ids1.count(), 3)
-        self.assertEqual(list(self.revision_ids1), [5, 2, 1])
+        self.assertEqual(version_ids1.count(), 3)
+        self.assertEqual(list(revision_ids1), [5, 2, 1])
 
         # performing compare
-        data3 = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[2]}
+        data3 = {"version_id2": version_ids1[0], "version_id1": version_ids1[2]}
         response = self.client.get(self.textfield_path, data3)
         # check if the selected versions corresponding the compared versions
         self.assert_contains_html(
             response,
-            f'<input type="radio" name="version_id1" value="{self.version_ids1[0]:d}" '
+            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" value="{version_ids1[0]:d}" '
             f'style="visibility:hidden" />',
-            f'<input type="radio" name="version_id2" value="{self.version_ids1[0]:d}" '
+            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" value="{version_ids1[0]:d}" '
             f'checked="checked" />',
-            f'<input type="radio" name="version_id1" value="{self.version_ids1[2]:d}" '
+            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" value="{version_ids1[2]:d}" '
             f'checked="checked" />',
-            f'<input type="radio" name="version_id2" value="{self.version_ids1[2]:d}" />',
+            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" value="{version_ids1[2]:d}" />',
         )
         # check if the differences will be correctly collected
         self.assert_contains_html(
@@ -272,7 +272,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         Tests latex revert with changes within the Latex model.
         """
         # performing the revert with post
-        data = {'rev_pk': '9'}  # the version number must be correct
+        data = {'ver_pk': '10'}  # the version number must be correct
         self.client.post(self.latex_path, data)
 
         # check the state of latex1 after the revert
@@ -364,7 +364,7 @@ class CourseHistoryCompareViewTestCase(BaseCourseViewTestCase):
         path = reverse('frontend:course-history', kwargs={
             'pk': self.course1.pk
         })
-        data = {'rev_pk': '1'}
+        data = {'ver_pk': '1'}
         self.client.post(path, data)
 
         # check the state of course1 after the revert
@@ -388,7 +388,7 @@ class CourseHistoryCompareViewTestCase(BaseCourseViewTestCase):
         path = reverse('frontend:course-history', kwargs={
             'pk': self.course1.pk
         })
-        data = {'rev_pk': '2'}
+        data = {'ver_pk': '2'}
         self.client.post(path, data)
 
         # check the state of course1 after the revert

@@ -13,7 +13,7 @@ from base.models import Course, Favorite, Topic, Content
 def add_to_coursebook(request, *args, **kwargs):  # pylint: disable=unused-argument
     """Add to course book
 
-    Adds the given request to the coursebook.
+    Adds the given content to the coursebook.
 
     :param request: The given request
     :type request: HttpRequest
@@ -40,7 +40,7 @@ def add_to_coursebook(request, *args, **kwargs):  # pylint: disable=unused-argum
 def remove_from_coursebook(request, *args, **kwargs):  # pylint: disable=unused-argument
     """Remove from course book
 
-    Removes the given request to the coursebook.
+    Removes the given content to the coursebook.
 
     :param request: The given request
     :type request: HttpRequest

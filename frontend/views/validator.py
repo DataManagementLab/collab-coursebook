@@ -11,7 +11,7 @@ from export.views import generate_pdf_response
 class Validator:
     """Validator
 
-    Handles all validation related operation related to views.
+    This class handles all validation related operation related to views.
     """
 
     @staticmethod
@@ -37,8 +37,8 @@ class Validator:
 
         Validates the image attachments and stores them into the database.
 
-        :param view: The view that wants to validate the data
-        :type view: View
+        :param content: The view that wants to validate the data
+        :type content: View
         :param image_formset: The image form set
         :type image_formset: BaseModelFormSet
 

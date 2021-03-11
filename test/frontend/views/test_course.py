@@ -69,14 +69,6 @@ class CourseViewTestCase(BaseCourseViewTestCase):
         # it should be a bad response
         self.assertEqual(response.status_code, 400)
 
-    def test_invalid_form_not_ajax_course_view(self):
-        """CourseView post test case - form is invalid and request not ajax
-
-        Tests CourseView post if form is invalid and request not ajax.
-        """
-        response = self.client.post(self.path, self.invalid_data)
-        self.assertContains(response, "form-group is-invalid")
-
     def test_ajax_and_check_and_ids_course_view(self):
         """CourseView post test case - ajax and check and ids[] are true
 
@@ -150,12 +142,13 @@ class FavoriteTestCase(BaseCourseViewTestCase):
         """
         self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
 
-        path = reverse('frontend:favourite_course', kwargs={
+        path = reverse('frontend:course', kwargs={
             'pk': self.course1.pk})
         data = {'user': self.user,
-                'pk': self.course1.pk}
+                'course_pk': self.course1.pk,
+                'save': 'true'}
         self.client.post(path, data)
         self.assertEqual(self.user.profile.stared_courses.all().count(), 1)
-
+        data['save'] = 'false'
         self.client.post(path, data)
         self.assertEqual(self.user.profile.stared_courses.all().count(), 0)

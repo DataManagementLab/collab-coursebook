@@ -35,20 +35,25 @@
                 {% if user.is_authenticated %}
                     {# Add to favourite #}
                     <button onclick="actionOnFavouriteClick()" id="add-fav" class="dropdown-item" style="display:none">
-                        {% fa5_icon 'bookmark' 'far' %} {% trans "Add to favourite" %}
+                        {% fa5_icon 'bookmark' 'far' %} {% trans 'Add to favourite' %}
                     </button>
                     {# Remove button #}
                     <button onclick="actionOnFavouriteClick()" id="remove-fav" class="dropdown-item"
                             style="display:none">
                         {% fa5_icon 'bookmark' 'fas' %}
-                        {% trans "Remove from favourite" %}
+                        {% trans 'Remove from favourite' %}
                     </button>
 
                     {# Duplicate option #}
                     {% if user.is_superuser or isCurrentUserOwner %}
                         <a href="{% url 'frontend:course-duplicate' pk=course.pk %}"
-                           class="btn form-control btn-warning">{% fa5_icon "copy" "fas" %} {% trans "Duplicate Course" %}</a>
+                           class="btn form-control btn-warning">{% fa5_icon 'copy' 'fas' %} {% trans 'Duplicate Course' %}</a>
                     {% endif %}
+
+                    {# Export option #}
+                    <a href="{% url 'frontend:export-course' course.id %}" target="_blank" class="dropdown-item">
+                        {% fa5_icon 'file-export' 'fas' %} {% trans 'Export Course' %}
+                    </a>
 
                     <div class="dropdown-divider"></div>
 
@@ -64,9 +69,10 @@
                             {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
-                           data-target="#deleteCourseModal">{% fa5_icon "trash" "fas" %} {% trans "Delete Course" %}
+                           data-target="#deleteCourseModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete Course' %}
                         </a>
                     {% endif %}
+
                 {% endif %}
             </div>
         </div>
@@ -140,7 +146,7 @@
                         </li>
                     {% empty %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            {% trans "No topics yet" %}
+                            {% trans 'No topics yet' %}
                         </li>
                     {% endfor %}
                 </ol>
@@ -156,7 +162,7 @@
         <form id="filter+sort" class="form-inline" method="post"
               action="{% url 'frontend:course' course.id %}">
             {% csrf_token %}
-            {% for f in filter_sort %}
+            {% for f in form %}
                 <div class="form-group" style="margin-right: 10px">
                     <div style="padding-right: 10px">
                         {{ f.label }}
@@ -182,7 +188,7 @@
                         {{ outer_index }}. {{ entry.topic.title }}
                     </h3>
                     {% with entry.topic_contents as topic_contents %}
-                        {% include "frontend/course/topic_contents.html" %}
+                        {% include 'frontend/course/topic_contents.html' %}
                     {% endwith %}
 
                     {#  Show subtopics #}
@@ -199,7 +205,7 @@
                                 </h4>
 
                                 {% with subtopic.topic_contents as topic_contents %}
-                                    {% include "frontend/course/topic_contents.html" %}
+                                    {% include 'frontend/course/topic_contents.html' %}
                                 {% endwith %}
                             </div>
                         {% endfor %}
@@ -208,7 +214,7 @@
             </div>
         {% empty %}
             <h3>
-                {% trans "No Topics" %}
+                {% trans 'No Topics' %}
             </h3>
             <p>
                 {% trans "This course doesn't have topics at the moment." %}
@@ -228,7 +234,7 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        {% blocktrans %}
+                        {% blocktrans trimmed %}
                             Are you sure you want to delete this course? Only the structure is deleted - the topics are
                             retained.
                         {% endblocktrans %}
@@ -239,10 +245,10 @@
                           class="mb-0">
                         {% csrf_token %}
                         <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
                         <button
-                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans 'Confirm' %}
                         </button>
                     </form>
                 </div>

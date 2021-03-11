@@ -43,14 +43,15 @@ class SearchView(ListView, LoginRequiredMixin):  # pylint: disable=too-many-ance
     def get_context_data(self, *, object_list=None, **kwargs):
         """Context data
 
-        Returns the context data of the search.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param object_list: The object list
-        :type object_list: Any
-        :param kwargs: The keyword arguments
+        :param object_list: The django object list
+        :type object_list: list
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data of the search
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
