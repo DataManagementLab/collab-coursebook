@@ -7,7 +7,7 @@
 {% get_current_language as lang %}
 
 <section>
-    <h3> {% trans 'Histroy' %} </h3>
+    <h3> {% trans 'History' %} </h3>
     {% with path='tutorial/'|add:lang|add:'/5.history.jpg' %}
         <img src="{% static path %}" class="img-fluid" alt="edit course"/>
     {% endwith %}
