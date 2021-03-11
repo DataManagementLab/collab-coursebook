@@ -38,13 +38,13 @@
             </h4>
             {# Topic combobox #}
             {% bootstrap_form topics %}
-            <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary">
+            <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary" style="margin: 5px">
                 {% fa5_icon 'expand' %} {% trans 'Expand Structure' %}
             </button>
-            <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary">
+            <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary" style="margin: 5px">
                 {% fa5_icon 'compress' %} {% trans 'Collapse Structure' %}
             </button>
-            <button onclick="addTopic()" class="btn btn-primary">
+            <button onclick="addTopic()" class="btn btn-primary" style="margin: 5px">
                 {% fa5_icon 'plus' 'fas' %} {% trans 'Add Topic' %}
             </button>
         </div>
