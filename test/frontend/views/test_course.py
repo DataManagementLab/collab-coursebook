@@ -69,14 +69,6 @@ class CourseViewTestCase(BaseCourseViewTestCase):
         # it should be a bad response
         self.assertEqual(response.status_code, 400)
 
-    def test_invalid_form_not_ajax_course_view(self):
-        """CourseView post test case - form is invalid and request not ajax
-
-        Tests CourseView post if form is invalid and request not ajax.
-        """
-        response = self.client.post(self.path, self.invalid_data)
-        self.assertContains(response, "form-group is-invalid")
-
     def test_ajax_and_check_and_ids_course_view(self):
         """CourseView post test case - ajax and check and ids[] are true
 
