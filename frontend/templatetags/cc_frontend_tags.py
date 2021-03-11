@@ -101,6 +101,23 @@ def content_view(content_type):
 
 
 @register.filter
+def content_reading(content_type):
+    """Content reading
+
+    Gets matching reading view for type.
+
+    :param content_type: The type of the content
+    :type content_type: str
+
+    :return: the path to the matching view for the type
+    :rtype: str
+    """
+    if content_type in CONTENT_TYPES.keys():
+        return f"content/reading_mode/{content_type}.html"
+    return "content/view/invalid.html"
+
+
+@register.filter
 def content_card(content_type):
     """Content card
 
