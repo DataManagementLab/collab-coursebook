@@ -26,7 +26,7 @@ from base.models import Course, Content, Topic
 from content.attachment.models import ImageAttachment
 
 from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex, CONTENT_TYPES
-from export.views import generate_pdf_response
+from export.views import generate_pdf_from_latex
 
 
 class Reversion:
@@ -326,7 +326,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
                     elif isinstance(deserialized_obj.object, Latex):
                         deserialized_obj.object.save()
                         topic = Topic.objects.get(pk=topic_id)
-                        pdf = generate_pdf_response(request.user.profile,
+                        pdf = generate_pdf_from_latex(request.user.profile,
                                                     deserialized_obj.object.content)
                         deserialized_obj.object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
                     elif isinstance(deserialized_obj.object, ImageAttachment):
