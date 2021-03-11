@@ -29,6 +29,14 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item"
                    href="
+
+
+
+
+
+
+
+
                            {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">
                     {% fa5_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
                 </a>
@@ -102,6 +110,14 @@
 
     {# Back to course option #}
     <a href="
+
+
+
+
+
+
+
+
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
        class="">
         {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
@@ -165,16 +181,20 @@
         </div>
     </div>
 
-    {# Description of the content #}
+
+
     <div style="margin-top: 50px;margin-bottom: 50px;">
         {% include content.type|content_view %}
-        <div class="mt-5">
-            <h4>
-                {% trans 'Description' %}
-            </h4>
-            {{ content.description|linebreaks }} <!-- resolves to s -->
-        </div>
+        {# Description of the content #}
+        {% if content.description %}
+            <div class="mt-5">
+                <h4>
+                    {% trans 'Description' %}
+                </h4>
+                {{ content.description|linebreaks }} <!-- resolves to s -->
+            </div>{% endif %}
     </div>
+
 
     {# Attachment gallery #}
     {% include 'frontend/content/detail_attachment.html' %}
