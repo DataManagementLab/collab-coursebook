@@ -65,7 +65,7 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
 
 
 def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pylint: disable=invalid-name
-    """Generate course book response
+    """Generate coursebook response
 
     Generates a PDF file with name tags for students in the queryset and sends it to the browser.
     This method generates a pdf file for the coursebook content (coursebook export)
@@ -87,7 +87,8 @@ def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pyl
 
 
 def generate_course_export_response(request, pk, file_name=_("Course_Export")):  # pylint: disable=invalid-name
-    """
+    """Generate course export response
+
     Generates a PDF file with name tags for students in the queryset and sends it to the browser.
     This method generates a PDF for all contents in a course (course export)
 
@@ -161,7 +162,7 @@ def generate_pdf_from_latex(user, content, template="content/export/base.tex", c
     if context is None:
         context = {}
 
-        # Set Context
+    # Set Context
     context['user'] = user
     context['topic'] = content.topic
     context['contents'] = [content]
