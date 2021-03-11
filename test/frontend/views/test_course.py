@@ -150,12 +150,13 @@ class FavoriteTestCase(BaseCourseViewTestCase):
         """
         self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
 
-        path = reverse('frontend:favourite_course', kwargs={
+        path = reverse('frontend:course', kwargs={
             'pk': self.course1.pk})
         data = {'user': self.user,
-                'pk': self.course1.pk}
+                'course_pk': self.course1.pk,
+                'save': 'true'}
         self.client.post(path, data)
         self.assertEqual(self.user.profile.stared_courses.all().count(), 1)
-
+        data['save'] = 'false'
         self.client.post(path, data)
         self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
