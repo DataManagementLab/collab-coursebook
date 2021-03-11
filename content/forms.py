@@ -111,7 +111,7 @@ class AddContentFormPdf(forms.ModelForm):
         :type Meta.widgets: dict[str, Widget]
         """
         model = PDFContent
-        fields = ['pdf', 'source']
+        fields = ['pdf', 'source', 'license']
         widgets = {
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
             'pdf': ModifiedClearableFileInput(attrs={'accept': 'application/pdf',
