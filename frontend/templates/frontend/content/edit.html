@@ -45,8 +45,16 @@
                 <div id="items-form-container">
                     {% for item_form in item_forms %}
                         <div id="item-{{ forloop.counter0 }}">
-                            {{ item_form.id }}
-                            {% bootstrap_form item_form %}
+                            <table class="table table-borderless">
+                                {{ item_form.id }}
+                                {% bootstrap_form item_form %}
+                                {% comment %}
+                                Existing attachment did not have a copy button from dynamic_attachment.html which is why we
+                                have to manually add it here.
+                                {% endcomment %}
+                                <button type="button" class="btn btn-info"
+                                        onclick="copyEmbeddedAttachment(this)">{% trans 'Copy Attachment-Embedding' %}</button>
+                            </table>
                         </div>
                     {% endfor %}
                 </div>
