@@ -26,7 +26,7 @@
             <h6>
                 {% trans 'Information' %}
             </h6>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 Please insert only the LaTeX code within the document body since the preamble and the configuration are
                 already set. Do not include any packages.
             {% endblocktrans %}
@@ -34,7 +34,7 @@
             <h6>
                 {% trans 'Example' %}
             </h6>
-            {% blocktrans %}
+            {% blocktrans trimmed %}
                 Here is an example LaTeX code which can be copied by pressing the following button:
             {% endblocktrans %}
             <br>
@@ -58,7 +58,7 @@
                     {% trans 'Example' %}: \includegraphics[width=\textwidth]{Image-0}
                 </li>
             </ul>
-            {% blocktrans with copy='"copy"' %}
+            {% blocktrans trimmed with copy='"copy"' %}
                 If you add an attachment, you can click on the {{ copy }} button to copy the LaTeX-code to use it as an
                 embedded attachment in your code.
             {% endblocktrans %}

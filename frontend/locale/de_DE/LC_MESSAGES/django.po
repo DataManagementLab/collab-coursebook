@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-11 00:13+0100\n"
+"POT-Creation-Date: 2021-03-11 01:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -166,20 +166,12 @@ msgstr "Informationen"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:29
 msgid ""
-"\n"
-"                Please insert only the LaTeX code within the document body "
-"since the preamble and the configuration are\n"
-"                already set. Do not include any packages.\n"
-"            "
+"Please insert only the LaTeX code within the document body since the "
+"preamble and the configuration are already set. Do not include any packages."
 msgstr ""
-"\n"
-"               Bitte geben Sie nur den LaTeX Code innerhalb des "
-"Dokumentenkörpers an, da die Präambel und Konfigurationen\n"
-"                bereits gesetzt wurden. Bitte fügen Sie keine weiteren "
-"Pakete hinzu.\n"
-"            Bitte geben Sie nur den LaTeX Code innerhalb des "
-"Dokumentenkörpers an, da die Präambel und Konfigurationen bereits gesetzt "
-"wurden. Bitte fügen Sie keine weiteren Pakete hinzu."
+"Bitte geben Sie nur den LaTeX Code innerhalb des Dokumentenkörpers an, da "
+"die Präambel und Konfigurationen bereits gesetzt wurden. Bitte fügen Sie "
+"keine weiteren Pakete hinzu."
 
 #: .\templates\frontend\content\attachment_embedding_help.html:35
 #: .\templates\frontend\content\attachment_embedding_help.html:58
@@ -188,15 +180,11 @@ msgstr "Beispiel"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:37
 msgid ""
-"\n"
-"                Here is an example LaTeX code which can be copied by "
-"pressing the following button:\n"
-"            "
+"Here is an example LaTeX code which can be copied by pressing the following "
+"button:"
 msgstr ""
-"\n"
-"                Hier ist ein Beispiel LaTeX Code verfübar, welche kopiert "
-"werden kann, in dem der gegeben Button gedrückt wird:\n"
-"            "
+"Hier ist ein Beispiel LaTeX Code verfübar, welche kopiert werden kann, in "
+"dem der gegeben Button gedrückt wird:"
 
 #: .\templates\frontend\content\attachment_embedding_help.html:42
 msgid "Copy Example"
@@ -224,17 +212,12 @@ msgstr ""
 #: .\templates\frontend\content\attachment_embedding_help.html:61
 #, python-format
 msgid ""
-"\n"
-"                If you add an attachment, you can click on the %(copy)s "
-"button to copy the LaTeX-code to use it as an\n"
-"                embedded attachment in your code.\n"
-"            "
+"If you add an attachment, you can click on the %(copy)s button to copy the "
+"LaTeX-code to use it as an embedded attachment in your code."
 msgstr ""
-"\n"
-"                Falls Sie ein Anhang hinzufügen möchten, klicken Sie bitte "
-"auf Button %(copy)s um den LaTeX-Code zu kopieren und es als\n"
-"                eingegebetten Anhang in den Code zu integrieren.\n"
-"            "
+"Falls Sie ein Anhang hinzufügen möchten, klicken Sie bitte auf Button "
+"%(copy)s um den LaTeX-Code zu kopieren und es alseingegebetten Anhang in den "
+"Code zu integrieren."
 
 #: .\templates\frontend\content\detail.html:25
 #: .\templates\frontend\course\view.html:30
@@ -287,15 +270,10 @@ msgstr "Erstellt am"
 #: .\templates\frontend\content\detail.html:147
 #, python-format
 msgid ""
-"\n"
-"                            Are you sure you want to delete this %(type)s? "
-"This action cannot be undone.\n"
-"                        "
+"Are you sure you want to delete this %(type)s? This action cannot be undone."
 msgstr ""
-"\n"
-"                            Soll dieses %(type)s wirklich gelöscht werden? "
-"Diese Aktion kann nicht rückgängig gemacht werden.\n"
-"                        "
+"Soll dieses %(type)s wirklich gelöscht werden? Diese Aktion kann nicht "
+"rückgängig gemacht werden."
 
 #: .\templates\frontend\content\detail.html:173
 #: .\templates\frontend\course\view.html:98
@@ -459,16 +437,11 @@ msgstr "Löschbestätigung"
 
 #: .\templates\frontend\course\view.html:237
 msgid ""
-"\n"
-"                            Are you sure you want to delete this course? "
-"Only the structure is deleted - the topics are\n"
-"                            retained.\n"
-"                        "
+"Are you sure you want to delete this course? Only the structure is deleted - "
+"the topics are retained."
 msgstr ""
-"\n"
-"        Sind Sie sicher, dass Sie diesen Kurs löschen möchten? Nur die "
-"Kursstruktur wird gelöscht. Die Themen bleiben erhalten.\n"
-"        "
+"Sind Sie sicher, dass Sie diesen Kurs löschen möchten? Nur die Kursstruktur "
+"wird gelöscht. Die Themen bleiben erhalten."
 
 #: .\templates\frontend\course_lists\card_category.html:34
 #: .\templates\frontend\course_lists\card_period.html:23
@@ -665,18 +638,12 @@ msgstr "Überschreiben vom"
 #: .\templates\frontend\history\history_compare_view.html:88
 #, python-format
 msgid ""
-"\n"
-"                            Are you sure you want to revert to Version "
-"<strong>%(date1)s</strong>?\n"
-"                            You can also undo the revert later.\n"
-"                        "
+"Are you sure you want to revert to Version <strong>%(date1)s</strong>? You "
+"can also undo the revert later."
 msgstr ""
-"\n"
 "Sind Sie sich sicher, dass Sie die aktuelle Version mit der Version vom "
-"<strong>%(date1)s</strong>\n"
-"überschreiben möchten? Sie können Ihre Änderungen auch später noch "
-"rückgängig machen.\n"
-"                        "
+"<strong>%(date1)s</strong>überschreiben möchten? Sie können Ihre Änderungen "
+"auch später noch rückgängig machen."
 
 #: .\templates\frontend\history\history_compare_view.html:116
 msgid "Go back to history list"
@@ -743,6 +710,10 @@ msgstr "Keine Kurse gefunden"
 msgid "No topics found"
 msgstr "Keine Themen gefunden"
 
+#: .\templates\frontend\tutorial.html:10
+msgid "Tutorial"
+msgstr "Tutorial"
+
 #: .\templates\frontend\tutorial.html:18
 msgid ""
 "Welcome to the “Collab Coursebook” tutorial! In this tutorial we will "
@@ -757,32 +728,34 @@ msgid ""
 "the content which you want to create. Here we choose LaTeX content as an "
 "example:"
 msgstr ""
-"Nachdem du auf der Kursseite auf „INHALT HINZUFÜGEN“ geklickt hast,"
-"kannst du einen der Inhaltstypen auswählen, den du erstellen möchtest."
-"Hier nehmen wir LaTeX als Beispiel:"
+"Nachdem du auf der Kursseite auf „INHALT HINZUFÜGEN“ geklickt hast,kannst du "
+"einen der Inhaltstypen auswählen, den du erstellen möchtest.Hier nehmen wir "
+"LaTeX als Beispiel:"
 
 #: .\templates\frontend\tutorial\add_content.html:23
 msgid ""
 "in ① you can click on the “?” to see detailed instruction for the latex code "
 "field."
 msgstr ""
-"in ① kannst du auf das “?” klicken um eine detaillierte Anleitung für das Latexcodefeld zu sehen"
+"in ① kannst du auf das “?” klicken um eine detaillierte Anleitung für das "
+"Latexcodefeld zu sehen"
 
 #: .\templates\frontend\tutorial\add_content.html:28
 msgid ""
 "in ② you can select “ADD ATTACHMENT” to select an image file from your local "
 "computer as an attachment to this content."
 msgstr ""
-"In ② kannst du „ANHANG HINZUFÜGEN“ selektieren, um eine Bilddatei von deinem lokalen "
-"Computer als Anhang zu diesem Inhalt hinzufügen "
+"In ② kannst du „ANHANG HINZUFÜGEN“ selektieren, um eine Bilddatei von deinem "
+"lokalen Computer als Anhang zu diesem Inhalt hinzufügen "
 
 #: .\templates\frontend\tutorial\add_content.html:34
 msgid ""
 "after you click on “ADD ATTACHMENT” there will also appear a “REMOVE "
 "ATTACHMENT” button, which allows you to remove the last attachment."
 msgstr ""
-"Nachdem du auf “ATTACHMENT HINZUFÜGEN” geklickt hast, wird auch die Schaltfläche"
-"„ANHANG ENTFERNEN“ angezeigt, mit der du den letzten Anhang entfernen kannst."
+"Nachdem du auf “ATTACHMENT HINZUFÜGEN” geklickt hast, wird auch die "
+"Schaltfläche„ANHANG ENTFERNEN“ angezeigt, mit der du den letzten Anhang "
+"entfernen kannst."
 
 #: .\templates\frontend\tutorial\content.html:8
 msgid "Content"
@@ -794,9 +767,9 @@ msgid ""
 "the course page, you can also click on an “ACTIONS” menu to access several "
 "main functions:"
 msgstr ""
-"Klick auf einen beliebigen Inhalt auf der Kursseite, um Details anzusehen. Ähnlich wie"
-"auf der Kursseite kannst du auch auf „AKTIONEN“ klicken, um auf mehrere"
-"Hauptfunktionen zuzugreifen:"
+"Klick auf einen beliebigen Inhalt auf der Kursseite, um Details anzusehen. "
+"Ähnlich wieauf der Kursseite kannst du auch auf „AKTIONEN“ klicken, um auf "
+"mehrereHauptfunktionen zuzugreifen:"
 
 #: .\templates\frontend\tutorial\content.html:18
 msgid "reading mode"
@@ -807,8 +780,8 @@ msgid ""
 "add or remove content from coursebook (the changes should be noticeable on "
 "the course page)"
 msgstr ""
-"den Inhalt zum Kursbuch hinzufügen oder aus dem Kursbuch entfernen "
-"(die Änderungen sollten auf der Kursseite erkennbar sein)"
+"den Inhalt zum Kursbuch hinzufügen oder aus dem Kursbuch entfernen (die "
+"Änderungen sollten auf der Kursseite erkennbar sein)"
 
 #: .\templates\frontend\tutorial\content.html:28
 msgid "edit, similar to section “Add Content”"
@@ -816,7 +789,9 @@ msgstr "den Inhalt bearbeiten, ähnlich wie im Abschnitt „Inhalt hinzufügen�
 
 #: .\templates\frontend\tutorial\content.html:33
 msgid "view history, similar to section “History”"
-msgstr "Versionsgeschichte des Inhalts anschauen, ähnlich wie im Abschnitt „Versionsgeschichte“ "
+msgstr ""
+"Versionsgeschichte des Inhalts anschauen, ähnlich wie im Abschnitt "
+"„Versionsgeschichte“ "
 
 #: .\templates\frontend\tutorial\content.html:38
 msgid "delete"
@@ -1194,47 +1169,6 @@ msgstr "Zurückgekehrt zu Version: %s"
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
 
-#~ msgid ""
-#~ "\n"
-#~ "                    reading mode\n"
-#~ "                "
-#~ msgstr ""
-#~ "\n"
-#~ "                            Soll dieses %(type)s wirklich gelöscht "
-#~ "werden? Diese Aktion kann nicht rückgängig gemacht werden.\n"
-#~ "                        "
-
-#~ msgid ""
-#~ "\n"
-#~ "                    delete\n"
-#~ "                "
-#~ msgstr ""
-#~ "\n"
-#~ "                            Soll dieses %(type)s wirklich gelöscht "
-#~ "werden? Diese Aktion kann nicht rückgängig gemacht werden.\n"
-#~ "                        "
-
-#~ msgid ""
-#~ "\n"
-#~ "                            DUPLICATE COURSE: Duplicate this course\n"
-#~ "                        "
-#~ msgstr ""
-#~ "\n"
-#~ "KURS DUPLIZIEREN: Dupliziere den betrachteten Kurs\n"
-#~ "                            "
-
-#~ msgid ""
-#~ "\n"
-#~ "                            DELETE COURSE: Delete the course\n"
-#~ "                        "
-#~ msgstr ""
-#~ "\n"
-#~ "KURS LÖSCHEN: Lösche den betrachteten Kurs\n"
-#~ "                            "
-
-#~ msgid "Tutorial"
-#~ msgstr "Tutorial"
-
 #~ msgid "Please write down your changes of this course"
 #~ msgstr "Bitte notieren Sie Ihre Änderungen an diesem Kurs"
 
@@ -1254,37 +1188,6 @@ msgstr "Profil aktualisiert"
 #~ msgid "Back to Course"
 #~ msgstr "Zurück zum Kurs"
 
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "        Delete %(title)s?\n"
-#~ "    "
-#~ msgstr ""
-#~ "\n"
-#~ " Möchten Sie %(title)s löschen? \n"
-#~ "        "
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "            Delete %(title)s?\n"
-#~ "        "
-#~ msgstr ""
-#~ "\n"
-#~ " Möchten Sie %(title)s löschen? \n"
-#~ "        "
-
-#~ msgid ""
-#~ "\n"
-#~ "            Are you sure you want to delete this course? Only the "
-#~ "structure is deleted - the topics are retained.\n"
-#~ "        "
-#~ msgstr ""
-#~ "\n"
-#~ "        Sind Sie sicher, dass Sie diesen Kurs löschen möchten? Nur die "
-#~ "Kursstruktur wird gelöscht. Die Themen bleiben erhalten.\n"
-#~ "        "
-
 #~ msgid "No image available"
 #~ msgstr "Kein Bild verfügbar"
 
@@ -1293,18 +1196,6 @@ msgstr "Profil aktualisiert"
 
 #~ msgid "Filter by: "
 #~ msgstr "Filtern nach: "
-
-#, python-format
-#~ msgid ""
-#~ "\n"
-#~ "            Compare Version 1: <strong>%(date1)s</strong> with Version 2: "
-#~ "<strong>%(date2)s</strong>:\n"
-#~ "        "
-#~ msgstr ""
-#~ "\n"
-#~ "            Vergleich von Version 1: <strong>%(date1)s</strong> und "
-#~ "Version 2: <strong>%(date2)s</strong>:\n"
-#~ "        "
 
 #~ msgid "previous"
 #~ msgstr "zurück"

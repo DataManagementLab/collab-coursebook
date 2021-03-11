@@ -144,7 +144,7 @@
                 </div>
                 <div class="modal-body">
                     <p>
-                        {% blocktrans with type=content.type %}
+                        {% blocktrans trimmed with type=content.type %}
                             Are you sure you want to delete this {{ type }}? This action cannot be undone.
                         {% endblocktrans %}
                     </p>
