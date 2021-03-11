@@ -110,14 +110,6 @@
 
     {# Back to course option #}
     <a href="
-
-
-
-
-
-
-
-
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
        class="">
         {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>

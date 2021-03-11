@@ -2,6 +2,11 @@
 
 {% load i18n %}
 {% load cc_frontend_tags %}
+{% load static %}
+
+{% block imports %}
+    <link href="{% static 'css/gallery_detail.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
 
 {% block general_content %}
     <div class="container-fluid" style="background-color: #0a3d62;padding-top:2em;padding-bottom:2em;color:#ffffff;">
@@ -25,4 +30,7 @@
     </div>
 
     {% include content.type|content_reading %}
+
+    {# Attachment gallery #}
+    {% include 'frontend/content/reading_mode_attachment.html' %}
 {% endblock %}
