@@ -2,21 +2,22 @@
 
 <p>
     <img src="{{ ImageAttachment.image.url }}" alt="Image cannot be displayed"
-         style="max-width: 100%;margin-bottom: 16px;">
+         style="max-width: 100%;display: block;margin: 16px auto;">
 </p>
 
-<b>
-    {% trans "Source" %}:
-</b>
-<p>
-    {{ ImageAttachment.source }}
-</p>
-
-{% if ImageAttachment.license %}
+<div class="container" style="margin: 16px auto; text-align: center">
     <b>
-        {% trans "License" %}:
+        {% trans "Source" %}:
     </b>
+
+    {{ ImageAttachment.source }}
     <p>
-        {{ ImageAttachment.license }}
+
+        {% if ImageAttachment.license %}
+            <b>
+                {% trans "License" %}:
+            </b>
+            {{ ImageAttachment.license }}
+        {% endif %}
     </p>
-{% endif %}
+</div>
