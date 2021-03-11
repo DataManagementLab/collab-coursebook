@@ -113,7 +113,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     def get_success_message(self, cleaned_data):
         """Success message
 
-        Returns the success message when the profile was updated
+        Returns the success message when the content was created.
 
         :param cleaned_data: The cleaned data
         :type cleaned_data: dict[str, Any]
