@@ -5,7 +5,7 @@ This file describes the validators needed for the views.
 
 from django.core.files.base import ContentFile
 
-from export.views import generate_pdf_from_latex
+from export.views import generate_pdf_response
 
 
 class Validator:
@@ -27,7 +27,7 @@ class Validator:
         :param latex_content: The data of the content type
         :type latex_content: Latex
         """
-        pdf = generate_pdf_from_latex(user, content)
+        pdf = generate_pdf_response(user, content)
         latex_content.pdf.save(f"{content.topic}" + ".pdf", ContentFile(pdf))
         latex_content.save()
 
