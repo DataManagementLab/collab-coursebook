@@ -146,7 +146,7 @@ def check_edit_course_permission(user, course):
     :param course: The course to check permission
     :type course: Course
 
-    :return: true if the course can be edited
+    :return: true iff the course can be edited
     :rtype: bool
     """
     return (user.profile in course.owners.all()) or (not course.restrict_changes
@@ -155,13 +155,19 @@ def check_edit_course_permission(user, course):
 
 @register.filter
 def check_profile_permissions(user, profile):
+    """Check Profile Permission
+
+    Checks if a user is allowed to see the stared courses in the profile of a user
+
+    :param user: The user to check permission
+    :type user: User
+    :param profile: The profile to check permission
+    :type profile: Profile
+
+    :return:true iff the favourites of the profile can be seen
+    :rtype: bool
     """
-    <TODO: Iteration 5>
-    :param user:
-    :param profile:
-    :return:
-    """
-    return (user.profile.pk == profile.pk or user.is_superuser)
+    return user.profile.pk == profile.pk or user.is_superuser
 
 
 @register.filter
