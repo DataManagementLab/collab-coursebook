@@ -327,12 +327,16 @@ class YTVideoContent(BaseContentModel):
         return: The id fo the YouTube video
         rtype: str
         """
-        split_url = self.url.split("=")
-        if len(split_url) == 2:
-            return self.url.split("=")[1]
-        if len(split_url) > 2:
-            return self.url.split("=")[1].split("&")[0]
-        return self.url.split("/")[3]
+        if 'youtube.com' in self.url:
+            split_url = self.url.split("=")
+            if len(split_url) == 2:
+                return self.url.split("=")[1]
+            if len(split_url) > 2:
+                return self.url.split("=")[1].split("&")[0]
+        if 'youtu.be' in self.url:
+            return self.url.split("/")[3]
+        else:
+            return self.url.split("/")[4]
 
     def __str__(self):
         """String representation
