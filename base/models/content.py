@@ -431,7 +431,9 @@ class Content(models.Model):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.type} for {self.topic} by {self.author}"
+        return _('%(title)s for %(topic)s by %(author)s') % {'title': self.type,
+                                                             'topic': self.topic,
+                                                             'author': self.author}
 
     def get_rate_num(self):
         """Average rating

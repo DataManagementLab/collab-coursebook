@@ -225,6 +225,7 @@ msgid "Actions"
 msgstr "Aktionen"
 
 #: .\templates\frontend\content\detail.html:33
+#: .\templates\frontend\content\reading_mode.html:12
 msgid "Reading Mode"
 msgstr "Lesemodus"
 

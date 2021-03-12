@@ -225,3 +225,7 @@ msgstr "Kommentar für"
 #: .\models\social.py:47
 msgid "Comment Text"
 msgstr "Kommentartext"
+
+#: .\models\content.py:434
+msgid "%(title)s for %(topic)s by %(author)s"
+msgstr "%(title)s für %(topic)s von %(author)s"
