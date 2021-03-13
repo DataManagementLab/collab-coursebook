@@ -237,7 +237,7 @@ def get_coursebook(user, course):
 def js_escape(value):
     """JavaScript escape
 
-    Escapes the characters from python string to JavaScrip string.
+    Escapes the characters from python string to JavaScript string.
 
     :param value: The string to be escaped
     :type value: str
