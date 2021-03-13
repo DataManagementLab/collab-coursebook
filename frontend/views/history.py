@@ -57,7 +57,7 @@ class Reversion:
         """Compare removed or added attachments
 
         Compares newly added or removed attachments which do not have a counterpart in the other
-        version and creates a html diff. The value of the indicator is either either 'ins' or 'del',
+        version and creates a html diff. The value of the indicator is either 'ins' or 'del',
         indicating whether the given attachments were added or removed .
 
         :param attachments: The newly added or removed attachments
@@ -66,6 +66,9 @@ class Reversion:
         :type ins_del: str
         :param index: The index at which the added or removed attachments start
         :type index: int
+
+        :return: A diff containing the added or removed attachments
+        :rtype: list(dict(str, any))
         """
         diff = []
         for attachment in attachments:
@@ -210,9 +213,9 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         Create a generic html differences from the attachments between version 1 and
         version 2.
 
-        :param versions1: The first version of attachments to compare
+        :param versions1: The attachments of the first version to compare
         :type versions1: list[Version]
-        :param versions2: The second version of attachments to compare
+        :param versions2: The attachments of the second version to compare
         :type versions2: list[Version]
 
         :return: the differences of every changed field values
