@@ -5,7 +5,6 @@ This file contains functions related to generating views.
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.utils.translation import gettext_lazy as _
 
 from base.models import Course, Favorite, Content
 
@@ -26,7 +25,7 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
-    :param exp_all: Indicator if the whole course or the course book should be exported
+    :param exp_all: Indicator if the whole course (True) or the coursebook (False) should be exported
     :type exp_all: bool
     :param template: The path of the LaTeX template to use
     :type template: str
@@ -66,16 +65,18 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
     return pdf, pdflatex_output, tex_template
 
 
-def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pylint: disable=invalid-name
+def generate_coursebook_response(request, pk, exp_all, file_name = None):  # pylint: disable=invalid-name
     """Generate coursebook response
 
     Generates a PDF file with name tags for students in the queryset and sends it to the browser.
-    This method generates a pdf file for the coursebook content (coursebook export)
+    This method generates a pdf file for the course content
 
     :param request: The given request
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
+    :param exp_all: Indicator if the whole course (True) or the coursebook (False) should be exported
+    :type exp_all: bool
     :param file_name: The name of the file
     :type file_name: str
 
@@ -83,30 +84,13 @@ def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pyl
     :rtype: HttpResponse
     """
 
-    # Call the method for pdf compilation and write the output afterwards
-    (pdf, pdflatex_output, tex_template) = pdf_compile(request, pk, False)
-    return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
-
-
-def generate_course_export_response(request, pk, file_name=_("Course_Export")):  # pylint: disable=invalid-name
-    """Generate course export response
-
-    Generates a PDF file with name tags for students in the queryset and sends it to the browser.
-    This method generates a PDF for all contents in a course (course export)
-
-    :param request: The given request
-    :type request: WSGIRequest
-    :param pk: The primary key of the course
-    :type pk: int
-    :param file_name: The name of the file
-    :type file_name: str
-
-    :return: the http response of the generated PDF file
-    :rtype: HttpResponse
-    """
+    # If we have no file name, name the file after the course title
+    if not file_name:
+        course = Course.objects.get(pk=pk)
+        file_name = f"{course.title}"
 
     # Call the method for pdf compilation and write the output afterwards
-    (pdf, pdflatex_output, tex_template) = pdf_compile(request, pk, True)
+    (pdf, pdflatex_output, tex_template) = pdf_compile(request, pk, exp_all)
     return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
 
 

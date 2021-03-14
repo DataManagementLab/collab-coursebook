@@ -5,12 +5,14 @@ This file defines the URL mapping.
 
 from django.urls import path, re_path, include
 from django.views.i18n import JavaScriptCatalog
+from django.utils.translation import gettext_lazy as _
 
 from content.models import CONTENT_TYPES
 
-from export.views import generate_coursebook_response, generate_course_export_response
+from export.views import generate_coursebook_response
 
 from frontend import views
+
 
 app_name = "frontend"
 
@@ -64,9 +66,11 @@ urlpatterns = [
                  name='course-delete'),
             path('coursebook/',
                  generate_coursebook_response,
+                 {'exp_all': False, 'file_name': _('Coursebook')},
                  name='coursebook-generate'),
             path('export/',
-                 generate_course_export_response,
+                 generate_coursebook_response,
+                 {'exp_all': True},
                  name='export-course'),
         ])),
         path('<int:course_id>/topic/<int:topic_id>/content/', include([
