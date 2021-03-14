@@ -130,10 +130,8 @@ msgstr "Inhalt hinzufügen"
 
 #: .\templates\frontend\content\add.html:25
 #: .\templates\frontend\content\edit.html:24
-#, fuzzy
-#| msgid "Topics"
 msgid "Topic"
-msgstr "Themen"
+msgstr "Thema"
 
 #: .\templates\frontend\content\add.html:42
 #: .\templates\frontend\content\edit.html:42
@@ -255,8 +253,6 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: .\templates\frontend\content\detail.html:107
-#, fuzzy
-#| msgid "Back to course"
 msgid "Back to course "
 msgstr "Zurück zum Kurs"
 
@@ -393,10 +389,8 @@ msgid "Remove from favourite"
 msgstr "Aus Favouriten entfernen"
 
 #: .\templates\frontend\course\view.html:55
-#, fuzzy
-#| msgid "Edit Course"
 msgid "Export Course"
-msgstr "Kurs bearbeiten"
+msgstr "Kurs exportieren"
 
 #: .\templates\frontend\course\view.html:63
 #: .\templates\frontend\tutorial\edit_course.html:10
@@ -1186,8 +1180,6 @@ msgstr "Profil aktualisiert"
 #~ "Example:"
 #~ msgstr "verwenden. Die Bilddateien werden ab dem Index 0 gezählt. Beispiel:"
 
-#~ msgid "Back to Course"
-#~ msgstr "Zurück zum Kurs"
 
 #~ msgid "No image available"
 #~ msgstr "Kein Bild verfügbar"
