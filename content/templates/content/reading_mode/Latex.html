@@ -1,18 +1,22 @@
+{% extends 'content/reading_mode/base.html' %}
+
+{# Load the tag library #}
 {% load i18n %}
 
-<div class="row">
-    <div class="col">
-        <embed src="{{ content.latex.pdf.url }}" type="application/pdf" height="700px" width="100%">
+{% block reading_header %}
+    <div class="row">
+        <div class="col">
+            <embed src="{{ content.latex.pdf.url }}" type="application/pdf" height="700px" width="100%">
+        </div>
     </div>
-</div>
+{% endblock %}
 
-<div class="container" style="padding-top:1em;padding-bottom: 1em;">
+{% block reading_content %}
     <b>
         {% trans 'Source' %}:
     </b>
+
     <p>
         {{ content.latex.source }}
     </p>
-
-    {% include 'content/reading_mode/Description.html' %}
-</div>
+{% endblock %}

@@ -1,5 +1,9 @@
+{% extends 'content/reading_mode/base.html' %}
+
+{# Load the tag library #}
 {% load i18n %}
-<div class="container" style="padding-top:1em;padding-bottom: 1em;">
+
+{% block reading_content %}
     <p style="font-family: Arial; padding: 0.5em; font-size: 120%; background-color: #efefef">
         {{ content.textfield.textfield|linebreaksbr }}
     </p>
@@ -9,9 +13,8 @@
     <b>
         {% trans 'Source' %}:
     </b>
+
     <p>
         {{ content.textfield.source }}
     </p>
-
-    {% include 'content/reading_mode/Description.html' %}
-</div>
+{% endblock %}
