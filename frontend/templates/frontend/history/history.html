@@ -8,19 +8,22 @@
 
 
 {% block imports %}
+    {# Load CSS #}
     <link href="{% static 'css/reversion.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
 
+{% block title %}
+    {% trans 'History' %} - Collab Coursebook
+{% endblock %}
 
 {% block content %}
+    {# Option #}
     <button onclick="location.href='{{ back_url }}'" class="btn btn-primary add-item">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Back' %}
     </button>
+    <h2 style="margin-top: 20px;">{% trans 'History' %}</h2>
 
-    <h2 style="font-weight: bold" align="center">
-        {% trans 'History' %}
-    </h2>
-
+    {# Compare history view #}
     {% include 'frontend/history/history_compare_header.html' %}
 
     {% include 'frontend/history/history_compare_view.html' %}

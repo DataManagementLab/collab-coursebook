@@ -76,13 +76,13 @@ msgstr "Besitzer*in"
 
 #: .\models\content.py:62
 msgid "Edit Restriction"
-msgstr "Bearbeitung eingeschränkt"
+msgstr "Eingeschränkes Bearbeiten"
 
 #: .\models\content.py:63
-msgid "Is the course protected and can only be edited by the owners?"
+msgid "This course is restricted and can only be edited by the owners"
 msgstr ""
-"Ist dieser Kurs geschützt und kann nur von der Besitzer*in bearbeitet "
-"werden?"
+"Dieser Kurs ist schreibgeschützt und kann nur von der Besitzer*in bearbeitet "
+"werden"
 
 #: .\models\content.py:83 .\models\content.py:138 .\models\content.py:245
 msgid "Topic"
@@ -125,22 +125,22 @@ msgid "Language"
 msgstr "Sprache"
 
 #: .\models\content.py:148
-msgid "Readonly"
-msgstr "Schreibgeschützt"
+msgid "Set to Read-Only"
+msgstr "Auf Schreibgeschützt stellen"
 
 #: .\models\content.py:148
-msgid "Can this content be updated?"
-msgstr "Kann dieser Inhalt verändert werden?"
+msgid "This content shouldn't be edited"
+msgstr "Dieser Inhalt sollte nicht verändert werden"
 
 #: .\models\content.py:150
-msgid "Show in public courses?"
-msgstr "In öffentlichen Kursen zugänglich machen?"
+msgid "Show in public courses"
+msgstr "In öffentlichen Kursen zugänglich machen"
 
 #: .\models\content.py:151
 msgid ""
-"May this content be displayed in courses that don't require registration?"
+"This content will be displayed in courses that don't require registration"
 msgstr ""
-"Darf dieser Inhalt in Kursen angezeigt werden, die keine Autorisierung erfordern?"
+"Dieser Inhalt wird in Kursen angezeigt werden, die keine Registrierung erfordern"
 
 #: .\models\content.py:153
 msgid "Attachment"
@@ -225,3 +225,7 @@ msgstr "Kommentar für"
 #: .\models\social.py:47
 msgid "Comment Text"
 msgstr "Kommentartext"
+
+#: .\models\content.py:434
+msgid "%(title)s for %(topic)s by %(author)s"
+msgstr "%(title)s für %(topic)s von %(author)s"

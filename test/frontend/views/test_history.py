@@ -11,12 +11,57 @@ import reversion
 from reversion import set_comment, is_registered
 from reversion.models import Version
 
-
 from django.urls import reverse
 
+from content.attachment.models import ImageAttachment
+from frontend.views.history import Reversion
 from base.models import Content, Course
 
 import content.models as model
+
+
+class ReversionTestCase(MediaTestCase):
+    """Reversion test case
+
+    Defines the test cases for Reversion.
+    """
+
+    def test_compare_added_attachments(self):
+        """test compare added attachments
+
+        Tests that the diff gets generated correctly for added attachments
+        """
+        content = Content.objects.first()
+        with reversion.create_revision():
+            utils.generate_attachment(content, 2)
+        attachments = Version.objects.all()[::1]
+        diff = Reversion.compare_removed_added_attachments(attachments, 'ins', 3)
+        self.assertEqual(diff[0]['attachment'], 3)
+        self.assertEqual(diff[1]['attachment'], 4)
+        self.assertIn('<ins>', diff[0]['diff'])
+        self.assertIn('<ins>', diff[1]['diff'])
+        self.assertIn('test1', diff[0]['diff'])
+        self.assertIn('test0', diff[1]['diff'])
+
+    def test_compare_removed_attachments(self):
+        """test compare removed attachments
+
+        Tests that the diff gets generated correctly for removed attachments
+        """
+        content = Content.objects.first()
+        with reversion.create_revision():
+            utils.generate_attachment(content, 3)
+        attachments = Version.objects.all()[::1]
+        diff = Reversion.compare_removed_added_attachments(attachments, 'del', 1)
+        self.assertEqual(diff[0]['attachment'], 1)
+        self.assertEqual(diff[1]['attachment'], 2)
+        self.assertEqual(diff[2]['attachment'], 3)
+        self.assertIn('<del>', diff[0]['diff'])
+        self.assertIn('<del>', diff[1]['diff'])
+        self.assertIn('<del>', diff[1]['diff'])
+        self.assertIn('test2', diff[0]['diff'])
+        self.assertIn('test1', diff[1]['diff'])
+        self.assertIn('test0', diff[2]['diff'])
 
 
 class BaseHistoryCompareViewTestCase(MediaTestCase):
@@ -54,7 +99,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # set up a textfield item to test
         with reversion.create_revision():
             content1 = utils.create_content(model.TextField.TYPE)
-            content1.attachment = utils.generate_attachment(2)
+            utils.generate_attachment(content1, 2)
             text1 = model.TextField.objects.create(content=content1,
                                                    textfield='Hello!',
                                                    source='test')
@@ -112,7 +157,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         Tests content revert with one change within TextField model.
         """
         # performing the revert with post
-        data = {'rev_pk': '2'}
+        data = {'ver_pk': '2'}
         self.client.post(self.textfield_path, data)
 
         # check the state of text1 after the revert
@@ -129,12 +174,12 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         self.assertEqual(text1.content.topic_id, 1)
 
     def assert_revert_to_2nd_version(self):
-        """assert contains html
+        """assert revert to 2nd version
 
         Assert that the textfield gets reverted to the 2nd version successfully
         """
         # performing the revert to the 2nd version with post
-        data = {'rev_pk': '6'}
+        data = {'ver_pk': '6'}
         self.client.post(self.textfield_path, data)
 
         # check the state of text1 after the revert
@@ -225,25 +270,26 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
             set_comment('test with more changes including content-field')
 
         queryset = Version.objects.get_for_object(text1)
-        self.version_ids1 = queryset.values_list("pk", flat=True)
-        self.revision_ids1 = queryset.values_list("revision_id", flat=True)
+        version_ids1 = queryset.values_list("pk", flat=True)
+        revision_ids1 = queryset.values_list("revision_id", flat=True)
         # the number of versions and revisions should be 3 now
-        self.assertEqual(self.version_ids1.count(), 3)
-        self.assertEqual(list(self.revision_ids1), [5, 2, 1])
+        self.assertEqual(version_ids1.count(), 3)
+        self.assertEqual(list(revision_ids1), [5, 2, 1])
 
         # performing compare
-        data3 = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[2]}
+        data3 = {"version_id2": version_ids1[0], "version_id1": version_ids1[2]}
         response = self.client.get(self.textfield_path, data3)
         # check if the selected versions corresponding the compared versions
         self.assert_contains_html(
             response,
-            f'<input type="radio" name="version_id1" value="{self.version_ids1[0]:d}" '
-            f'style="visibility:hidden" />',
-            f'<input type="radio" name="version_id2" value="{self.version_ids1[0]:d}" '
-            f'checked="checked" />',
-            f'<input type="radio" name="version_id1" value="{self.version_ids1[2]:d}" '
-            f'checked="checked" />',
-            f'<input type="radio" name="version_id2" value="{self.version_ids1[2]:d}" />',
+            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" '
+            f'value="{version_ids1[0]:d}" style="visibility:hidden" />',
+            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" '
+            f'value="{version_ids1[0]:d}" checked="checked" />',
+            f'<input onclick="validateCompareOption(this, true)" type="radio" name="version_id1" '
+            f'value="{version_ids1[2]:d}" checked="checked" />',
+            f'<input onclick="validateCompareOption(this, false)" type="radio" name="version_id2" '
+            f'value="{version_ids1[2]:d}" />',
         )
         # check if the differences will be correctly collected
         self.assert_contains_html(
@@ -272,7 +318,7 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         Tests latex revert with changes within the Latex model.
         """
         # performing the revert with post
-        data = {'rev_pk': '9'}  # the version number must be correct
+        data = {'ver_pk': '10'}  # the version number must be correct
         self.client.post(self.latex_path, data)
 
         # check the state of latex1 after the revert
@@ -290,32 +336,62 @@ class ContentHistoryCompareViewTestCase(MediaTestCase):
         # after revert the pdf file of latex should still exist
         self.assertIsNotNone(latex1.pdf)
 
-    # TODO next iteration #pylint: disable=fixme,pointless-string-statement
-    """def test_compare_with_attachment(self):
-        """"""Compare test case - Content history compare with attachment
+    def test_compare_change_attachment(self):
+        """Compare test case - Content history compare with attachment
 
         Tests content history compare with attachment.
-        """"""
+        """
         text1 = model.TextField.objects.get(pk=2)
         with reversion.create_revision():
-            text1.content.attachment.images.get(pk=1).source = 'new source text'
+            attachment = text1.content.ImageAttachments.get(pk=1)
+            attachment.source = 'new source text'
+            attachment.save()
             text1.save()
             set_comment('attachment edited')
 
         queryset = Version.objects.get_for_object(text1)
-        self.version_ids1 = queryset.values_list("pk", flat=True)
+        version_ids1 = queryset.values_list("pk", flat=True)
         # performing the compare between the last two versions
-        data3 = {"version_id2": self.version_ids1[0], "version_id1": self.version_ids1[1]}
+        data3 = {"version_id2": version_ids1[0], "version_id1": version_ids1[1]}
         response = self.client.get(self.textfield_path, data3)
-        # TODO the changes of attachment source is not showing at current status #pylint: disable=fixme
         self.assert_contains_html(
             response,
-            # "<ins>+ new source text</ins>",  # change for source
+            "<ins>+ new source text</ins>",  # change for source
             "<blockquote>attachment edited</blockquote>",  # change log
         )
-        queryset3 = Version.objects.get_for_object(text1.content.attachment)
+        queryset3 = Version.objects.get_for_object(text1.content.ImageAttachments.get(pk=1))
         # the versions of the attachment should also exist in database
-        self.assertNotEqual(queryset3.values_list("pk", flat=True).count(), 0)"""
+        self.assertNotEqual(queryset3.values_list("pk", flat=True).count(), 0)
+
+    def test_compare_add_attachment(self):
+        """Compare test case - Content history compare with added attachment
+
+        Tests content history compare with added attachment.
+        """
+        with reversion.create_revision():
+            text1 = model.TextField.objects.get(pk=2)
+            image = utils.generate_image_file(42)
+            ImageAttachment.objects.create(content=text1.content,
+                                           image=image,
+                                           source="2nd src",
+                                           license="2nd license")
+            att = text1.content.ImageAttachments.first()
+            att.source = "new source"
+            att.license = "new license"
+            att.save()
+            text1.save()
+        queryset = Version.objects.get_for_object(text1)
+        version_ids1 = queryset.values_list("pk", flat=True)
+        # performing the compare between the last two versions
+        data3 = {"version_id2": version_ids1[0], "version_id1": version_ids1[1]}
+        response = self.client.get(self.textfield_path, data3)
+        self.assert_contains_html(
+            response,
+            "<ins>+ new source</ins>",
+            "<ins>+ new license</ins>",
+            "<ins>2nd src</ins>",
+            "<ins>2nd license</ins>",
+        )
 
 
 class CourseHistoryCompareViewTestCase(BaseCourseViewTestCase):
@@ -364,7 +440,7 @@ class CourseHistoryCompareViewTestCase(BaseCourseViewTestCase):
         path = reverse('frontend:course-history', kwargs={
             'pk': self.course1.pk
         })
-        data = {'rev_pk': '1'}
+        data = {'ver_pk': '1'}
         self.client.post(path, data)
 
         # check the state of course1 after the revert
@@ -388,7 +464,7 @@ class CourseHistoryCompareViewTestCase(BaseCourseViewTestCase):
         path = reverse('frontend:course-history', kwargs={
             'pk': self.course1.pk
         })
-        data = {'rev_pk': '2'}
+        data = {'ver_pk': '2'}
         self.client.post(path, data)
 
         # check the state of course1 after the revert

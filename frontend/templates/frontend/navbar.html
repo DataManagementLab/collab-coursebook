@@ -1,29 +1,39 @@
+{# Load the tag library #}
 {% load i18n %}
 {% load fontawesome_5 %}
 
 {% if user.is_authenticated %}
     <div class="float-right" style="color: #ffffff;font-weight: bold;">
         <form class="form-inline float-left" action="{% url 'frontend:search' %}">
-            <input class="form-control" type="search" name="q" placeholder="{% trans 'Search' %}" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">
+            <input class="form-control navbar-inline-list" type="search" name="q" placeholder="{% trans 'Search' %}"
+                   aria-label="Search">
+            <button class="btn btn-outline-success navbar-inline-list" type="submit">
                 {% fa5_icon 'search' 'fas' %}
             </button>
         </form>
 
-        <a href="{% url 'frontend:courses' %}" class="btn btn-primary" style="">
-            {% trans 'All Courses' %}
+        <a href="{% url 'frontend:courses' %}" class="btn btn-primary navbar-inline-list">
+            {% trans "All Courses" %}
         </a>
         {% if user.is_superuser %}
-            <a href="{% url 'admin:index' %}" class="btn btn-danger" style="">
-                {% trans 'Admin Menu' %}
+            <a href="{% url 'admin:index' %}" class="btn btn-danger navbar-inline-list">
+                {% trans "Admin Menu" %}
             </a>
             &nbsp;
         {% endif %}
-        <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white">
+        <a href="{% url 'frontend:profile' pk=user.profile.pk %}"
+           class="text-decoration-none text-white navbar-inline-list">
+            {% if user.profile.pic %}
+                <img src="{{ user.profile.pic.url }}" class="rounded-circle"
+                     style="width: 35px; height: 35px; object-fit: cover;"
+                     alt="{% trans 'User profile picture' %}">
+            {% else %}
+                {% fa5_icon 'user' 'far' %}
+            {% endif %}
             {{ user.get_username }}
         </a>
 
-        <div class="btn-group" role="group">
+        <div class="btn-group navbar-inline-list" role="group">
             <div class="btn-group" role="group">
                 <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -33,7 +43,7 @@
                     <div class="dropdown-header">
                         {% trans "Language" %}:
                     </div>
-                    <!-- language switcher -->
+                    {# Language switcher #}
                     <form action="{% url 'set_language' %}" method="post" class="form-inline" name="language-form"
                           id="language-switcher" style="flex-direction: column;">
                         {% csrf_token %}
@@ -50,7 +60,12 @@
                             </button>
                         {% endfor %}
                     </form>
+                    <div class="dropdown-divider">
 
+                    </div>
+                    <a href="{% url 'frontend:tutorial' %}" class="dropdown-item" style="">
+                        Tutorial
+                    </a>
                     <div class="dropdown-divider">
 
                     </div>

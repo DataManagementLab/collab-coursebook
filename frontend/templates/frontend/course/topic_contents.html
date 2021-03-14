@@ -1,5 +1,5 @@
-{% load i18n %}
 {# Load the tag library #}
+{% load i18n %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
 {% load cc_frontend_tags %}
@@ -34,11 +34,11 @@
                             {% if content.get_rate != -1 %}
                                 &nbsp;&middot;&nbsp;
                                 <span class="badge badge-info">
-                                    {% fa5_icon "star" "fas" %} {{ content.get_rate }}
+                                    {% fa5_icon 'star' 'fas' %} {{ content.get_rate }}
                                 </span>
                                 &nbsp;&middot;&nbsp;
                                 <span class="badge badge-info">
-                                    {% fa5_icon "hashtag" "fas" %} {{ content.get_rate_amount }}
+                                    {% fa5_icon 'hashtag' 'fas' %} {{ content.get_rate_amount }}
                                 </span>
                             {% endif %}
                         </div>

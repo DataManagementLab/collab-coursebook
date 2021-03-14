@@ -6,11 +6,12 @@
 {% load static %}
 {% load fontawesome_5 %}
 
-{# Load CSS and JavaScript #}
-
-{% block title %}{% trans 'Search' %} - Collab Coursebook{% endblock %}
+{% block title %}
+    {% trans 'Search' %} - Collab Coursebook
+{% endblock %}
 
 {% block imports %}
+    {# Load CSS #}
     <link rel="stylesheet" href="{% static 'vendor/chosen-js/chosen.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-chosen.css' %}">
 {% endblock %}
@@ -61,10 +62,10 @@
 {% endblock %}
 
 {% block bottom_script %}
-    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}">
+    {# Load JavaScript #}
+    <script src="{% static 'vendor/chosen-js/chosen.jquery.js' %}"></script>
 
-    </script>
-    <script>
+    <script type='text/javascript'>
         $(function () {
             $(".chosen-select").chosen();
         });

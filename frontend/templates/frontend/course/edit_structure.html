@@ -6,48 +6,50 @@
 {% load fontawesome_5 %}
 {% load static %}
 {% load i18n %}
+
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
+
 {% block imports %}
-    <!-- TODO Must be imported to use ajaxSetup and ajax, maybe store it locally? -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.js' %}"></script>
-    <script type="text/javascript" src="{% static 'vendor/Nestable2/jquery.nestable.min.js' %}"></script>
-    <link href="{% static 'vendor/Nestable2/jquery.nestable.min.css' %}" type="text/css" rel="stylesheet"/>
-    <link href="{% static 'css/edit_structure.css' %}" type="text/css" rel="stylesheet"/>
+    {# Load JavaScript #}
+    <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
+    <script type="text/javascript" src="{% static 'js/request.js' %}"></script>
 {% endblock %}
 
 {% block title %}
-    {% trans 'Edit' %} - {{ course.title }}
+    {% trans 'Edit Course Structure' %} - Collab Coursebook
 {% endblock %}
 
 {% block content %}
-    <div style="text-align: center">
+    <div id="title" style="text-align: center">
         <h2 style="font-weight: bold">
-            {% trans 'Edit Course Structure' %}
+            {% trans 'Edit Course Structure' %} - {{ course.title }}
         </h2>
     </div>
 
+    {# Minipage #}
     <div style="display: flex;justify-content: center;">
+        {# Add existing topic #}
         <div style="display: inline-block;width:49.5%; padding-right: 25px;">
             <h4 style="font-weight: bold; text-align: center">
                 {% trans 'Add Topic to Structure' %}
             </h4>
-            <!-- Topic combobox -->
+            {# Topic combobox #}
             {% bootstrap_form topics %}
-            <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary">
-                {% fa5_icon 'expand' %} {% trans 'Expand All' %}
+            <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary" style="margin: 5px">
+                {% fa5_icon 'expand' %} {% trans 'Expand Structure' %}
             </button>
-            <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary">
-                {% fa5_icon 'compress' %} {% trans 'Collapse All' %}
+            <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary" style="margin: 5px">
+                {% fa5_icon 'compress' %} {% trans 'Collapse Structure' %}
             </button>
-            <button onclick="addTopic()" class="btn btn-primary">
+            <button onclick="addTopic()" class="btn btn-primary" style="margin: 5px">
                 {% fa5_icon 'plus' 'fas' %} {% trans 'Add Topic' %}
             </button>
         </div>
 
+        {# Add new topic #}
         <div style="display: inline-block;width:49.5%;padding-left: 25px">
             <h4 style="font-weight: bold; text-align: center">
                 {% trans 'Add a new Topic' %}
@@ -66,112 +68,39 @@
     <br>
     <br>
 
-    <!-- Structure Editor -->
+    {# Structure Editor #}
     <div class="container-fluid">
+        <div style="text-align: center">
+            <h3 style="font-weight: bold">
+                {% trans 'Course Structure' %}
+            </h3>
+        </div>
         <div class="row">
-            <!-- Nestable listing -->
-            <div class="cf nestable-lists">
-                <div class="dd" id="nestable3">
-                    <ol class="dd-list" id="dd-empty-placeholder">
-                        <!-- Insert elements here -->
-                    </ol>
-                </div>
-            </div>
+            {% include 'frontend/utils/nestable_list.html' %}
         </div>
     </div>
 
     <br>
 
-    <button onclick="cancel()" class=" btn btn-primary">
-        {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Back' %}
+    {# Option #}
+    <button onclick="cancel()" class=" btn btn-danger">
+        {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
     </button>
     <button onclick="save()" type="submit" class="btn btn-primary">
         {% fa5_icon 'save' %} {% trans 'Save' %}
     </button>
+{% endblock %}
 
-    <script>
+{% block bottom_script %}
+    <script type='text/javascript'>
         // Convert JSON containing topics to String
-        const json_obj = JSON.stringify({{ structure|safe }});
+        const JSON_OBJ = JSON.stringify({{ structure|safe }});
 
         // Max list depth
-        const depth = 2;
+        const DEPTH = 2;
 
         // Track newly created topics
-        const track = [];
-
-        /**
-         * Generates the menu list item for the item (topic).
-         * @param item item to be added to the list
-         * @returns {string} html list item
-         */
-        function buildItem(item) {
-            // HTML code
-            let html = "<li class='dd-item dd3-item' data-id='" + item.id + "'>";
-            html += "\n";
-            // Drag option
-            html += "<div class='dd-handle dd3-handle'>Drag</div>";
-            html += "\n";
-            // Remove option
-            html += "<a href='#' class='close close-assoc-file' data-dismiss='alert' aria-label='close'>&times;</a>"
-            html += "\n";
-            html += "<div class='dd3-content'>" + item.value + "</div>";
-
-            // Sub topics
-            if (item.children) {
-                html += "<ol class='dd-list'>";
-                $.each(item.children, function (index, sub) {
-                    html += buildItem(sub);
-                });
-                html += "</ol>";
-            }
-            html += "</li>";
-            return html;
-        }
-
-        /**
-         * Appends the new topic to the last of the nestable list.
-         *
-         * @param value the given topic to append
-         * @param id id of the topic
-         */
-        function addItem(value, id) {
-            // Creates item
-            const item = {value: value, id: id}
-
-            // Adds to HTML
-            const placeholder = document.getElementById("dd-empty-placeholder");
-            placeholder.innerHTML += buildItem(item);
-        }
-
-        /**
-         * Parses the items from the string
-         * @param obj the json object to be parsed
-         */
-        function parseItems(obj) {
-            console.log(document.getElementsByClassName("dd-empty"));
-            // Cannot parse an empty json object
-            if (obj === "[]") {
-                return;
-            }
-            // Parses json, dynamically generate a nestable list
-            const placeholder = document.getElementById("dd-empty-placeholder");
-            $.each(JSON.parse(obj), function (index, item) {
-                // Adds to HTML
-                placeholder.innerHTML += buildItem(item);
-            });
-        }
-
-        /**
-         * Removes the clicked item for the nestable list.
-         * @param event event
-         */
-        function removeItem(event) {
-            // Finds the closest list item to the clicked location
-            const element = $(this).closest("li");
-            // Removes the element with the given id
-            const id = element.attr("data-id");
-            $("#nestable3").nestable("remove", id);
-        }
+        const NEW_ELEMENTS = [];
 
         /**
          * Adds the selected topic to the nestable list.
@@ -188,8 +117,9 @@
             if (!isTopicValid(id, topic, data)) {
                 return;
             }
-
             addItem(topic, id);
+            const message = gettext("The topic %s was successfully added to the course structure.");
+            showNotification(interpolate(message, [topic]), "alert-info");
         }
 
         /**
@@ -203,7 +133,7 @@
          */
         function isTopicValid(id, topic, data) {
             // Skip if no selection is present
-            if (id === "") {
+            if (id === '') {
                 return false;
             }
             // id must be an integer to be compared
@@ -227,59 +157,15 @@
         }
 
         /**
-         * Cleans the nestable list from containing an empty class - 'dd-empty' which causes some bugs.
-         * This bug occurs if the nestable list is initialized with an empty list and it will automatically
-         * add an div with the class 'dd-empty' which represents an empty class and causes conflicts with
-         * drag & drop items.
-         */
-        function cleanNestable() {
-            // Remove empty class from nestable to prevent bugs
-            const dd_empty = document.getElementsByClassName("dd-empty");
-            for (let i = 0; i < dd_empty.length; i++) {
-                dd_empty[i].parentNode.removeChild(dd_empty[i]);
-            }
-        }
-
-        /**
-         * Retrieve the cookie from the document.
-         *
-         * @param name the name of the cookie to be searched
-         * @return {null} the cookie if it was found
-         */
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== "") {
-                const cookies = document.cookie.split(";");
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        /**
          * Configures the post information with the newly created topic. The topic will be stored in backend
          * if possible and if it is successfully stored in the backend add it to the select field.
          * @return {boolean} false if the form is not valid
          */
         function create(event) {
             event.preventDefault();
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                        // Only send the token to relative URLs i.e. locally.
-                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-                    }
-                }
-            });
             const topic = document.getElementById("id_title");
             const category = document.getElementById("id_category");
-            $.ajax({
+            sendRequest({
                 url: "{% url 'frontend:course-edit-structure' course.id %}",
                 type: "POST",
                 data: {"title": topic.value, "category": category.value},
@@ -290,8 +176,7 @@
                     const topics = json.topics;
 
                     // Tracking newly created topics
-                    track.push(topic_id);
-                    console.log(topic_id);
+                    NEW_ELEMENTS.push(topic_id);
 
                     // Ordered entries
                     const select = document.getElementById("id_topic_name");
@@ -305,9 +190,11 @@
                             select.selectedIndex = i + 1;
                         }
                     }
+                    addTopic()
                 },
                 error: function (data) {
-                    alert("{% trans 'Fehler bei der Datenübertragung zum Server - Status:' %}" + " " + data.status);
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
             });
         }
@@ -316,26 +203,17 @@
          * Configures the post information canceling all created topics.
          */
         function cancel() {
-            for (let i = 0; i < track.length; i++)
-                console.log(track[i]);
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                        // Only send the token to relative URLs i.e. locally.
-                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-                    }
-                }
-            });
-            $.ajax({
+            sendRequest({
                 url: "{% url 'frontend:course' course.id %}",
                 type: "POST",
-                data: {"ids": track},
+                data: {"ids": NEW_ELEMENTS},
 
                 success: function () {
                     window.location.href = "{% url 'frontend:course' course.id %}"
                 },
                 error: function (data) {
-                    alert("{% trans 'Fehler bei der Datenübertragung zum Server - Status:' %}" + " " + data.status);
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
             });
         }
@@ -344,28 +222,20 @@
          * Configures the post information with the serialized nestable data.
          */
         function save() {
-            const nestable = $("#nestable3").nestable("serialize");
+            const nestable = $('#nestable3').nestable("serialize");
             const json_obj = window.JSON.stringify(nestable);
-            $.ajaxSetup({
-                beforeSend: function (xhr, settings) {
-                    if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                        // Only send the token to relative URLs i.e. locally.
-                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-                    }
-                }
-            });
-            $.ajax({
+            sendRequest({
                 url: "{% url 'frontend:course' course.id %}",
                 type: "POST",
-                data: {"topic_list": json_obj, "ids": track},
+                data: {"topic_list": json_obj, "ids": NEW_ELEMENTS},
                 ContentType: "application/json",
 
                 success: function (data) {
-                    window.location.href = "{% url 'frontend:course' course.id %}"
+                    window.location.href = "{% url 'frontend:course' course.id %}";
                 },
                 error: function (data) {
-                     alert("{% trans 'Fehler bei der Datenübertragung zum Server - Status:' %}" + " " + data.status);
-                    alert(json_obj);
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
                 }
             });
         }
@@ -374,16 +244,13 @@
 
             /* Parsing */
 
-            parseItems(json_obj);
+            parseItems(JSON_OBJ);
 
             // Activate nestable
-            $("#nestable3").nestable({maxDepth: depth});
+            $("#nestable3").nestable({maxDepth: DEPTH});
 
             /* Register actions */
-
-            // Defines actions on remove click
             $("#dd-empty-placeholder").on("click", ".close", removeItem);
-
             $("#post-form-edit-structure-create-topic").on("submit", create);
 
             // Clean nestable

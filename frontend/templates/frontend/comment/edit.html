@@ -6,22 +6,24 @@
 {% load i18n %}
 
 {% block title %}
-{% trans 'Edit comment' %}
+    {% trans 'Edit comment' %} - Collab Coursebook
 {% endblock %}
 
 {% block content %}
-<h1>
-    {% trans 'Edit comment' %}
-</h1>
-<form action="" class="post-form" method="post">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <button type="submit" class="btn btn-success float-right">
-        {% fa5_icon 'check' 'fas' %}{% trans 'Submit' %}
-    </button>
-    <a href="{% url 'frontend:content' course_id topic.id comment.content.id %}#comments"
-       class="btn btn-secondary">
-        {% fa5_icon 'times' 'fas' %}{% trans 'Cancel' %}
-    </a>
-</form>
+    <h1>
+        {% trans 'Edit comment' %}
+    </h1>
+
+    {# Edit comment fields #}
+    <form action="" class="post-form" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-success float-right">
+            {% fa5_icon 'check' 'fas' %}{% trans 'Submit' %}
+        </button>
+        <a href="{% url 'frontend:content' course_id topic.id comment.content.id %}#comments"
+           class="btn btn-secondary">
+            {% fa5_icon 'times' 'fas' %}{% trans 'Cancel' %}
+        </a>
+    </form>
 {% endblock %}

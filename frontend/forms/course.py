@@ -108,12 +108,12 @@ class FilterAndSortForm(forms.Form):
     filter = forms.CharField(label=_("Filter by"),
                              widget=forms.Select(choices=FILTER_CHOICE,
                                                  attrs={'class': 'form-control',
-                                                        'style': 'width:auto',
+                                                        'style': 'width:auto; padding-right: 30px',
                                                         'onchange': 'this.form.submit();'}))
     sort = forms.CharField(label=_("Sort by"),
                            widget=forms.Select(choices=SORTING_CHOICE,
                                                attrs={'class': 'form-control',
-                                                      'style': 'width:auto',
+                                                      'style': 'width:auto; padding-right: 30px',
                                                       'onchange': 'this.form.submit();'}))
 
 
@@ -121,6 +121,7 @@ class TopicChooseForm(forms.Form):
     """Topic choose form
 
     Represents a combo box containing all topics group by category title and ordered by their title.
+    The topics are sorted by their category and internally by their title.
 
     :attr TopicChooseForm.topic_name: The combo box
     :type TopicChooseForm.topic_name: ModelChoiceField

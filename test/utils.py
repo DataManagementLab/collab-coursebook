@@ -16,6 +16,7 @@ from base.models.content import Category, Topic, Content, Course
 
 import content.forms as form
 import content.models as model
+from content.attachment.models import ImageAttachment
 
 from frontend.views.validator import Validator
 
@@ -43,24 +44,18 @@ def generate_image_file(image_file_number):
     return ImageFile(file)
 
 
-def generate_attachment(image_count):
+def generate_attachment(content, image_count):
     """ Generate an Image Attachment.
 
     Generates an image attachment with the given number of images which can be used for testing.
-
+    :param content: The content to which the images get attached
+    :type content: Content
     :param image_count: The number of the images to be generated in the attachment
     :type image_count: int
-
-    :return: the generated image Attachment
-    :rtype: ImageAttachment
     """
-    attachment = model.ImageAttachment.objects.create()
     for i in range(image_count):
         image = generate_image_file(i)
-        singe_image = model.SingleImageAttachment.objects.create(image=image)
-        attachment.images.add(singe_image)
-    attachment.save()
-    return attachment
+        ImageAttachment.objects.create(content=content, image=image)
 
 
 def setup_database():
@@ -73,20 +68,16 @@ def setup_database():
     Course.objects.create(title='Course', description='desc', category=cat)
     Topic.objects.create(title="Topic", category=cat)
     content = create_content(model.Latex.TYPE)
-    content.attachment = model.ImageAttachment.objects.create()
-    content.save()
     latex_code = form.get_placeholder(model.Latex.TYPE, 'textfield')
     latex = model.Latex.objects.create(textfield=latex_code, content=content)
     Validator.validate_latex(user, content, latex)
 
 
-def create_content(content_type, attachment=None):
+def create_content(content_type):
     """Create content
 
     :param content_type: The type of the content
     :type content_type: str
-    :param attachment: The attachment of the content
-    :type attachment: ImageAttachment
 
     Create a dummy content with the given content type and attachment.
 
@@ -97,5 +88,4 @@ def create_content(content_type, attachment=None):
                                   topic=Topic.objects.first(),
                                   type=content_type,
                                   description='this is a description',
-                                  language='de',
-                                  attachment=attachment)
+                                  language='de')

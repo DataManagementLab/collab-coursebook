@@ -1,17 +1,19 @@
 {% load fontawesome_5 %}
 
 <div style="margin-bottom:30px;">
+    {# Comment author profile picture #}
     <div class="float-left text-center"
          style="margin-right: 10px;width: 52px;height:52px;border: 1px solid gray;font-size:32px;">
         {% if comment.author.pic %}
-        <img src="{{ comment.author.pic.url }}"
-             style="width: 50px;height:50px;padding:0;margin:0;vertical-align: top;"
-             alt="Profile Pic {{ comment.author }}">
+            <img src="{{ comment.author.pic.url }}"
+                 style="width: 50px;height:50px;padding:0;margin:0;vertical-align: top;"
+                 alt="Profile Pic {{ comment.author }}">
         {% else %}
-        {% fa5_icon 'user' 'far' %}
+            {% fa5_icon 'user' 'far' %}
         {% endif %}
     </div>
     <div style="margin-left: 10px;">
+        {# Comment information #}
         <a href="{% url 'frontend:profile' comment.author.pk %}" class="font-weight-bold">
             {{ comment.author }}
         </a>
@@ -21,17 +23,21 @@
                 {% fa5_icon 'pencil-alt' 'fas' %} {{ comment.last_edit|date:'d.m.Y H:i' }}
             {% endif %}
         </span>
+
+        {# Edit option #}
         {% if user.profile == comment.author %}
-        &nbsp;&middot;&nbsp;
-        <a class="text-info" href="{% url 'frontend:comment-edit' course_id topic.id content_id comment.id %}">
-            {% fa5_icon 'edit' 'far' %}
-        </a>
+            &nbsp;&middot;&nbsp;
+            <a class="text-info" href="{% url 'frontend:comment-edit' course_id topic.id content_id comment.id %}">
+                {% fa5_icon 'edit' 'far' %}
+            </a>
         {% endif %}
+
+        {# Delete option #}
         {% if user.profile == comment.author or user.is_superuser or user.profile == content.author %}
-        &nbsp;&middot;&nbsp;
-        <a href="{% url 'frontend:comment-delete' course_id topic.id content_id comment.id %}" class="text-danger">
-            {% fa5_icon 'trash-alt' 'far' %}
-        </a>
+            &nbsp;&middot;&nbsp;
+            <a href="{% url 'frontend:comment-delete' course_id topic.id content_id comment.id %}" class="text-danger">
+                {% fa5_icon 'trash-alt' 'far' %}
+            </a>
         {% endif %}
         {{ comment.text|linebreaks }}
     </div>

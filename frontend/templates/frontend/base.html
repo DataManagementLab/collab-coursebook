@@ -19,8 +19,11 @@
     {% bootstrap_javascript jquery='slim' %}
     {% fontawesome_5_static %}
 
+    {# Load CSS #}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
+    {# Load JavaScript #}
+    <script type='text/javascript' src="{% static 'js/form.js' %}"></script>
     <script type='text/javascript'>
         let changed_form = false;
 
@@ -41,11 +44,14 @@
         });
     </script>
 
-    {% block imports %}{% endblock %}
+    {% block imports %}
+        {# Insert imports here #}
+    {% endblock %}
 </head>
 <body>
 
 {% block general_content %}
+    {# Insert content here #}
 {% endblock %}
 
 <div class="container" style="padding-top:1em;padding-bottom: 1em;">
@@ -67,8 +73,13 @@
     {% endif %}
 </div>
 
-{% block bottom_script %}
+<script type='text/javascript'>
+    {# Marks required fields with an asterisk #}
+    $(document).ready(markRequired("form-group"));
+</script>
 
+{% block bottom_script %}
+    {# Insert scripts here #}
 {% endblock %}
 </body>
 </html>

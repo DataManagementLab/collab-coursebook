@@ -1,0 +1,54 @@
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+
+{% get_current_language as lang %}
+
+<section>
+    <h3> {% trans 'Navigation Bar' %} </h3>
+    {% with path='tutorial/'|add:lang|add:'/1.navi bar.jpg' %}
+        <img src="{% static path %}" class="img-fluid" alt="edit course"/>
+    {% endwith %}
+    <div>
+        <p>
+            {% blocktrans trimmed %}
+                Once you have logged in, we have prepared several functions on the navigation bar which you can access
+                anytime during browsing.
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
+                {% blocktrans trimmed %}
+                    Click on “Collab Coursebook” (see ①) to open the Dashboard.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    Type any key words and click on the green button (see ②) to search for specific content.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    Select “ALL COURSES” (see ③) to view all available courses.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    There will be an "ADMIN MENU" button in ④ only if you are the superviser of the website, click to
+                    access the admin site.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    Select your user name (see ⑤) in order to check your profile.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    Select the dropdown-toggle button (see ⑥) in order to change the language, access the tutorial or
+                    log out.
+                {% endblocktrans %}
+            </li>
+        </ul>
+    </div>
+</section>

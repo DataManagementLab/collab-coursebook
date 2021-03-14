@@ -8,6 +8,7 @@ import re
 
 from builtins import staticmethod
 
+from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.core.files.base import ContentFile
 from django.db import transaction
@@ -23,11 +24,13 @@ from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Course, Content, Topic
 
+from content.attachment.models import ImageAttachment
 from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex, CONTENT_TYPES
-from export.views import generate_pdf_response
+
+from export.views import generate_pdf_from_latex
 
 
-class Reversion:  # pylint: disable=too-few-public-methods
+class Reversion:
     """Reversion utilities
 
     This class provides utility operation related to reversion.
@@ -49,6 +52,36 @@ class Reversion:  # pylint: disable=too-few-public-methods
         # else the default comment message will be used
         if change_log:
             reversion.set_comment(change_log)
+
+    @staticmethod
+    def compare_removed_added_attachments(attachments, ins_del, index):
+        """Compare removed or added attachments
+
+        Compares newly added or removed attachments which do not have a counterpart in the other
+        version and creates a html diff. The value of the indicator is either 'ins' or 'del',
+        indicating whether the given attachments were added or removed .
+
+        :param attachments: The newly added or removed attachments
+        :type attachments: list
+        :param ins_del: Indicator whether the given attachments were added or removed
+        :type ins_del: str
+        :param index: The index at which the added or removed attachments start
+        :type index: int
+
+        :return: A diff containing the added or removed attachments
+        :rtype: list(dict(str, any))
+        """
+        diff = []
+        for attachment in attachments:
+            field_dict = attachment.field_dict
+            for field in ImageAttachment()._meta.fields:
+                field_name = field.name
+                if field_name in field_dict and field_dict[field_name]:
+                    html = SafeString(f'<pre class="highlight"><{ins_del}>'
+                                      f'{field_dict[field_name]}</{ins_del}></pre>')
+                    diff.append({"field": field, "attachment": index, "diff": html})
+            index += 1
+        return diff
 
 
 class BaseHistoryCompareView(HistoryCompareDetailView):
@@ -90,12 +123,13 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Returns the context data of the history.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data of the history
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data()
@@ -134,8 +168,8 @@ class BaseHistoryCompareView(HistoryCompareDetailView):
         # Remove sequence of ?+ or ?- at the end of the result of the compare which is not
         # relevant for the comparison
         for field in diff:
-            field['diff'] = SafeString(re.sub(r'</ins>\n\?\s*\+*\n*', '</ins>\n', field['diff']))
-            field['diff'] = SafeString(re.sub(r'</del>\n\?\s*-*\n*', '</del>\n', field['diff']))
+            field['diff'] = SafeString(re.sub(r'</ins>\n\?[\s^+]*', '</ins>\n', field['diff']))
+            field['diff'] = SafeString(re.sub(r'</del>\n\?[\s^-]*', '</del>\n', field['diff']))
         return diff, has_unfollowed_fields
 
 
@@ -174,10 +208,48 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         content_id = self.get_object().pk
         return reverse(f'frontend:{value}', args=(course_id, topic_id, content_id,))
 
+    def __compare_attachment(self, versions1, versions2):
+        """Compare attachment
+
+        Create a generic html differences from the attachments between version 1 and
+        version 2.
+
+        :param versions1: The attachments of the first version to compare
+        :type versions1: list[Version]
+        :param versions2: The attachments of the second version to compare
+        :type versions2: list[Version]
+
+        :return: the differences of every changed field values
+        :rtype: list[dict[str, any]], bool
+        """
+        diff = []
+        has_unfollowed_fields = False
+        index = 1
+        for attachment_version1, attachment_version2 in zip(versions1, versions2):
+            diff2, has_unfollowed_fields2 = super().compare(ImageAttachment(),
+                                                            attachment_version1,
+                                                            attachment_version2)
+            for field in diff2:
+                field['attachment'] = index
+            index += 1
+            diff += diff2
+            has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+
+        added_attachments = len(versions2) - len(versions1)
+        if added_attachments > 0:
+            added_attachments = versions2[-added_attachments:]
+            diff += Reversion.compare_removed_added_attachments(added_attachments, 'ins', index)
+        elif added_attachments < 0:
+            removed_attachments = versions1[added_attachments:]
+            diff += Reversion.compare_removed_added_attachments(removed_attachments, 'del', index)
+        return diff, has_unfollowed_fields
+
     def compare(self, obj, version1, version2):
         """Compare two versions of an object
 
-        Create a generic html diff from the obj between version1 and version2
+        Create a generic html differences from the obj between version 1 and version 2. The
+        purpose of the object ist to retrieve the fields to be compared with the function of
+        the compare from the super class.
 
         :param obj: The object to compare
         :type obj: BaseContentModel
@@ -186,7 +258,7 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         :param version2: The second version to compare
         :type version2: Version
 
-        :return: A diff of every changed field values
+        :return: the differences of every changed field values
         :rtype: list(dict(str, any)), bool
         """
         content = obj.content
@@ -200,23 +272,27 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         diff += diff2
         has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
 
-        if content.attachment is not None:
-            attachment = content.attachment
-            versions = Version.objects.get_for_object(attachment)
-            obj_version1 = versions.get(revision=version1.revision)
-            obj_version2 = versions.get(revision=version2.revision)
-            diff2, has_unfollowed_fields2 = super().compare(attachment,
-                                                            obj_version1,
-                                                            obj_version2)
-            diff += diff2
-            has_unfollowed_fields = has_unfollowed_fields or has_unfollowed_fields2
+        content_type = ContentType.objects.get(model='imageattachment')
+
+        # Get all image attachments versions from both revisions as list
+        compared_attachments = self.__compare_attachment(
+            versions1=version1.revision.version_set.filter(
+                content_type=content_type
+            ).order_by('object_id')[::1],
+            versions2=version2.revision.version_set.filter(
+                content_type=content_type
+            ).order_by('object_id')[::1]
+        )
+
+        diff += compared_attachments[0]
+        has_unfollowed_fields = has_unfollowed_fields or compared_attachments[1]
 
         return diff, has_unfollowed_fields
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Submits the form and its its information to revert the current content to a previous state.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -225,18 +301,24 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the reversion was successful
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         topic_id = self.kwargs['topic_id']
         pk = self.kwargs['pk']  # pylint: disable=invalid-name
-        rev_pk = request.POST.get('rev_pk')
         with transaction.atomic(), reversion.create_revision():
-            revision_id = Version.objects.get(pk=rev_pk).revision_id
+            versions = Version.objects.get(pk=request.POST.get('ver_pk')).revision.version_set.all()
 
-            for version in Version.objects.filter(revision_id=revision_id):
+            # revert added attachments
+            content = Content.objects.get(pk=pk)
+            content_type = ContentType.objects.get(model='imageattachment')
+            for attachment in content.ImageAttachments.all():
+                if not versions.filter(content_type=content_type, object_id=attachment.pk).exists():
+                    attachment.delete()
+
+            for version in versions:
                 date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-                reversion.set_comment(_("<== Version: {}".format(date_time)))
+                reversion.set_comment(_("Reverted to Version: %s") % date_time)
 
                 for deserialized_obj in serializers.deserialize('json', version.serialized_data):
                     if isinstance(deserialized_obj.object, Content):
@@ -248,15 +330,17 @@ class BaseContentHistoryCompareView(BaseHistoryCompareView):
                     elif isinstance(deserialized_obj.object, Latex):
                         deserialized_obj.object.save()
                         topic = Topic.objects.get(pk=topic_id)
-                        pdf = generate_pdf_response(request.user.profile,
+                        pdf = generate_pdf_from_latex(request.user.profile,
                                                     deserialized_obj.object.content)
                         deserialized_obj.object.pdf.save(f"{topic}" + ".pdf", ContentFile(pdf))
+                    elif isinstance(deserialized_obj.object, ImageAttachment):
+                        deserialized_obj.object.content_id = pk
                     deserialized_obj.save()
 
-        content = Content.objects.get(pk=pk)
-        content.preview = CONTENT_TYPES.get(content.type) \
-            .objects.get(pk=content.pk).generate_preview()
-        content.save()
+            content = Content.objects.get(pk=pk)
+            content.preview = CONTENT_TYPES.get(content.type) \
+                .objects.get(pk=content.pk).generate_preview()
+            content.save()
 
         return HttpResponseRedirect(reverse_lazy(
             'frontend:content',
@@ -297,7 +381,7 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Submits the form and its its information to revert the current course to a previous state.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -306,16 +390,16 @@ class BaseCourseHistoryCompareView(BaseHistoryCompareView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the reversion was successful
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         pk = self.kwargs['pk']  # pylint: disable=invalid-name
-        rev_pk = request.POST.get('rev_pk')
+        ver_pk = request.POST.get('ver_pk')
         with transaction.atomic(), reversion.create_revision():
-            version = Version.objects.get(id=rev_pk)
+            version = Version.objects.get(id=ver_pk)
 
             date_time = version.revision.date_created.strftime("%d. %b. %Y, %H:%M")
-            reversion.set_comment(_("<== Version: {}".format(date_time)))
+            reversion.set_comment(_("Reverted to Version: %s") % date_time)
 
             for deserialized_obj in serializers.deserialize('json', version.serialized_data):
                 if isinstance(deserialized_obj.object, Course):
@@ -388,7 +472,7 @@ class LatexHistoryCompareView(BaseContentHistoryCompareView):
     """
     model = Latex
     compare_fields = ['description', 'language', 'tags', 'readonly',
-                      'public', 'images', 'textfield', 'source']
+                      'public', 'image', 'textfield', 'source', 'license']
 
     def __init__(self):
         """Initializer
@@ -434,7 +518,7 @@ class TextfieldHistoryCompareView(BaseContentHistoryCompareView):
     """
     model = TextField
     compare_fields = ['description', 'language', 'tags', 'readonly',
-                      'public', 'images', 'textfield', 'source']
+                      'public', 'image', 'textfield', 'source', 'license']
 
     def __init__(self):
         super().__init__('content', 'textfield-history')

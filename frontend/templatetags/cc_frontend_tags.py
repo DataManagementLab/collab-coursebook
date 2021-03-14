@@ -3,6 +3,8 @@
 This file describes the configuration of frontend including the templates and tags.
 """
 
+import re
+
 from django import template
 from django.conf import settings
 
@@ -99,6 +101,23 @@ def content_view(content_type):
 
 
 @register.filter
+def content_reading(content_type):
+    """Content reading
+
+    Gets matching reading view for type.
+
+    :param content_type: The type of the content
+    :type content_type: str
+
+    :return: the path to the matching view for the type
+    :rtype: str
+    """
+    if content_type in CONTENT_TYPES.keys():
+        return f"content/reading_mode/{content_type}.html"
+    return "content/view/invalid.html"
+
+
+@register.filter
 def content_card(content_type):
     """Content card
 
@@ -127,21 +146,28 @@ def check_edit_course_permission(user, course):
     :param course: The course to check permission
     :type course: Course
 
-    :return: true if the course can be edited
+    :return: true iff the course can be edited
     :rtype: bool
     """
     return (user.profile in course.owners.all()) or (not course.restrict_changes
                                                      and ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE)
 
+
 @register.filter
 def check_profile_permissions(user, profile):
+    """Check Profile Permission
+
+    Checks if a user is allowed to see the stared courses in the profile of a user
+
+    :param user: The user to check permission
+    :type user: User
+    :param profile: The profile to check permission
+    :type profile: Profile
+
+    :return: true iff the stared courses of the profile can be seen
+    :rtype: bool
     """
-    <TODO: Iteration 5>
-    :param user:
-    :param profile:
-    :return:
-    """
-    return (user.profile.pk == profile.pk or user.is_superuser)
+    return user.profile.pk == profile.pk or user.is_superuser
 
 
 @register.filter
@@ -156,7 +182,7 @@ def check_edit_content_permission(user, content):
     :param content: The content to check permission
     :type content: Content
 
-    :return: true if the content can be edited
+    :return: true iff the content can be edited
     :rtype: bool
     """
     if content.readonly:
@@ -206,3 +232,31 @@ def get_coursebook(user, course):
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
     return coursebook
+
+
+def js_escape(value):
+    """JavaScript escape
+
+    Escapes the characters from python string to JavaScript string.
+
+    :param value: The string to be escaped
+    :type value: str
+
+    :return: the escaped string
+    :rtype: str
+    """
+    # Replacements for left character with right character
+    replacements = {
+        '\\': '\\\\',
+        '\n': '\\n'
+    }
+
+    # Compile into pattern objects
+    regex = re.compile(
+        # Concatenate the escaped characters to one string
+        '|'.join(
+            # Escape special characters in pattern
+            re.escape(key) for key in replacements
+        )
+    )
+    return regex.sub(lambda match: replacements[match.group()], value)

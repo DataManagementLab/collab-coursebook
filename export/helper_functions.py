@@ -17,13 +17,15 @@ from export.templatetags.cc_export_tags import export_template, tex_escape, ret_
 class Latex:
     """LaTeX Export
 
-    This class takes care of the export and rendering of LaTeX code.
+    This class takes care of the export and rendering of LaTeX code. The encoding of the LaTeX
+    file will be defined next to the error template name and the prefix of the error in the
+    logs which can be extracted by finding the prefix.
 
     :attr Latex.encoding: The file encoding
     :type Latex.encoding: str
     :attr Latex.error_prefix: The error prefix character to find the error message in the logs
     :type Latex.error_prefix: str
-    :attr Latex.error_template: he name of the error template if the compilation went wrong
+    :attr Latex.error_template: The name of the error template
     :type Latex.error_template: str
     """
     encoding = 'utf-8'
@@ -93,17 +95,17 @@ class Latex:
     def errors(lob):
         """Error log
 
-        Checks the given log if there are error messages and returns the messages.
-        If there are none, an empty list will be returned.
+        Checks the given log (stdout) if there are error messages and returns the
+        messages. If there are none, an empty list will be returned.
 
-        :param lob: A list of bytes representing the PDF LaTeX compile log
+        :param lob: The bytes representing the LaTeX compile log
         :type lob: bytes
 
-        :return: the error messages from the log (stdout)
+        :return: the error messages from the log
         :rtype: list[str]
         """
         # Decode bytes to string and split the string by the delimiter '\n'
-        lines = lob.decode(Latex.encoding).splitlines()
+        lines = lob.decode(Latex.encoding, errors='ignore').splitlines()
         found = []
         for line in lines:
             # LaTeX log errors contains '!'
@@ -119,11 +121,17 @@ class Latex:
 
     @staticmethod
     def pre_render(content, export_flag, template_type=None, no_error=True):
-        """Prerender
+        """Pre render
 
-        Prerender the given content and its corresponding template. If there
+        Pre renders the given content and its corresponding template. If there
         is no template specified, the template will associated with the type
-        of the content.
+        of the content. Additional there are two flags, which indicates if
+        a course or a content should be exported and if there exists errors
+        while rendering the LaTeX code.
+
+        If there are no errors, we can include the attachments to the pdf and
+        replace the placeholders with the actual path to the images. Else
+        we will render the error (log).
 
         :param content: The content to be rendered
         :type content: any
@@ -131,7 +139,7 @@ class Latex:
         :type export_flag: bool
         :param template_type: The type of the template to use
         :type template_type: str
-        :param no_error: True if we are rendering a non error content (log)
+        :param no_error: Indicator if we are rendering a non error content
         :type no_error: bool
 
         :return: the rendered template
@@ -155,11 +163,11 @@ class Latex:
 
             # If there exists an attachment, replace all placeholders in the tex file with
             # image path
-            if content.attachment is not None and content.attachment.images.count() > 0:
-                pictures = content.attachment.images.all()
+            if content.ImageAttachments.count() > 0:
+                attachments = content.ImageAttachments.all()
 
-                for idx, picture in enumerate(pictures):
-                    path = ret_path(picture.image.url)
+                for idx, attachment in enumerate(attachments):
+                    path = ret_path(attachment.image.url)
                     rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
                                           rf"\\includegraphics\1{{{path}}}",
                                           rendered_tpl)

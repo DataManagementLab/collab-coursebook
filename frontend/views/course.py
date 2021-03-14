@@ -30,7 +30,7 @@ from frontend.views.json import JsonHandler
 class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Duplicate course view
 
-     Duplicates a course.
+    Duplicates a course.
 
     :attr DuplicateCourseView.model: The model of the view
     :type DuplicateCourseView.model: Model
@@ -106,7 +106,7 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add course view
 
-    Adds a new course to the database
+    Adds a new course to the database.
 
     :attr AddCourseView.model: The model of the view
     :type AddCourseView.model: Model
@@ -194,17 +194,17 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         """Post
 
-        Defines what happens after form is posted. Sets object and the checks if form is valid.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
-        :return: the result from form_valid / form_invalid depending on the result from is_valid
-        :rtype: TemplateResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
         # Reversion comment
         Reversion.update_comment(request)
@@ -232,13 +232,14 @@ class EditCourseStructureView(DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data for the page.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :param kwargs: The additional arguments
+        :type kwargs: dict[str, Any]
 
-        :return: The context
-        :rtype: dict
+        :return: the context data
+        :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         # Json object representing the topics of this course structure
@@ -250,17 +251,17 @@ class EditCourseStructureView(DetailView, FormMixin):
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Defines what happens after form is posted. Sets object and the checks if form is valid.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
         :param args: The arguments
         :type args: Any
         :param kwargs: The keyword arguments
-        :type kwargs: dict
+        :type kwargs: dict[str, Any]
 
-        :return: the json data if there request is an ajax, else an bad http response
-        :rtype:  JsonResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
         self.object = self.get_object()
         form_create_topic = self.get_form()
@@ -323,7 +324,7 @@ class CourseView(DetailView, FormMixin):
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         """Post
 
-        Defines what happens after form is posted. Sets object and the checks if form is valid.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -332,9 +333,25 @@ class CourseView(DetailView, FormMixin):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the result from form_valid / form_invalid depending on the result from is_valid
-        :rtype: HttpResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
+        # Add/remove favourite
+        if request.POST.get('save') is not None:
+            # Identify the profile and the course
+            profile = get_user(request).profile
+            course = get_object_or_404(Course, pk=request.POST.get('course_pk'))
+            if request.POST.get('save') == 'true':
+                profile.stared_courses.add(course)
+            else:
+                profile.stared_courses.remove(course)
+            return HttpResponse()
+        if request.POST.get('course_pk') is not None:
+            # Identify the profile and the course
+            profile = get_user(request).profile
+            course = get_object_or_404(Course, pk=request.POST.get('course_pk'))
+            return JsonResponse(data={'save': course in profile.stared_courses.all()})
+
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
@@ -383,12 +400,13 @@ class CourseView(DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data for the page.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: The context
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
@@ -463,7 +481,7 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
     :type CourseDeleteView.template_name: str
     """
     model = Course
-    template_name = 'frontend/course/delete_confirm.html'
+    template_name = 'frontend/course/view.html'
 
     def get_success_url(self):
         """Success url
@@ -513,39 +531,3 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         message = _("Course %(title)s successfully deleted") % {'title': self.get_object().title}
         messages.success(request, message, extra_tags="alert-success")
         return super().delete(self, request, *args, **kwargs)
-
-
-def add_remove_favourites(request, pk):  # pylint: disable=invalid-name
-    """Add and remove favourites
-
-    Add or removes the course from the favourites. If the course is already in the favourites
-    we remove it, else we add it.
-
-    :param request: The given request
-    :type request: HTTPRequest
-    :param pk: The course id
-    :type pk: int
-
-    :return: the redirection to the course page
-    :rtype: HttpResponse
-    """
-
-    # Identify the profile and the course
-    profile = get_user(request).profile
-    course = get_object_or_404(Course, pk=pk)
-
-    # If the course is already in the favourite set, remove it
-    if course in profile.stared_courses.all():
-        profile.stared_courses.remove(course)
-        message = \
-            _("Course %(title)s successfully removed from favourites") % {'title': course.title}
-        messages.success(request, message, extra_tags="alert-success")
-
-    # Otherwise add it to the favourite set
-    else:
-        profile.stared_courses.add(course)
-        message = _("Course %(title)s successfully added to favourites") % {'title': course.title}
-        messages.success(request, message, extra_tags="alert-success")
-
-    # Return to the course page afterwards
-    return HttpResponseRedirect(reverse_lazy('frontend:course', args=(pk,)))

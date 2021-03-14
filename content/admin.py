@@ -10,17 +10,9 @@ from django.contrib import admin
 
 from reversion_compare.admin import CompareVersionAdmin
 
-from content.models import ImageAttachment, ImageContent, Latex
-from content.models import PDFContent, SingleImageAttachment, TextField
+from content.models import ImageContent, Latex
+from content.models import PDFContent, TextField
 from content.models import YTVideoContent
-
-
-@admin.register(ImageAttachment)
-class ImageAttachmentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
-    """Image attachment admin
-
-    Represents the image attachment model in the admin panel.
-    """
 
 
 @admin.register(ImageContent)
@@ -48,14 +40,6 @@ class PDFContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestor
     """PDF content admin
 
     Represents the PDF content model in the admin panel.
-    """
-
-
-@admin.register(SingleImageAttachment)
-class SingleImageAttachmentAdmin(admin.ModelAdmin):  # pylint: disable=too-many-ancestors
-    """Singe Image attachment admin
-
-    Represents the single image attachment model in the admin panel.
     """
 
 

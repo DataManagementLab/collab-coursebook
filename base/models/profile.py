@@ -13,7 +13,9 @@ from django.utils.translation import gettext_lazy as _
 class Profile(models.Model):
     """Profile
 
-    This model represents the profile of the user.
+    This model represents the profile of the user. A profile contains optionally a
+    biography and an image. Furthermore the user can favour courses and will be
+    marked on its profile.
 
     :attr Profile.user: The user of the profile
     :type Profile.user: User
@@ -21,7 +23,7 @@ class Profile(models.Model):
     :type Profile.bio: TextField
     :attr Profile.pic: The profile picture of the user
     :type Profile.pic: ImageField
-    :attr Profile.stared_courses: The courses that the user stared
+    :attr Profile.stared_courses: The courses that the user favoured
     :type Profile.stared_courses: ManyToManyField - Course
     """
     class Meta:
@@ -58,13 +60,13 @@ class Profile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     """Create user profile
 
-    Creates a user profile
+    Creates a user profile.
 
     :param sender: The user of the profile
     :type sender: User
     :param instance: The user instance to be created
     :type instance: User
-    :param created: True if the profile was created
+    :param created: An indicator if the profile was correctly created
     :type created: bool
     :param kwargs: The keyword arguments
     :type kwargs: Any

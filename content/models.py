@@ -21,31 +21,15 @@ from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
 
-class BaseModel(models.Model, GeneratePreviewMixin):
-    """Base model
-
-    This abstract class forms a basic skeleton for the models from which content
-    types can be created.
-    """
-
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.abstract: Describes whether this model is an abstract model (class)
-        :type Meta.abstract: bool
-        """
-        abstract = True
-
-
-class BaseContentModel(BaseModel):
+class BaseContentModel(models.Model, GeneratePreviewMixin):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to the content.
+    Each model extended from this model contains a relation to a content. The extended models
+    defines the specific content types with their own presentation of the content.
 
 
-    :attr BaseContentModel.content: Describes the content of this model
+    :attr BaseContentModel.content: The content of this model
     :type BaseContentModel.content: OneToOneField - Content
     """
     content = models.OneToOneField(Content,
@@ -64,10 +48,11 @@ class BaseContentModel(BaseModel):
         abstract = True
 
 
-class BasePDFModel(BaseModel):
+class BasePDFModel(models.Model):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to PDF.
+    Each model extended from this model contains a relation to pd file.
 
     :attr BasePDFModel.pdf: Describes the PDF file of this model
     :type BasePDFModel.pdf: FileField
@@ -108,10 +93,12 @@ class BasePDFModel(BaseModel):
         return os.path.join(preview_folder, base_filename)
 
 
-class BaseSourceModel(BaseModel):
+class BaseSourceModel(models.Model):
     """Base content model
 
     This abstract class forms a basic skeleton for the models that are related to source.
+    Each model extended from this model contains a relation to a source. A source contains further
+    a license.
 
     :attr BaseSourceModel.source: Describes the source of this model
     :type BaseSourceModel.source: TextField
@@ -193,7 +180,10 @@ class Latex(BaseContentModel, BasePDFModel):
     TYPE = "Latex"
     DESC = _("Latex Textfield")
 
-    textfield = models.TextField(verbose_name=_("Latex Code"))
+    textfield = models.TextField(verbose_name=_("Latex Code"),
+                                 help_text=_("Please insert only valid LaTeX code. The packages "
+                                             "and \\begin{document} "
+                                             "and \\end{document} will be inserted automatically."))
     source = models.TextField(verbose_name=_("Source"))
 
     class Meta:
@@ -257,48 +247,6 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         return f"{self.content}: {self.pdf}"
 
 
-class SingleImageAttachment(BaseSourceModel):
-    """Single image attachment
-
-    This model represents a single image.
-
-    :attr SingleImageAttachment.TYPE: Describes the content type of this model
-    :type SingleImageAttachment.TYPE: str
-    :attr SingleImageAttachment.DESC: Describes the name of this model
-    :type SingleImageAttachment.DESC: __proxy__
-    :attr SingleImageAttachment.image: The image file of this model
-    :type SingleImageAttachment.image: ImageField
-    """
-    TYPE = "SingleImageAttachment"
-    DESC = _("Single Image Attachment")
-
-    image = models.ImageField(verbose_name=_("Image"),
-                              upload_to='uploads/contents/%Y/%m/%d/')
-
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.verbose_name: A human-readable name for the object in singular
-        :type Meta.verbose_name: __proxy__
-        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
-        :type Meta.verbose_name_plural: __proxy__
-        """
-        verbose_name = _("Single Image Attachment")
-        verbose_name_plural = _("Single Image Attachments")
-
-    def __str__(self):
-        """String representation
-
-        Returns the string representation of this object.
-
-        :return: the string representation of this object
-        :rtype: str
-        """
-        return f"{self.image}"
-
-
 class TextField(BaseContentModel):
     """Text field
 
@@ -358,7 +306,7 @@ class YTVideoContent(BaseContentModel):
     TYPE = "YouTubeVideo"
     DESC = _("YouTube Video")
 
-    url = models.URLField(verbose_name=_("Video URL"))
+    url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
     class Meta:
         """Meta options
@@ -382,10 +330,16 @@ class YTVideoContent(BaseContentModel):
         return: The id fo the YouTube video
         rtype: str
         """
-        split_url = self.url.split("=")
-        if len(split_url) == 2:
-            return self.url.split("=")[1]
-        return self.url.split("=")[1].split("&")[0]
+        if 'youtube.com' in self.url:
+            split_url = self.url.split("=")
+            if len(split_url) == 2:
+                return self.url.split("=")[1]
+            if len(split_url) > 2:
+                return self.url.split("=")[1].split("&")[0]
+            return self.url.split("/")[2]
+        if 'youtu.be' in self.url:
+            return self.url.split("/")[3]
+        return self.url.split("/")[4]
 
     def __str__(self):
         """String representation
@@ -398,50 +352,6 @@ class YTVideoContent(BaseContentModel):
         return f"{self.url}"
 
 
-class ImageAttachment(BaseModel):
-    """Image attachment
-
-    This model represents the image attachment of a content.
-
-    :attr ImageAttachment.TYPE: Describes the content type of this model
-    :type ImageAttachment.TYPE: str
-    :attr ImageAttachment.DESC: Describes the name of this model
-    :type ImageAttachment.DESC: __proxy__
-    :attr ImageAttachment.images: A reference to the single images
-    :type ImageAttachment.images: ManyToManyField - SingleImageAttachment
-    """
-    TYPE = "ImageAttachment"
-    DESC = _("Image Attachment")
-
-    images = models.ManyToManyField(SingleImageAttachment,
-                                    verbose_name=_("Images"),
-                                    related_name='images',
-                                    blank=True)
-
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.verbose_name: A human-readable name for the object in singular
-        :type Meta.verbose_name: __proxy__
-        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
-        :type Meta.verbose_name_plural: __proxy__
-        """
-        verbose_name = _("Image Attachment")
-        verbose_name_plural = _("Image Attachments")
-
-    def __str__(self):
-        """String representation
-
-        Returns the string representation of this object.
-
-        :return: the string representation of this object
-        :rtype: str
-        """
-        return f"{self.pk}"
-
-
 # dict: Contains all available content types.
 CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
@@ -449,19 +359,6 @@ CONTENT_TYPES = {
     PDFContent.TYPE: PDFContent,
     TextField.TYPE: TextField,
     Latex.TYPE: Latex,
-}
-
-# Set: Content types which are not directly accessible via the topics,
-# but embedded into other content types
-EMBEDDED_CONTENT_TYPES = {
-    ImageAttachment.TYPE,
-    SingleImageAttachment.TYPE
-}
-
-# Set: Content types which allow image attachments
-IMAGE_ATTACHMENT_TYPES = {
-    TextField.TYPE,
-    Latex.TYPE
 }
 
 # Register models for reversion if it is not already done in admin,
@@ -481,8 +378,3 @@ reversion.register(PDFContent,
 reversion.register(YTVideoContent,
                    fields=['content', 'url'],
                    follow=['content'])
-reversion.register(SingleImageAttachment,
-                   fields=['image', 'source', 'license'])
-reversion.register(ImageAttachment,
-                   fields=['images'],
-                   follow=['images'])

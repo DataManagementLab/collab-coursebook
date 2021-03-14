@@ -9,53 +9,71 @@
 
 {% if compare_view %}
     <table class="table table-borderless table-hover table-primary" id="change-history">
+        {# Table head #}
         <thead class="table-active">
         <tr>
+            {# Compare version #}
             {% if compare_view %}
-                <th scope="col">
+                {# Compare button #}
+                <th scope="col" style="text-align: center; width:100px">
                     {% if comparable %}
                         <button class="btn btn-primary add-item" type="submit">
                             {% trans 'Compare' %}
                         </button>
                     {% endif %}
                 </th>
+                <th scope="col" style="text-align: center; width: 100px">
+                    {% trans 'Version 1' %}
+                </th>
+                <th scope="col" style="text-align: center; width: 100px">
+                    {% trans 'Version 2' %}
+                </th>
             {% endif %}
-            <th scope="col">
+            {# Compare date #}
+            <th scope="col" style="text-align: center; width: 200px">
                 {% trans 'Date/time' %}
             </th>
-            <th scope="col">
+            {# User change #}
+            <th scope="col" style="text-align: center; width: 200px">
                 {% trans 'User' %}
             </th>
+            {# Change log #}
             <th scope="col">
-                {% trans 'Comment' %}
+                {% trans 'Change Log' %}
             </th>
         </tr>
         </thead>
+
+        {# Table body #}
         <tbody>
         {% for action in action_list %}
+            {# Table column #}
             <tr>
+                <td scope="row"></td>
                 {% if compare_view %}
-                    <td scope="row">
+                    <td scope="row" style="text-align: center">
                         {% if comparable %}
-                            <div class="custom-control custom-radio">
-                                <input type="radio" name="version_id1"
-                                       value="{{ action.version.pk|unlocalize }}"
-                                        {% if action.first %}
-                                       style="visibility:hidden"
-                                        {% endif %}
-                                        {% if version1.pk|unlocalize == action.version.pk|unlocalize or action.second %}
-                                       checked="checked"
-                                        {% endif %}/>
-                                <input type="radio" name="version_id2"
-                                       value="{{ action.version.pk|unlocalize }}"
-                                        {% if version2.pk|unlocalize == action.version.pk|unlocalize or action.first == 1 %}
-                                       checked="checked"
-                                        {% endif %}/>
-                            </div>
+                            <input onclick="validateCompareOption(this, true)" type="radio" name="version_id1"
+                                   value="{{ action.version.pk|unlocalize }}"
+                                    {% if action.first %}
+                                   style="visibility:hidden"
+                                    {% endif %}
+                                    {% if version1.pk|unlocalize == action.version.pk|unlocalize or action.second %}
+                                   checked="checked"
+                                    {% endif %}/>
+                        {% endif %}
+                    </td>
+                    <td scope="row" style="text-align: center">
+                        {% if comparable %}
+                            <input onclick="validateCompareOption(this, false)" type="radio" name="version_id2"
+                                   value="{{ action.version.pk|unlocalize }}"
+                                    {% if version2.pk|unlocalize == action.version.pk|unlocalize or action.first == 1 %}
+                                   checked="checked"
+                                    {% endif %}/>
                         {% endif %}
                     </td>
                 {% endif %}
-                <th scope="row">
+                <td scope="row" style="text-align: center">
                     {% if action.url %}
                         <a href="{{ action.url }}">
                             {{ action.revision.date_created|date:_('DATETIME_FORMAT') }}
@@ -63,8 +81,8 @@
                     {% else %}
                         {{ action.revision.date_created|date:_('DATETIME_FORMAT') }}
                     {% endif %}
-                </th>
-                <td>
+                </td>
+                <td scope="row" style="text-align: center">
                     {% if action.revision.user %}
                         {{ action.revision.user.get_username }}
                         {% if action.revision.user.get_full_name %}
@@ -83,3 +101,75 @@
 {% if compare_view %}
     </form>
 {% endif %}
+
+<script type="text/javascript">
+    let lastLeft = null;
+    let lastRight = null
+
+    /**
+     * Setups the last left and right version checked radio buttons which are needed to restore
+     * the previous selection if the new selection is invalid.
+     */
+    function initCompareOption() {
+        const version_ids1 = document.getElementsByName("version_id1");
+        const version_ids2 = document.getElementsByName("version_id2");
+
+        // Find last left
+        for (const version of version_ids1) {
+            if (version.checked) {
+                lastLeft = version;
+            }
+        }
+        // Find last right
+        for (const version of version_ids2) {
+            if (version.checked) {
+                lastRight = version;
+            }
+        }
+    }
+
+    /**
+     * Validate the checked radio button for comparing. We cannot select
+     * two radio buttons with the same version id. If the validation fails,
+     * we restore  the selection to the previous selected option.
+     *
+     * @param element the selected radio button
+     * @param left determines which radio button was selected (version1 - version2)
+     */
+    function validateCompareOption(element, left) {
+        // tr scope contains both input
+        const parent = element.parentElement.parentElement;
+        const inputs = parent.getElementsByTagName("input");
+        console.log(inputs);
+        let same = true;
+
+        // Check if all radio buttons are checked
+        for (const input of inputs) {
+            console.log(input);
+            same = same && input.checked;
+        }
+        console.log(same);
+
+        // We cannot select radio buttons if they are all checked
+        if (same) {
+            element.checked = false;
+            // Restore previous selection
+            if (left) {
+                lastLeft.checked = true;
+            } else {
+                lastRight.checked = true;
+            }
+        }
+        // Update last element reference
+        else {
+            if (left) {
+                lastLeft = element;
+            } else {
+                lastRight = element;
+            }
+        }
+    }
+
+    // Setup
+    $(document).ready(initCompareOption());
+</script>

@@ -6,47 +6,49 @@
 {% load fontawesome_5 %}
 {% load cc_frontend_tags %}
 
+{% block title %}
+    {% trans 'Profile' %} - Collab Coursebook
+{% endblock %}
+
 {% block content %}
+    {# Edit option #}
     <div class="float-right">
         {% if user == profile.user %}
-            <a href="{% url 'frontend:profile-edit' %}" class="btn btn-success">
-                {% fa5_icon 'edit' "far" %} {% trans 'Edit' %}
+            <a href="{% url 'frontend:profile-edit' profile.pk %}" class="btn btn-primary">
+                {% fa5_icon 'edit' 'far' %} {% trans 'Edit' %}
             </a>
         {% endif %}
     </div>
 
+    {# User name #}
     <h1>
         {% trans 'User' %}: {{ profile.user.get_username }}
     </h1>
 
-    {% if profile.pic %}
-        <img src="{{ profile.pic.url }}" class="img-thumbnail" style="width: 30%; height: 250px; object-fit: cover;"
-             alt="{% trans 'User profile picture' %}">
-    {% endif %}
-
-    <p>
-    <h2>
-        {% trans 'Biography' %}
-    </h2>
-    {{ profile.bio | linebreaks }}
-
-    <div style="clear: both;"></div>
-
-    <h3 class="text-info"
-        style="margin-top: 30px;">
-        {% fa5_icon 'chalkboard-teacher' 'fas' %} {% trans 'Owned Courses' %}
-    </h3>
-    <div class="row">
-        {% for course in profile.owned_courses.all %}
-            {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
-            {% include 'frontend/course_lists/card_course.html' %}
-        {% endfor %}
+    {# Biography and User profile picture #}
+    <div class="media">
+        <div class="media-body" style="padding-right: 20px">
+            {% if profile.bio %}
+                <h2 class="mt-0 mb-1" style="text-align: justify">{% trans 'Biography' %}</h2>
+                {{ profile.bio | linebreaks }}
+            {% endif %}
+        </div>
+        {% if profile.pic %}
+            <img src="{{ profile.pic.url }}" class="ml-3" style="
+        width: 250px; height: 250px; object-fit: cover; border-radius: calc(0.25rem - 1px);"
+                 alt="{% trans 'User profile picture' %}">
+        {% else %}
+            <span style="font-size: 100px">{% fa5_icon 'user' 'far' %}</span>
+        {% endif %}
     </div>
 
+    <div style="clear: both;">
+
+    {# Stared courses #}
     {% if user|check_profile_permissions:profile %}
         <h3 class="text-success"
-                style="margin-top: 40px;">
-                {% fa5_icon 'bookmark' 'fas' %} {% trans 'Stared Courses' %}
+            style="margin-top: 40px;">
+            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Stared Courses' %}
         </h3>
         <div class="row">
             {% for course in profile.stared_courses.all %}

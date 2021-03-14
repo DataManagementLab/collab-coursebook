@@ -16,33 +16,48 @@ from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 
-from content.forms import CONTENT_TYPE_FORMS, AddContentFormAttachedImage, SingleImageFormSet
-from content.models import CONTENT_TYPES, IMAGE_ATTACHMENT_TYPES
-from content.models import SingleImageAttachment, ImageAttachment
+from content.attachment.forms import ImageAttachmentFormSet
+from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
+from content.forms import CONTENT_TYPE_FORMS
+from content.models import CONTENT_TYPES
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
+from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
 
 
-def clean_attachment(attachment_object, image_formset):
+def clean_attachment(content, image_formset):
     """Clean attachment
 
     Cleans the attachment from the database if the attachments
     were removed from the form.
 
-    :param attachment_object: The attachment object
-    :type attachment_object: ImageAttachment
+    :param content: The content object
+    :type content: Content
     :param image_formset: The image form set
     :type image_formset: BaseModelFormSet
     """
-    clean = attachment_object.images.count() - image_formset.total_form_count()
+    clean = content.ImageAttachments.count() - image_formset.total_form_count()
     if clean > 0:
-        remove_source = attachment_object.images.order_by('id').reverse()[:clean]
+        remove_source = content.ImageAttachments.order_by('id').reverse()[:clean]
         for remove_object in remove_source:
-            SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
             remove_object.delete()
+
+
+# Tooltip for LaTeX
+# str: Path of the LaTeX example code
+LATEX_EXAMPLE_PATH = 'content/templates/form/examples/Latex_textfield.txt'
+# __proxy__: Message if the file was not found
+LATEX_EXAMPLE = _('There exists no example yet.')
+
+# Retrieve example code
+try:
+    with open(LATEX_EXAMPLE_PATH, 'r') as file:
+        LATEX_EXAMPLE = js_escape(file.read())
+except FileNotFoundError:
+    pass
 
 
 def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disable=invalid-name
@@ -93,11 +108,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     form_class = AddContentForm
     success_url = reverse_lazy('frontend:dashboard')
     context_object_name = 'content'
+    object = None
 
     def get_success_message(self, cleaned_data):
         """Success message
 
-        Returns the success message when the profile was updated
+        Returns the success message when the content was created.
 
         :param cleaned_data: The cleaned data
         :type cleaned_data: dict[str, Any]
@@ -123,19 +139,20 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Returns the context data of the addition of content.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data of the addition of the content
+        :return: the context data
         :rtype: dict[str, Any]
-         """
+        """
         context = super().get_context_data(**kwargs)
-
         # Retrieves the form for content type
         content_type = self.kwargs['type']
-        context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
+        if 'content_type_form' not in context:
+            context['content_type_form'] = CONTENT_TYPE_FORMS.get(content_type)
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
@@ -143,23 +160,27 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
 
-        # Retrieves attachment_form
-        context['attachment_form'] = AddContentFormAttachedImage
+        if content_type == 'Latex':
+            context['latex_tooltip'] = LATEX_EXAMPLE
 
         # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
         context['course'] = course
 
+        # Topic
+        context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
+
         # Setup formset
-        formset = SingleImageFormSet(queryset=SingleImageAttachment.objects.none())
-        context['item_forms'] = formset
+        if 'item_forms' not in context:
+            formset = ImageAttachmentFormSet(queryset=ImageAttachment.objects.none())
+            context['item_forms'] = formset
 
         return context
 
     def post(self, request, *args, **kwargs):
         """Post
 
-        Submits the form and its uploaded files to store it into the database.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -168,8 +189,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the submitting or
-        to the invalid page if something wrong occurs
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         # Retrieves content type form
@@ -185,6 +205,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Reads input from included forms
         add_content_form = AddContentForm(request.POST)
+        image_formset = ImageAttachmentFormSet(request.POST, request.FILES)
 
         # Checks if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
@@ -203,15 +224,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
-                # Reads input from all forms
-                attachment_form = AddContentFormAttachedImage(request.POST, request.FILES)
-                image_formset = SingleImageFormSet(request.POST, request.FILES)
-
                 # Validates attachments
-                redirect = Validator.validate_attachment(self,
-                                                         attachment_form,
-                                                         image_formset,
-                                                         content)
+                redirect = Validator.validate_attachment(content,
+                                                         image_formset)
                 if redirect is not None:
                     return redirect
 
@@ -235,11 +250,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                       topic_id,
                       content.id)))
 
-        # add_content_form invalid
-        if not add_content_form.is_valid():
-            return self.form_invalid(add_content_form)
-        # content_type_form invalid
-        return self.form_invalid(content_type_form)
+        return self.render_to_response(
+            self.get_context_data(form=add_content_form, content_type_form=content_type_form,
+                                  item_forms=image_formset))
 
 
 class EditContentView(LoginRequiredMixin, UpdateView):
@@ -321,18 +334,22 @@ class EditContentView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Returns the context data of the editing.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context data of the editing
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
         content_type = self.get_object().type
+
+        # Topic
+        context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
 
         # Adds the form only to context data if not already in it
         # (when passed by post method containing error messages)
@@ -347,29 +364,27 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
+        if content_type == 'Latex':
+            context['latex_tooltip'] = LATEX_EXAMPLE
 
-        if content_type in IMAGE_ATTACHMENT_TYPES:
-
-            # Retrieves attachment_form
-            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
-            context['attachment_form'] = AddContentFormAttachedImage(instance=attachment_object)
+        if content_type in IMAGE_ATTACHMENT_TYPES and 'item_forms' not in context:
 
             # Identifies the pk's of attached images
             pk_set = []
-            for image in self.get_object().attachment.images.all():
+            for image in self.get_object().ImageAttachments.all():
                 pk_set.append(image.pk)
 
             # Setups the formset with attached images
-            formset = SingleImageFormSet(
-                queryset=SingleImageAttachment.objects.filter(pk__in=pk_set))
+            formset = ImageAttachmentFormSet(
+                queryset=ImageAttachment.objects.filter(pk__in=pk_set))
             context['item_forms'] = formset
 
         return context
 
     def post(self, request, *args, **kwargs):
-        """Post request
+        """Post
 
-        Submits the form and its uploaded files to store it into the database.
+        Defines the action after a post request.
 
         :param request: The given request
         :type request: HttpRequest
@@ -378,8 +393,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page after the submitting or
-        to the invalid page if something wrong occurs
+        :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
         self.object = self.get_object()
@@ -399,6 +413,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Reversion comment
             Reversion.update_comment(request)
+            image_formset = ImageAttachmentFormSet(
+                data=request.POST,
+                files=request.FILES)
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
@@ -409,25 +426,12 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
 
-                    # Retrieves current state of attachment form and formset
-                    attachment_object = ImageAttachment.objects.get(
-                        pk=self.get_object().attachment.pk)
-                    attachment_form = AddContentFormAttachedImage(
-                        instance=attachment_object,
-                        data=request.POST,
-                        files=request.FILES)
-                    image_formset = SingleImageFormSet(
-                        data=request.POST,
-                        files=request.FILES)
-
                     # Removes images from database
-                    clean_attachment(attachment_object, image_formset)
+                    clean_attachment(content, image_formset)
 
                     # Validates attachments
-                    redirect = Validator.validate_attachment(self,
-                                                             attachment_form,
-                                                             image_formset,
-                                                             content)
+                    redirect = Validator.validate_attachment(content,
+                                                             image_formset)
                     if redirect is not None:
                         return redirect
 
@@ -448,7 +452,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Don't save and render error messages for both forms
             return self.render_to_response(
-                self.get_context_data(form=form, content_type_form=content_type_form))
+                self.get_context_data(form=form,
+                                      content_type_form=content_type_form,
+                                      item_forms=image_formset))
 
         # Redirect to error page (should not happen for valid content types)
         return self.handle_error()
@@ -472,19 +478,19 @@ class ContentView(DetailView):
     context_object_name = 'content'
 
     def post(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        """Post request
+        """Post
 
-        Creates comment in database.
+        Defines the action after a post request.
 
         :param request: The given request
-        :type request: HttpResponse
+        :type request: HttpRequest
         :param args: The arguments
-        :type: Any
+        :type args: Any
         :param kwargs: The keyword arguments
         :type kwargs: dict[str, Any]
 
-        :return: the redirection to the content page
-        :rtype: HttpResponse
+        :return: the response after a post request
+        :rtype: HttpResponseRedirect
         """
         comment_form = CommentForm(request.POST)
         translate_form = TranslateForm(request.POST)
@@ -532,9 +538,10 @@ class ContentView(DetailView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
         :return: the context data
@@ -587,7 +594,6 @@ class ContentView(DetailView):
 
         context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
                                                       content=content).count() > 0
-        context['attachment'] = content.attachment
 
         return context
 
@@ -604,17 +610,18 @@ class AttachedImageView(DetailView):
     :attr AttachedImageView.context_object_name: The name of the context variable
     :type AttachedImageView.context_object_name: str
     """
-    model = SingleImageAttachment
+    model = ImageAttachment
     template_name = "content/view/AttachedImage.html"
 
-    context_object_name = 'SingleImageAttachment'
+    context_object_name = 'ImageAttachment'
 
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
         :return: the context data
@@ -631,9 +638,6 @@ class AttachedImageView(DetailView):
 
         content = Content.objects.get(pk=self.kwargs['content_id'])
         context['content'] = content
-
-        attachment = ImageAttachment.objects.get(pk=self.kwargs['imageattachment_id'])
-        context['attachment'] = attachment
 
         context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
         context['translate_form'] = TranslateForm()
@@ -704,7 +708,7 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         """Delete
 
-        Deletes the content when the user clicks the delete button
+        Deletes the content when the user clicks the delete button.
 
         :param request: The given request
         :attr request: HttpRequest
@@ -719,22 +723,6 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
 
         # Sends the success message
         messages.success(request, "Content successfully deleted", extra_tags="alert-success")
-
-        if self.get_object().type in IMAGE_ATTACHMENT_TYPES:
-
-            # Retrieves the attachment
-            attachment_object = ImageAttachment.objects.get(pk=self.get_object().attachment.pk)
-
-            # Removes the images in the attachment from DB
-            for remove_object in attachment_object.images.all():
-                SingleImageAttachment.objects.filter(pk=remove_object.pk).delete()
-                remove_object.delete()
-
-            # Retrieves the success url, then delete the corresponding attachment
-            success_url = super().delete(self, request, *args, **kwargs)
-            ImageAttachment.objects.filter(pk=attachment_object.pk).delete()
-            attachment_object.delete()
-            return success_url
 
         return super().delete(self, request, *args, **kwargs)
 
@@ -755,12 +743,13 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         """Context data
 
-        Gets the context data for the response.
+        Gets the context data of the view which can be accessed in
+        the html templates.
 
-        :param kwargs: The keyword arguments
+        :param kwargs: The additional arguments
         :type kwargs: dict[str, Any]
 
-        :return: the context
+        :return: the context data
         :rtype: dict[str, Any]
         """
         context = super().get_context_data(**kwargs)

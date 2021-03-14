@@ -23,16 +23,18 @@ from .social import Rating
 class Category(models.Model):
     """Category
 
-    This model represents the category of a course book.
+    This model represents the category of a course book. A category contains a title and
+    optional an image.
 
-    :attr Category.title: Describes the title of the category
+    :attr Category.title: The title of the category
     :type Category.title: CharField
-    :attr Category.DESC: The image file of the category
+    :attr Category.DESC: The image of the category
     :type Category.DESC: ImageField
     """
     title = models.CharField(max_length=150,
                              verbose_name=_("Title"))
-    image = models.ImageField(verbose_name=_("Title Image"), blank=True,
+    image = models.ImageField(verbose_name=_("Title Image"),
+                              blank=True,
                               upload_to='uploads/categories/')
 
     class Meta:
@@ -65,9 +67,10 @@ class Category(models.Model):
 class Period(models.Model):
     """Period
 
-    This model represents the period of a course book.
+    This model represents the period of a course book. A period contains a title
+    and two dates which indicates its start and end point.
 
-    :attr Period.title: Describes the title of the period
+    :attr Period.title: The title of the period
     :type Period.title: CharField
     :attr Period.start: The starting date of the period
     :type Period.start: DateField
@@ -109,9 +112,15 @@ class Period(models.Model):
 class Course(models.Model):
     """Course
 
-    This model represents the course of a course book.
+    This model represents the course of a course book. A course contains a unique title with a
+    description, the owners of the course  and an image representing the course. Furthermore
+    the creation date and the permission who can change the content of the course will be
+    stored.
 
-    :attr Course.title: Describes the title of the course
+    A course can contain categories and is assigned by topics. Besides, a period of the course
+    can also be defined.
+
+    :attr Course.title: The title of the course
     :type Course.title: CharField
     :attr Course.description: The description of the course
     :type Course.description: TextField
@@ -119,22 +128,21 @@ class Course(models.Model):
     :type Course.creation_date: DateTimeField
     :attr Course.image: The image of the course
     :type Course.image: ImageField
-    :attr Course.topics: Describes the topic content in the course
+    :attr Course.topics: The topics that the course contains
     :type Course.topics: ManyToManyField - Topic
-    :attr Course.owners: Describes the people that may change the structure of
-    the course
+    :attr Course.owners: The owners of the course which can change the content of the course
     :type Course.owners: ManyToManyField - Profile
-    :attr Course.restrict_changes: Describes the changes of the restriction who
-    can edit it
+    :attr Course.restrict_changes: The restriction who can edit the course
     :type Course.restrict_changes: BooleanField
-    :attr Course.category: Describes the category of the course
+    :attr Course.category: The category of the course
     :type Course.category: ForeignKey - Category
-    :attr Course.period: Describes the period of the course
+    :attr Course.period: The period of the course
     :type Course.period: ForeignKey - Period
     """
     title = models.CharField(max_length=200,
                              verbose_name=_("Title"),
-                             unique=True)
+                             unique=True
+                             )
     description = models.TextField(verbose_name=_("Description"))
 
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
@@ -149,11 +157,12 @@ class Course(models.Model):
                                     related_name="courses",
                                     blank=True)
 
-    owners = models.ManyToManyField(Profile, related_name='owned_courses',
+    owners = models.ManyToManyField(Profile,
+                                    related_name='owned_courses',
                                     verbose_name=_("Owners"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
-                                           help_text=_("Is the course protected and "
-                                                       "can only be edited by the owners?"),
+                                           help_text=_("This course is restricted and "
+                                                       "can only be edited by the owners"),
                                            blank=True,
                                            default=False)
 
@@ -187,7 +196,8 @@ class Course(models.Model):
     def get_sorted_topic_list(self):
         """Sorted topic list
 
-        Returns a sorted topic query.
+        Returns a sorted topic query. The order after this call
+        is that its sorted by the index of the sub topics.
 
         :return: the sorted topic list
         :rtype: QuerySet
@@ -208,7 +218,7 @@ class Course(models.Model):
 class Topic(models.Model):
     """Topic
 
-    This model represents the tag to identify or specify a specific topic of a course book.
+    This model represents the topic. A topic contains a title and its related category.
 
     :attr Topic.title: Describes the title of the course
     :type Topic.title: CharField
@@ -248,14 +258,15 @@ class Topic(models.Model):
     def get_contents(self, sorted_by, filtered_by):
         """Get contents
 
-        Returns all contents belonging to the topic.
+        Returns all contents belonging to this topic. Additionally the contents
+        can be sorted or filtered.
 
-        :param sorted_by: By what attribute the results should be sorted
+        :param sorted_by: The sorting value which the content should be sorted
         :type sorted_by: str
-        :param filtered_by: By what style the results should be filtered
+        :param filtered_by: The filtered value which the content should be filtered
         :type filtered_by: str
 
-        :return: the sorted and filtered contents
+        :return: the sorted and filtered contents belonging to this topic
         :rtype: QuerySet[Content]
         """
         contents = self.contents.all()
@@ -289,14 +300,15 @@ class Topic(models.Model):
 
 
 class Tag(models.Model):
-    """Topic
+    """Tag
 
-    This model represents the topic of a course book.
+    This model represents the tag to identify or specify a specific topic of a course book.
+    A tag contains an title and an optional symbol representing the tag.
 
-    :attr Tag.title: Describes the title of the course
+    :attr Tag.title: The title of the tag
     :type Tag.title: CharField
-    :attr Tag.category: Describes in which category the topic belongs to
-    :type Tag.category: IconField
+    :attr Tag.symbol: The symbol of the tag
+    :type Tag.symbol: IconField
     """
     title = models.CharField(verbose_name=_("Title"),
                              max_length=200)
@@ -331,32 +343,34 @@ class Tag(models.Model):
 class Content(models.Model):
     """Content
 
-    This model represents the content of a course book.
+    This model represents the content of a course book. A content contains topics to which
+    it can be assigned. There can be different types of content, which differ from the
+    concrete content and presentation. There is an optional description of the content,
+    the language in which the content was written and, of course, authors who wrote the content.
+    Additionally, tags, markings, whether the document is read-only and whether it is public,
+    the creation date, user ratings and a preview of the course are stored.
 
-    :attr Content.topic: Describes the topics in the content
+    :attr Content.topic: The topics of the content
     :type Content.topic: ForeignKey - Topic
-    :attr Content.author: The user that created the content
+    :attr Content.author: The authors of the content
     :type Content.author: ForeignKey - Profile
     :attr Content.description: The description of the content
     :type Content.description: TextField
-    :attr Content.type: Describes the type of the content
+    :attr Content.type: The content type of the content
     :type Content.type: CharField
-    :attr Content.language: Describes the language the content in which the content is
-    written
+    :attr Content.language: The language of the content
     :type Content.language: CharField
-    :attr Content.tags: Describes the tags of the content
+    :attr Content.tags: The tags of the content
     :type Content.tags: ManyToManyField - Tag
-    :attr Content.readonly: Describes if the content is read only or it can be modified
+    :attr Content.readonly: The status of the content if it is read only
     :type Content.readonly: BooleanField
-    :attr Content.public BooleanField: Describes the content visibility
+    :attr Content.public: The status of the content if it is public
     :type Content.public: BooleanField
-    :attr Content.attachment: Describes the attachment of the content
-    :type Content.attachment: OneToOneField - ImageAttachment
-    :attr Content.creation_date: Describes when the content was created
+    :attr Content.creation_date: The creation date of the content
     :type Content.creation_date: DateTimeField
     :attr Content.preview: The preview image of the content
     :type Content.preview: ImageField
-    :attr Content.ratings: Describes the ratings of the content
+    :attr Content.ratings: The ratings from the user to the content
     :type Content.ratings: ManyToManyField - Profile
     """
     topic = models.ForeignKey(Topic, verbose_name=_("Topic"),
@@ -379,19 +393,13 @@ class Content(models.Model):
                                   related_name='contents',
                                   blank=True)
 
-    readonly = models.BooleanField(verbose_name=_("Readonly"),
-                                   help_text=_("Can this content be updated?"),
+    readonly = models.BooleanField(verbose_name=_("Set to Read-Only"),
+                                   help_text=_("This content shouldn't be edited"),
                                    default=False)
-    public = models.BooleanField(verbose_name=_("Show in public courses?"),
-                                 help_text=_("May this content be displayed in courses "
-                                             "that don't require registration?"),
+    public = models.BooleanField(verbose_name=_("Show in public courses"),
+                                 help_text=_("This content will be displayed in courses "
+                                             "that don't require registration"),
                                  default=False)
-
-    attachment = models.OneToOneField('content.ImageAttachment',
-                                      verbose_name=_("Attachment"),
-                                      on_delete=models.CASCADE,
-                                      blank=True,
-                                      null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
                                          default=timezone.now,
                                          blank=True)
@@ -423,7 +431,9 @@ class Content(models.Model):
         :return: the string representation of this object
         :rtype: str
         """
-        return f"{self.type} for {self.topic} by {self.author}"
+        return _('%(title)s for %(topic)s by %(author)s') % {'title': self.type,
+                                                             'topic': self.topic,
+                                                             'author': self.author}
 
     def get_rate_num(self):
         """Average rating
@@ -440,7 +450,7 @@ class Content(models.Model):
     def get_rate_amount(self):
         """Total number of ratings
 
-        Returns the amount number of ratings and 0 if there are no ratings present.
+        Returns the amount number of ratings to this content and 0 if there are no ratings present.
 
         :return: the amount of ratings
         :rtype: int
@@ -458,7 +468,7 @@ class Content(models.Model):
         """
         rating = Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
         if rating is not None:
-            return rating
+            return int(rating)
         return -1
 
     def get_rate_count(self):
@@ -487,8 +497,8 @@ class Content(models.Model):
     def get_user_rate(self, user):
         """User rating
 
-        Returns the rating of an user. If the use did not rate already, then the returned
-        rating will be 0.
+        Returns the rating of an user. If the user has not yet submitted a rating, then
+        the returned rating will be 0.
 
         :param user: The user to retrieve the rating
         :type user: User
@@ -503,7 +513,7 @@ class Content(models.Model):
     def rate_content(self, user, rating):
         """Content rating
 
-        Returns the rate content by the user.
+        Rates the content by the given rating of the user.
 
         :param rating: The rating of content by the user
         :type rating: Rating
@@ -532,12 +542,19 @@ class Content(models.Model):
 class CourseStructureEntry(models.Model):
     """Course Structure Entry
 
-    This model represents the structure of the courses.
+    This model represents the structure of the courses. The course structure consists
+    of main topics and each main topics can contain sub topics. The main topics and sub topics
+    are differentiated through its index. Sub topics contains the index of the main topic and
+    its own index position in the main topic
+
+    For example:
+
+    - 1 is a main topic
+    - 1/2 is a second sub topic in the main topic 1
 
     :attr CourseStructureEntry.course: The course whose structure is meant
     :type CourseStructureEntry.course: ForeignKey - Course
-    :attr CourseStructureEntry.index: The position that is meant (e.g. "1/2" -> second under topic
-    of the first topic)
+    :attr CourseStructureEntry.index: The position of the (sub) topic
     :type CourseStructureEntry.index: CharField
     :attr CourseStructureEntry.topic: The topic at the specified position/index
     :type CourseStructureEntry.topic: ForeignKey - Topic
@@ -546,7 +563,8 @@ class CourseStructureEntry(models.Model):
                                on_delete=models.CASCADE)
     index = models.CharField(verbose_name=_("Index"),
                              max_length=50)
-    topic = models.ForeignKey(Topic, related_name='child_topic', verbose_name=_("Topic"),
+    topic = models.ForeignKey(Topic, related_name='child_topic',
+                              verbose_name=_("Topic"),
                               on_delete=models.DO_NOTHING)
 
     class Meta:
@@ -581,4 +599,5 @@ reversion.register(Course,
 
 reversion.register(Content,
                    fields=['description', 'language',
-                           'tags', 'readonly', 'public', 'attachment'])
+                           'tags', 'readonly', 'public'],
+                   follow=['ImageAttachments'])
