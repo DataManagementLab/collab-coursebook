@@ -333,9 +333,11 @@ class YTVideoContent(BaseContentModel):
             split_url = self.url.split("=")
             if len(split_url) == 2:
                 return self.url.split("=")[1]
-            if len(split_url) > 2:
+            elif len(split_url) > 2:
                 return self.url.split("=")[1].split("&")[0]
-        if 'youtu.be' in self.url:
+            else:
+                return self.url.split("/")[2]
+        elif 'youtu.be' in self.url:
             return self.url.split("/")[3]
         else:
             return self.url.split("/")[4]
