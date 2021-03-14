@@ -81,7 +81,7 @@ def generate_coursebook_response(request, pk, file_name=_("Coursebook")):  # pyl
     :rtype: HttpResponse
     """
 
-    # Call the method for coursebook generation and write the output afterwards
+    # Call the method for pdf compilation and write the output afterwards
     (pdf, pdflatex_output, tex_template) = pdf_compile(request, pk, False)
     return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
 
@@ -103,7 +103,7 @@ def generate_course_export_response(request, pk, file_name=_("Course_Export")): 
     :rtype: HttpResponse
     """
 
-    # Call the method for coursebook generation and write the output afterwards
+    # Call the method for pdf compilation and write the output afterwards
     (pdf, pdflatex_output, tex_template) = pdf_compile(request, pk, True)
     return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
 
