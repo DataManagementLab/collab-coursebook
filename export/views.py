@@ -25,7 +25,7 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
-    :param exp_all: Indicator if the whole course (True) or the coursebook (False) should be exported
+    :param exp_all: Indicator if the whole course (T) or the coursebook (F)should b eexported
     :type exp_all: bool
     :param template: The path of the LaTeX template to use
     :type template: str
@@ -75,7 +75,7 @@ def generate_coursebook_response(request, pk, exp_all, file_name = None):  # pyl
     :type request: WSGIRequest
     :param pk: The primary key of the course
     :type pk: int
-    :param exp_all: Indicator if the whole course (True) or the coursebook (False) should be exported
+    :param exp_all: Indicator if the whole course (T) or the coursebook (F) should be exported
     :type exp_all: bool
     :param file_name: The name of the file
     :type file_name: str
@@ -155,5 +155,6 @@ def generate_pdf_from_latex(user, content, template="content/export/base.tex", c
     context['export_pdf'] = False
 
     # Performs compilation given context and template
-    (pdf, pdflatex_output, tex_template) = Latex.render(context, template, [])
-    return pdf
+    # pdf = pdf, pdflatex_output, tex_template
+    pdf = Latex.render(context, template, [])
+    return pdf[0]

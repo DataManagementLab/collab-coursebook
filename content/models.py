@@ -181,7 +181,8 @@ class Latex(BaseContentModel, BasePDFModel):
     DESC = _("Latex Textfield")
 
     textfield = models.TextField(verbose_name=_("Latex Code"),
-                                 help_text=_("Please insert only valid LaTeX code. The packages and \\begin{document} "
+                                 help_text=_("Please insert only valid LaTeX code. The packages "
+                                             "and \\begin{document} "
                                              "and \\end{document} will be inserted automatically."))
     source = models.TextField(verbose_name=_("Source"))
 
@@ -333,14 +334,12 @@ class YTVideoContent(BaseContentModel):
             split_url = self.url.split("=")
             if len(split_url) == 2:
                 return self.url.split("=")[1]
-            elif len(split_url) > 2:
+            if len(split_url) > 2:
                 return self.url.split("=")[1].split("&")[0]
-            else:
-                return self.url.split("/")[2]
-        elif 'youtu.be' in self.url:
+            return self.url.split("/")[2]
+        if 'youtu.be' in self.url:
             return self.url.split("/")[3]
-        else:
-            return self.url.split("/")[4]
+        return self.url.split("/")[4]
 
     def __str__(self):
         """String representation
