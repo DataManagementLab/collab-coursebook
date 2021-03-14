@@ -23,9 +23,10 @@ from reversion.models import Version
 from reversion_compare.views import HistoryCompareDetailView
 
 from base.models import Course, Content, Topic
-from content.attachment.models import ImageAttachment
 
+from content.attachment.models import ImageAttachment
 from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex, CONTENT_TYPES
+
 from export.views import generate_pdf_response
 
 
