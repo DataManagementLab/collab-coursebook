@@ -80,8 +80,7 @@ def tex_escape(value):
     :return: the escaped LaTeX code
     :rtype: str
     """
-
-    # dict[str, str]: Replacements - Escape characters
+    # Replacements for left character with right character
     replacements = {
         '&': r'\&',
         '%': r'\%',
@@ -98,5 +97,12 @@ def tex_escape(value):
         '\n': r'\newline '
     }
 
-    regex = re.compile('|'.join(re.escape(key) for key in replacements))
+    # Compile into pattern objects
+    regex = re.compile(
+        # Concatenate the escaped characters to one string
+        '|'.join(
+            # Escape special characters in pattern
+            re.escape(key) for key in replacements
+        )
+    )
     return regex.sub(lambda match: replacements[match.group()], value)
