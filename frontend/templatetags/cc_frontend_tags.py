@@ -164,7 +164,7 @@ def check_profile_permissions(user, profile):
     :param profile: The profile to check permission
     :type profile: Profile
 
-    :return:true iff the favourites of the profile can be seen
+    :return: true iff the stared courses of the profile can be seen
     :rtype: bool
     """
     return user.profile.pk == profile.pk or user.is_superuser
@@ -182,7 +182,7 @@ def check_edit_content_permission(user, content):
     :param content: The content to check permission
     :type content: Content
 
-    :return: true if the content can be edited
+    :return: true iff the content can be edited
     :rtype: bool
     """
     if content.readonly:
