@@ -8,7 +8,9 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Course, Favorite, Content
+
 from export.helper_functions import Latex
+
 
 
 def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
