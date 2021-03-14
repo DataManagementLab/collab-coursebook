@@ -180,7 +180,9 @@ class Latex(BaseContentModel, BasePDFModel):
     TYPE = "Latex"
     DESC = _("Latex Textfield")
 
-    textfield = models.TextField(verbose_name=_("Latex Code"))
+    textfield = models.TextField(verbose_name=_("Latex Code"),
+                                 help_text=_("Please insert only valid LaTeX code. The packages and \\begin{document} "
+                                             "and \\end{document} will be inserted automatically."))
     source = models.TextField(verbose_name=_("Source"))
 
     class Meta:

@@ -42,6 +42,12 @@ msgstr "Lizenz"
 msgid "Single Image"
 msgstr "Einzelnes Bild"
 
+#: .\models.py:182
+msgid "Please insert only valid LaTeX code. "
+"The packages and \\begin{document} and \\end{document} will be inserted automatically."
+msgstr "Bitte geben Sie nur gültigen LaTeX-Code ein. Die Packages und \\begin{document} "
+"und \\end{document} werden automatisch hinzugefügt."
+
 #: .\models.py:152 .\models.py:275
 msgid "Image"
 msgstr "Bild"
