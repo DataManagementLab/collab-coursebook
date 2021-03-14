@@ -7,12 +7,13 @@
 </div>
 
 <div class="container" style="padding-top:1em;padding-bottom: 1em;">
+    <b>
+        {% trans 'Source' %}:
+    </b>
     <p>
-        <b>
-            {% trans 'Source' %}:
-        </b>
         {{ content.pdfcontent.source }}
     </p>
+
     <p>
         {% if content.pdfcontent.license %}
             <b>
@@ -21,13 +22,6 @@
             {{ content.pdfcontent.license }}
         {% endif %}
     </p>
-    {# Description of the content #}
-    {% if content.description %}
-        <div class="mt-5">
-            <h4>
-                {% trans 'Description' %}
-            </h4>
-            {{ content.description|linebreaks }} <!-- resolves to s -->
-        </div>
-    {% endif %}
+
+    {% include 'content/reading_mode/Description.html' %}
 </div>
