@@ -245,10 +245,18 @@ def js_escape(value):
     :return: the escaped string
     :rtype: str
     """
+    # Replacements for left character with right character
     replacements = {
         '\\': '\\\\',
         '\n': '\\n'
     }
 
-    regex = re.compile('|'.join(re.escape(key) for key in replacements))
+    # Compile into pattern objects
+    regex = re.compile(
+        # Concatenate the escaped characters to one string
+        '|'.join(
+            # Escape special characters in pattern
+            re.escape(key) for key in replacements
+        )
+    )
     return regex.sub(lambda match: replacements[match.group()], value)

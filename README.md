@@ -21,13 +21,13 @@ Collab Coursebook has two types of requirements: System requirements are depende
 * Python 3.7 incl. development tools
 * Virtualenv
 * poppler
+* TeX Distribution (e.g. TeX Live)
 * for production using uwsgi:
   * C compiler e.g. gcc
   * uwsgi
   * uwsgi Python3 plugin
 * for production using Apache (in addition to uwsgi)
   * the mod proxy uwsgi plugin for apache2
-
 
 #### Python Requirements
 
@@ -61,6 +61,9 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 1. create a privileged user, credentials are entered interactively on CLI ``python manage.py createsuperuser``
 1. deactivate virtualenv ``deactivate``
 
+**Distributable Setup**
+
+* In order to use Nestable2 correctly the dist folder is needed. This folder can be found here: https://github.com/RamonSmit/Nestable2
 
 **Development Server**
 
