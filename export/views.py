@@ -158,8 +158,8 @@ def generate_pdf_from_latex(user, content, template="content/export/base.tex", c
     :param context: The context of the content
     :type context: dict[str, Any]
 
-    :return: the generated PDF as PDF, PDF LaTeX output and its rendered template
-    :rtype: tuple[bytes, tuple[bytes, bytes], str]
+    return: the generated PDF
+    rtype: bytes
     """
     if context is None:
         context = {}
@@ -172,24 +172,4 @@ def generate_pdf_from_latex(user, content, template="content/export/base.tex", c
 
     # Performs compilation given context and template
     (pdf, pdflatex_output, tex_template) = Latex.render(context, template, [])
-    return pdf, pdflatex_output, tex_template
-
-
-def generate_pdf_response(user, content):
-    """Generate pdf response
-
-    Generates a PDF file with name tags for students in the queryset.
-    This method compiles a specific latex content into a PDF.
-
-    :param user: The user of the content
-    :type user: User
-    :param content: The content of the pdf
-    :type content: Content
-
-    return: the generated PDF
-    rtype: bytes
-    """
-
-    # Calls the function for generating the pdf and return the pdf
-    pdf = generate_pdf_from_latex(user, content)
-    return pdf[0]
+    return pdf
