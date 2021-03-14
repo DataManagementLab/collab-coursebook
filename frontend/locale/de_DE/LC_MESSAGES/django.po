@@ -621,12 +621,12 @@ msgid "Revert to Version 1"
 msgstr "Zurückkehren zu Version 1"
 
 #: .\templates\frontend\history\history_compare_view.html:59
-msgid "Previous Versions"
-msgstr "Vorherige Versionen"
+msgid "Compare previous two Versions"
+msgstr "Die vorherigen beiden Versionen vergleichen"
 
 #: .\templates\frontend\history\history_compare_view.html:65
-msgid "Next Versions"
-msgstr "Nächste Versionen"
+msgid "Compare next two Versions"
+msgstr "Die nächsten beiden Versionen vergleichen"
 
 #: .\templates\frontend\history\history_compare_view.html:72
 msgid "Overwrite fields with these changes?"

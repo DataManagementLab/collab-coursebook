@@ -47,30 +47,28 @@
             {% trans 'Compare Version 1' %}:
             <strong>{{ version1.revision.date_created|date:_('DATETIME_FORMAT') }}</strong> {% trans 'with Version 2' %}
             <strong>{{ version2.revision.date_created|date:_('DATETIME_FORMAT') }}</strong>
-            <br>
-            {% trans 'Revert to Version 1' %} -
+            <br> </p>
+        <div style="color: #b71540">
+            {% trans 'Revert to Version 1'  %} -
             <strong>{{ version1.revision.date_created|date:_('DATETIME_FORMAT') }}</strong>
-        </p>
+        </div>
+
     </blockquote>
 
     {#  Previous and next compare options #}
     {% if prev_url %}
-        <button onclick="location.href='{{ prev_url }}'" class="btn btn-primary add-item">
-            {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Previous Versions' %}
+        <button onclick="location.href='{{ prev_url }}'" class="btn btn-primary add-item navbar-inline-list"
+        style="margin-left: 0">
+            {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Compare previous two Versions' %}
         </button>
     {% endif %}
 
     {% if next_url %}
-        <button onclick="location.href='{{ next_url }}'" class="btn btn-primary add-item">
-            {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans 'Next Versions' %}
+        <button onclick="location.href='{{ next_url }}'" class="btn btn-primary add-item navbar-inline-list"
+        style="margin-left: 0">
+            {% fa5_icon 'chevron-circle-right' 'fas' %} {% trans 'Compare next two Versions' %}
         </button>
     {% endif %}
-
-    {# Revert option  #}
-    <button type="button" class="btn btn-warning" data-toggle="modal"
-            data-target="#revert-modal">
-        {% fa5_icon 'history' 'fas' %} {% trans 'Overwrite fields with these changes?' %}
-    </button>
 
     {#  Modal for course/content revert #}
     <div class="modal fade" id="revert-modal" tabindex="1" role="dialog"
@@ -112,7 +110,14 @@
     <br>
 
     {# Back to history list option #}
-    <button onclick="location.href='{{ history_url }}'" class="btn btn-primary add-item">
+    <button onclick="location.href='{{ history_url }}'" class="btn btn-primary navbar-inline-list"
+    style="margin-left: 0">
         {% fa5_icon 'chevron-circle-left' 'fas' %} {% trans 'Go back to history list' %}
+    </button>
+
+    {# Revert option  #}
+    <button type="button" class="btn btn-warning navbar-inline-list" data-toggle="modal"
+            data-target="#revert-modal" style="margin-left: 0">
+        {% fa5_icon 'history' 'fas' %} {% trans 'Overwrite fields with these changes?' %}
     </button>
 {% endif %}
