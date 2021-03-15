@@ -1094,7 +1094,7 @@ msgstr ""
 "auf das Tutorial zuzugreifen oder dich auszuloggen."
 
 #: .\views\comment.py:52 .\views\comment.py:164
-msgid "You don't have permission to do this."
+msgid "You do not have permission to do this."
 msgstr "Sie haben keine Berechtigung, um diesen Vorgang durchzuführen."
 
 #: .\views\comment.py:75

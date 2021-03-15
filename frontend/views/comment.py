@@ -49,7 +49,7 @@ class DeleteComment(LoginRequiredMixin, DeleteView):  # pylint: disable=too-many
         """
         if self.get_object().author != request.user.profile and not request.user.is_superuser:
             # Back url for no permission page
-            messages.error(request, _("You don't have permission to do this."),
+            messages.error(request, _("You do not have permission to do this."),
                            extra_tags="alert-danger")
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
@@ -161,7 +161,7 @@ class EditComment(LoginRequiredMixin, UpdateView):  # pylint: disable=too-many-a
         """
         comment = self.get_object()
         if comment.author != self.request.user.profile:
-            messages.error(request, _("You don't have permission to do this."),
+            messages.error(request, _("You do not have permission to do this."),
                            extra_tags="alert-danger")
             course_id = self.kwargs['course_id']
             topic_id = self.kwargs['topic_id']
