@@ -636,7 +636,7 @@ msgid ""
 "can also undo the revert later."
 msgstr ""
 "Sind Sie sich sicher, dass Sie die aktuelle Version mit der Version vom "
-"<strong>%(date1)s</strong>überschreiben möchten? Sie können Ihre Änderungen "
+"<strong>%(date1)s</strong> überschreiben möchten? Sie können Ihre Änderungen "
 "auch später noch rückgängig machen."
 
 #: .\templates\frontend\history\history_compare_view.html:115
