@@ -4,14 +4,14 @@
     {# Insert header information here #}
 {% endblock %}
 
-<div class="container" style="padding-top:1em;padding-bottom: 1em;">
+<div class="container" style="padding-top:1em;padding-bottom: 1em;overflow-wrap: break-word">
     {% block reading_content %}
         {# Insert reading mode content here #}
     {% endblock %}
 
     {# Description #}
     {% if content.description %}
-        <div class="mt-5">
+        <div class="mt-5" style="overflow-wrap: break-word">
             <h4>
                 {% trans 'Description' %}
             </h4>

@@ -79,11 +79,11 @@
     </div>
 
     {# Course header: Title, owners, description #}
-    <h1>
+    <h1 style="overflow-wrap: break-word">
         {{ course.title }}
     </h1>
 
-    <h5 style="margin: 20px 0;">
+    <h5 style="margin: 20px 0; overflow-wrap: break-word">
         {% for owner in course.owners.all %}
             <a href="{% url 'frontend:profile' pk=owner.pk %}"
                class="{% if owner == user.profile %}text-danger{% endif %}">
@@ -95,7 +95,8 @@
     <div class="media">
         <div class="media-body">
             {% if course.description %}
-                <h2 class="mt-0 mb-1" style="text-align: justify">{% trans 'Description' %}</h2>
+                <h2 class="mt-0 mb-1" style="text-align: justify; overflow-wrap: break-word">
+                    {% trans 'Description' %}</h2>
                 {{ course.description | linebreaks }}
             {% endif %}
         </div>
