@@ -296,8 +296,8 @@ msgstr "Anhänge"
 
 #: .\templates\frontend\content\dynamic_attachment.html:30
 #: .\templates\frontend\content\edit.html:57
-msgid "Copy Attachment-Embedding"
-msgstr ""
+msgid "Copy Attachment-Embedding Code"
+msgstr "Code für Anhangseinbettung kopieren"
 
 #: .\templates\frontend\content\edit.html:11
 msgid "Edit content"
