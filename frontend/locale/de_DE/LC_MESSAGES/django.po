@@ -726,8 +726,8 @@ msgid ""
 "the content which you want to create. Here we choose LaTeX content as an "
 "example:"
 msgstr ""
-"Nachdem du auf der Kursseite auf „INHALT HINZUFÜGEN“ geklickt hast, kannst "
-"du einen der Inhaltstypen auswählen, den du erstellen möchtest. Hier nehmen "
+"Nachdem Sie auf der Kursseite auf „INHALT HINZUFÜGEN“ geklickt haben, können "
+"Sie einen der Inhaltstypen auswählen, den Sie erstellen möchten. Hier nehmen "
 "wir LaTeX als Beispiel:"
 
 #: .\templates\frontend\tutorial\add_content.html:21
@@ -735,15 +735,15 @@ msgid ""
 "in ① you can click on the “?” to see detailed instruction for the latex code "
 "field."
 msgstr ""
-"In ① kannst du auf das “?” klicken um eine detaillierte Anleitung für das "
-"Latexcodefeld zu sehen."
+"In ① können Sie auf das “?” klicken um eine detaillierte Anleitung für das "
+"LaTeX-Codefeld zu sehen."
 
 #: .\templates\frontend\tutorial\add_content.html:26
 msgid ""
 "in ② you can select “ADD ATTACHMENT” to select an image file from your local "
 "computer as an attachment to this content."
 msgstr ""
-"In ② kannst du „ANHANG HINZUFÜGEN“ selektieren, um eine Bilddatei von deinem "
+"In ② können Sie „ANHANG HINZUFÜGEN“ selektieren, um eine Bilddatei von Ihrem "
 "lokalen Computer als Anhang zu diesem Inhalt hinzufügen."
 
 #: .\templates\frontend\tutorial\add_content.html:32
@@ -751,9 +751,9 @@ msgid ""
 "after you click on “ADD ATTACHMENT” there will also appear a “REMOVE "
 "ATTACHMENT” button, which allows you to remove the last attachment."
 msgstr ""
-"Nachdem du auf “ANHANG HINZUFÜGEN” geklickt hast, wird auch die "
-"Schaltfläche„ANHANG ENTFERNEN“ angezeigt, mit der du den zuletzt "
-"hinzugefügten Anhang entfernen kannst."
+"Nachdem Sie auf “ANHANG HINZUFÜGEN” geklickt haben, wird auch die "
+"Schaltfläche „ANHANG ENTFERNEN“ angezeigt, mit der Sie den zuletzt "
+"hinzugefügten Anhang entfernen können."
 
 #: .\templates\frontend\tutorial\content.html:6
 msgid "Content"
@@ -765,8 +765,8 @@ msgid ""
 "the course page, you can also click on an “ACTIONS” menu to access several "
 "main functions:"
 msgstr ""
-"Klick auf einen beliebigen Inhalt auf der Kursseite, um Details anzusehen. "
-"Ähnlich wie auf der Kursseite kannst du auch hier auf „AKTIONEN“ klicken, um "
+"Klicken Sie auf einen beliebigen Inhalt auf der Kursseite, um sich die Details dazu anzusehen. "
+"Ähnlich wie auf der Kursseite können Sie auch hier auf „AKTIONEN“ klicken, um "
 "auf mehrere Hauptfunktionen zuzugreifen:"
 
 #: .\templates\frontend\tutorial\content.html:16
@@ -807,7 +807,7 @@ msgstr "Die Schlüsselfunktionen der Kursseite sind die folgenden:"
 msgid ""
 "in ① you can select “ACTIONS” in order to access the following functions:"
 msgstr ""
-"In ① kannst du “AKTIONEN” selektieren, um Zugriff auf die folgenden "
+"In ① können Sie “AKTIONEN” selektieren, um Zugriff auf die folgenden "
 "Funktionen zu erlangen:"
 
 #: .\templates\frontend\tutorial\course.html:25
@@ -815,16 +815,16 @@ msgid ""
 "“ADD TO/ REMOVE FROM FAVOURITE”: Add/Remove the viewed course to your list "
 "of favourite courses."
 msgstr ""
-"“ZU FAVORITEN HINZUFÜGEN/ AUS FAVORITEN ENTFERNEN”: Hinzufügen/Entfernen des "
-"betrachteten Kurses zur Liste von Favoritenkursen."
+"“ZU FAVORITEN HINZUFÜGEN/ AUS FAVORITEN ENTFERNEN”: Den "
+"betrachteten Kurses zur Liste von Favoritenkursen hinzufügen/entfernen."
 
 #: .\templates\frontend\tutorial\course.html:31
 msgid "DUPLICATE COURSE: Duplicate this course"
-msgstr "KURS DUPLIZIEREN: Dupliziere den betrachteten Kurs"
+msgstr "KURS DUPLIZIEREN: Den betrachteten Kurs duplizieren"
 
 #: .\templates\frontend\tutorial\course.html:36
 msgid "EXPORT COURSE: Export all course contents in a PDF"
-msgstr "KURS EXPORTIEREN: Exportiere alle Kursinhalte in einer PDF"
+msgstr "KURS EXPORTIEREN: Alle Kursinhalte in einer PDF exportieren"
 
 #: .\templates\frontend\tutorial\course.html:41
 msgid "EDIT COURSE - more information in a later section"
@@ -840,14 +840,14 @@ msgstr "VERSIONSGESCHICHTE - mehr Informationen in einem späteren Abschnitt"
 
 #: .\templates\frontend\tutorial\course.html:56
 msgid "DELETE COURSE: Delete the course"
-msgstr "KURS LÖSCHEN: Lösche den betrachteten Kurs"
+msgstr "KURS LÖSCHEN: Den betrachteten Kurs löschen"
 
 #: .\templates\frontend\tutorial\course.html:63
 msgid ""
 "in ② you can click on the name of a specific topic for quick topic jumping, "
 "and click on the hamburger button to toggle/untoggle the topic list."
 msgstr ""
-"in ② kannst du auf den Namen eines bestimmten Themas klicken, um schnell zum "
+"in ② können Sie auf den Namen eines bestimmten Themas klicken, um schnell zum "
 "ausgewählten Thema zu springen, und auf die Hamburger-Schaltfläche klicken, "
 "um die Themenliste ein- oder auszuschalten."
 
@@ -857,8 +857,8 @@ msgid ""
 "also click on the hamburger button in order to toggle/untoggle the "
 "coursebook section."
 msgstr ""
-"Unter “Kursbuch” kannst du die markierten Kursbuch-Inhalte sehen. In ③ "
-"kannst du auch auf die Hamburger-Schaltfläche klicken, um das Kursbuch ein- "
+"Unter “Kursbuch” können Sie die markierten Kursbuch-Inhalte sehen. In ③ "
+"können Sie auch auf die Hamburger-Schaltfläche klicken, um das Kursbuch ein- "
 "oder auszuschalten."
 
 #: .\templates\frontend\tutorial\course.html:75
@@ -868,7 +868,7 @@ msgid ""
 "coursebook content."
 msgstr ""
 "Wenn das „Kursbuch“ Inhalte enthält, wird ein Button „EXPORTIEREN“ (siehe ④) "
-"auftauchen, worüber du eine PDF Datei herunterladen kannst, welche alle "
+"auftauchen, worüber Sie eine PDF Datei herunterladen können, welche alle "
 "Inhalte des Kursbuchs enthält. "
 
 #: .\templates\frontend\tutorial\course.html:81
@@ -876,8 +876,8 @@ msgid ""
 "on the right side of each topic there is an “ADD CONTENT” button (see ⑤). "
 "Click to add new content to the corresponding topic."
 msgstr ""
-"Auf der rechten Seite jedes Themas befindet sich die  Schaltfläche „INHALT "
-"HINZUFÜGEN“ (siehe ⑤). Selektiere diese, um dem entsprechenden Thema einen "
+"Auf der rechten Seite jedes Themas befindet sich die Schaltfläche „INHALT "
+"HINZUFÜGEN“ (siehe ⑤). Selektieren Sie diese, um dem entsprechenden Thema einen "
 "neuen Inhalt hinzuzufügen."
 
 #: .\templates\frontend\tutorial\edit_course.html:14
@@ -885,7 +885,7 @@ msgid ""
 "If you click “EDIT COURSE” in the “ACTIONS” menu of the course, you will be "
 "redirected to an “Edit course” page like this."
 msgstr ""
-"Wenn du im Aktionsmenü des Kurses auf “KURS BEARBEITEN” klickst, wirst du zu "
+"Wenn Sie im Aktionsmenü des Kurses auf “KURS BEARBEITEN” klicken, werden Sie zu "
 "einer solchen “Kurs bearbeiten” Seite weitergeleitet."
 
 #: .\templates\frontend\tutorial\edit_course.html:21
@@ -904,8 +904,8 @@ msgid ""
 "If you select “EDIT STRUCTURE” in the “ACTIONS” menu of the course, you will "
 "be redirected to an “Edit Course Structure” page like this."
 msgstr ""
-"Wenn du im Aktionsmenü des Kurses auf “STRUKTUR BEARBEITEN” klickst, wirst "
-"du zu einer solchen “Kursstruktur bearbeiten” Seite weitergeleitet."
+"Wenn Sie im Aktionsmenü des Kurses auf “STRUKTUR BEARBEITEN” klicken, werden Sie "
+"zu einer solchen “Kursstruktur bearbeiten” Seite weitergeleitet."
 
 #: .\templates\frontend\tutorial\edit_structure.html:21
 msgid ""
@@ -913,8 +913,8 @@ msgid ""
 "one and click “ADD TOPIC” in order to add the topic to the course structure "
 "(shown in part ③)"
 msgstr ""
-"In ① kannst du alle vorhandenen Themen sehen, indem du das  Dropdown-Menü "
-"selektierst. Wähle ein Thema aus und klicke auf „THEMA HINZUFÜGEN“, um das "
+"In ① können Sie alle vorhandenen Themen sehen, indem Sie das Dropdown-Menü "
+"selektierst. Wählen Sie ein Thema aus und klicken Sie auf „THEMA HINZUFÜGEN“, um das "
 "Thema zur Kursstruktur hinzuzufügen (siehe Teil ③)."
 
 #: .\templates\frontend\tutorial\edit_structure.html:27
@@ -923,7 +923,7 @@ msgid ""
 "subtopics of the course in part ③, and click “COLLAPSE STRUCTURE” to view "
 "all topics excluding the subtopics of the course in part ③"
 msgstr ""
-"In ① kannst du auf „STRUKTUR AUFKLAPPEN“ klicken, um alle Themen "
+"In ① können Sie auf „STRUKTUR AUFKLAPPEN“ klicken, um alle Themen "
 "einschließlich der Unterthemen des Kurses in ③ anzusehen, und auf “STRUKTUR "
 "ZUKLAPPEN” klicken, um alle Themen ohne die Unterthemen des Kurses in Teil ③ "
 "anzusehen. "
@@ -934,8 +934,8 @@ msgid ""
 "then clicking “CREATE TOPIC”. The new topic will then be added to the list "
 "of all topics in part ① and to the current course structure in part ③."
 msgstr ""
-"In ② kannst du neue Themen hinzufügen, indem du einen Titel angibst, eine "
-"Kategorie auswählst und dann auf „THEMA ERSTELLEN“ klickst. Das neue Thema "
+"In ② können Sie neue Themen hinzufügen, indem Sie einen Titel angeben, eine "
+"Kategorie auswählen und dann auf „THEMA ERSTELLEN“ klicken. Das neue Thema "
 "wird dann zur Liste aller Themen in Teil ① sowie der Struktur des Kurses in "
 "Teil ③ hinzugefügt."
 
@@ -945,19 +945,19 @@ msgid ""
 "structure via Drag & Drop of the hamburger buttons in front of the topic "
 "names"
 msgstr ""
-"In ③ siehst du die aktuelle Struktur des Kurses. Du kannst die Struktur per "
+"In ③ sehen Sie die aktuelle Struktur des Kurses. Sie können die Struktur per "
 "Drag & Drop der Hamburger-Schaltflächen vor den Themennamen umordnen."
 
 #: .\templates\frontend\tutorial\edit_structure.html:47
 msgid "Don’t forget to save your changes!"
-msgstr "Vergiss nicht, deine Änderungen zu speichern! "
+msgstr "Vergissen Sie nicht, Ihre Änderungen zu speichern! "
 
 #: .\templates\frontend\tutorial\history.html:14
 msgid ""
 "If you select “VIEW HISTORY” in the “ACTIONS” menu of the course, you will "
 "be redirected to a “History” page like this."
 msgstr ""
-"Wenn du im Aktionsmenü des Kurses auf “VERSIONSGESCHICHTE” klickst, wirst du "
+"Wenn Sie im Aktionsmenü des Kurses auf “VERSIONSGESCHICHTE” klicken, werden Sie "
 "zu einer solchen “Versionsgeschichte” Seite weitergeleitet."
 
 #: .\templates\frontend\tutorial\history.html:21
@@ -967,7 +967,7 @@ msgid ""
 "containing the new changes added to the table"
 msgstr ""
 "In der dargestellten Tabelle werden alle Versionen des entsprechenden Kurses "
-"angezeigt. Jedes Mal, nachdem du den Kurs bearbeitet hast, wird eine Version "
+"angezeigt. Jedes Mal, nachdem Sie den Kurs bearbeitet haben, wird eine Version "
 "mit den neuen Änderungen zur Tabelle hinzugefügt. "
 
 #: .\templates\frontend\tutorial\history.html:27
@@ -976,7 +976,7 @@ msgid ""
 "“COMPARE” button (see ①) in order to view the differences between the two "
 "versions"
 msgstr ""
-"Du kannst in Teil ② zwei verschiedene Versionen auswählen und dann auf die "
+"Sie können in Teil ② zwei verschiedene Versionen auswählen und dann auf die "
 "Schaltfläche „VERGLEICHEN“ (siehe ①) klicken, um die Unterschiede zwischen "
 "den beiden Versionen anzusehen."
 
@@ -985,9 +985,9 @@ msgid ""
 "After you click “COMPARE”, regardless how you have selected the two "
 "versions, the left version (Version 1) will always be the older one"
 msgstr ""
-"Nachdem du auf „VERGLEICHEN“ geklickt hast, ist die linke Version (Version "
-"1) immer die ältere, unabhängig davon, in welcher Reihenfolge du die beiden "
-"Versionen ausgewählt hast. "
+"Nachdem Sie auf „VERGLEICHEN“ geklickt haben, ist die linke Version (Version "
+"1) immer die ältere, unabhängig davon, in welcher Reihenfolge Sie die beiden "
+"Versionen ausgewählt haben. "
 
 #: .\templates\frontend\tutorial\history_compare.html:8
 msgid "History Compare"
@@ -997,24 +997,24 @@ msgstr "Versionsgeschichte vergleichen"
 msgid ""
 "After you click on the “COMPARE” button, text will appear below the table:"
 msgstr ""
-"Nachdem du auf die Schaltfläche „VERGLEICHEN“ geklickt hast, wird Text "
+"Nachdem Sie auf die Schaltfläche „VERGLEICHEN“ geklickt haben, wird Text "
 "bezüglich des Vergleichs unter der Tabelle angezeigt: "
 
 #: .\templates\frontend\tutorial\history_compare.html:20
 msgid "in ① you can see the fields where changes were made."
-msgstr "In ① siehst du die Felder, an denen Änderungen vorgenommen wurden."
+msgstr "In ① sehen Sie die Felder, an denen Änderungen vorgenommen wurden."
 
 #: .\templates\frontend\tutorial\history_compare.html:25
 msgid ""
 "in ② you can see the details of the changes. The newly added texts are "
 "marked with green, the deleted texts are marked with red."
 msgstr ""
-"In ② siehst du die Details der Änderungen. Die neu hinzugefügten Texte sind "
+"In ② sehen Sie die Details der Änderungen. Die neu hinzugefügten Texte sind "
 "grün markiert, die gelöschten Texte sind rot markiert. "
 
 #: .\templates\frontend\tutorial\history_compare.html:31
 msgid "in ③ you can see which two versions are being compared."
-msgstr "In ③ siehst du, welche zwei Versionen verglichen werden."
+msgstr "In ③ sehen Sie, welche zwei Versionen verglichen werden."
 
 #: .\templates\frontend\tutorial\history_compare.html:36
 msgid ""
@@ -1022,7 +1022,7 @@ msgid ""
 "between the previous two versions, or select “COMPARE NEXT TWO VERSIONS” to "
 "see the comparison between the next two versions."
 msgstr ""
-"in ④ kannst du „DIE VORHERIGEN BEIDEN VERSIONEN VERGLEICHEN“ auswählen, um den Vergleich zwischen "
+"in ④ können Sie „DIE VORHERIGEN BEIDEN VERSIONEN VERGLEICHEN“ auswählen, um den Vergleich zwischen "
 "den beiden vorherigen Versionen anzusehen, oder „DIE NÄCHSTEN BEIDEN VERSIONEN VERGLEICHEN“ "
 "auswählen, um den Vergleich zwischen den nächsten beiden Versionen "
 "anzusehen. "
@@ -1033,14 +1033,14 @@ msgid ""
 "1. After the revert has been completed, the status of the course will be "
 "reset to Version 1."
 msgstr ""
-"Selektiere „FELDER ÜBERSCHREIBEN MIT DIESEN ÄNDERUNGEN?“, um zu Version 1 "
-"zurückzukehren. Du solltest daraufhin auf die Kursseite weitergeleitet "
-"werden,  wobei der Kurs auf Version 1 zurückgesetzt sein sollte. "
+"Selektieren Sie „FELDER ÜBERSCHREIBEN MIT DIESEN ÄNDERUNGEN?“, um zu Version 1 "
+"zurückzukehren. Sie sollten daraufhin auf die Kursseite weitergeleitet "
+"werden, wobei der Kurs auf Version 1 zurückgesetzt sein sollte. "
 
 #: .\templates\frontend\tutorial\history_compare.html:48
 msgid "select “GO BACK TO HISTORY LIST” to close the compare view"
 msgstr ""
-"Selektiere „ZURÜCK ZUR VERSIONSGESCHICHTE“, um die Vergleichsansicht zu "
+"Selektieren Sie „ZURÜCK ZUR VERSIONSGESCHICHTE“, um die Vergleichsansicht zu "
 "schließen"
 
 #: .\templates\frontend\tutorial\navbar.html:8
@@ -1052,46 +1052,46 @@ msgid ""
 "Once you have logged in, we have prepared several functions on the "
 "navigation bar which you can access anytime during browsing."
 msgstr ""
-"Sobald du dich eingeloggt hast, sind mehrere Funktionen auf der "
-"Navigationsbar verfügbar, welche du jederzeit abrufen kannst:"
+"Sobald Sie sich eingeloggt haben, sind mehrere Funktionen auf der "
+"Navigationsbar verfügbar, welche Sie jederzeit abrufen können:"
 
 #: .\templates\frontend\tutorial\navbar.html:21
 msgid "Click on “Collab Coursebook” (see ①) to open the Dashboard."
-msgstr "Klicke auf  “Collab Coursebook” (siehe ①), um das Dashboard zu öffnen."
+msgstr "Klicken Sie auf  “Collab Coursebook” (siehe ①), um das Dashboard zu öffnen."
 
 #: .\templates\frontend\tutorial\navbar.html:26
 msgid ""
 "Type any key words and click on the green button (see ②) to search for "
 "specific content."
 msgstr ""
-"Gebe ein Schlüsselwort ein und klicke auf den grünen Knopf (siehe ②), um "
+"Geben Sie ein Schlüsselwort ein und klicken Sie auf den grünen Knopf (siehe ②), um "
 "nach spezifischen Inhalten zu suchen."
 
 #: .\templates\frontend\tutorial\navbar.html:31
 msgid "Select “ALL COURSES” (see ③) to view all available courses."
 msgstr ""
-"Selektiere “ALLE KURSE” (siehe ③), um alle verfügbaren Kurse angezeigt zu "
+"Selektieren Sie “ALLE KURSE” (siehe ③), um alle verfügbaren Kurse angezeigt zu "
 "bekommen."
 
 #: .\templates\frontend\tutorial\navbar.html:36
 msgid ""
-"There will be an \"ADMIN MENU\" button in ④ only if you are the superviser "
+"There will be an \"ADMIN MENU\" button in ④ only if you are the supervisor "
 "of the website, click to access the admin site."
 msgstr ""
-"Nur wenn du Supervisor der Webseite bist, wird hier der “ADMIN MENÜ” Button "
-"(siehe ④) angezeigt. Selektiere diesen, um die Admin-Seite aufzurufen."
+"Nur wenn Sie Supervisor der Webseite sind, wird hier der “ADMIN MENÜ” Button "
+"(siehe ④) angezeigt. Selektieren Sie diesen, um die Admin-Seite aufzurufen."
 
 #: .\templates\frontend\tutorial\navbar.html:42
 msgid "Select your user name (see ⑤) in order to check your profile."
-msgstr "Selektiere deinen Nutzernamen (siehe ⑤), um dein Profil aufzurufen."
+msgstr "Selektieren Sie Ihren Nutzernamen (siehe ⑤), um Ihr Profil aufzurufen."
 
 #: .\templates\frontend\tutorial\navbar.html:47
 msgid ""
 "Select the dropdown-toggle button (see ⑥) in order to change the language, "
 "access the tutorial or log out."
 msgstr ""
-"Selektiere den Dropdown-toggle Knopf (siehe ⑥), um die Sprache zu wechseln, "
-"auf das Tutorial zuzugreifen oder dich auszuloggen."
+"Selektieren Sie den Dropdown-toggle Knopf (siehe ⑥), um die Sprache zu wechseln, "
+"auf das Tutorial zuzugreifen oder sich auszuloggen."
 
 #: .\views\comment.py:52 .\views\comment.py:164
 msgid "You do not have permission to do this."
