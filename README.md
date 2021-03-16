@@ -34,16 +34,16 @@ Collab Coursebook has two types of requirements: System requirements are depende
 Python requirements are listed in ``requirements.txt``. They can be installed with pip using ``-r requirements.txt``.
 
 
+#### Distributable Setup
+
+* In order to use Nestable2 correctly the dist folder is needed. This folder can be found here: https://github.com/RamonSmit/Nestable2
+    * The folder must be placed in `frontend/static/vendor/Nestable2`.
 ### Development Setup
 
 * Create a new directory that should contain the files in the future, e.g. ``mkdir collab-coursebook``
 * Change into that directory ``cd collab-coursebook``
 * Clone this repository ``git clone URL .``
 
-**Distributable Setup**
-
-* In order to use Nestable2 correctly the dist folder is needed. This folder can be found here: https://github.com/RamonSmit/Nestable2
-    * The folder must be placed in `frontend/static/vendor/Nestable2`.
 
 #### Linux
 
