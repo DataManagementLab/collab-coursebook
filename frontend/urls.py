@@ -4,6 +4,7 @@ from export.views import generate_coursebook_response
 from content.models import CONTENT_TYPES
 from frontend import views
 from frontend.views.search import SearchView
+from frontend.views.page import PrivacyPolicyView
 from frontend.views.coursebook import add_to_coursebook, remove_from_coursebook
 
 app_name = "frontend"
@@ -11,6 +12,7 @@ app_name = "frontend"
 urlpatterns = [
     path('', views.StartView.as_view(), name="index"),
     path('dashboard/', views.DashboardView.as_view(), name="dashboard"),
+    path('privacy-policy/', PrivacyPolicyView.as_view(), name="privacy-policy"),
     path('search/', views.search.SearchView.as_view(), name='search'),
     path('profile/<int:pk>/', views.ProfileView.as_view(), name="profile"),
     path('profile/edit/', views.ProfileEditView.as_view(), name="profile-edit"),
