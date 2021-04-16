@@ -6,4 +6,4 @@ django-timezone-field==4.0
 django-cas-ng==4.1.1
 django-imagekit==4.0.2
 pillow==8.1.1
-django-debug-toolbar==3.2
+django-debug-toolbar==3.2.1
