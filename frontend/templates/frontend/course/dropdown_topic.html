@@ -1,19 +1,22 @@
-{% load i18n %}
 {# Load the tag library #}
+{% load i18n %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
 {% load cc_frontend_tags %}
 
 <div class="float-right text-right">
     <div class="dropdown show">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {% trans "Add Content" %}
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            {% trans 'Add Content' %}
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
             {% if user.is_authenticated %}
                 {% for content in content_data %}
                     <a class="dropdown-item"
-                       href="{% url 'frontend:content-add' course_id=course_id topic_id=topic_id type=content.0 %}">{% trans content.1 %}</a>
+                       href="{% url 'frontend:content-add' course_id=course_id topic_id=topic_id type=content.0 %}">
+                        {% trans content.1 %}
+                    </a>
                 {% endfor %}
             {% endif %}
         </div>

@@ -7,87 +7,157 @@
 {% load static %}
 {% load i18n %}
 
+{% block title %}
+    {{ content.topic }} - Collab Coursebook
+{% endblock %}
+
 {% block imports %}
     <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
+    <link href="{% static 'css/gallery_detail.css' %}" type="text/css" rel="stylesheet"/>
 {% endblock %}
 
 {% block content %}
+    {# Drop down actions #}
     <div class="float-right text-right">
         <div class="dropdown show">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {% trans "Actions" %}
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                {% trans 'Actions' %}
             </button>
 
+            {# Drop down menu #}
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-
-                <a class="dropdown-item" href="
-                        {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">{% fa5_icon 'eye' 'far' %}
-                    Reading Mode</a>
+                <a class="dropdown-item"
+                   href="
+                           {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">
+                    {% fa5_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
+                </a>
+                {# Remove and add to course book option #}
                 {% if user.is_authenticated %}
-                    {% if content.type|is_content_editable %}
-                        <a class="dropdown-item"
-                           href="{#{% url 'edit_md_file' course.id topic.id content.id %}#}">{% fa5_icon 'pencil-alt' 'fas' %}
-                            Edit</a>
-                    {% endif %}
-
                     {% if favorite %}
-                        <a class="dropdown-item" href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">{% fa5_icon 'minus' 'far' %} {% trans 'Coursebook' %}</a>
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">
+                            {% fa5_icon 'minus' 'fas' %} {% trans 'Coursebook' %}
+                        </a>
                     {% else %}
-                        <a class="dropdown-item" href="{% url 'frontend:coursebook-add' course.id topic.id content.id  %}">{% fa5_icon 'plus' 'far' %} {% trans 'Coursebook' %}</a>
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">
+                            {% fa5_icon 'plus' 'fas' %} {% trans 'Coursebook' %}
+                        </a>
                     {% endif %}
 
-                    {% if isCurrentUserOwner or user.is_superuser or content.author == user %}
+                    <div class="dropdown-divider"></div>
+
+                    {# Edit option #}
+                    {% if user|check_edit_content_permission:content %}
+                        <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
+                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit' %}
+                        </a>
+                    {% endif %}
+
+                    {# History view #}
+                    {% if content.type == 'Textfield' %}
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'YouTubeVideo' %}
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:ytvideo-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'Image' %}
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:image-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'PDF' %}
+                        <a class="dropdown-item" href="{% url 'frontend:pdf-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {% if content.type == 'Latex' %}
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:latex-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
+                    {# Delete option #}
+                    {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
-                           data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} Delete</a>
+                           data-target="#deleteContentModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
                     {% endif %}
                 {% endif %}
-
             </div>
         </div>
     </div>
 
-    <a href="{% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}" class="">
+    {# Back to course option #}
+    <a href="
+            {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
+       class="">
         {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
     </a>
 
-    <h1 style="word-wrap: break-word;margin-top: 20px;margin-bottom: 20px;">{{ content.topic }}</h1>
+    <h1 style="word-wrap: break-word;margin-top: 20px;margin-bottom: 20px;">
+        {{ content.topic }}
+    </h1>
 
+    {# Content information #}
     <h5>
         {% trans "By" %} <i>{{ content.author }}</i>
         &nbsp;&middot;&nbsp;
-        <span class="badge badge-primary">{{ content.language }}</span>
+        <span class="badge badge-primary">
+            {{ content.language }}
+        </span>
         {% if content.tags.count > 0 %}
             &nbsp;&middot;&nbsp;
             {% for tag in content.tags.all %}
-                <span class="badge badge-info">{{ tag }}</span>
+                <span class="badge badge-info">
+                    {{ tag }}
+                </span>
             {% endfor %}
         {% endif %}
         &nbsp;&middot;&nbsp;
-        <span class="text-muted">{% trans "Created at" %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i></span>
+        <span class="text-muted">
+            {% trans 'Created at' %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
+        </span>
     </h5>
 
-    <!-- Delete inline -->
-    <div class="modal fade" id="deleteContentModal" tabindex="1" role="dialog" aria-labelledby="deleteContentModalLabel" aria-hidden="true">
+    {# Delete inline, for 'Delete Confirmation' bootstrap modal #}
+    <div class="modal fade" id="deleteContentModal" tabindex="1" role="dialog" aria-labelledby="deleteContentModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteContentModalLabel">{% trans "Delete" %} <i>{{ content }}</i>?</h5>
+                    <h5 class="modal-title" id="deleteContentModalLabel">
+                        {% trans "Delete" %} <i>{{ content }}</i>?
+                    </h5>
                 </div>
                 <div class="modal-body">
                     <p>
-                        {% blocktrans with type=content.type %}
+                        {% blocktrans trimmed with type=content.type %}
                             Are you sure you want to delete this {{ type }}? This action cannot be undone.
                         {% endblocktrans %}
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <form action="{# url 'delete_content' course.id topic.id content.id #}" method="POST" class="mb-0">
+                    <form action="{% url 'frontend:content-delete' course.id topic.id content.id %}" method="post"
+                          class="mb-0">
                         {% csrf_token %}
                         <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans "Cancel" %}
+                            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
-                        <button class="btn btn-danger">
-                            {% fa5_icon 'trash' 'fas' %} {% trans "Confirm" %}
+                        <button
+                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans 'Confirm' %}
                         </button>
                     </form>
                 </div>
@@ -95,43 +165,68 @@
         </div>
     </div>
 
-    <div style="margin-top: 50px;margin-bottom: 50px;">
-        {% include content.type|content_view %}
 
-        <div class="mt-5">
-            {{ content.description|linebreaks }} <!-- resolves to s -->
-        </div>
+
+    <div style="margin-top: 50px;margin-bottom: 50px;overflow-wrap: break-word">
+        {% include content.type|content_view %}
+        {# Description of the content #}
+        {% if content.description %}
+            <div class="mt-5">
+                <h4>
+                    {% trans 'Description' %}
+                </h4>
+                {{ content.description|linebreaks }} <!-- resolves to s -->
+            </div>{% endif %}
     </div>
-    <h5><a name="rating">{% trans "Rating" %}</a>
+
+
+    {# Attachment gallery #}
+    {% include 'frontend/content/detail_attachment.html' %}
+
+    <br>
+
+    {# Rating #}
+    <h5>
+        <a name="rating">
+            {% trans 'Rating' %}
+        </a>
         {% if content.get_rate != -1 %}
-            <span class="badge float-right text-right">{{ content.get_rate }}/5</span>
+            <span class="badge float-right text-right">
+                {{ content.get_rate }}/5
+            </span>
         {% else %}
-            <span class="badge float-right text-right">No rating yet</span>
+            <span class="badge float-right text-right">
+                {% trans 'No rating yet' %}
+            </span>
         {% endif %}
     </h5>
-        <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
-            {% for i in 5|rev_range %}
-                <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
-                       {% if i <= content.get_rate %}class="active" {% endif %}/>
-                <label for="star{{ i }}" onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
-            {% endfor %}
-        </div>
-    <h5 style="margin-top: 30px;"><a name="comments">{% trans "Comments" %}</a></h5>
+    <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
+        {% for i in 5|rev_range %}
+            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+                   {% if i <= content.get_rate %}class="active" {% endif %}/>
+            <label for="star{{ i }}"
+                   onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
+        {% endfor %}
+    </div>
+    <h5 style="margin-top: 30px;">
+        <a name="comments">
+            {% trans 'Comments' %}
+        </a>
+    </h5>
     {% if user.is_authenticated %}
         <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
-
             {% bootstrap_form comment_form %}
-            <button name="action" value="submit" class="btn btn-outline-primary">{% fa5_icon 'comment-dots' 'far' %} {% trans "Add comment" %}
+            <button name="action" value="submit" class="btn btn-outline-primary">
+                {% fa5_icon 'comment-dots' 'far' %} {% trans 'Add comment' %}
             </button>
         </form>
     {% endif %}
 
     <div class="clearfix mb-4"></div>
 
+    {# Comment #}
     {% for comment in comments %}
-        {% include "frontend/comment/comment.html" with course_id=course.id content_id=content.id %}
+        {% include 'frontend/comment/comment.html' with course_id=course.id content_id=content.id %}
     {% endfor %}
-
-
 {% endblock %}

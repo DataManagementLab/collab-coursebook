@@ -1,3 +1,4 @@
-from django.shortcuts import render
+"""Purpose of this file
 
-# Create your views here.
+This file describes the frontend views.
+"""

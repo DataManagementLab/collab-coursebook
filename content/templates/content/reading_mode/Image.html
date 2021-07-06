@@ -1,0 +1,31 @@
+{% extends 'content/reading_mode/base.html' %}
+
+{# Load the tag library #}
+{% load i18n %}
+
+{% block reading_header %}
+    <img src="{{ content.imagecontent.image.url }}"
+         alt="{{ content.description }}"
+         style="max-width: 100%; display: block; margin: 16px auto;">
+{% endblock %}
+
+
+{% block reading_content %}
+    <b>
+        {% trans 'Source' %}:
+    </b>
+
+    <p>
+        {{ content.imagecontent.source }}
+    </p>
+
+    <p>
+        {% if content.imagecontent.license %}
+            <b>
+                {% trans 'License' %}:
+            </b>
+            {{ content.imagecontent.license }}
+
+        {% endif %}
+    </p>
+{% endblock %}

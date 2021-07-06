@@ -1,0 +1,99 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load cc_frontend_tags %}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Edit content' %} - Collab Coursebook
+{% endblock %}
+
+{% block imports %}
+    {# Load CSS #}
+    <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <form method="post" enctype=multipart/form-data>
+        {# Topic #}
+        <div class="form-group">
+            <label for="topic">
+                {% trans 'Topic' %}
+            </label>
+            <textfield
+                    disabled
+                    name="topic"
+                    class="form-control"
+                    style="height: 35px"
+                    id="topic">{{ topic }}
+            </textfield>
+        </div>
+        {% csrf_token %}
+        {% bootstrap_form content_type_form %}
+
+        <br>
+        {# Dynamic attachment for content types with attachments #}
+        {% if attachment_allowed %}
+            <div>
+                <h2>
+                    {% trans "Image Attachments" %}
+                </h2>
+                {{ item_forms.management_form }}
+                <div id="items-form-container">
+                    {% for item_form in item_forms %}
+                        <div id="item-{{ forloop.counter0 }}">
+                            <table class="table table-borderless">
+                                {{ item_form.id }}
+                                {% bootstrap_form item_form %}
+                                {% comment %}
+                                Existing attachment did not have a copy button from dynamic_attachment.html which is why we
+                                have to manually add it here.
+                                {% endcomment %}
+                                <button type="button" class="btn btn-info"
+                                        onclick="copyEmbeddedAttachment(this)">{% trans 'Copy Attachment-Embedding Code' %}
+                                </button>
+                            </table>
+                        </div>
+                    {% endfor %}
+                </div>
+                {# Attachments option #}
+                <button id="add-item-button" class="btn btn-primary add-item">
+                    {% trans "Add attachment" %}
+                </button>
+                <button id="remove-item-button" class="btn btn-primary remove-item">
+                    {% trans "Remove attachment" %}
+                </button>
+            </div>
+            <br>
+        {% endif %}
+
+        {% bootstrap_form form %}
+
+        <br>
+
+        {{ form.media }}
+
+        {# Form option #}
+        <div>
+            <button type="submit" class="btn btn-primary float-right">
+                {% fa5_icon 'plus-circle' 'fas' %} {% trans 'Save' %}
+            </button>
+            <a href="{% url 'frontend:content' course_id topic_id content.id %}" class="btn btn-danger">
+                {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
+            </a>
+        </div>
+    </form>
+
+    {# Dynamic attachment template #}
+    {% if attachment_allowed %}
+        {% include 'frontend/content/dynamic_attachment.html' %}
+    {% endif %}
+
+    {# LaTeX embedded help for attachment #}
+    {% if is_latex_content %}
+        {% include 'frontend/content/attachment_embedding_help.html' %}
+    {% endif %}
+{% endblock %}

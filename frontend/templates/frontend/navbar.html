@@ -1,49 +1,85 @@
+{# Load the tag library #}
 {% load i18n %}
 {% load fontawesome_5 %}
 
 {% if user.is_authenticated %}
     <div class="float-right" style="color: #ffffff;font-weight: bold;">
-
         <form class="form-inline float-left" action="{% url 'frontend:search' %}">
-            <input class="form-control" type="search" name="q" placeholder="{% trans 'Search' %}" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">{% fa5_icon "search" "far" %}</button>
+            <input class="form-control navbar-inline-list" type="search" name="q" placeholder="{% trans 'Search' %}"
+                   aria-label="Search">
+            <button class="btn btn-outline-success navbar-inline-list" type="submit">
+                {% fa5_icon 'search' 'fas' %}
+            </button>
         </form>
 
-        <a href="{% url "frontend:courses" %}" class="btn btn-primary" style="">{% trans "All Courses" %}</a>
+        <a href="{% url 'frontend:courses' %}" class="btn btn-primary navbar-inline-list">
+            {% trans "All Courses" %}
+        </a>
         {% if user.is_superuser %}
-            <a href="{% url "admin:index" %}" class="btn btn-danger" style="">{% trans "Admin Menu" %}</a>
+            <a href="{% url 'admin:index' %}" class="btn btn-danger navbar-inline-list">
+                {% trans "Admin Menu" %}
+            </a>
             &nbsp;
         {% endif %}
-        <a href="{% url 'frontend:profile' pk=user.profile.pk %}" class="text-decoration-none text-white">{{ user.get_username }}</a>
+        <a href="{% url 'frontend:profile' pk=user.profile.pk %}"
+           class="text-decoration-none text-white navbar-inline-list">
+            {% if user.profile.pic %}
+                <img src="{{ user.profile.pic.url }}" class="rounded-circle"
+                     style="width: 35px; height: 35px; object-fit: cover;"
+                     alt="{% trans 'User profile picture' %}">
+            {% else %}
+                {% fa5_icon 'user' 'far' %}
+            {% endif %}
+            {{ user.get_username }}
+        </a>
 
-        <div class="btn-group" role="group">
+        <div class="btn-group navbar-inline-list" role="group">
             <div class="btn-group" role="group">
-            <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-            <div class="dropdown-menu" aria-labelledby="btnGroupNavbar" style="">
-                <div class="dropdown-header">
-                    {% trans "Language" %}:
+                <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupNavbar" style="">
+                    <div class="dropdown-header">
+                        {% trans "Language" %}:
+                    </div>
+                    {# Language switcher #}
+                    <form action="{% url 'set_language' %}" method="post" class="form-inline" name="language-form"
+                          id="language-switcher" style="flex-direction: column;">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}"/>
+
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+
+                        {% for language in languages %}
+                            <button type="submit" class="dropdown-item" name="language" value="{{ language.code }}"
+                                    style="align-self: end;">
+                                {{ language.code | upper }}
+                            </button>
+                        {% endfor %}
+                    </form>
+                    <div class="dropdown-divider">
+
+                    </div>
+                    <a href="{% url 'frontend:tutorial' %}" class="dropdown-item" style="">
+                        Tutorial
+                    </a>
+                    <div class="dropdown-divider">
+
+                    </div>
+                    <a href="{% url 'cas_ng_logout' %}" class="dropdown-item" style="">
+                        {% trans 'Logout' %}
+                    </a>
                 </div>
-                <!-- language switcher -->
-                <form action="{% url 'set_language' %}" method="post" class="form-inline" name="language-form" id="language-switcher" style="flex-direction: column;">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}" />
-
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-
-                    {% for language in languages %}
-                        <button type="submit" class="dropdown-item" name="language" value="{{ language.code }}" style="align-self: end;">
-                            {{ language.code | upper }}
-                        </button>
-                    {% endfor %}
-                </form>
-                <div class="dropdown-divider"></div>
-                <a href="{% url "cas_ng_logout" %}" class="dropdown-item" style="">{% trans "Logout" %}</a>
-            </div>
             </div>
         </div>
     </div>
 {% endif %}
 
-<a href="{% url "frontend:dashboard" %}" style="color: #ffffff;text-decoration: none;"><h4 style="font-weight: bold;display: inline;">Collab Coursebook</h4></a>
+<a href="{% url 'frontend:dashboard' %}" style="color: #ffffff;text-decoration: none;">
+    <h4 style="font-weight: bold;display: inline;">
+        Collab Coursebook
+    </h4>
+</a>

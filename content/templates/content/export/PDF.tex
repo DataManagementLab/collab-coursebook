@@ -1,0 +1,25 @@
+{% load cc_export_tags %}
+{% load i18n %}
+{% autoescape off %}
+
+% show topic title when exporting
+{% if export_pdf %}
+{\Large \textbf{ {{content.topic.title}}   }}
+{% endif %}
+
+\vskip 1em
+
+% show description when exporting
+{% if export_pdf %}
+\textit{~~{% trans "Description" %}:} {{content.description|tex_escape}}
+{% endif %}
+
+\vskip 1em
+
+% show pdf content
+\includepdf[pages=-]{~~{{content.pdfcontent.pdf.url|ret_path}}} % ~~ is escape char
+
+
+\vskip 3em
+
+{% endautoescape %}

@@ -11,8 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from django.utils.translation import gettext_lazy as _
 
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,7 +31,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,8 +46,11 @@ INSTALLED_APPS = [
     'base',
     'frontend',
     'content',
+    'content.attachment',
     'export',
     'debug_toolbar',
+    'reversion',  # https://github.com/etianen/django-reversion
+    'reversion_compare',  # https://github.com/jedie/django-reversion-compare
 ]
 
 MIDDLEWARE = [
@@ -61,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'reversion.middleware.RevisionMiddleware',
 ]
 
 ROOT_URLCONF = 'collab_coursebook.urls'
@@ -83,7 +86,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'collab_coursebook.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -93,7 +95,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -136,6 +137,16 @@ LANGUAGES = [
     ('en', _('English')),
 ]
 
+# For Django to find the translation file
+# https://docs.djangoproject.com/zh-hans/3.0/topics/i18n/translation/
+
+LOCALE_PATHS = [
+    '/base/locale',
+    '/collab_coursebook/locale',
+    '/content/locale',
+    '/frontend/locale'
+]
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -143,7 +154,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -178,3 +188,9 @@ FOOTER_INFO = {
 }
 
 ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE = True
+
+# Add reversion models to admin interface:
+ADD_REVERSION_ADMIN = True
+# optional settings:
+REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID = False
+REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
