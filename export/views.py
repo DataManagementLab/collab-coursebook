@@ -17,9 +17,7 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
                         context=None):
     """Generate course book
 
-    Generates a PDF file with name tags for students in the queryset. There is also
-    a flag which indicates if the whole core or only the coursebook should be
-    exported.
+    There is also a flag which indicates if the whole course or only the coursebook should be exported.
 
     :param request: The given request
     :type request: WSGIRequest
@@ -68,8 +66,7 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
 def generate_coursebook_response(request, pk, exp_all, file_name = None):  # pylint: disable=invalid-name
     """Generate coursebook response
 
-    Generates a PDF file with name tags for students in the queryset and sends it to the browser.
-    This method generates a pdf file for the course content
+    There is also a flag which indicates if the whole course or only the coursebook should be exported.
 
     :param request: The given request
     :type request: WSGIRequest
@@ -130,7 +127,6 @@ def write_response(request, pdf, pdflatex_output, tex_template, filename,
 def generate_pdf_from_latex(user, content, template="content/export/base.tex", context=None):
     """Generate PDF
 
-    Generates a PDF file with name tags for students in the queryset.
     This method is used to compile a specific latex content into a PDF.
 
     :param user: The user of the content
