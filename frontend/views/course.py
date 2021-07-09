@@ -473,7 +473,7 @@ class CourseView(DetailView, FormMixin):
 class CourseDeleteView(LoginRequiredMixin, DeleteView):
     """Course delete view
 
-    Deletes the user and redirects to course list.
+    Deletes the course and redirects to course list.
 
     :attr CourseDeleteView.model: The model of the view
     :type CourseDeleteView.model: Model
