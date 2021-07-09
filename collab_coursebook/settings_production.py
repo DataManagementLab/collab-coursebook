@@ -7,7 +7,7 @@ Secrets are stored in and imported from an additional file, not set under versio
 import collab_coursebook.settings_secrets as secrets
 
 # noinspection PyUnresolvedReferences
-# from collab_coursebook.settings import *
+from collab_coursebook.settings import *
 
 ### SECURITY ###
 
