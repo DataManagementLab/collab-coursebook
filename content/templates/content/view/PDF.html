@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<div class="row">
+    <div class="col">
+        <embed src="{{ content.pdfcontent.pdf.url }}" type="application/pdf" height="700px" width="100%">
+    </div>
+</div>
+
+<b>
+    {% trans 'Source' %}:
+</b>
+<p>
+    {{ content.pdfcontent.source }}
+</p>
+
+{% if content.pdfcontent.license %}
+    <b>
+        {% trans 'License' %}:
+    </b>
+    <p>
+        {{ content.pdfcontent.license }}
+    </p>
+{% endif %}

@@ -1,0 +1,16 @@
+.form-required > label:after {
+    content: '*';
+    color: var(--red);
+}
+
+.navbar-inline-list {
+    margin: 5px;
+}
+
+.form-group textarea::placeholder {
+    opacity: 0.7;
+}
+
+.badge {
+    display: inline-flex;
+}

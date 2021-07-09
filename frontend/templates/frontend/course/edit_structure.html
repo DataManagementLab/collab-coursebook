@@ -1,0 +1,260 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load bootstrap4 %}
+{% load cc_frontend_tags %}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+
+{% block imports %}
+    {# Load JavaScript #}
+    <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
+    <script type="text/javascript" src="{% static 'js/request.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    {% trans 'Edit Course Structure' %} - Collab Coursebook
+{% endblock %}
+
+{% block content %}
+    <div id="title" style="text-align: center">
+        <h2 style="font-weight: bold">
+            {% trans 'Edit Course Structure' %} - {{ course.title }}
+        </h2>
+    </div>
+
+    {# Minipage #}
+    <div style="display: flex;justify-content: center;">
+        {# Add existing topic #}
+        <div style="display: inline-block;width:49.5%; padding-right: 25px;">
+            <h4 style="font-weight: bold; text-align: center">
+                {% trans 'Add Topic to Structure' %}
+            </h4>
+            {# Topic combobox #}
+            {% bootstrap_form topics %}
+            <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary" style="margin: 5px">
+                {% fa5_icon 'expand' %} {% trans 'Expand Structure' %}
+            </button>
+            <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary" style="margin: 5px">
+                {% fa5_icon 'compress' %} {% trans 'Collapse Structure' %}
+            </button>
+            <button onclick="addTopic()" class="btn btn-primary" style="margin: 5px">
+                {% fa5_icon 'plus' 'fas' %} {% trans 'Add Topic' %}
+            </button>
+        </div>
+
+        {# Add new topic #}
+        <div style="display: inline-block;width:49.5%;padding-left: 25px">
+            <h4 style="font-weight: bold; text-align: center">
+                {% trans 'Add a new Topic' %}
+            </h4>
+            <form method="post" id="post-form-edit-structure-create-topic" class="post-form"
+                  enctype=multipart/form-data>
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <button type="submit" class="btn btn-primary">
+                    {% fa5_icon 'plus' 'fas' %} {% trans 'Create Topic' %}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <br>
+    <br>
+
+    {# Structure Editor #}
+    <div class="container-fluid">
+        <div style="text-align: center">
+            <h3 style="font-weight: bold">
+                {% trans 'Course Structure' %}
+            </h3>
+        </div>
+        <div class="row">
+            {% include 'frontend/utils/nestable_list.html' %}
+        </div>
+    </div>
+
+    <br>
+
+    {# Option #}
+    <button onclick="cancel()" class=" btn btn-danger">
+        {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
+    </button>
+    <button onclick="save()" type="submit" class="btn btn-primary">
+        {% fa5_icon 'save' %} {% trans 'Save' %}
+    </button>
+{% endblock %}
+
+{% block bottom_script %}
+    <script type='text/javascript'>
+        // Convert JSON containing topics to String
+        const JSON_OBJ = JSON.stringify({{ structure|safe }});
+
+        // Max list depth
+        const DEPTH = 2;
+
+        // Track newly created topics
+        const NEW_ELEMENTS = [];
+
+        /**
+         * Adds the selected topic to the nestable list.
+         */
+        function addTopic() {
+            // Gets the selected topic
+            const element = document.querySelector("#id_topic_name");
+            const selected = element.options[element.selectedIndex];
+            const id = selected.value;
+            const topic = element.options[element.selectedIndex].textContent;
+            const data = $("#nestable3").nestable("serialize");
+
+            // Checks if topic is valid to be added
+            if (!isTopicValid(id, topic, data)) {
+                return;
+            }
+            addItem(topic, id);
+            const message = gettext("The topic %s was successfully added to the course structure.");
+            showNotification(interpolate(message, [topic]), "alert-info");
+        }
+
+        /**
+         * Checks if the topic could be added in the given data, that means there exists no topic with the same id or title.
+         *
+         * @param id id of the topic
+         * @param topic the given topic title
+         * @param data the data to be checked
+         *
+         * @return true if the topic could be added
+         */
+        function isTopicValid(id, topic, data) {
+            // Skip if no selection is present
+            if (id === '') {
+                return false;
+            }
+            // id must be an integer to be compared
+            id = parseInt(id);
+
+            // Checks all nodes
+            for (let i = 0; i < data.length; i++) {
+                const entry = data[i];
+                // Duplicates id
+                if (entry["id"] === id) {
+                    return false;
+                }
+                // Sub topics
+                else if (entry["children"] !== undefined) {
+                    if (!isTopicValid(id, topic, entry["children"])) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /**
+         * Configures the post information with the newly created topic. The topic will be stored in backend
+         * if possible and if it is successfully stored in the backend add it to the select field.
+         * @return {boolean} false if the form is not valid
+         */
+        function create(event) {
+            event.preventDefault();
+            const topic = document.getElementById("id_title");
+            const category = document.getElementById("id_category");
+            sendRequest({
+                url: "{% url 'frontend:course-edit-structure' course.id %}",
+                type: "POST",
+                data: {"title": topic.value, "category": category.value},
+
+                success: function (data) {
+                    const json = JSON.parse(JSON.stringify(data));
+                    const topic_id = json.topic_id;
+                    const topics = json.topics;
+
+                    // Tracking newly created topics
+                    NEW_ELEMENTS.push(topic_id);
+
+                    // Ordered entries
+                    const select = document.getElementById("id_topic_name");
+
+                    for (let i = 0; i < topics.length; i++) {
+                        const entry = topics[i];
+                        const id = entry.id;
+                        const topic = entry.title;
+                        select.options[i + 1] = new Option(topic, id);
+                        if (topic_id === id) {
+                            select.selectedIndex = i + 1;
+                        }
+                    }
+                    addTopic()
+                },
+                error: function (data) {
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
+                }
+            });
+        }
+
+        /**
+         * Configures the post information canceling all created topics.
+         */
+        function cancel() {
+            sendRequest({
+                url: "{% url 'frontend:course' course.id %}",
+                type: "POST",
+                data: {"ids": NEW_ELEMENTS},
+
+                success: function () {
+                    window.location.href = "{% url 'frontend:course' course.id %}"
+                },
+                error: function (data) {
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
+                }
+            });
+        }
+
+        /**
+         * Configures the post information with the serialized nestable data.
+         */
+        function save() {
+            const nestable = $('#nestable3').nestable("serialize");
+            const json_obj = window.JSON.stringify(nestable);
+            sendRequest({
+                url: "{% url 'frontend:course' course.id %}",
+                type: "POST",
+                data: {"topic_list": json_obj, "ids": NEW_ELEMENTS},
+                ContentType: "application/json",
+
+                success: function (data) {
+                    window.location.href = "{% url 'frontend:course' course.id %}";
+                },
+                error: function (data) {
+                    const message = gettext("Error during data transfer to the server - status: %s");
+                    showNotification(interpolate(message, [data.status]), "alert-danger");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+
+            /* Parsing */
+
+            parseItems(JSON_OBJ);
+
+            // Activate nestable
+            $("#nestable3").nestable({maxDepth: DEPTH});
+
+            /* Register actions */
+            $("#dd-empty-placeholder").on("click", ".close", removeItem);
+            $("#post-form-edit-structure-create-topic").on("submit", create);
+
+            // Clean nestable
+            cleanNestable();
+        });
+    </script>
+{% endblock %}

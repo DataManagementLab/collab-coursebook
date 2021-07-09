@@ -1,36 +1,45 @@
 {% extends 'frontend/base_logged_in.html' %}
 
+{# Load the tag library #}
 {% load i18n %}
 {% load bootstrap4 %}
 {% load static %}
 {% load fontawesome_5 %}
-
 {% load cc_frontend_tags %}
 
 
-{# title block #}
-{% block title %}{% trans "Courses for" %} {{ period.title }} - Collab Coursebook{% endblock %}
+{% block title %}
+    {% trans 'Courses for' %} {{ period.title }} - Collab Coursebook
+{% endblock %}
 
-{# content block #}
 {% block content %}
     <div class="row mt-3">
         <div class="col-md">
-            <h1>{% trans "All Courses" %}{% if sort %} ({{ sort }}){% endif %} {% trans "for" %} {{ period.title }}</h1>
+            <h1>
+                {% trans 'All Courses' %}{% if sort %} ({{ sort }}){% endif %} {% trans 'for' %} {{ period.title }}
+            </h1>
         </div>
         <div class="col-md-auto my-auto">
-                <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Sort by: {{ sort }}
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='date-new' pk=period.pk %}">Date (newest)</a>
-                    <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='date-old' pk=period.pk %}">Date (oldest)</a>
-                    <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='title-a' pk=period.pk %}">Title (A-Z)</a>
-                    <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='title-z' pk=period.pk %}">Title (Z-A)</a>
-                </div>
+            <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {% trans 'Sort by:' %} {{ sort }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='date-new' pk=period.pk %}">
+                    {% trans 'Date (newest)' %}
+                </a>
+                <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='date-old' pk=period.pk %}">
+                    {% trans 'Date (oldest)' %}
+                </a>
+                <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='title-a' pk=period.pk %}">
+                    {% trans 'Title (A-Z)' %}
+                </a>
+                <a class="dropdown-item" href="{% url 'frontend:period-courses-sort' sort='title-z' pk=period.pk %}">
+                    {% trans 'Title (Z-A)' %}
+                </a>
+            </div>
         </div>
     </div>
 
-
-    {% include "frontend/course_lists/course_cards_paginated.html" %}
+    {% include 'frontend/course_lists/course_cards_paginated.html' %}
 {% endblock %}

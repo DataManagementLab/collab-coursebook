@@ -1,0 +1,68 @@
+% Warning triangle
+\usetikzlibrary{shapes.geometric}
+
+The compilation process from \LaTeX{} to PDF has been unexpectedly interrupted.
+\vskip .5em
+{{content}} errors were found during compilation.
+\vskip .5em
+
+% Supported packages
+\begin{table}[h]
+	\centering
+	\begin{tabular}{cp{17.5em}p{20em}}
+		\textbf{Package} & \textbf{Options}                                 & \textbf{Usage}
+		\\
+		\midrule
+		inputenc         & utf8                                             & Accept different input encodings
+		\\
+		fontenc          & T1                                               & Standard package for selecting font encodings
+		\\
+		babel            & english, main = ngerman                          & Multilingual support
+		\\
+		csquotes         & babel                                            & Context sensitive quotation facilities
+		\\
+		grffile          & -                                                & Extended file name support for graphics
+		\\
+		hyperref         & -                                                & Extensive support for hypertext
+		\\
+		geometry         & left = 1cm, right = 1cm, top = 2cm, bottom = 2cm & Flexible and complete interface to document dimensions
+		\\
+		adjustbox        & -                                                & Graphics package-alike macros for general boxes
+		\\
+		float            & -                                                & Improved interface for floating objects
+		\\
+		graphicx         & -                                                & Enhanced support for graphics
+		\\
+		tikz             & -                                                & Graphics
+		\\
+		listings         & -                                                & Typeset source code listings
+		\\
+		amsmath          & -                                                & AMS mathematical facilities
+		\\
+		amssymb          & -                                                & AMS mathematical facilities
+		\\
+		mathtools        & -                                                & Mathematical tools to use with amsmath
+		\\
+		xcolor           & -                                                & Driver-independent color extensions
+		\\
+		booktabs         & -                                                & Publication quality tables
+		\\
+		array            & -                                                & Extending the array and tabular environments
+	\end{tabular}
+	\caption{Currently supported packages}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[scale = 15 , transform shape]
+		\node[
+			shape = regular polygon,
+			regular polygon sides = 3,
+			rounded corners = 1.5em,
+			inner sep = 0pt,
+			thick,
+			fill = red!90!black,
+			text = white
+		] {\textbf{!}};
+	\end{tikzpicture}
+\end{figure}

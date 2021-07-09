@@ -1,5 +1,5 @@
-{% load i18n %}
 {# Load the tag library #}
+{% load i18n %}
 {% load bootstrap4 %}
 {% load fontawesome_5 %}
 {% load cc_frontend_tags %}
@@ -10,24 +10,36 @@
         <div class="row flex-nowrap">
             {% for content in topic_contents %}
                 <div class="card card_style" style="">
-                     <div class="card-img-top" style="position: relative; text-align: center; color: black">
-                        <a href="{% url "frontend:content" course.pk content.topic.pk content.pk %}">
+                    <div class="card-img-top" style="position: relative; text-align: center; color: black">
+                        <a href="{% url 'frontend:content' course.pk content.topic.pk content.pk %}">
                             {% include content.type|content_card %}
-                             <div class="card-body" style="">
-                                <p>{{ content.description|truncatechars:40 }}</p>
+                            <div class="card-body" style="">
+                                <p>
+                                    {{ content.description|truncatechars:40 }}
+                                </p>
                             </div>
                         </a>
                         <div class="card-footer">
-                            <span class="badge badge-primary">{{ content.language }}</span>
+                            <span class="badge badge-primary">
+                                {{ content.language }}
+                            </span>
                             {% if content.tags.count > 0 %}
-                            &nbsp;&middot;&nbsp;
+                                &nbsp;&middot;&nbsp;
                                 {% for tag in content.tags.all %}
-                                    <span class="badge badge-secondary">{{ tag }}</span>
+                                    <span class="badge badge-secondary">
+                                        {{ tag }}
+                                    </span>
                                 {% endfor %}
                             {% endif %}
                             {% if content.get_rate != -1 %}
-                            &nbsp;&middot;&nbsp;
-                                <span class="badge badge-info">{{ content.get_rate}}</span>
+                                &nbsp;&middot;&nbsp;
+                                <span class="badge badge-info">
+                                    {% fa5_icon 'star' 'fas' %} {{ content.get_rate }}
+                                </span>
+                                &nbsp;&middot;&nbsp;
+                                <span class="badge badge-info">
+                                    {% fa5_icon 'hashtag' 'fas' %} {{ content.get_rate_amount }}
+                                </span>
                             {% endif %}
                         </div>
                     </div>

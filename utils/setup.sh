@@ -20,10 +20,11 @@ sudo apt-get install poppler-utils
 
 # Setup database
 python manage.py migrate
+python manage.py createinitialrevisions
 
 # Prepare static files and translations
 python manage.py collectstatic --noinput
-python manage.py compilemessages
+python manage.py compilemessages --ignore=cache --ignore=venv
 
 # Create superuser
 # Credentials are entered interactively on CLI

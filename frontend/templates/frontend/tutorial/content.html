@@ -1,0 +1,42 @@
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+
+<section>
+    <h3> {% trans 'Content' %} </h3>
+    <div>
+        <p>
+            {% blocktrans trimmed %}
+                Click on any content on the course page in order to view details. Similar to the course page, you can
+                also click on an “ACTIONS” menu to access several main functions:
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
+                {% blocktrans trimmed %}
+                    reading mode
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    add or remove content from coursebook (the changes should be noticeable on the course page)
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    edit, similar to section “Add Content”
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    view history, similar to section “History”
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    delete
+                {% endblocktrans %}
+            </li>
+        </ul>
+    </div>
+</section>

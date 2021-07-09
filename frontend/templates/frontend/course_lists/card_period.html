@@ -1,14 +1,14 @@
+{# Load the tag library #}
 {% load i18n %}
 {% load bootstrap4 %}
 {% load static %}
 {% load fontawesome_5 %}
-
 {% load cc_frontend_tags %}
 
 <div class="card ml-3 mt-3" style="width: 20rem;">
     <div class="card-body">
         <h5 class="card-title">
-            <a href="{% url "frontend:period-courses" pk=period.pk %}">
+            <a href="{% url 'frontend:period-courses' pk=period.pk %}">
                 {{ period.title }}
             </a>
         </h5>
@@ -20,6 +20,6 @@
 
     <div class="card-footer bg-transparent text-primary"
          style="font-size: 14px;">
-            {% trans "Courses" %}: {{ period.courses.count }}
+        {% trans 'Courses' %}: {{ period.courses.count }}
     </div>
 </div>

@@ -1,0 +1,23 @@
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+
+{% if content.ImageAttachments.count > 0 %}
+    <br>
+    <h4>
+        {% trans 'Attachments' %}
+    </h4>
+    {# Gallery #}
+    <div class="gallery-grid">
+        {% for attachment in content.ImageAttachments.all %}
+            <figure class="gallery-frame">
+                <a target="_blank"
+                   href="{% url 'frontend:attachment' course.id topic.id content.id attachment.id %}">
+                    <img class="gallery-img" src="{{ attachment.image.url }}" alt="{{ content.description }}">
+                </a>
+            </figure>
+        {% endfor %}
+    </div>
+    <div class="clearfix"></div>
+    <div style="padding:20px;"></div>
+{% endif %}

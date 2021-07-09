@@ -1,12 +1,12 @@
+{# Load the tag library #}
 {% load i18n %}
 {% load bootstrap4 %}
 {% load static %}
 {% load fontawesome_5 %}
-
 {% load cc_frontend_tags %}
 
 <div class="card ml-3 mt-3" style="width: 20rem;">
-    <a href="{% url "frontend:course" pk=course.pk %}">
+    <a href="{% url 'frontend:course' pk=course.pk %}">
         <div class="card-img-top">
             {% if course.image %}
                 <img src="{{ course.image.url }}" class="card-img-top" alt="Course Title Image" width="286"
@@ -19,8 +19,8 @@
 
     <div class="card-body">
         <h5 class="card-title">
-            <a href="{% url "frontend:course" pk=course.pk %}">
-                {{ course.title|slice:":33" }}
+            <a href="{% url 'frontend:course' pk=course.pk %}">
+                {{ course.title|slice:':33' }}
                 {% if course.title|length >= 33 %}
                     ...
                 {% endif %}
@@ -37,19 +37,18 @@
         </h6>
 
         <p class="card-text" style="color: #444444">
-            {{ course.description|slice:":150" }}
+            {{ course.description|slice:':150' }}
             {% if course.description|length >= 146 %}
                 ...
             {% endif %}
         </p>
-
     </div>
 
     <div class="card-footer bg-transparent"
          style="font-size: 14px; color: #343a40 ">
         <div style="float: left">
             <!-- TODO Insert correct topic referencing -->
-            {% trans "Contents" %}: {{ course.topics.all|count_content }}
+            {% trans 'Contents' %}: {{ course.topics.all|count_content }}
         </div>
         <div style="float: right" title="Creation Date">
             {{ course.creation_date|date:'d.m.Y' }}

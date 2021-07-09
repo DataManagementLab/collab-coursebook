@@ -1,10 +1,13 @@
+{# Load the tag library #}
 {% load cc_frontend_tags %}
 
+{% include 'frontend/utils/notification.html' %}
+
+{# Message notification #}
 {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-dismissible {{ message.tags | message_bootstrap_class }}">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{ message }}
-    </div>
+        <script type='text/javascript'>
+            showNotification("{{ message }}", "{{ message.tags | message_bootstrap_class }}");
+        </script>
     {% endfor %}
 {% endif %}
