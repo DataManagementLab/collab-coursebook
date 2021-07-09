@@ -81,7 +81,7 @@ msgstr "Eingeschränkes Bearbeiten"
 #: .\models\content.py:63
 msgid "This course is restricted and can only be edited by the owners"
 msgstr ""
-"Dieser Kurs ist schreibgeschützt und kann nur von der Besitzer*in bearbeitet "
+"Dieser Kurs ist schreibgeschützt und kann nur von den Besitzer*innen bearbeitet "
 "werden"
 
 #: .\models\content.py:83 .\models\content.py:138 .\models\content.py:245
