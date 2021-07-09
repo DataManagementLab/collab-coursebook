@@ -20,7 +20,7 @@ class AddCourseForm(forms.ModelForm):
     This model represents the add form for adding a course.
     """
 
-    # Default value is -1: if this value gets overwritten the form
+    # Default value for pk is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
 
     class Meta:  # pylint: disable=too-few-public-methods
@@ -58,7 +58,7 @@ class EditCourseForm(HistoryForm):
     field_order = ['title', 'description', 'image',
                    'owners', 'restrict_changes', 'category', 'period', 'change_log']
 
-    # Default value is -1: if this value gets overwritten the form
+    # Default value for pk is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
 
     class Meta:
