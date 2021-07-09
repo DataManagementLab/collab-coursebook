@@ -7,6 +7,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from base.models import Course, Topic
+from content.models import CONTENT_TYPES
 
 from content.widgets import ModifiedClearableFileInput
 
@@ -101,9 +102,9 @@ class FilterAndSortForm(forms.Form):
     :type FilterAndSortForm.sort: CharField
     """
 
-    FILTER_CHOICE = [('None', '------'), ('Text', _("Text")), ('Image', _("Image")),
-                     ('Latex', _("LaTeX-Textfield")), ('YouTube-Video', _("YouTube-Video")),
-                     ('PDF', 'PDF')]  # + Content.STYLE
+    FILTER_CHOICE = [('None', '------')]
+    FILTER_CHOICE.extend((t, c.DESC) for t, c in CONTENT_TYPES.items())
+
     SORTING_CHOICE = [('None', '-----'), ('Date', _("Date")), ('Rating', _("Rating"))]
     filter = forms.CharField(label=_("Filter by"),
                              widget=forms.Select(choices=FILTER_CHOICE,

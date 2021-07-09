@@ -273,19 +273,11 @@ class Topic(models.Model):
         # filtered by is a String and represents the decision of the user
         # , how they want to filter the data,
         # e.g. 'Text' means they want to only see all text fields in the topic
-        if filtered_by != 'None' and filtered_by is not None:
-            if filtered_by == 'Text':
-                contents = contents.filter(textfield__isnull=False)
-            elif filtered_by == 'Latex':
-                contents = contents.filter(latex__isnull=False)
-            elif filtered_by == 'Image':
-                contents = contents.filter(imagecontent__isnull=False)
-            elif filtered_by == 'YouTube-Video':
-                contents = contents.filter(ytvideocontent__isnull=False)
-            elif filtered_by == 'PDF':
-                contents = contents.filter(pdfcontent__isnull=False)
-            else:
-                contents = contents.filter()
+        from content.models import CONTENT_TYPES
+
+        if filtered_by is not None and filtered_by != 'None' and filtered_by in CONTENT_TYPES:
+            contents = CONTENT_TYPES[filtered_by].filter_by_own_type(contents)
+
         # the topic can be sorted (even as an addition to filter)
         # the user decides, if they want to sort by rating or by date
         # and the String represent their decision

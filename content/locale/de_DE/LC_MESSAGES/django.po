@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-20 15:51+0100\n"
+"POT-Creation-Date: 2021-07-09 14:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,143 +17,157 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\models.py:52
-msgid "Content"
-msgstr "Inhalt"
-
-#: .\models.py:75 .\models.py:234
-msgid "PDF"
-msgstr "PDF"
-
-#: .\models.py:121 .\models.py:197 .\models.py:320
-#: .\templates\content\view\AttachedImage.html:7
-#: .\templates\content\view\Image.html:6 .\templates\content\view\Latex.html:9
-#: .\templates\content\view\PDF.html:9
-#: .\templates\content\view\Textfield.html:7
-msgid "Source"
-msgstr "Quelle"
-
-#: .\models.py:122 .\templates\content\view\AttachedImage.html:11
-#: .\templates\content\view\Image.html:10 .\templates\content\view\PDF.html:13
-msgid "License"
-msgstr "Lizenz"
-
-#: .\models.py:150
-msgid "Single Image"
-msgstr "Einzelnes Bild"
-
-#: .\models.py:182
-msgid "Please insert only valid LaTeX code. "
-"The packages and \\begin{document} and \\end{document} will be inserted automatically."
-msgstr "Bitte geben Sie nur gültigen LaTeX-Code ein. Die Packages und \\begin{document} "
-"und \\end{document} werden automatisch hinzugefügt."
-
-#: .\models.py:152 .\models.py:275
-msgid "Image"
-msgstr "Bild"
-
-#: .\models.py:165
-msgid "Image Content"
-msgstr "Bild-Inhalt"
-
-#: .\models.py:166
-msgid "Image Contents"
-msgstr "Bild-Inhalte"
-
-#: .\models.py:194
-#, fuzzy
-#| msgid "LaTeX Textfield"
-msgid "Latex Textfield"
-msgstr "LaTeX-Textfeld"
-
-#: .\models.py:196
-#, fuzzy
-#| msgid "LaTeX Code"
-msgid "Latex Code"
-msgstr "LaTeX-Code"
-
-#: .\models.py:209
-msgid "Latex Content"
-msgstr "Latex-Inhalt"
-
-#: .\models.py:210
-msgid "Latex Contents"
-msgstr "Latex-Inhalte"
-
-#: .\models.py:248
-msgid "PDF Content"
-msgstr "PDF-Inhalt"
-
-#: .\models.py:247
-msgid "PDF Contents"
-msgstr "PDF-Inhalte"
-
-#: .\models.py:273 .\models.py:288
-msgid "Single Image Attachment"
-msgstr "Einzelner Bildanhang"
-
-#: .\models.py:276
-msgid "Single Image Attachments"
-msgstr "Einzelne Bildanhänge"
-
-#: .\models.py:291
-msgid "Single Attachments"
-msgstr "Einzelne Anhänge"
-
-#: .\models.py:317
-msgid "Textfield"
-msgstr "Textfeld"
-
-#: .\models.py:319
-msgid "Text"
-msgstr "Text"
-
-#: .\models.py:332
-msgid "Textfield Content"
-msgstr "Textfeld-Inhalt"
-
-#: .\models.py:333
-msgid "Textfield Contents"
-msgstr "Textfeld-Inhalte"
-
-#: .\models.py:359
-msgid "YouTube Video"
-msgstr "YouTube-Video"
-
-#: .\models.py:361
-msgid "Video URL"
-msgstr "Video-URL"
-
-#: .\models.py:373
-msgid "YouTube Video Content"
-msgstr "YouTube-Video-Inhalt"
-
-#: .\models.py:374
-msgid "YouTube Video Contents"
-msgstr "YouTube-Video-Inhalte"
-
-#: .\models.py:414 .\models.py:431
+#: attachment/models.py:37 attachment/models.py:56
 msgid "Image Attachment"
 msgstr "Bildanhang"
 
-#: .\models.py:417
-msgid "Images"
-msgstr "Bilder"
+#: attachment/models.py:40 models.py:36
+msgid "Content"
+msgstr "Inhalt"
 
-#: .\models.py:432
+#: attachment/models.py:43 models.py:149 models.py:151
+msgid "Image"
+msgstr "Bild"
+
+#: attachment/models.py:57
 #, fuzzy
 #| msgid "Image Attachment"
 msgid "Image Attachments"
 msgstr "Bildanhänge"
 
-#: .\templates\content\view\YouTubeVideo.html:11
+#: models.py:72 models.py:244
+msgid "PDF"
+msgstr "PDF"
+
+#: models.py:120 models.py:203 models.py:292
+#: templates/content/reading_mode/Image.html:15
+#: templates/content/reading_mode/Latex.html:16
+#: templates/content/reading_mode/PDF.html:18
+#: templates/content/reading_mode/Textfield.html:14
+#: templates/content/view/AttachedImage.html:10
+#: templates/content/view/Image.html:7 templates/content/view/Latex.html:10
+#: templates/content/view/PDF.html:10 templates/content/view/Textfield.html:10
+msgid "Source"
+msgstr "Quelle"
+
+#: models.py:121 templates/content/reading_mode/Image.html:25
+#: templates/content/reading_mode/PDF.html:28
+#: templates/content/view/AttachedImage.html:18
+#: templates/content/view/Image.html:15 templates/content/view/PDF.html:18
+msgid "License"
+msgstr "Lizenz"
+
+#: models.py:164
+msgid "Image Content"
+msgstr "Bild-Inhalt"
+
+#: models.py:165
+msgid "Image Contents"
+msgstr "Bild-Inhalte"
+
+#: models.py:197
+msgid "Text (LaTeX)"
+msgstr "Text (LaTeX)"
+
+#: models.py:199
+#, fuzzy
+#| msgid "LaTeX Code"
+msgid "Latex Code"
+msgstr "LaTeX-Code"
+
+#: models.py:200
+#, python-brace-format
+msgid ""
+"Please insert only valid LaTeX code. The packages and \\begin{document} and "
+"\\end{document} will be inserted automatically."
+msgstr ""
+"Bitte geben Sie nur gültigen LaTeX-Code ein. Die Packages und "
+"\\begin{document} und \\end{document} werden automatisch hinzugefügt."
+
+#: models.py:215
+msgid "Latex Content"
+msgstr "Latex-Inhalt"
+
+#: models.py:216
+msgid "Latex Contents"
+msgstr "Latex-Inhalte"
+
+#: models.py:256
+msgid "PDF Content"
+msgstr "PDF-Inhalt"
+
+#: models.py:257
+msgid "PDF Contents"
+msgstr "PDF-Inhalte"
+
+#: models.py:289 models.py:291
+msgid "Text"
+msgstr "Text"
+
+#: models.py:304
+msgid "Textfield Content"
+msgstr "Textfeld-Inhalt"
+
+#: models.py:305
+msgid "Textfield Contents"
+msgstr "Textfeld-Inhalte"
+
+#: models.py:335
+msgid "YouTube Video"
+msgstr "YouTube-Video"
+
+#: models.py:337
+msgid "Video URL"
+msgstr "Video-URL"
+
+#: models.py:349
+msgid "YouTube Video Content"
+msgstr "YouTube-Video-Inhalt"
+
+#: models.py:350
+msgid "YouTube Video Contents"
+msgstr "YouTube-Video-Inhalte"
+
+#: templates/content/reading_mode/YouTubeVideo.html:17
+#: templates/content/view/YouTubeVideo.html:12
 msgid "View on YouTube"
 msgstr "Auf YouTube ansehen"
 
-#: .\templates\content\view\invalid.html:4
+#: templates/content/reading_mode/base.html:16
+msgid "Description"
+msgstr ""
+
+#: templates/content/view/invalid.html:5
 msgid "Invalid type"
 msgstr "Ungültiger Typ"
 
-#: .\templates\content\view\invalid.html:8
-msgid "The type of content you are trying to view is not supported and cannot be displayed"
-msgstr "Der Inhaltstyp, den Sie sich anschauen wollen, wird nicht unterstützt und kann nicht angezeigt werden"
+#: templates/content/view/invalid.html:8
+msgid ""
+"The type of content you are trying to view is not supported and cannot be "
+"displayed"
+msgstr ""
+"Der Inhaltstyp, den Sie sich anschauen wollen, wird nicht unterstützt und "
+"kann nicht angezeigt werden"
+
+#~ msgid "Single Image"
+#~ msgstr "Einzelnes Bild"
+
+#, fuzzy
+#~| msgid "LaTeX Textfield"
+#~ msgid "Latex Textfield"
+#~ msgstr "LaTeX-Textfeld"
+
+#~ msgid "Single Image Attachment"
+#~ msgstr "Einzelner Bildanhang"
+
+#~ msgid "Single Image Attachments"
+#~ msgstr "Einzelne Bildanhänge"
+
+#~ msgid "Single Attachments"
+#~ msgstr "Einzelne Anhänge"
+
+#~ msgid "Textfield"
+#~ msgstr "Textfeld"
+
+#~ msgid "Images"
+#~ msgstr "Bilder"

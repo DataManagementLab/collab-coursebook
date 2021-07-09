@@ -47,6 +47,18 @@ class BaseContentModel(models.Model, GeneratePreviewMixin):
         """
         abstract = True
 
+    @staticmethod
+    def filter_by_own_type(contents):
+        """
+        Filter the given contents: Restrict to own type only
+
+        :param contents: contents to filter
+        :type contents: QuerySet[Content]
+        :return: filtered contents queryset
+        :rtype: QuerySet[Content]
+        """
+        return contents.all()
+
 
 class BasePDFModel(models.Model):
     """Base content model
@@ -134,7 +146,7 @@ class ImageContent(BaseContentModel, BaseSourceModel):
     :type ImageContent.image: ImageField
     """
     TYPE = "Image"
-    DESC = _("Single Image")
+    DESC = _("Image")
 
     image = models.ImageField(verbose_name=_("Image"),
                               upload_to='uploads/contents/%Y/%m/%d/')
@@ -162,6 +174,10 @@ class ImageContent(BaseContentModel, BaseSourceModel):
         """
         return f"{self.content}: {self.image}"
 
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(imagecontent__isnull=False)
+
 
 class Latex(BaseContentModel, BasePDFModel):
     """LaTeX text field
@@ -178,7 +194,7 @@ class Latex(BaseContentModel, BasePDFModel):
     :type Latex.source: TextField
     """
     TYPE = "Latex"
-    DESC = _("Latex Textfield")
+    DESC = _("Text (LaTeX)")
 
     textfield = models.TextField(verbose_name=_("Latex Code"),
                                  help_text=_("Please insert only valid LaTeX code. The packages "
@@ -208,6 +224,10 @@ class Latex(BaseContentModel, BasePDFModel):
         :rtype: str
         """
         return f"{self.content}: {self.pk}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(latex__isnull=False)
 
 
 class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
@@ -246,6 +266,10 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         """
         return f"{self.content}: {self.pdf}"
 
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(pdfcontent__isnull=False)
+
 
 class TextField(BaseContentModel):
     """Text field
@@ -262,7 +286,7 @@ class TextField(BaseContentModel):
     :type TextField.source: TextField
     """
     TYPE = "Textfield"
-    DESC = _("Textfield")
+    DESC = _("Text")
 
     textfield = models.TextField(verbose_name=_("Text"))
     source = models.TextField(verbose_name=_("Source"))
@@ -289,6 +313,10 @@ class TextField(BaseContentModel):
         :rtype: str
         """
         return f"{self.content}: {self.pk}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(textfield__isnull=False)
 
 
 class YTVideoContent(BaseContentModel):
@@ -351,14 +379,18 @@ class YTVideoContent(BaseContentModel):
         """
         return f"{self.url}"
 
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(ytvideocontent__isnull=False)
+
 
 # dict: Contains all available content types.
 CONTENT_TYPES = {
-    YTVideoContent.TYPE: YTVideoContent,
-    ImageContent.TYPE: ImageContent,
     PDFContent.TYPE: PDFContent,
     TextField.TYPE: TextField,
     Latex.TYPE: Latex,
+    YTVideoContent.TYPE: YTVideoContent,
+    ImageContent.TYPE: ImageContent,
 }
 
 # Register models for reversion if it is not already done in admin,
