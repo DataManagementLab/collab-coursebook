@@ -44,7 +44,9 @@ class DuplicateCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Course
     template_name = 'frontend/course/duplicate.html'
     form_class = AddCourseForm
-    success_url = reverse_lazy('frontend:dashboard')
+
+    def get_success_url(self):
+        return reverse_lazy('frontend:course-edit-structure', kwargs={'pk': self.object.pk})
 
     def get_success_message(self, cleaned_data):
         """Success message
@@ -120,7 +122,9 @@ class AddCourseView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     model = Course
     template_name = 'frontend/course/create.html'
     form_class = AddCourseForm
-    success_url = reverse_lazy('frontend:dashboard')
+
+    def get_success_url(self):
+        return reverse_lazy('frontend:course-edit-structure', kwargs={'pk': self.object.pk})
 
     def get_success_message(self, cleaned_data):
         """Success message

@@ -35,6 +35,9 @@ jobs:
       - name: Run Check
         run: |
           python manage.py check
+      - name: Check for missing migrations
+        run: |
+          python manage.py makemigrations --check
       - name: Run Tests
         run: |
           python manage.py test
