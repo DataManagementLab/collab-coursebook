@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 from django.utils.translation import gettext_lazy as _
+from split_settings.tools import optional, include
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -186,3 +187,5 @@ ADD_REVERSION_ADMIN = True
 # optional settings:
 REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID = False
 REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
+
+include(optional("settings/*.py"))
