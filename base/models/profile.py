@@ -43,7 +43,8 @@ class Profile(models.Model):
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
     stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"),
-                                            related_name="staring_users")
+                                            related_name="staring_users", blank=True)
+    accepted_privacy_note = models.BooleanField(verbose_name=_("Accepted privacy note?"), blank=True, default=False)
 
     def __str__(self):
         """String representation

@@ -29,6 +29,12 @@ urlpatterns = [
     path('tutorial/',
          views.TutorialView.as_view(),
          name='tutorial'),
+    path('privacy/',
+         views.PrivacyNoteView.as_view(),
+         name='privacy'),
+    path('privacy-accept/',
+         views.AcceptPrivacyNoteView.as_view(),
+         name='privacy_accept'),
     path('profile/<int:pk>/', include([
         path('',
              views.ProfileView.as_view(),
