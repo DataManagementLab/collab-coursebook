@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from split_settings.tools import optional, include
 
@@ -127,6 +128,7 @@ CAS_RENAME_ATTRIBUTES = {
     'givenName': 'first_name',
     'mail': 'email',
 }
+CAS_REDIRECT_URL = reverse_lazy("frontend:privacy_accept")
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -177,7 +179,8 @@ FONTAWESOME_5_PREFIX = "fa"
 FOOTER_INFO = {
     "repo_url": "https://github.com/DataManagementLab/collab-coursebook",
     "impress_text": "",
-    "impress_url": ""
+    "impress_url": "",
+    "privacy_note_url": "",
 }
 
 ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE = True
@@ -187,5 +190,7 @@ ADD_REVERSION_ADMIN = True
 # optional settings:
 REVERSION_COMPARE_FOREIGN_OBJECTS_AS_ID = False
 REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
+
+DATA_PROTECTION_REQURE_CONFIRMATION = False
 
 include(optional("settings/*.py"))

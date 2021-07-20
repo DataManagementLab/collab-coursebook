@@ -4,9 +4,13 @@ This file describes the frontend views related to pages.
 """
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, FormView
 
 from base.models import Period, Category
+from collab_coursebook.settings import DATA_PROTECTION_REQURE_CONFIRMATION
+from frontend.forms import AcceptPrivacyNoteForm
 
 
 class StartView(TemplateView):
@@ -20,6 +24,11 @@ class StartView(TemplateView):
     """
     template_name = "frontend/index.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("frontend:dashboard")
+        return super().dispatch(request, *args, **kwargs)
+
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     """Dashboard view
@@ -30,6 +39,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     :type DashboardView.template_name: str
     """
     template_name = "frontend/dashboard.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if DATA_PROTECTION_REQURE_CONFIRMATION \
+                and request.user.is_authenticated \
+                and not request.user.profile.accepted_privacy_note:
+            return redirect(reverse_lazy("frontend:privacy_accept"))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """Context data
@@ -59,3 +75,34 @@ class TutorialView(TemplateView):
     :type TutorialView.template_name: str
     """
     template_name = "frontend/tutorial.html"
+
+
+class PrivacyNoteView(TemplateView):
+    """
+    View to access privacy note
+    """
+    template_name = "frontend/data_protection.html"
+
+
+class AcceptPrivacyNoteView(FormView):
+    """
+    View to review and accept privacy note
+    """
+    template_name = "frontend/data_protection_accept.html"
+    form_class = AcceptPrivacyNoteForm
+    success_url = reverse_lazy("frontend:dashboard")
+
+    def form_valid(self, form):
+        profile = self.request.user.profile
+        profile.accepted_privacy_note = True
+        profile.save()
+        return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated \
+                and (
+                    not DATA_PROTECTION_REQURE_CONFIRMATION
+                    or request.user.profile.accepted_privacy_note
+                ):
+            return redirect(reverse_lazy("frontend:dashboard"))
+        return super().dispatch(request, *args, **kwargs)

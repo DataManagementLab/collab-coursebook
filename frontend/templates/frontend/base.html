@@ -66,6 +66,11 @@
             {% trans "Impress" %}
         </a> &middot;
     {% endif %}
+    {% if FI.privacy_note_url %}
+        <a href="{{ FI.privacy_note_url }}">
+            {% trans "Privacy Note" %}
+        </a> &middot;
+    {% endif %}
     {% if FI.repo_url %}
         <a href="{{ FI.repo_url }}">
             {% trans 'This software is open source' %}

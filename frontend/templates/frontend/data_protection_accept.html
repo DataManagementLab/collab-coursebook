@@ -1,0 +1,41 @@
+{% extends 'frontend/base_logged_in.html' %}
+
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+{% load bootstrap4 %}
+{% load fontawesome_5 %}
+{% load cc_frontend_tags %}
+
+{% block title %}
+    {% trans 'Data Protection' %} - Collab Coursebook
+{% endblock %}
+
+{% block navbar %}
+    {# Empty navbar, privacy note has to be accepted first #}
+    <h4 style="font-weight: bold;display: inline;">
+        Collab Coursebook
+    </h4>
+{% endblock %}
+
+{% block content %}
+    <h1>{% trans 'Data Protection' %}</h1>
+
+    <p>{% trans 'Please review and accept the following data privacy note to continue using Collab Coursebook' %}</p>
+
+    <div style="height: 45vh;overflow-y: scroll;border:1px solid black; padding: 10px;">
+        {% include "frontend/data_protection_text.html" %}
+    </div>
+
+    <div class="mt-4">
+        <form method="post" class="post-form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <button type="submit"
+                    class="btn btn-primary">
+                {% fa5_icon 'check' 'fas' %} {% trans 'Continue' %}
+            </button>
+        </form>
+    </div>
+{% endblock %}

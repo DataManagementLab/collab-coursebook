@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-15 11:01+0000\n"
+"POT-Creation-Date: 2021-07-20 14:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -51,6 +51,14 @@ msgstr "Änderungsprotokoll"
 msgid "Please write down your changes of this content"
 msgstr "Bitte notieren Sie Ihre Änderungen an diesem Inhalt"
 
+#: frontend/forms/page.py:6
+msgid "I accept the privacy note"
+msgstr "Ich akzeptiere die Datenschutzerklärung"
+
+#: frontend/forms/page.py:7
+msgid "(required to use this website)"
+msgstr "(notwendig zur Nutzung dieser Webseite)"
+
 #: frontend/templates/frontend/base.html:34
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
@@ -63,6 +71,10 @@ msgid "Impress"
 msgstr "Impressum"
 
 #: frontend/templates/frontend/base.html:71
+msgid "Privacy Note"
+msgstr "Datenschutzerklärung"
+
+#: frontend/templates/frontend/base.html:76
 msgid "This software is open source"
 msgstr "Diese Software ist Open Source"
 
@@ -214,7 +226,7 @@ msgstr "Lesemodus"
 
 #: frontend/templates/frontend/content/detail.html:40
 #: frontend/templates/frontend/content/detail.html:45
-#: frontend/templates/frontend/course/coursebook.html:21 frontend/urls.py:69
+#: frontend/templates/frontend/course/coursebook.html:21 frontend/urls.py:75
 msgid "Coursebook"
 msgstr "Kursbuch"
 
@@ -531,6 +543,24 @@ msgstr "Alle Kurse für den Zeitraum"
 #: frontend/templates/frontend/dashboard.html:46
 msgid "All Courses by Category"
 msgstr "Alle Kurse für die Kategorie"
+
+#: frontend/templates/frontend/data_protection.html:11
+#: frontend/templates/frontend/data_protection_accept.html:11
+#: frontend/templates/frontend/data_protection_accept.html:22
+msgid "Data Protection"
+msgstr "Datenschutz"
+
+#: frontend/templates/frontend/data_protection_accept.html:24
+msgid ""
+"Please review and accept the following data privacy note to continue using "
+"Collab Coursebook"
+msgstr ""
+"Bitte die folgende Datenschutzerklärung lesen und akzeptieren, um Collab "
+"Coursebook zu verwenden"
+
+#: frontend/templates/frontend/data_protection_accept.html:37
+msgid "Continue"
+msgstr "Fortfahren"
 
 #: frontend/templates/frontend/history/history.html:16
 #: frontend/templates/frontend/history/history.html:24
