@@ -35,6 +35,9 @@ jobs:
       - name: Run Check
         run: |
           python manage.py check
+      - name: Check for missing migrations
+        run: |
+          python manage.py makemigrations --check
       - name: Run Tests
         run: |
           python manage.py test
@@ -42,3 +45,6 @@ jobs:
         run: |
           python manage.py makemessages -l de_DE --ignore venv
           python utils/check_translations.py
+      - name: Run deploy check
+        run: |
+          python manage.py check --deploy --settings=collab_coursebook.settings_production
