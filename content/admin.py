@@ -13,6 +13,7 @@ from reversion_compare.admin import CompareVersionAdmin
 from content.models import ImageContent, Latex
 from content.models import PDFContent, TextField
 from content.models import YTVideoContent
+from content.models import MDFileContent
 
 
 @admin.register(ImageContent)
@@ -56,4 +57,11 @@ class YTVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ance
     """YouTube video content
 
     Represents the YouTube video content model in the admin panel.
+    """
+
+@admin.register(MDFileContent)
+class MDFileContentAdmin(CompareVersionAdmin):
+    """MD File content
+    
+    Represents the MD file content model in the admin panel;
     """

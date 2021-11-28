@@ -8,6 +8,7 @@ from django import forms
 from content.models import YTVideoContent, ImageContent, PDFContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
+from content.models import MDFileContent
 
 # str: Relative directory path of the forms examples
 FORMS_EXAMPLES_DIRECTORY = 'content/templates/form/examples/'
@@ -180,6 +181,36 @@ class AddLatex(forms.ModelForm):
         }
 
 
+class AddMDFile(forms.ModelForm):
+    """Add MD file
+
+    This model represents the add form for a .md file.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = MDFileContent
+        fields = ['md', 'source']
+        widgets = {
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(MDFileContent.TYPE, 'source')}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown',
+                                                    'required': 'true'})
+        }
+
+
 # dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
@@ -187,4 +218,5 @@ CONTENT_TYPE_FORMS = {
     PDFContent.TYPE: AddContentFormPdf,
     TextField.TYPE: AddTextField,
     Latex.TYPE: AddLatex,
+    MDFileContent.TYPE: AddMDFile,
 }

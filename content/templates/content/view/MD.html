@@ -1,0 +1,13 @@
+{% load i18n %}
+{% autoescape off %}
+    {{ markdown}}
+{% endautoescape %}
+
+<hr>
+
+<b>
+    {% trans 'Source' %}:
+</b>
+<p>
+    {{ content.textfield.source }}
+</p>

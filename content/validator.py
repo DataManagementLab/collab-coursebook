@@ -54,3 +54,26 @@ class Validator:  # pylint: disable=too-few-public-methods)
         valid_url = re.match(r"^(http(s)?://)?(www\.|m\.)?youtu(\.?)be(\.com)?/.*", url)
         if valid_url is None:
             raise ValidationError('Invalid URL')
+
+    @staticmethod
+    def validate_md(file):
+        """Validate MD
+
+          Validates if the given file is a valid MD file. If the file is not
+          a md file, a validation error will be thrown.
+
+          :param file: The file that should be checked
+          :type file: file
+
+          :return: a validation error, if the file is not a valid md
+          :rtype: None or ValidationError
+
+        """
+        valid_types = ['text/plain']
+        file_type = magic.from_buffer(file.read(1024), mime=True)
+        if file_type not in valid_types:
+            raise ValidationError('Unsupported file type.')
+        valid_file_extensions = ['.md']
+        ext = os.path.splitext(file.name)[1]
+        if ext.lower() not in valid_file_extensions:
+            raise ValidationError('Unacceptable file extension.')
