@@ -271,6 +271,58 @@ class PDFContent(BaseContentModel, BasePDFModel, BaseSourceModel):
         return contents.filter(pdfcontent__isnull=False)
 
 
+class MDContent(BaseContentModel):
+    """MD content
+
+    This model represents a MD based content.
+
+    :attr MDContent.TYPE: Describes the content type of this model
+    :type MDContent.TYPE: str
+    :attr MDContent.DESC: Describes the name of this model
+    :type MDContent.DESC: __proxy__
+    """
+    TYPE = "MD"
+    DESC = _("Markdown")
+
+    md = models.FileField(verbose_name=_("MD"),
+                           upload_to='uploads/contents/%Y/%m/%d/',
+                           blank=True)
+    html = models.FileField(verbose_name=_("HTML"),
+                           upload_to='uploads/contents/%Y/%m/%d/',
+                           blank=True)
+
+    textfield = models.TextField(verbose_name=_("Markdown Script"),
+                                 help_text=_("Insert your markdown script here:"))
+    source = models.TextField(verbose_name=_("Source"))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("MD Content")
+        verbose_name_plural = _("MD Contents")
+
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.content}; {self.pk} "
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(markdown__isnull=False)
+
+
 class TextField(BaseContentModel):
     """Text field
 
@@ -391,6 +443,7 @@ CONTENT_TYPES = {
     Latex.TYPE: Latex,
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
+    MDContent.TYPE: MDContent
 }
 
 # Register models for reversion if it is not already done in admin,
@@ -409,4 +462,7 @@ reversion.register(PDFContent,
                    follow=['content'])
 reversion.register(YTVideoContent,
                    fields=['content', 'url'],
+                   follow=['content'])
+reversion.register(MDContent,
+                   fields=['content', 'md', 'html', 'textfield', 'source'],
                    follow=['content'])

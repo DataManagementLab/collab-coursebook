@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load fontawesome_5 %}
+
+<div class="row" style="border-left: solid #0a3d62">
+    <div class="col">
+        <embed src="{{ content.mdcontent.html.url }}" type="text/html" height="700px" width="100%">
+    </div>
+</div>
+
+<b>
+    {% trans 'Source' %}:
+</b>
+<p>
+    {{ content.mdcontent.source }}
+</p>
+
+<form action="{{ content.mdcontent.md.url }}" method="get" target="_blank">
+    {% csrf_token %}
+    <button name="action" value="submit" class="btn btn-outline-primary">
+        {% fa5_icon 'download' 'fas' %} {% trans 'Download' %}
+    </button>
+</form>
+

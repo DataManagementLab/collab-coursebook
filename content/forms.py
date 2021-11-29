@@ -5,7 +5,7 @@ This file contains forms associated with the content types.
 
 from django import forms
 
-from content.models import YTVideoContent, ImageContent, PDFContent
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -179,6 +179,35 @@ class AddLatex(forms.ModelForm):
                 attrs={'placeholder': get_placeholder(Latex.TYPE, 'textfield')})
         }
 
+class AddMD(forms.ModelForm):
+    """Add Markdown
+
+    This model represents the add form for Markdown code.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = MDContent
+        fields = ['textfield', 'source']
+        widgets = {
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
+            'textfield': forms.Textarea(
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')})
+        }
+
 
 # dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {
@@ -187,4 +216,5 @@ CONTENT_TYPE_FORMS = {
     PDFContent.TYPE: AddContentFormPdf,
     TextField.TYPE: AddTextField,
     Latex.TYPE: AddLatex,
+    MDContent.TYPE: AddMD,
 }
