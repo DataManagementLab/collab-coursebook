@@ -198,14 +198,15 @@ class AddMD(forms.ModelForm):
         :type Meta.widgets: dict[str, Widget]
         """
         model = MDContent
-        fields = ['textfield', 'source']
+        fields = ['md', 'textfield', 'source']
         widgets = {
             'source': forms.Textarea(
                 attrs={
                     'style': 'height: 100px',
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
             'textfield': forms.Textarea(
-                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')})
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'})
         }
 
 

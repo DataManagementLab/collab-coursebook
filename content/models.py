@@ -20,6 +20,8 @@ from base.models import Content
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
+from django.core.exceptions import ValidationError
+
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
     """Base content model
@@ -284,7 +286,7 @@ class MDContent(BaseContentModel):
     TYPE = "MD"
     DESC = _("Markdown")
 
-    md = models.FileField(verbose_name=_("MD"),
+    md = models.FileField(verbose_name=_("Markdown File"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True)
     html = models.FileField(verbose_name=_("HTML"),
@@ -292,7 +294,8 @@ class MDContent(BaseContentModel):
                            blank=True)
 
     textfield = models.TextField(verbose_name=_("Markdown Script"),
-                                 help_text=_("Insert your markdown script here:"))
+                                 help_text=_("Insert your markdown script here:"),
+                                 blank=True)
     source = models.TextField(verbose_name=_("Source"))
 
     class Meta:
@@ -321,6 +324,10 @@ class MDContent(BaseContentModel):
     @staticmethod
     def filter_by_own_type(contents):
         return contents.filter(markdown__isnull=False)
+
+    def clean(self):
+        if not (self.textfield or self.md):
+            raise ValidationError("You must input either a Markdown File file or Markdown Script.")
 
 
 class TextField(BaseContentModel):

@@ -447,6 +447,9 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                              content,
                                              content_type_data)
 
+                #TODO add check if md file upload is empty if empty create md and html from text
+                #if not empty create text and html from md
+
                 #If the content type is MD, compile an HTML version of it and store in DB
                 if content_type == 'MD':
                     Validator.validate_md(get_user(request),
