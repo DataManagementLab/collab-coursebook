@@ -131,6 +131,9 @@ urlpatterns = [
             path('<pk>/latex-history/',
                  views.history.LatexHistoryCompareView.as_view(),
                  name='latex-history'),
+            path('<pk>/markdown-history/',
+                 views.history.MDHistoryCompareView.as_view(),
+                 name='md-history'),
 
         ])),
         path('add/',

@@ -90,6 +90,13 @@
                         </a>
                     {% endif %}
 
+                    {% if content.type == 'MD' %}
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:md-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
                     {# Delete option #}
                     {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"

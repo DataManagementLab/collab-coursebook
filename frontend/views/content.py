@@ -236,6 +236,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                          content,
                                          content_type_data)
 
+            #If the content type is MD, compile an HTML version of it and store in DB
+            if content_type == 'MD':
+                Validator.validate_md(get_user(request),
+                                        content,
+                                        content_type_data)
+
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview
@@ -440,6 +446,15 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     Validator.validate_latex(get_user(request),
                                              content,
                                              content_type_data)
+
+                #TODO add check if md file upload is empty if empty create md and html from text
+                #if not empty create text and html from md
+
+                #If the content type is MD, compile an HTML version of it and store in DB
+                if content_type == 'MD':
+                    Validator.validate_md(get_user(request),
+                                            content,
+                                            content_type_data)
 
                 # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \
