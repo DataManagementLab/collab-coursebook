@@ -21,6 +21,7 @@ from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 
 
 
@@ -290,10 +291,7 @@ class MDContent(BaseContentModel):
     md = models.FileField(verbose_name=_("Markdown File"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True,
-                            validators = (Validator.validate_md,))
-    html = models.FileField(verbose_name=_("HTML"),
-                           upload_to='uploads/contents/%Y/%m/%d/',
-                           blank=True)
+                            validators = [FileExtensionValidator(['md'])])
 
     textfield = models.TextField(verbose_name=_("Markdown Script"),
                                  help_text=_("Insert your Markdown script here:"),
@@ -473,5 +471,5 @@ reversion.register(YTVideoContent,
                    fields=['content', 'url'],
                    follow=['content'])
 reversion.register(MDContent,
-                   fields=['content', 'md', 'html', 'textfield', 'source'],
+                   fields=['content', 'md', 'textfield', 'source'],
                    follow=['content'])
