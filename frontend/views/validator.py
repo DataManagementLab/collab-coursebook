@@ -63,7 +63,7 @@ class Validator:
         :param md_content: The data of the content type
         :type md_content: MD
         """
-        md_text = md_content.md.open().read().decode('utf8')
+        md_text = md_content.md.open().read().decode('utf-8')
         md_content.textfield = md_text
         md_content.save()
 

@@ -609,8 +609,7 @@ class ContentView(DetailView):
                 context['markdown'] = html"""
 
         if content.type == "MD":
-            file = content.mdcontent.md.open()
-            html = markdown.markdown(file.read().decode('utf-8'), safe_mode=True,
+            html = markdown.markdown(content.mdcontent.textfield, safe_mode=True,
                                      extras=["tables"])
             context['html'] = html
 
@@ -824,8 +823,7 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
                                 self.request.GET.get('f')
 
         if content.type == "MD":
-            file = content.mdcontent.md.open()
-            html = markdown.markdown(file.read().decode('utf-8'), safe_mode=True,
+            html = markdown.markdown(content.mdcontent.textfield, safe_mode=True,
                                      extras=["tables"])
             context['html'] = html
 
