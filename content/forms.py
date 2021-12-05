@@ -210,6 +210,36 @@ class AddMD(forms.ModelForm):
             'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'})
         }
 
+class EditMD(forms.ModelForm):
+    """Add Markdown
+
+    This model represents the add form for Markdown code.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = MDContent
+        fields = ['textfield', 'source']
+        widgets = {
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
+            'textfield': forms.Textarea(
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'})
+        }
+
 # dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
