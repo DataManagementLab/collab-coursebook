@@ -33,6 +33,9 @@
             </textfield>
         </div>
         {% csrf_token %}
+        {% if is_markdown_content %}
+            <h6>You may add either a markdown file to upload directly or input markdown script yourself. If you do both the uploaded file will be prioritized and the script discarded.</h6>
+        {% endif %}
         {% bootstrap_form content_type_form %}
         <br>
         {# Dynamic attachment for content types with attachments #}
