@@ -51,7 +51,7 @@ class Validator:
         md_code = md_content.textfield
         html = markdown.markdown(md_code)
         md_content.html.save(f"{content.topic}"+ ".html", ContentFile(html))
-        md_content.md.save(f"{content.topic}"+ ".md", ContentFile(md_code))
+        md_content.md.save(f"{content.topic}"+ ".md", ContentFile(md_code.encode('utf-8')))
         md_content.save()
 
     @staticmethod

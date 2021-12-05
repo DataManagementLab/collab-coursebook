@@ -289,13 +289,14 @@ class MDContent(BaseContentModel):
 
     md = models.FileField(verbose_name=_("Markdown File"),
                            upload_to='uploads/contents/%Y/%m/%d/',
-                           blank=True)
+                           blank=True,
+                            validators = (Validator.validate_md,))
     html = models.FileField(verbose_name=_("HTML"),
                            upload_to='uploads/contents/%Y/%m/%d/',
                            blank=True)
 
     textfield = models.TextField(verbose_name=_("Markdown Script"),
-                                 help_text=_("Insert your markdown script here:"),
+                                 help_text=_("Insert your Markdown script here:"),
                                  blank=True)
     source = models.TextField(verbose_name=_("Source"))
 
@@ -328,7 +329,7 @@ class MDContent(BaseContentModel):
 
     def clean(self):
         if not (self.textfield or self.md):
-            raise ValidationError("You must input either a Markdown File file or Markdown Script.")
+            raise ValidationError("You must input either a Markdown file or Markdown script.")
 
 
 class TextField(BaseContentModel):
@@ -442,50 +443,6 @@ class YTVideoContent(BaseContentModel):
     @staticmethod
     def filter_by_own_type(contents):
         return contents.filter(ytvideocontent__isnull=False)
-
-
-class MDFileContent(BaseContentModel):
-    """MD file content
-
-        This model represents a MD-file based content.
-
-        :attr MDFileContent.TYPE: Describes the content type of this model
-        :type MDFileContent.TYPE: str
-        :attr MDFile.DESC: Describes the name of this model
-        :type MDfile.DESC: __proxy__
-        """
-    TYPE = "MD"
-    DESC = _("MD File")
-
-    md = models.FileField(verbose_name=_("MD File"),
-                           upload_to='uploads/contents/%Y/%m/%d/',
-                           blank=True,
-                           validators=(Validator.validate_md,))
-
-    source = models.TextField(verbose_name=_("Source"))
-
-    class Meta:
-        """Meta options
-
-        This class handles all possible meta options that you can give to this model.
-
-        :attr Meta.verbose_name: A human-readable name for the object in singular
-        :type Meta.verbose_name: __proxy__
-        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
-        :type Meta.verbose_name_plural: __proxy__
-        """
-        verbose_name = _("MD File")
-        verbose_name_plural = _("MD files")
-
-    def __str__(self):
-        """String representation
-
-        Returns the string representation of this object.
-
-        :return: the string representation of this object
-        :rtype: str
-        """
-        return f"{self.content}: {self.md}"
 
 
 # dict: Contains all available content types.

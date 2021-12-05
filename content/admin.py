@@ -69,10 +69,3 @@ class YTVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ance
 
     Represents the YouTube video content model in the admin panel.
     """
-
-@admin.register(MDFileContent)
-class MDFileContentAdmin(CompareVersionAdmin):
-    """MD File content
-    
-    Represents the MD file content model in the admin panel;
-    """

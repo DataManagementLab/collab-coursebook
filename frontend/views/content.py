@@ -2,10 +2,11 @@
 
 This file describes the frontend views related to content types.
 """
-
+import markdown
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.files.base import ContentFile
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -232,16 +233,18 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             # If the content type is LaTeX, compile the LaTeX Code and store in DB
             if content_type == 'Latex':
-                Validator.validate_latex(get_user(request),
-                                         content,
-                                         content_type_data)
+                 Validator.validate_latex(get_user(request),
+                                            content,
+                                            content_type_data)
+
 
             #If the content type is MD, compile an HTML version of it and store in DB
             if content_type == 'MD':
-                Validator.validate_md(get_user(request),
-                                        content,
-                                        content_type_data)
-
+                nonempty = bool(content_type_data.md)
+                if not nonempty:
+                    Validator.validate_md(get_user(request),
+                                            content,
+                                            content_type_data)
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview
@@ -589,8 +592,13 @@ class ContentView(DetailView):
                          'Ö': '&Ouml', 'ß': '&szlig'}
                 for char in chars:
                     html = html.replace(char, chars[char])
-                context['markdown'] = html
-        """
+                context['markdown'] = html"""
+
+        if content.type == "MD":
+            file = content.mdcontent.md.open()
+            html = markdown.markdown(file.read().decode('utf-8'), safe_mode=True,
+                                     extras=["tables"])
+            context['html'] = html
 
         context['comment_form'] = CommentForm()
 
