@@ -7,8 +7,6 @@ from django.core.files.base import ContentFile
 
 from export.views import generate_pdf_from_latex
 
-import markdown
-
 
 class Validator:
     """Validator
@@ -34,12 +32,12 @@ class Validator:
         latex_content.save()
 
 
-#TODO outsource this to views and helper functions like the LaTeX function for reuseability
+    #TODO outsource this to views and helper functions like the LaTeX function for reuseability
     @staticmethod
     def validate_md(user, content, md_content):
         """Validate Markdown
 
-        Validates Markdown and compiles the Markdown Code and stores its html into the database.
+        Validates Markdown and stores it into the database encoded as UTF-8 for decoding to html later.
 
         :param user: The current user
         :type user: User
@@ -49,9 +47,24 @@ class Validator:
         :type md_content: MD
         """
         md_code = md_content.textfield
-        html = markdown.markdown(md_code)
-        md_content.html.save(f"{content.topic}"+ ".html", ContentFile(html))
         md_content.md.save(f"{content.topic}"+ ".md", ContentFile(md_code.encode('utf-8')))
+        md_content.save()
+
+    @staticmethod
+    def validate_md_file(user, content, md_content):
+        """Validate Markdown File
+
+        Validates Markdown file and stores it into the database encoded as UTF-8 for decoding to html later.
+
+        :param user: The current user
+        :type user: User
+        :param content: The content of the html
+        :type content: Content
+        :param md_content: The data of the content type
+        :type md_content: MD
+        """
+        md_text = md_content.md.open().read().decode('utf8')
+        md_content.textfield = md_text
         md_content.save()
 
     @staticmethod

@@ -19,7 +19,7 @@ from base.utils import get_user
 
 from content.attachment.forms import ImageAttachmentFormSet
 from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
-from content.forms import CONTENT_TYPE_FORMS
+from content.forms import CONTENT_TYPE_FORMS, EditMD
 from content.models import CONTENT_TYPES
 
 from frontend.forms.comment import CommentForm
@@ -159,6 +159,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
         # Checks if content type is of type Latex
+        context['is_markdown_content'] = content_type == 'MD'
+
+        # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
 
         if content_type == 'Latex':
@@ -238,11 +241,15 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                             content_type_data)
 
 
-            #If the content type is MD, compile an HTML version of it and store in DB
+            #If the content type is MD store in DB
             if content_type == 'MD':
                 nonempty = bool(content_type_data.md)
                 if not nonempty:
                     Validator.validate_md(get_user(request),
+                                            content,
+                                            content_type_data)
+                else:
+                    Validator.validate_md_file(get_user(request),
                                             content,
                                             content_type_data)
             # Generates preview image in 'uploads/contents/'
@@ -352,6 +359,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :return: the context data
         :rtype: dict[str, Any]
         """
+        content = self.get_object()
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
@@ -365,8 +373,14 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         if 'content_type_form' not in context:
             if content_type in CONTENT_TYPE_FORMS:
                 content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
-                context['content_type_form'] = \
-                    CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+                #if content is MD and there exists an md file in DB for it get EditMD so the user can't edit the md file.
+                if content.type == "MD":
+                    if content.mdcontent.md:
+                        context['content_type_form'] = \
+                            EditMD(instance=content_file)
+                else:
+                    context['content_type_form'] = \
+                        CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
@@ -808,4 +822,11 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
         elif self.request.GET.get('s'):
             context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
                                 self.request.GET.get('f')
+
+        if content.type == "MD":
+            file = content.mdcontent.md.open()
+            html = markdown.markdown(file.read().decode('utf-8'), safe_mode=True,
+                                     extras=["tables"])
+            context['html'] = html
+
         return context
