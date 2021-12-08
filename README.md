@@ -28,7 +28,6 @@ Collab Coursebook has two types of requirements: System requirements are depende
   * uwsgi Python3 plugin
 * For production using Apache (in addition to uwsgi)
   * the mod proxy uwsgi plugin for apache2
-* Markdown
 
 #### Python Requirements
 
