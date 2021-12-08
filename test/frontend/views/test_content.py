@@ -2,6 +2,8 @@
 
 This file contains the test cases for /frontend/forms/content.py.
 """
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from test import utils
 from test.test_cases import MediaTestCase
@@ -71,6 +73,89 @@ class AddContentViewTestCase(MediaTestCase):
             'course_id': 1, 'topic_id': 1, 'pk': 2
         })
         self.assertEqual(response.url, response_path)
+
+    def test_add_md_text(self):
+        """POST test case - add Markdown
+
+        Tests the function post that a Markdown content gets created by text and saved properly after sending
+        a POST request to content-add and that the POST request redirects to
+        the content page.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'MD'
+        })
+        data = {
+            'language': 'de',
+            'source': 'src',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'textfield': 'test text'
+        }
+        self.post_redirects_to_content(path, data)
+        self.assertEqual(model.MDContent.objects.count(), 1)
+        content = model.MDContent.objects.first()
+        self.assertTrue((bool)(content.md))
+        self.assertEqual(content.source, "src")
+        self.assertEqual(content.textfield, "test text")
+        self.assertEqual(content.textfield,content.md.open().read().decode('utf-8'))
+
+
+    def test_add_md_file(self):
+        """POST test case - add Markdown
+
+        Tests the function post that a Markdown content gets created by file and saved properly after sending
+        a POST request to content-add and that the POST request redirects to
+        the content page.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'MD'
+        })
+        test_file = SimpleUploadedFile("test_file.md",b"test text")
+        data = {
+            'language': 'de',
+            'source': 'src',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'md': test_file
+        }
+        self.post_redirects_to_content(path, data)
+        self.assertEqual(model.MDContent.objects.count(), 1)
+        content = model.MDContent.objects.first()
+        self.assertTrue((bool)(content.md))
+        self.assertTrue(content.md.name,"test_file")
+        self.assertEqual(content.source, "src")
+        self.assertEqual(content.textfield, "test text")
+        self.assertEqual(content.textfield,content.md.open().read().decode('utf-8'))
+
+    def test_add_md_priority(self):
+        """POST test case - add Markdown
+
+        Tests the function post that:
+        a Markdown content gets created by file when both file and text are inputted (i.e files are correctly
+        prioritised)
+        and then saved properly after sending a POST request to content-add and that the POST request redirects to
+        the content page.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'MD'
+        })
+        test_file = SimpleUploadedFile("test_file.md",b"A")
+        data = {
+            'language': 'de',
+            'source': 'src',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'md': test_file,
+            'textfield': 'B'
+        }
+        self.post_redirects_to_content(path, data)
+        self.assertEqual(model.MDContent.objects.count(), 1)
+        content = model.MDContent.objects.first()
+        self.assertTrue((bool)(content.md))
+        self.assertTrue(content.md.name,"test_file")
+        self.assertEqual(content.source, "src")
+        self.assertEqual(content.textfield, "A")
+        self.assertEqual(content.textfield,content.md.open().read().decode('utf-8'))
 
     def test_add_textfield(self):
         """POST test case - add TextField
