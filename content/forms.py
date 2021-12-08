@@ -207,7 +207,7 @@ class AddMD(forms.ModelForm):
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'})
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown'})
         }
 
 class EditMD(forms.ModelForm):
