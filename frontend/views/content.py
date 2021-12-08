@@ -158,7 +158,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
-        # Checks if content type is of type Latex
+        # Checks if content type is of type Markdown
         context['is_markdown_content'] = content_type == 'MD'
 
         # Checks if content type is of type Latex
@@ -241,17 +241,13 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                             content_type_data)
 
 
-            #If the content type is MD store in DB
-            if content_type == 'MD':
-                nonempty = bool(content_type_data.md)
-                if not nonempty:
-                    Validator.validate_md(get_user(request),
-                                            content,
-                                            content_type_data)
-                else:
-                    Validator.validate_md_file(get_user(request),
-                                            content,
-                                            content_type_data)
+            #If the content type is MD store in DB, is_file checks if there is a md file so validator knows if it needs to create a md file or text
+            is_file = bool(content_type_data.md)
+            Validator.validate_md(get_user(request),
+                                    content,
+                                    content_type_data,
+                                    is_file)
+
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
             content.preview.name = preview
@@ -464,9 +460,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                                              content,
                                              content_type_data)
 
-                #TODO add check if md file upload is empty if empty create md and html from text
-                #if not empty create text and html from md
-
                 #If the content type is MD, compile an HTML version of it and store in DB
                 if content_type == 'MD':
                     Validator.validate_md(get_user(request),
@@ -609,8 +602,7 @@ class ContentView(DetailView):
                 context['markdown'] = html"""
 
         if content.type == "MD":
-            html = markdown.markdown(content.mdcontent.textfield, safe_mode=True,
-                                     extras=["tables"])
+            html = markdown.markdown(content.mdcontent.textfield, extensions=["tables"])
             context['html'] = html
 
         context['comment_form'] = CommentForm()
@@ -823,8 +815,7 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
                                 self.request.GET.get('f')
 
         if content.type == "MD":
-            html = markdown.markdown(content.mdcontent.textfield, safe_mode=True,
-                                     extras=["tables"])
+            html = markdown.markdown(content.mdcontent.textfield, extensions=["tables"])
             context['html'] = html
 
         return context

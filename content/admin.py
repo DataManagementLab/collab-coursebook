@@ -24,7 +24,6 @@ class MDContentAdmin(CompareVersionAdmin):
     :attr MDContentAdmin.fields: Including fields into the form
     :type MDContentAdmin.fields: list[str]
     """
-    #fields = ['content', 'textfield', 'source']
 
 
 @admin.register(ImageContent)

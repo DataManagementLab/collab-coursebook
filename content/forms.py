@@ -211,9 +211,9 @@ class AddMD(forms.ModelForm):
         }
 
 class EditMD(forms.ModelForm):
-    """Add Markdown
+    """Edit Markdown
 
-    This model represents the add form for Markdown code.
+    This model represents the edit form for Markdown code, excluding the file field.
     """
 
     class Meta:

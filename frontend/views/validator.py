@@ -34,7 +34,7 @@ class Validator:
 
     #TODO outsource this to views and helper functions like the LaTeX function for reuseability
     @staticmethod
-    def validate_md(user, content, md_content):
+    def validate_md(user, content, md_content, is_file):
         """Validate Markdown
 
         Validates Markdown and stores it into the database encoded as UTF-8 for decoding to html later.
@@ -46,8 +46,12 @@ class Validator:
         :param md_content: The data of the content type
         :type md_content: MD
         """
-        md_code = md_content.textfield
-        md_content.md.save(f"{content.topic}"+ ".md", ContentFile(md_code.encode('utf-8')))
+        if (is_file):
+            md_text = md_content.md.open().read().decode('utf-8')
+            md_content.textfield = md_text
+        else:
+            md_text = md_content.textfield
+            md_content.md.save(f"{content.topic}"+ ".md", ContentFile(md_text.encode('utf-8')))
         md_content.save()
 
     @staticmethod
