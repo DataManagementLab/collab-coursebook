@@ -55,23 +55,6 @@ class Validator:
         md_content.save()
 
     @staticmethod
-    def validate_md_file(user, content, md_content):
-        """Validate Markdown File
-
-        Validates Markdown file and stores it into the database encoded as UTF-8 for decoding to html later.
-
-        :param user: The current user
-        :type user: User
-        :param content: The content of the html
-        :type content: Content
-        :param md_content: The data of the content type
-        :type md_content: MD
-        """
-        md_text = md_content.md.open().read().decode('utf-8')
-        md_content.textfield = md_text
-        md_content.save()
-
-    @staticmethod
     def validate_attachment(content, image_formset):
         """Validate attachment
 
