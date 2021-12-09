@@ -242,11 +242,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
 
             #If the content type is MD store in DB, is_file checks if there is a md file so validator knows if it needs to create a md file or text
-            is_file = bool(content_type_data.md)
-            Validator.validate_md(get_user(request),
-                                    content,
-                                    content_type_data,
-                                    is_file)
+            if content_type == 'MD':
+                is_file = bool(content_type_data.md)
+                Validator.validate_md(get_user(request),
+                                        content,
+                                        content_type_data,
+                                        is_file)
 
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
