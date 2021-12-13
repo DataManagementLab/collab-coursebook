@@ -96,8 +96,7 @@ def md_to_html(text, content):
     if content.ImageAttachments.count() > 0:
         attachments = content.ImageAttachments.all()
         for idx, attachment in enumerate(attachments):
-            print(attachment.image.url)
-            text = re.sub(rf"!\[(.*)]\(Image-{idx}\)",
+            text = re.sub(rf"!\[(.*?)]\(Image-{idx}\)",
                           rf"![\1]({attachment.image.url})",
                           text)
     return markdown.markdown(text)
