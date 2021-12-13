@@ -4,8 +4,8 @@
 {% load static %}
 
 {# Load JavaScript #}
-<script type="text/javascript" src="{% static 'js/attachment.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/copy.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/attachment.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
 
 <script>
@@ -30,6 +30,11 @@
                         onclick="copyEmbeddedAttachment(this)">{% trans 'Copy Attachment-Embedding Code' %}
                 </button>
                 </table>
+            {% elif is_markdown_content %}
+                <button type="button" class="btn btn-info"
+                        onclick="md_generateRelativeImagePath(this)">{% trans 'Copy Attachment-Embedding Code' %}
+                </button>
+                </table>
             {% endif %}
     </div>
 </script>
@@ -45,6 +50,20 @@
         const parent = element.parentElement;
         const id = parent.id.replace("item-", "");
         const command = "\\includegraphics[width=\\textwidth]{Image-" + id + "}";
+        copy(command);
+    }
+</script>
+
+<script type="text/javascript">
+    /**
+     * Generates markdown command to embed image attachment in content then sends it to the clipboard.
+     * The path to the image is a relative path.
+     * @param element the button that this function is bound to.
+    */
+    function md_generateRelativeImagePath(element) {
+        const parent = element.parentElement;
+        const id = parent.id.replace("item-", "");
+        const command = "![](Image-" + id + ")";
         copy(command);
     }
 </script>
