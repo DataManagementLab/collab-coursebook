@@ -243,11 +243,11 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             #If the content type is MD store in DB, is_file checks if there is a md file so validator knows if it needs to create a md file or text
             if content_type == 'MD':
-                is_file = bool(content_type_data.md)
+                is_file = content.mdcontent.options == 'file'
                 Validator.validate_md(get_user(request),
-                                        content,
-                                        content_type_data,
-                                        is_file)
+                                      content,
+                                      content_type_data,
+                                      is_file)
 
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
@@ -430,6 +430,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
+            if self.object.type == "MD":
+                content_type_form = EditMD(instance=content_object,
+                                            data=self.request.POST,
+                                            files=self.request.FILES)
 
             # Reversion comment
             Reversion.update_comment(request)
@@ -465,7 +469,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 if content_type == 'MD':
                     Validator.validate_md(get_user(request),
                                             content,
-                                            content_type_data)
+                                            content_type_data,False)
 
                 # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \

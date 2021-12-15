@@ -186,15 +186,6 @@ class AddMD(forms.ModelForm):
 
     This model represents the add form for Markdown code.
     """
-    CHOICES = [
-        ('file', 'Upload as file'),
-        ('text', 'Upload as text'),
-    ]
-    options = forms.ChoiceField(widget=forms.RadioSelect,
-                                choices=CHOICES,
-                                required=False,
-                                initial='file',
-                                label='Options')
 
     class Meta:
         """Meta options
@@ -217,7 +208,8 @@ class AddMD(forms.ModelForm):
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),'disabled':'true'}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown'})
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
+            'options': forms.RadioSelect
         }
 
 
@@ -248,8 +240,9 @@ class EditMD(forms.ModelForm):
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'})
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
         }
+
 
 # dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {

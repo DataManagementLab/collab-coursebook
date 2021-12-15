@@ -287,6 +287,11 @@ class MDContent(BaseContentModel):
     """
     TYPE = "MD"
     DESC = _("Markdown")
+    CHOICES = [
+        ('file', 'Upload as file'),
+        ('text', 'Upload as text'),
+    ]
+    options = models.TextField(blank=False,choices=CHOICES,default='file')
 
     md = models.FileField(verbose_name=_("Markdown File"),
                            upload_to='uploads/contents/%Y/%m/%d/',

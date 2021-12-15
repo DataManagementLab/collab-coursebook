@@ -8,7 +8,7 @@ const LABEL_TEXT = $('label[for="id_textfield"]')
 
 // At the start the markdown text field is disabled to the label is grayed out
 LABEL_TEXT.attr("style","opacity:0.5")
-
+// LABEL_TEXT.parent().addClass('form-required')
 function uploadAsFile(event) {
     LABEL_TEXT.attr("style","opacity:0.5")
     TEXT_FIELD.setAttribute('disabled',"true")
@@ -16,6 +16,7 @@ function uploadAsFile(event) {
     LABEL_FILE.attr("style","opacity:1.0")
     FILE_FIELD.removeAttribute('disabled')
     FILE_FIELD.setAttribute("style","opacity:1.0")
+
 }
 
 function uploadAsText(event) {

@@ -97,6 +97,7 @@
 {% block bottom_script %}
     {# Script for radio buttons in MD add form #}
     {%if is_markdown_content%}
+        <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/md_form.js' %}"></script>
     {%endif%}
 {%endblock%}
