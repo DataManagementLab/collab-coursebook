@@ -3,7 +3,6 @@
 This file contains utility functions related to exporting and rendering files.
 """
 
-import markdown
 from markdown_it import MarkdownIt
 import pdfkit
 import os
