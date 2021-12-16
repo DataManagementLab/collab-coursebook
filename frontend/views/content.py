@@ -604,7 +604,7 @@ class ContentView(DetailView):
 
         if content.type == "MD":
             md = MarkdownIt()
-            html = md.render(content.mdcontent.textfield, extensions=["tables"])
+            html = md.render(content.mdcontent.textfield)
             context['html'] = html
 
         context['comment_form'] = CommentForm()
@@ -818,7 +818,7 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
 
         if content.type == "MD":
             md = MarkdownIt()
-            html = md.render(content.mdcontent.textfield, extensions=["tables"])
+            html = md.render(content.mdcontent.textfield)
             context['html'] = html
 
         return context
