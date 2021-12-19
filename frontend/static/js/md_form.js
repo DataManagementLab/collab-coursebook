@@ -1,33 +1,43 @@
-const FILE_OPTIONS_BUTTON = document.getElementById("id_options_0")
-const TEXT_OPTIONS_BUTTON = document.getElementById("id_options_1")
+const FILE_OPTIONS_BUTTON = document.getElementById("id_options_0");
+const TEXT_OPTIONS_BUTTON = document.getElementById("id_options_1");
 
-const FILE_FIELD = document.getElementById("id_md")
-const TEXT_FIELD = document.getElementById("id_textfield")
-const LABEL_FILE = $('label[for="id_md"]')
-const LABEL_TEXT = $('label[for="id_textfield"]')
+const FILE_FIELD = document.getElementById("id_md");
+const TEXT_FIELD = document.getElementById("id_textfield");
+const LABEL_FILE = $('label[for="id_md"]');
+const LABEL_TEXT = $('label[for="id_textfield"]');
 
-// At the start the markdown text field is disabled to the label is grayed out
-LABEL_TEXT.attr("style","opacity:0.5")
-// LABEL_TEXT.parent().addClass('form-required')
-function uploadAsFile(event) {
-    LABEL_TEXT.attr("style","opacity:0.5")
-    TEXT_FIELD.setAttribute('disabled',"true")
 
-    LABEL_FILE.attr("style","opacity:1.0")
-    FILE_FIELD.removeAttribute('disabled')
-    FILE_FIELD.setAttribute("style","opacity:1.0")
+function updateOptionsState() {
+    if (FILE_OPTIONS_BUTTON.checked) {
+        disable(LABEL_TEXT, TEXT_FIELD);
+        enable(LABEL_FILE, FILE_FIELD);
+    }
+    else if (TEXT_OPTIONS_BUTTON.checked) {
+        disable(LABEL_FILE, FILE_FIELD);
+        enable(LABEL_TEXT, TEXT_FIELD);
+    }
+}
+
+function disable(button, field) {
+    button.attr("style","opacity:0.5");
+    button.parent().removeClass('form-required')
+    field.setAttribute('disabled',"true");
+    field.removeAttribute('required');
 
 }
 
-function uploadAsText(event) {
-    LABEL_FILE.attr("style","opacity:0.5")
-    FILE_FIELD.setAttribute('disabled',"true")
-    FILE_FIELD.setAttribute("style","opacity:0.5")
-
-    LABEL_TEXT.attr("style","opacity:1.0")
-    TEXT_FIELD.removeAttribute('disabled')
+function enable(button, field) {
+    button.attr("style","opacity:1.0");
+    button.parent().addClass('form-required')
+    field.removeAttribute('disabled');
+    field.setAttribute("style","opacity:1.0");
+    field.setAttribute('required','');
 }
 
+FILE_OPTIONS_BUTTON.addEventListener('click',updateOptionsState);
+TEXT_OPTIONS_BUTTON.addEventListener('click',updateOptionsState);
+updateOptionsState();
 
-FILE_OPTIONS_BUTTON.addEventListener('click',uploadAsFile)
-TEXT_OPTIONS_BUTTON.addEventListener('click',uploadAsText)
+
+
+

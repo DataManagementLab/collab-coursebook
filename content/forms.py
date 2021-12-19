@@ -242,6 +242,9 @@ class EditMD(forms.ModelForm):
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
             'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
         }
+    def clean(self):
+        if not bool(self.cleaned_data['textfield']):
+            raise forms.ValidationError("You must input text")
 
 
 # dict[str, ModelForm]: Contains all available content types form.
