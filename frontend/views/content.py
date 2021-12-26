@@ -465,7 +465,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 if content_type == 'MD':
                     Validator.validate_md(get_user(request),
                                             content,
-                                            content_type_data)
+                                            content_type_data,
+                                            False)
 
                 # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \
