@@ -9,6 +9,8 @@ import os
 import re
 import tempfile
 
+from django.utils.translation import gettext
+
 from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
@@ -165,6 +167,9 @@ class Latex:
             md = MarkdownIt()
             #parse markdown to html
             html = md.render(content.mdcontent.textfield)
+            if export_flag:
+                #for the export embed the title and description in the html so the LaTeX document doesn't render a new page just for description and title
+                html += f"<hr><h2><span style=\"font-weight:normal\">{content.topic.title}</span></h2><i>"+gettext("Description")+f":</i> {content.description}"
             #create a path for the temporary file with pk in name to ensure uniqueness
             pdf_path = f'media/uploads/temp/MD{content.mdcontent.pk}.pdf'
             #convert the html to a temporary pdf
