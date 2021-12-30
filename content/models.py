@@ -12,9 +12,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 import reversion
+from djrichtextfield.models import RichTextField
 
 from pdf2image import convert_from_path
 
+import django_tuieditor.models
 from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
@@ -293,14 +295,18 @@ class MDContent(BaseContentModel):
     options = models.TextField(blank=False,choices=CHOICES,default='file')
 
     md = models.FileField(verbose_name=_("Markdown File"),
-                           upload_to='uploads/contents/%Y/%m/%d/',
-                           blank=True,
-                            validators = [FileExtensionValidator(['md'])])
+                          upload_to='uploads/contents/%Y/%m/%d/',
+                          blank=True,
+                          validators = [FileExtensionValidator(['md'])])
 
     textfield = models.TextField(verbose_name=_("Markdown Script"),
                                  help_text=_("Insert your Markdown script here:"),
                                  blank=True)
     source = models.TextField(verbose_name=_("Source"))
+
+    editor = RichTextField(verbose_name=_("Markdown Script"),
+                           help_text=_("Insert your Markdown script here:"),
+                           blank=True)
 
     class Meta:
         """Meta options
@@ -479,5 +485,5 @@ reversion.register(YTVideoContent,
                    fields=['content', 'url'],
                    follow=['content'])
 reversion.register(MDContent,
-                   fields=['content', 'md', 'textfield', 'source'],
+                   fields=['content', 'md', 'textfield', 'source','editor'],
                    follow=['content'])

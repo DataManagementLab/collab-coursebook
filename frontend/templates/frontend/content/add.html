@@ -14,6 +14,13 @@
 {% block imports %}
     {# Load CSS #}
     <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
+    {% if is_markdown_content %}
+    {{ content_type_form.media }}
+    {# <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" /> #}
+    {# <link href="{% static 'plugins/css/bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet" /> #}
+    {# <link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet" /> #}
+    {# <link href="{% static 'plugins/css/resizable.min.css' %}" type="text/css" media="all" rel="stylesheet" /> #}
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -95,9 +102,12 @@
 
 
 {% block bottom_script %}
-    {# Script for radio buttons in MD add form #}
+{% comment %}
     {%if is_markdown_content%}
-        <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
+        {# #}
+        {% include 'frontend/content/editor.html' %}
+        {# Script for radio buttons in MD add form #}
         <script type="text/javascript" src="{% static 'js/md_form.js' %}"></script>
     {%endif%}
+{% endcomment %}
 {%endblock%}

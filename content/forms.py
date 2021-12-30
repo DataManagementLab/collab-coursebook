@@ -2,12 +2,14 @@
 
 This file contains forms associated with the content types.
 """
-
+import djrichtextfield.widgets
 from django import forms
 
 from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
+from djrichtextfield import widgets
+
 
 
 # str: Relative directory path of the forms examples
@@ -200,7 +202,7 @@ class AddMD(forms.ModelForm):
         :type Meta.widgets: dict[str, Widget]
         """
         model = MDContent
-        fields = ['options','md', 'textfield', 'source']
+        fields = ['options','md', 'textfield','editor', 'source']
         widgets = {
             'source': forms.Textarea(
                 attrs={
@@ -209,7 +211,8 @@ class AddMD(forms.ModelForm):
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),'disabled':'true'}),
             'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
-            'options': forms.RadioSelect
+            'options': forms.RadioSelect,
+            'editor': djrichtextfield.widgets.RichTextWidget(),
         }
 
 

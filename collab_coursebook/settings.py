@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'export',
     'debug_toolbar',
     'reversion',  # https://github.com/etianen/django-reversion
-    'reversion_compare',  # https://github.com/jedie/django-reversion-compare
+    'reversion_compare',  # https://github.com/jedie/django-reversion-compare,
+    'djrichtextfield',
 ]
 
 MIDDLEWARE = [
@@ -198,3 +199,11 @@ include(optional("settings/*.py"))
 if DEBUG:
     import mimetypes
     mimetypes.add_type("application/javascript", ".js", True)
+
+DJRICHTEXTFIELD_CONFIG = {
+    'js': ['js/toastui-editor-all.js',],
+    'css' : { 'screen': ( 'css/toastui-editor.css', ) },
+    'init_template': 'frontend/content/toastui_init_template.js',
+    'settings': {
+    }
+}
