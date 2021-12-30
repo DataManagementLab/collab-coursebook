@@ -1,7 +1,10 @@
 // console.log(id);
 // $(".fieldBox").attr('id','test');
 var textArea = document.getElementById("id_editor");
-$('label[for="id_editor"]').after("<div class=editor id=editor> </div>");
+// $('label[for="id_editor"]').after("<div class=editor id=editor> </div>");
+editorElement = textArea.parentElement.insertAdjacentElement('beforebegin',document.createElement('div'));
+editorElement.classList.add('editor');
+editorElement.setAttribute('id','editor');
 const editor = new toastui.Editor({
       el: document.querySelector('#editor'),
       previewStyle: "vertical",
