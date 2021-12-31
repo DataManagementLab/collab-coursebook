@@ -202,17 +202,15 @@ class AddMD(forms.ModelForm):
         :type Meta.widgets: dict[str, Widget]
         """
         model = MDContent
-        fields = ['options','md', 'textfield','editor', 'source']
+        fields = ['options','md', 'textfield', 'source']
         widgets = {
             'source': forms.Textarea(
                 attrs={
                     'style': 'height: 100px',
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
-            'textfield': forms.Textarea(
-                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
+            'textfield': djrichtextfield.widgets.RichTextWidget(),
             'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
             'options': forms.RadioSelect,
-            'editor': djrichtextfield.widgets.RichTextWidget(),
         }
 
 

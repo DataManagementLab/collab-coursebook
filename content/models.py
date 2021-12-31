@@ -299,14 +299,14 @@ class MDContent(BaseContentModel):
                           blank=True,
                           validators = [FileExtensionValidator(['md'])])
 
-    textfield = models.TextField(verbose_name=_("Markdown Script"),
+    textfield = RichTextField(verbose_name=_("Markdown Script"),
                                  help_text=_("Insert your Markdown script here:"),
                                  blank=True)
     source = models.TextField(verbose_name=_("Source"))
 
-    editor = RichTextField(verbose_name=_("Markdown Script"),
+    """editor = RichTextField(verbose_name=_("Markdown Script"),
                            help_text=_("Insert your Markdown script here:"),
-                           blank=True)
+                           blank=True)"""
 
     class Meta:
         """Meta options
@@ -485,5 +485,5 @@ reversion.register(YTVideoContent,
                    fields=['content', 'url'],
                    follow=['content'])
 reversion.register(MDContent,
-                   fields=['content', 'md', 'textfield', 'source','editor'],
+                   fields=['content', 'md', 'textfield', 'source'],
                    follow=['content'])

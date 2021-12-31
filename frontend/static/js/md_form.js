@@ -44,7 +44,7 @@ function enable(button, field) {
 
 FILE_OPTIONS_BUTTON.addEventListener('click',updateOptionsState);
 TEXT_OPTIONS_BUTTON.addEventListener('click',updateOptionsState);
-updateOptionsState();
+
 
 
 
