@@ -3,22 +3,28 @@ const TEXT_OPTIONS_BUTTON = document.getElementById("id_options_1");
 
 const FILE_FIELD = document.getElementById("id_md");
 const TEXT_FIELD = document.getElementById("id_textfield");
-console.log(TEXT_FIELD);
 const LABEL_FILE = $('label[for="id_md"]');
 const LABEL_TEXT = $('label[for="id_textfield"]');
-// $('.section-martor').hide();
-//const TEST = document.getElementById('martor-textfield');
-//ace.edit('martor-textfield').setReadOnly(true);
+
+var form_attach;
+const OPTION_FORM = $('#id_options').parent();
+
 
 function updateOptionsState() {
     if (FILE_OPTIONS_BUTTON.checked) {
-        disable(LABEL_TEXT, TEXT_FIELD);
-        enable(LABEL_FILE, FILE_FIELD);
+        changeState('id_textfield');
     }
     else if (TEXT_OPTIONS_BUTTON.checked) {
-        disable(LABEL_FILE, FILE_FIELD);
-        enable(LABEL_TEXT, TEXT_FIELD);
+        changeState('id_md');
     }
+}
+
+function changeState(detachID) {
+    if (form_attach != null) {
+        OPTION_FORM.after(form_attach);
+    }
+    var form_detach = $('label[for="' + detachID + '"]').parent();
+    form_attach = form_detach.detach();
 }
 
 function disable(button, field) {
@@ -34,12 +40,11 @@ function enable(button, field) {
     field.removeAttribute('disabled');
     field.setAttribute("style","opacity:1.0");
     field.setAttribute('required','');
-    $('.tab-martor-menu').hide();
 }
 
 FILE_OPTIONS_BUTTON.addEventListener('click',updateOptionsState);
 TEXT_OPTIONS_BUTTON.addEventListener('click',updateOptionsState);
-// updateOptionsState();
+updateOptionsState();
 
 
 
