@@ -207,7 +207,7 @@ class AddMD(forms.ModelForm):
                     'style': 'height: 100px',
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
             'textfield': forms.Textarea(
-                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),'disabled':'true'}),
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
             'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
             'options': forms.RadioSelect
         }
