@@ -14,6 +14,22 @@ const CHILDREN = $('#items-form-container').children().length;
 ADD_BUTTON.style.visibility = CHILDREN < MAX_ATTACHMENT ? "visible" : "hidden";
 REMOVE_BUTTON.style.visibility = CHILDREN === 0 ? "hidden" : "visible";
 
+const URL_ARRAY = [];
+
+function test() {
+    const numAttachments = parseInt($('#id_form-TOTAL_FORMS').val());
+    for (let i = 0 ; i < numAttachments ; i ++) {
+        var img = $("img[src='Image-" + i +"']",".toastui-editor-main-container");
+        if (img.length) {
+            fileInput = document.getElementById("id_form-" + i + "-image").files;
+            if (fileInput.length && fileInput[0]['type'].split('/')[0] === 'image' && !(typeof URL_ARRAY[i] === undefined)) {
+                img.attr('src',URL_ARRAY[i]);
+            }
+
+        }
+    }
+}
+
 
 /**
  * Adds an attachment form to the current attachment div. Additionally
@@ -58,6 +74,27 @@ function addAttachment(event) {
 
         // Update form count
         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
+
+        const id = document.getElementById('id_form-' + children + '-image');
+        console.log("Field id:" + children);
+        id.onchange = function() {
+            console.log("Changes detected.")
+            if (!(typeof URL_ARRAY[children] === 'undefined')) {
+                    console.log("Revoking old URL entry..");
+                    URL.revokeObjectURL(URL_ARRAY[children]);
+                    var img = $("img[src='"+ URL_ARRAY[children] + "']",".toastui-editor-main-container");
+                    if (img.length) {
+                        console.log("Removing url from html..")
+                        img.attr('src','Image-'+children);
+                    }
+            }
+            if (id.files.length) {
+                console.log("Creating new URL...")
+                const url = URL.createObjectURL(id.files[0])
+                URL_ARRAY[children] = url;
+            }
+            test();
+        }
     }
 }
 
@@ -96,4 +133,13 @@ function removeAttachment(event) {
 
     // Update form count
     $('#id_form-TOTAL_FORMS').attr('value', children - 1);
+
+    if (!(typeof URL_ARRAY[children - 1] === 'undefined')) {
+        URL.revokeObjectURL(URL_ARRAY[children - 1]);
+        var img = $("img[src='"+ URL_ARRAY[children] + "']",".toastui-editor-main-container");
+        if (img.length) {
+           img.attr('src','Image-'+(children-1));
+        }
+        URL_ARRAY.pop();
+    }
 }
