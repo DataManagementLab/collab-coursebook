@@ -9,6 +9,13 @@ const LABEL_TEXT = $('label[for="id_textfield"]');
 var form_attach;
 const OPTION_FORM = $('#id_options').parent();
 
+function changeState(detachID) {
+    if (form_attach != null) {
+        OPTION_FORM.after(form_attach);
+    }
+    var form_detach = $('label[for="' + detachID + '"]').parent();
+    form_attach = form_detach.detach();
+}
 
 function updateOptionsState() {
     if (FILE_OPTIONS_BUTTON.checked) {
@@ -17,14 +24,6 @@ function updateOptionsState() {
     else if (TEXT_OPTIONS_BUTTON.checked) {
         changeState('id_md');
     }
-}
-
-function changeState(detachID) {
-    if (form_attach != null) {
-        OPTION_FORM.after(form_attach);
-    }
-    var form_detach = $('label[for="' + detachID + '"]').parent();
-    form_attach = form_detach.detach();
 }
 
 function disable(button, field) {
