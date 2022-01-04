@@ -104,3 +104,14 @@
         {% include 'frontend/content/attachment_embedding_help.html' %}
     {% endif %}
 {% endblock %}
+
+{% block bottom_script %}
+    {%if is_markdown_content%}
+        <link href="{% static 'css/toastui-editor.css' %}" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="{% static 'js/toastui-editor-all.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/editor.js' %}"></script>
+        <script> {editor.setMarkdown(textArea.value);
+                  $('.ProseMirror').removeClass('ProseMirror-focused');
+                  }</script>
+    {%endif%}
+{%endblock%}
