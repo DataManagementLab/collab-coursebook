@@ -16,7 +16,8 @@ REMOVE_BUTTON.style.visibility = CHILDREN === 0 ? "hidden" : "visible";
 
 const URL_ARRAY = [];
 
-function test() {
+function updateAttachmentLinks() {
+    // console.log("Replacing all instances of image attachments with corresponding link..");
     const numAttachments = parseInt($('#id_form-TOTAL_FORMS').val());
     for (let i = 0 ; i < numAttachments ; i ++) {
         var img = $("img[src='Image-" + i +"']",".toastui-editor-main-container");
@@ -27,6 +28,16 @@ function test() {
             }
 
         }
+    }
+}
+
+function revertAttachmentLinks(index) {
+    console.log("Revoking old URL entry..");
+    URL.revokeObjectURL(URL_ARRAY[index]);
+    var img = $("img[src='"+ URL_ARRAY[index] + "']",".toastui-editor-main-container");
+    if (img.length) {
+       console.log("Removing url from html..")
+       img.attr('src','Image-'+ index);
     }
 }
 
@@ -78,22 +89,16 @@ function addAttachment(event) {
         const id = document.getElementById('id_form-' + children + '-image');
         console.log("Field id:" + children);
         id.onchange = function() {
-            console.log("Changes detected.")
+            console.log("Changes detected.");
             if (!(typeof URL_ARRAY[children] === 'undefined')) {
-                    console.log("Revoking old URL entry..");
-                    URL.revokeObjectURL(URL_ARRAY[children]);
-                    var img = $("img[src='"+ URL_ARRAY[children] + "']",".toastui-editor-main-container");
-                    if (img.length) {
-                        console.log("Removing url from html..")
-                        img.attr('src','Image-'+children);
-                    }
+                revertAttachmentLinks(children);
             }
             if (id.files.length) {
-                console.log("Creating new URL...")
-                const url = URL.createObjectURL(id.files[0])
+                console.log("Generating new URL...");
+                const url = URL.createObjectURL(id.files[0]);
                 URL_ARRAY[children] = url;
             }
-            test();
+            updateAttachmentLinks();
         }
     }
 }
@@ -135,11 +140,7 @@ function removeAttachment(event) {
     $('#id_form-TOTAL_FORMS').attr('value', children - 1);
 
     if (!(typeof URL_ARRAY[children - 1] === 'undefined')) {
-        URL.revokeObjectURL(URL_ARRAY[children - 1]);
-        var img = $("img[src='"+ URL_ARRAY[children] + "']",".toastui-editor-main-container");
-        if (img.length) {
-           img.attr('src','Image-'+(children-1));
-        }
+        revertAttachmentLinks(children-1);
         URL_ARRAY.pop();
     }
 }

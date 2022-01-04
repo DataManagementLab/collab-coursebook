@@ -19,7 +19,7 @@ editor.on("change", function () {
       //console.log("CHANGED");
       textArea.value = editor.getMarkdown();
       //editor.getEditorElements();
-      test();
+      updateAttachmentLinks();
       //console.log(editor.getHTML());
       //var img = $("img[src='Image-0']",".toastui-editor-main-container");
      // img.attr('src','https://sbme-tutorials.github.io/2018/cv/images/CannyEdgeWheel.gif');
