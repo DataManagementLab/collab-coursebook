@@ -43,6 +43,5 @@ urlpatterns = [
                        include('django.conf.urls.i18n')),
                   path('__debug__/',
                        include(debug_toolbar.urls)),
-                  path('djrichtextfield/', include('djrichtextfield.urls')),
               ] + static(settings.MEDIA_URL,
                          document_root=settings.MEDIA_ROOT)

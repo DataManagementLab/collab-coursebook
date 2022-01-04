@@ -299,7 +299,7 @@ class MDContent(BaseContentModel):
                           blank=True,
                           validators = [FileExtensionValidator(['md'])])
 
-    textfield = RichTextField(verbose_name=_("Markdown Script"),
+    textfield = models.TextField(verbose_name=_("Markdown Script"),
                                  help_text=_("Insert your Markdown script here:"),
                                  blank=True)
     source = models.TextField(verbose_name=_("Source"))
