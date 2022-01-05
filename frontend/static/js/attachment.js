@@ -24,7 +24,7 @@ function updateAttachmentLinks() {
         var img = $("img[src='Image-" + i +"']",".toastui-editor-main-container");
         if (img.length) {
             //fileInput = document.getElementById("id_form-" + i + "-image").files;
-            if (/*fileInput.length && fileInput[0]['type'].split('/')[0] === 'image' && */!(typeof URL_ARRAY[i] === undefined)) {
+            if (/*fileInput.length && fileInput[0]['type'].split('/')[0] === 'image' && */URL_ARRAY[i] != null) {
                 img.attr('src',URL_ARRAY[i]);
             }
 
@@ -59,7 +59,7 @@ function addAttachmentEvent(attachment, id) {
     // Assume attachment exists
     attachment.on("change",function() {
         console.log("Changes detected.");
-        if (!(typeof URL_ARRAY[id] === 'undefined')) {
+        if (URL_ARRAY[id] != null) {
             revertAttachmentLinks(id);
         }
         if (validateInput(this)) {
@@ -178,7 +178,7 @@ function removeAttachment(event) {
     // Update form count
     $('#id_form-TOTAL_FORMS').attr('value', children - 1);
 
-    if (!(typeof URL_ARRAY[children - 1] === 'undefined')) {
+    if (URL_ARRAY[children - 1] != null) {
         revertAttachmentLinks(children-1);
         URL_ARRAY.pop();
     }
