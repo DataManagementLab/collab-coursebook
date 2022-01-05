@@ -112,6 +112,7 @@
         <script type="text/javascript" src="{% static 'js/editor.js' %}"></script>
         <script> {editor.setMarkdown(textArea.value);
                   $('.ProseMirror').removeClass('ProseMirror-focused');
+                  updateAttachmentLinks();
                   }</script>
     {%endif%}
 {%endblock%}

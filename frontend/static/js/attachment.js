@@ -17,27 +17,73 @@ REMOVE_BUTTON.style.visibility = CHILDREN === 0 ? "hidden" : "visible";
 const URL_ARRAY = [];
 
 function updateAttachmentLinks() {
-    // console.log("Replacing all instances of image attachments with corresponding link..");
+    if ($('#id_form-TOTAL_FORMS').length) {
+    console.log("Replacing all instances of image attachments with corresponding link..");
     const numAttachments = parseInt($('#id_form-TOTAL_FORMS').val());
     for (let i = 0 ; i < numAttachments ; i ++) {
         var img = $("img[src='Image-" + i +"']",".toastui-editor-main-container");
         if (img.length) {
-            fileInput = document.getElementById("id_form-" + i + "-image").files;
-            if (fileInput.length && fileInput[0]['type'].split('/')[0] === 'image' && !(typeof URL_ARRAY[i] === undefined)) {
+            //fileInput = document.getElementById("id_form-" + i + "-image").files;
+            if (/*fileInput.length && fileInput[0]['type'].split('/')[0] === 'image' && */!(typeof URL_ARRAY[i] === undefined)) {
                 img.attr('src',URL_ARRAY[i]);
             }
 
         }
     }
+    }
 }
 
-function revertAttachmentLinks(index) {
+function revertAttachmentLinks(index) { // Assuming element at index is not undefined
     console.log("Revoking old URL entry..");
     URL.revokeObjectURL(URL_ARRAY[index]);
+    delete URL_ARRAY[index];
     var img = $("img[src='"+ URL_ARRAY[index] + "']",".toastui-editor-main-container");
     if (img.length) {
        console.log("Removing url from html..")
        img.attr('src','Image-'+ index);
+    }
+}
+
+function validateInput(input) {
+   return input.files.length && input.files[0]['type'].split('/')[0] === 'image';
+}
+
+function generateNewAttachmentURLs(id, children) {
+
+            console.log("Generating new URL...");
+            const url = URL.createObjectURL(id.files[0]);
+            URL_ARRAY[children] = url;
+}
+
+function addAttachmentEvent(attachment, id) {
+    // Assume attachment exists
+    attachment.on("change",function() {
+        console.log("Changes detected.");
+        if (!(typeof URL_ARRAY[id] === 'undefined')) {
+            revertAttachmentLinks(id);
+        }
+        if (validateInput(this)) {
+            generateNewAttachmentURLs(this,id);
+            updateAttachmentLinks();
+        }
+    });
+}
+
+function generateExistingAttachmentURLs() {
+    if ($('#id_form-TOTAL_FORMS').length) {
+    const numAttachments = parseInt($('#id_form-TOTAL_FORMS').val());
+    console.log("There are " + numAttachments + " attachments.");
+    for (let i = 0 ; i < numAttachments ; i ++) {
+        var attachment = $('#id_form-' + i + '-image');
+        if (attachment.length && attachment.parent().length && attachment.parent().parent().length) {
+            var existingURL = $("a",attachment.parent().parent());
+            if (existingURL.length) {
+                console.log("Populating URL_ARRAY at pos " + i);
+                URL_ARRAY[i] = existingURL.attr("href");
+            }
+            addAttachmentEvent(attachment,i);
+        }
+    }
     }
 }
 
@@ -86,20 +132,13 @@ function addAttachment(event) {
         // Update form count
         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
 
-        const id = document.getElementById('id_form-' + children + '-image');
-        console.log("Field id:" + children);
-        id.onchange = function() {
-            console.log("Changes detected.");
-            if (!(typeof URL_ARRAY[children] === 'undefined')) {
-                revertAttachmentLinks(children);
-            }
-            if (id.files.length) {
-                console.log("Generating new URL...");
-                const url = URL.createObjectURL(id.files[0]);
-                URL_ARRAY[children] = url;
-            }
-            updateAttachmentLinks();
+        //const attachment = document.getElementById('id_form-' + children + '-image');
+        const attachment = $('#id_form-' + children + '-image');
+        if (attachment.length) {
+            console.log("Field id:" + children);
+            addAttachmentEvent(attachment,children);
         }
+
     }
 }
 
@@ -144,3 +183,6 @@ function removeAttachment(event) {
         URL_ARRAY.pop();
     }
 }
+
+generateExistingAttachmentURLs();
+updateAttachmentLinks();
