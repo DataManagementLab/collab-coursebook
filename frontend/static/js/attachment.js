@@ -36,12 +36,12 @@ function updateAttachmentLinks() {
 function revertAttachmentLinks(index) { // Assuming element at index is not undefined
     console.log("Revoking old URL entry..");
     URL.revokeObjectURL(URL_ARRAY[index]);
-    delete URL_ARRAY[index];
     var img = $("img[src='"+ URL_ARRAY[index] + "']",".toastui-editor-main-container");
     if (img.length) {
        console.log("Removing url from html..")
        img.attr('src','Image-'+ index);
     }
+    delete URL_ARRAY[index];
 }
 
 function validateInput(input) {
