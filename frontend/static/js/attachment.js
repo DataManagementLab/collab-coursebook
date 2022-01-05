@@ -184,5 +184,3 @@ function removeAttachment(event) {
     }
 }
 
-generateExistingAttachmentURLs();
-updateAttachmentLinks();
