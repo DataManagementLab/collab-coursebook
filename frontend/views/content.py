@@ -223,8 +223,10 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             content.save()
             # Evaluates generic form
             content_type_data = content_type_form.save(commit=False)
+
             content_type_data.content = content
             content_type_data.save()
+
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
@@ -243,7 +245,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
             #If the content type is MD store in DB, is_file checks if there is a md file so validator knows if it needs to create a md file or text
             if content_type == 'MD':
-                is_file = content.mdcontent.options == 'file'
+                is_file = content_type_form.cleaned_data['options'] == 'file'
                 Validator.validate_md(get_user(request),
                                       content,
                                       content_type_data,
