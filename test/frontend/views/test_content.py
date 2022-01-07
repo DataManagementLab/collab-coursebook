@@ -85,6 +85,7 @@ class AddContentViewTestCase(MediaTestCase):
             'course_id': 1, 'topic_id': 1, 'type': 'MD'
         })
         data = {
+            'options': 'text',
             'language': 'de',
             'source': 'src',
             'form-TOTAL_FORMS': '0',
@@ -112,11 +113,12 @@ class AddContentViewTestCase(MediaTestCase):
         })
         test_file = SimpleUploadedFile("test_file.md",b"test text")
         data = {
+            'options': 'file',
             'language': 'de',
             'source': 'src',
             'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0',
-            'md': test_file
+            'md': test_file,
         }
         self.post_redirects_to_content(path, data)
         self.assertEqual(model.MDContent.objects.count(), 1)
@@ -127,13 +129,13 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(content.textfield, "test text")
         self.assertEqual(content.textfield,content.md.open().read().decode('utf-8'))
 
-    def test_add_md_priority(self):
+    def test_add_md_file_options(self):
         """POST test case - add Markdown
 
         Tests the function post that:
-        a Markdown content gets created by file when both file and text are inputted (i.e files are correctly
-        prioritised)
-        and then saved properly after sending a POST request to content-add and that the POST request redirects to
+        a Markdown content gets created by file when both file and text are inputted and the option "Upload by file"
+        is chosen.
+        The content should then be saved properly after sending a POST request to content-add and that the POST request redirects to
         the content page.
         """
         path = reverse('frontend:content-add', kwargs={
@@ -141,6 +143,7 @@ class AddContentViewTestCase(MediaTestCase):
         })
         test_file = SimpleUploadedFile("test_file.md",b"A")
         data = {
+            'options': 'file',
             'language': 'de',
             'source': 'src',
             'form-TOTAL_FORMS': '0',
@@ -156,6 +159,36 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(content.source, "src")
         self.assertEqual(content.textfield, "A")
         self.assertEqual(content.textfield,content.md.open().read().decode('utf-8'))
+
+    def test_add_md_text_options(self):
+        """POST test case - add Markdown
+
+        Tests the function post that:
+        a Markdown content gets created by text when both file and text are inputted and the option "Upload by text"
+        is chosen.
+        The content should then be saved properly after sending a POST request to content-add and that the POST request redirects to
+        the content page.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'MD'
+        })
+        test_file = SimpleUploadedFile("test_file.md", b"A")
+        data = {
+            'options': 'text',
+            'language': 'de',
+            'source': 'src',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'md': test_file,
+            'textfield': 'B'
+        }
+        self.post_redirects_to_content(path, data)
+        self.assertEqual(model.MDContent.objects.count(), 1)
+        content = model.MDContent.objects.first()
+        self.assertTrue((bool)(content.md))
+        self.assertEqual(content.source, "src")
+        self.assertEqual(content.textfield, "B")
+        self.assertEqual(content.textfield, content.md.open().read().decode('utf-8'))
 
     def test_add_textfield(self):
         """POST test case - add TextField
@@ -387,3 +420,36 @@ class EditContentViewTestCase(MediaTestCase):
         self.assertEqual(type(context['content_type_form']), form.AddLatex)
         self.assertTrue(context['attachment_allowed'])
         self.assertTrue('item_forms' in context)
+
+    def test_md(self):
+        """POST test case -  edit MD
+
+        Tests the function post that a MD Content gets edited and saved properly after sending
+        a POST request to content-edit and that the POST request redirects to the content page.
+        """
+        content = utils.create_content(model.MDContent.TYPE)
+        content.save()
+        model.MDContent.objects.create(textfield='Markdown Script', source='src', content=content)
+
+        data = {
+            'change_log': 'stuff changed',
+            'language': 'de',
+            'description': 'description',
+            'textfield': 'Lorem ipsum',
+            'source': 'src text',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0'
+        }
+        path = reverse('frontend:content-edit', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 2
+        })
+        response = self.client.post(path, data)
+
+        self.assertEqual(response.url, reverse('frontend:content', kwargs={
+            'course_id': 1, 'topic_id': 1, 'pk': 2
+        }))
+        content = Content.objects.get(pk=2)
+        self.assertEqual(content.language, 'de')
+        md_content = model.MDContent.objects.first()
+        self.assertEqual(md_content.source, 'src text')
+        self.assertEqual(md_content.textfield, 'Lorem ipsum')
