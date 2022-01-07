@@ -12,7 +12,7 @@ var form_attach;
 function changeState(detachID) {
     const OPTION_FORM = $('#id_options').parent();
     var form_detach = $('label[for="' + detachID + '"]').parent();
-    if (form_detach.length) {
+    if (OPTION_FORM.length && form_detach.length) {
         if (form_attach != null) {
             OPTION_FORM.after(form_attach);
         }
