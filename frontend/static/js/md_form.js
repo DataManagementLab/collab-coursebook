@@ -7,14 +7,17 @@ const LABEL_FILE = $('label[for="id_md"]');
 const LABEL_TEXT = $('label[for="id_textfield"]');
 
 var form_attach;
-const OPTION_FORM = $('#id_options').parent();
+
 
 function changeState(detachID) {
-    if (form_attach != null) {
-        OPTION_FORM.after(form_attach);
-    }
+    const OPTION_FORM = $('#id_options').parent();
     var form_detach = $('label[for="' + detachID + '"]').parent();
-    form_attach = form_detach.detach();
+    if (form_detach.length) {
+        if (form_attach != null) {
+            OPTION_FORM.after(form_attach);
+        }
+        form_attach = form_detach.detach();
+    }
 }
 
 function updateOptionsState() {
