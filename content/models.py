@@ -288,11 +288,6 @@ class MDContent(BaseContentModel):
     """
     TYPE = "MD"
     DESC = _("Markdown")
-    CHOICES = [
-        ('file', 'Upload as file'),
-        ('text', 'Upload as text'),
-    ]
-    options = models.TextField(blank=False,choices=CHOICES,default='file')
 
     md = models.FileField(verbose_name=_("Markdown File"),
                           upload_to='uploads/contents/%Y/%m/%d/',
@@ -335,13 +330,13 @@ class MDContent(BaseContentModel):
     def filter_by_own_type(contents):
         return contents.filter(markdown__isnull=False)
 
-    def clean(self):
+    """def clean(self):
         if self.options == 'file' and not self.md:
             raise ValidationError("You must input a Markdown file")
         if self.options == 'text' and not self.textfield:
             raise ValidationError("You must input text")
         if not (self.textfield or self.md):
-            raise ValidationError("You must input either text or a Markdown file")
+            raise ValidationError("You must input either text or a Markdown file")"""
 
 
 class TextField(BaseContentModel):

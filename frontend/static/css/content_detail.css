@@ -20,8 +20,3 @@
 .active ~ label {
     color: #ffca08;
 }
-
-.form-control:disabled, .form-control[readonly] {
-    background-color: #ffffff;
-    opacity: 0.5;
-}
