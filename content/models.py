@@ -12,17 +12,15 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 import reversion
-from djrichtextfield.models import RichTextField
 
 from pdf2image import convert_from_path
 
-import django_tuieditor.models
 from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
-from django.core.exceptions import ValidationError
+
 from django.core.validators import FileExtensionValidator
 
 
@@ -298,10 +296,6 @@ class MDContent(BaseContentModel):
                                  help_text=_("Insert your Markdown script here:"),
                                  blank=True)
     source = models.TextField(verbose_name=_("Source"))
-
-    """editor = RichTextField(verbose_name=_("Markdown Script"),
-                           help_text=_("Insert your Markdown script here:"),
-                           blank=True)"""
 
     class Meta:
         """Meta options

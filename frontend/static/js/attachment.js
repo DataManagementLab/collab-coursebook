@@ -131,14 +131,11 @@ function addAttachment(event) {
 
         // Update form count
         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
-
-        //const attachment = document.getElementById('id_form-' + children + '-image');
         const attachment = $('#id_form-' + children + '-image');
         if (attachment.length) {
             console.log("Field id:" + children);
             addAttachmentEvent(attachment,children);
         }
-
     }
 }
 
@@ -183,4 +180,3 @@ function removeAttachment(event) {
         URL_ARRAY.pop();
     }
 }
-
