@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-20 14:28+0000\n"
+"POT-Creation-Date: 2022-01-09 03:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,149 +17,148 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: frontend/forms/comment.py:48
+#: forms/comment.py:48
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
-#: frontend/forms/course.py:108
+#: forms/course.py:108
 msgid "Date"
 msgstr "Datum"
 
-#: frontend/forms/course.py:108
-#: frontend/templates/frontend/content/detail.html:191
+#: forms/course.py:108 templates/frontend/content/detail.html:198
 msgid "Rating"
 msgstr "Bewertung"
 
-#: frontend/forms/course.py:109
+#: forms/course.py:109
 msgid "Filter by"
 msgstr "Filtern nach"
 
-#: frontend/forms/course.py:114
+#: forms/course.py:114
 msgid "Sort by"
 msgstr "Sortieren nach"
 
-#: frontend/forms/course.py:132
+#: forms/course.py:132
 msgid "Topics"
 msgstr "Themen"
 
-#: frontend/forms/history.py:23
-#: frontend/templates/frontend/history/history_compare_header.html:43
+#: forms/history.py:23
+#: templates/frontend/history/history_compare_header.html:43
 msgid "Change Log"
 msgstr "Änderungsprotokoll"
 
-#: frontend/forms/history.py:23
+#: forms/history.py:23
 msgid "Please write down your changes of this content"
 msgstr "Bitte notieren Sie Ihre Änderungen an diesem Inhalt"
 
-#: frontend/forms/page.py:6
+#: forms/page.py:6
 msgid "I accept the privacy note"
 msgstr "Ich akzeptiere die Datenschutzerklärung"
 
-#: frontend/forms/page.py:7
+#: forms/page.py:7
 msgid "(required to use this website)"
 msgstr "(notwendig zur Nutzung dieser Webseite)"
 
-#: frontend/templates/frontend/base.html:34
+#: templates/frontend/base.html:34
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
 msgstr ""
 "Sind Sie sicher, dass Sie die Sprache ändern möchten? Ihre Änderungen gehen "
 "dann verloren!"
 
-#: frontend/templates/frontend/base.html:66
+#: templates/frontend/base.html:66
 msgid "Impress"
 msgstr "Impressum"
 
-#: frontend/templates/frontend/base.html:71
+#: templates/frontend/base.html:71
 msgid "Privacy Note"
 msgstr "Datenschutzerklärung"
 
-#: frontend/templates/frontend/base.html:76
+#: templates/frontend/base.html:76
 msgid "This software is open source"
 msgstr "Diese Software ist Open Source"
 
-#: frontend/templates/frontend/comment/delete_confirm.html:9
-#: frontend/templates/frontend/comment/delete_confirm.html:14
+#: templates/frontend/comment/delete_confirm.html:9
+#: templates/frontend/comment/delete_confirm.html:14
 msgid "Delete Comment"
 msgstr "Kommentar löschen"
 
-#: frontend/templates/frontend/comment/delete_confirm.html:17
+#: templates/frontend/comment/delete_confirm.html:17
 msgid "Are you sure you want to delete the following comment?"
 msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 
-#: frontend/templates/frontend/comment/delete_confirm.html:30
-#: frontend/templates/frontend/content/detail.html:160
-#: frontend/templates/frontend/course/view.html:252
-#: frontend/templates/frontend/history/history_compare_view.html:101
+#: templates/frontend/comment/delete_confirm.html:30
+#: templates/frontend/content/detail.html:167
+#: templates/frontend/course/view.html:252
+#: templates/frontend/history/history_compare_view.html:101
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: frontend/templates/frontend/comment/delete_confirm.html:33
-#: frontend/templates/frontend/comment/edit.html:26
-#: frontend/templates/frontend/content/add.html:77
-#: frontend/templates/frontend/content/detail.html:157
-#: frontend/templates/frontend/content/edit.html:86
-#: frontend/templates/frontend/course/create.html:32
-#: frontend/templates/frontend/course/duplicate.html:37
-#: frontend/templates/frontend/course/edit.html:34
-#: frontend/templates/frontend/course/edit_structure.html:87
-#: frontend/templates/frontend/course/view.html:249
-#: frontend/templates/frontend/history/history_compare_view.html:97
-#: frontend/templates/frontend/profile/profile_edit.html:22
+#: templates/frontend/comment/delete_confirm.html:33
+#: templates/frontend/comment/edit.html:26
+#: templates/frontend/content/add.html:80
+#: templates/frontend/content/detail.html:164
+#: templates/frontend/content/edit.html:86
+#: templates/frontend/course/create.html:32
+#: templates/frontend/course/duplicate.html:37
+#: templates/frontend/course/edit.html:34
+#: templates/frontend/course/edit_structure.html:90
+#: templates/frontend/course/view.html:249
+#: templates/frontend/history/history_compare_view.html:97
+#: templates/frontend/profile/profile_edit.html:22
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: frontend/templates/frontend/comment/edit.html:9
-#: frontend/templates/frontend/comment/edit.html:14
+#: templates/frontend/comment/edit.html:9
+#: templates/frontend/comment/edit.html:14
 msgid "Edit comment"
 msgstr "Kommentar bearbeiten"
 
-#: frontend/templates/frontend/comment/edit.html:22
-#: frontend/templates/frontend/profile/profile_edit.html:25
+#: templates/frontend/comment/edit.html:22
+#: templates/frontend/profile/profile_edit.html:25
 msgid "Submit"
 msgstr "Abschicken"
 
-#: frontend/templates/frontend/content/add.html:11
-#: frontend/templates/frontend/course/dropdown_topic.html:11
-#: frontend/templates/frontend/tutorial/add_content.html:8
+#: templates/frontend/content/add.html:11
+#: templates/frontend/course/dropdown_topic.html:11
+#: templates/frontend/tutorial/add_content.html:8
 msgid "Add Content"
 msgstr "Inhalt hinzufügen"
 
-#: frontend/templates/frontend/content/add.html:25
-#: frontend/templates/frontend/content/edit.html:24
+#: templates/frontend/content/add.html:25
+#: templates/frontend/content/edit.html:24
 msgid "Topic"
 msgstr "Thema"
 
-#: frontend/templates/frontend/content/add.html:42
-#: frontend/templates/frontend/content/edit.html:42
+#: templates/frontend/content/add.html:45
+#: templates/frontend/content/edit.html:42
 msgid "Image Attachments"
 msgstr "Bildanhänge"
 
-#: frontend/templates/frontend/content/add.html:55
-#: frontend/templates/frontend/content/edit.html:65
+#: templates/frontend/content/add.html:58
+#: templates/frontend/content/edit.html:65
 msgid "Add attachment"
 msgstr "Anhang hinzufügen"
 
-#: frontend/templates/frontend/content/add.html:58
-#: frontend/templates/frontend/content/edit.html:68
+#: templates/frontend/content/add.html:61
+#: templates/frontend/content/edit.html:68
 msgid "Remove attachment"
 msgstr "Anhang entfernen"
 
-#: frontend/templates/frontend/content/add.html:74
-#: frontend/templates/frontend/course/create.html:29
-#: frontend/templates/frontend/course/duplicate.html:34
+#: templates/frontend/content/add.html:77
+#: templates/frontend/course/create.html:29
+#: templates/frontend/course/duplicate.html:34
 msgid "Create"
 msgstr "Erstellen"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:18
+#: templates/frontend/content/attachment_embedding_help.html:18
 msgid "Instruction"
 msgstr "Instruktion"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:27
+#: templates/frontend/content/attachment_embedding_help.html:27
 msgid "Information"
 msgstr "Informationen"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:29
+#: templates/frontend/content/attachment_embedding_help.html:29
 msgid ""
 "Please insert only the LaTeX code within the document body since the "
 "preamble and the configuration are already set. Do not include any packages."
@@ -168,12 +167,12 @@ msgstr ""
 "die Präambel und Konfigurationen bereits gesetzt wurden. Bitte fügen Sie "
 "keine weiteren Pakete hinzu."
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:35
-#: frontend/templates/frontend/content/attachment_embedding_help.html:58
+#: templates/frontend/content/attachment_embedding_help.html:35
+#: templates/frontend/content/attachment_embedding_help.html:58
 msgid "Example"
 msgstr "Beispiel"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:37
+#: templates/frontend/content/attachment_embedding_help.html:37
 msgid ""
 "Here is an example LaTeX code which can be copied by pressing the following "
 "button:"
@@ -181,30 +180,30 @@ msgstr ""
 "Hier ist ein Beispiel LaTeX Code verfübar, welche kopiert werden kann, in "
 "dem der gegeben Button gedrückt wird:"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:42
+#: templates/frontend/content/attachment_embedding_help.html:42
 msgid "Copy Example"
 msgstr "Kopiere Beispiel"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:47
+#: templates/frontend/content/attachment_embedding_help.html:47
 msgid "Embedded attachment"
 msgstr "Eingebettete Anhänge"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:49
+#: templates/frontend/content/attachment_embedding_help.html:49
 msgid "Command:"
 msgstr "Befehl"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:52
+#: templates/frontend/content/attachment_embedding_help.html:52
 msgid "LaTeX specific options"
 msgstr "LaTeX spezifische Optionen"
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:55
+#: templates/frontend/content/attachment_embedding_help.html:55
 msgid ""
 "The number of the attachment. The first attachment you upload has the number "
 "0."
 msgstr ""
 "Die Nummer des Anhangs. Der erste Anhang, den Sie hochladen hat die Nummer 0."
 
-#: frontend/templates/frontend/content/attachment_embedding_help.html:61
+#: templates/frontend/content/attachment_embedding_help.html:61
 #, python-format
 msgid ""
 "If you add an attachment, you can click on the %(copy)s button to copy the "
@@ -214,54 +213,55 @@ msgstr ""
 "%(copy)s um den LaTeX-Code zu kopieren und es alseingegebetten Anhang in den "
 "Code zu integrieren."
 
-#: frontend/templates/frontend/content/detail.html:25
-#: frontend/templates/frontend/course/view.html:30
+#: templates/frontend/content/detail.html:25
+#: templates/frontend/course/view.html:30
 msgid "Actions"
 msgstr "Aktionen"
 
-#: frontend/templates/frontend/content/detail.html:33
-#: frontend/templates/frontend/content/reading_mode.html:12
+#: templates/frontend/content/detail.html:33
+#: templates/frontend/content/reading_mode.html:12
 msgid "Reading Mode"
 msgstr "Lesemodus"
 
-#: frontend/templates/frontend/content/detail.html:40
-#: frontend/templates/frontend/content/detail.html:45
-#: frontend/templates/frontend/course/coursebook.html:21 frontend/urls.py:75
+#: templates/frontend/content/detail.html:40
+#: templates/frontend/content/detail.html:45
+#: templates/frontend/course/coursebook.html:21 urls.py:75
 msgid "Coursebook"
 msgstr "Kursbuch"
 
-#: frontend/templates/frontend/content/detail.html:54
-#: frontend/templates/frontend/profile/profile.html:18
+#: templates/frontend/content/detail.html:54
+#: templates/frontend/profile/profile.html:18
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: frontend/templates/frontend/content/detail.html:62
-#: frontend/templates/frontend/content/detail.html:69
-#: frontend/templates/frontend/content/detail.html:76
-#: frontend/templates/frontend/content/detail.html:82
-#: frontend/templates/frontend/content/detail.html:89
-#: frontend/templates/frontend/course/view.html:70
+#: templates/frontend/content/detail.html:62
+#: templates/frontend/content/detail.html:69
+#: templates/frontend/content/detail.html:76
+#: templates/frontend/content/detail.html:82
+#: templates/frontend/content/detail.html:89
+#: templates/frontend/content/detail.html:96
+#: templates/frontend/course/view.html:70
 msgid "View History"
 msgstr "Versionsgeschichte"
 
-#: frontend/templates/frontend/content/detail.html:96
-#: frontend/templates/frontend/content/detail.html:142
+#: templates/frontend/content/detail.html:103
+#: templates/frontend/content/detail.html:149
 msgid "Delete"
 msgstr "Löschen"
 
-#: frontend/templates/frontend/content/detail.html:107
+#: templates/frontend/content/detail.html:114
 msgid "Back to course "
 msgstr "Zurück zum Kurs"
 
-#: frontend/templates/frontend/content/detail.html:116
+#: templates/frontend/content/detail.html:123
 msgid "By"
 msgstr "Von"
 
-#: frontend/templates/frontend/content/detail.html:131
+#: templates/frontend/content/detail.html:138
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: frontend/templates/frontend/content/detail.html:147
+#: templates/frontend/content/detail.html:154
 #, python-format
 msgid ""
 "Are you sure you want to delete this %(type)s? This action cannot be undone."
@@ -269,169 +269,166 @@ msgstr ""
 "Soll dieses %(type)s wirklich gelöscht werden? Diese Aktion kann nicht "
 "rückgängig gemacht werden."
 
-#: frontend/templates/frontend/content/detail.html:176
-#: frontend/templates/frontend/course/view.html:100
+#: templates/frontend/content/detail.html:183
+#: templates/frontend/course/view.html:100
 msgid "Description"
 msgstr "Beschreibung"
 
-#: frontend/templates/frontend/content/detail.html:199
+#: templates/frontend/content/detail.html:206
 msgid "No rating yet"
 msgstr "Bisher keine Bewertungen"
 
-#: frontend/templates/frontend/content/detail.html:213
+#: templates/frontend/content/detail.html:220
 msgid "Comments"
 msgstr "Kommentare"
 
-#: frontend/templates/frontend/content/detail.html:221
+#: templates/frontend/content/detail.html:228
 msgid "Add comment"
 msgstr "Kommentar hinzufügen"
 
-#: frontend/templates/frontend/content/detail_attachment.html:8
-#: frontend/templates/frontend/content/reading_mode_attachment.html:9
+#: templates/frontend/content/detail_attachment.html:8
+#: templates/frontend/content/reading_mode_attachment.html:9
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: frontend/templates/frontend/content/dynamic_attachment.html:30
-#: frontend/templates/frontend/content/edit.html:57
+#: templates/frontend/content/dynamic_attachment.html:30
+#: templates/frontend/content/edit.html:57
 msgid "Copy Attachment-Embedding Code"
 msgstr "Code für Anhangseinbettung kopieren"
 
-#: frontend/templates/frontend/content/edit.html:11
+#: templates/frontend/content/edit.html:11
 msgid "Edit content"
 msgstr "Inhalt bearbeiten"
 
-#: frontend/templates/frontend/content/edit.html:83
-#: frontend/templates/frontend/course/edit_structure.html:90
+#: templates/frontend/content/edit.html:83
+#: templates/frontend/course/edit_structure.html:87
 msgid "Save"
 msgstr "Speichern"
 
-#: frontend/templates/frontend/content/reading_mode.html:20
+#: templates/frontend/content/reading_mode.html:20
 msgid "Close"
 msgstr "Schließen"
 
-#: frontend/templates/frontend/content/reading_mode.html:27
+#: templates/frontend/content/reading_mode.html:27
 msgid "Next"
 msgstr "Vor"
 
-#: frontend/templates/frontend/content/reading_mode.html:31
+#: templates/frontend/content/reading_mode.html:31
 msgid "Previous"
 msgstr "Zurück"
 
-#: frontend/templates/frontend/course/coursebook.html:12
+#: templates/frontend/course/coursebook.html:12
 msgid "Export"
 msgstr "Exportieren"
 
-#: frontend/templates/frontend/course/coursebook.html:29
+#: templates/frontend/course/coursebook.html:29
 msgid "Your coursebook is empty"
 msgstr "Dein Kursbuch ist leer"
 
-#: frontend/templates/frontend/course/create.html:9
-#: frontend/templates/frontend/course/create.html:18
-#: frontend/templates/frontend/course_lists/card_create_course.html:22
+#: templates/frontend/course/create.html:9
+#: templates/frontend/course/create.html:18
+#: templates/frontend/course_lists/card_create_course.html:22
 msgid "Create a new course"
 msgstr "Neuen Kurs anlegen"
 
-#: frontend/templates/frontend/course/duplicate.html:11
-#: frontend/templates/frontend/course/duplicate.html:22
-#: frontend/templates/frontend/course/view.html:51
+#: templates/frontend/course/duplicate.html:11
+#: templates/frontend/course/duplicate.html:22
+#: templates/frontend/course/view.html:51
 msgid "Duplicate Course"
 msgstr "Kurs duplizieren"
 
-#: frontend/templates/frontend/course/edit.html:9
-#: frontend/templates/frontend/course/edit.html:19
+#: templates/frontend/course/edit.html:9 templates/frontend/course/edit.html:19
 msgid "Edit course"
 msgstr "Kurs bearbeiten"
 
-#: frontend/templates/frontend/course/edit.html:31
+#: templates/frontend/course/edit.html:31
 msgid "Change"
 msgstr "Ändern"
 
-#: frontend/templates/frontend/course/edit_structure.html:22
-#: frontend/templates/frontend/course/edit_structure.html:28
+#: templates/frontend/course/edit_structure.html:22
+#: templates/frontend/course/edit_structure.html:28
 msgid "Edit Course Structure"
 msgstr "Kursstruktur bearbeiten"
 
-#: frontend/templates/frontend/course/edit_structure.html:37
+#: templates/frontend/course/edit_structure.html:37
 msgid "Add Topic to Structure"
 msgstr "Thema zur Kursstruktur hinzufügen"
 
-#: frontend/templates/frontend/course/edit_structure.html:42
+#: templates/frontend/course/edit_structure.html:42
 msgid "Expand Structure"
 msgstr "Struktur aufklappen"
 
-#: frontend/templates/frontend/course/edit_structure.html:45
+#: templates/frontend/course/edit_structure.html:45
 msgid "Collapse Structure"
 msgstr "Struktur zuklappen"
 
-#: frontend/templates/frontend/course/edit_structure.html:48
+#: templates/frontend/course/edit_structure.html:48
 msgid "Add Topic"
 msgstr "Thema hinzufügen"
 
-#: frontend/templates/frontend/course/edit_structure.html:55
+#: templates/frontend/course/edit_structure.html:55
 msgid "Add a new Topic"
 msgstr "Ein neues Thema erstellen"
 
-#: frontend/templates/frontend/course/edit_structure.html:62
+#: templates/frontend/course/edit_structure.html:62
 msgid "Create Topic"
 msgstr "Thema erstellen"
 
-#: frontend/templates/frontend/course/edit_structure.html:75
+#: templates/frontend/course/edit_structure.html:75
 msgid "Course Structure"
 msgstr "Kursstruktur"
 
-#: frontend/templates/frontend/course/view.html:38
+#: templates/frontend/course/view.html:38
 msgid "Add to favourite"
 msgstr "Zu Favouriten hinzufügen"
 
-#: frontend/templates/frontend/course/view.html:44
+#: templates/frontend/course/view.html:44
 msgid "Remove from favourite"
 msgstr "Aus Favouriten entfernen"
 
-#: frontend/templates/frontend/course/view.html:56
+#: templates/frontend/course/view.html:56
 msgid "Export Course"
 msgstr "Kurs exportieren"
 
-#: frontend/templates/frontend/course/view.html:64
-#: frontend/templates/frontend/tutorial/edit_course.html:8
+#: templates/frontend/course/view.html:64
+#: templates/frontend/tutorial/edit_course.html:8
 msgid "Edit Course"
 msgstr "Kurs bearbeiten"
 
-#: frontend/templates/frontend/course/view.html:67
-#: frontend/templates/frontend/tutorial/edit_structure.html:8
+#: templates/frontend/course/view.html:67
+#: templates/frontend/tutorial/edit_structure.html:8
 msgid "Edit Structure"
 msgstr "Struktur bearbeiten"
 
-#: frontend/templates/frontend/course/view.html:73
-#: frontend/templates/frontend/course/view_course.html:36
+#: templates/frontend/course/view.html:73
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
-#: frontend/templates/frontend/course/view.html:107
+#: templates/frontend/course/view.html:107
 msgid "Course picture"
 msgstr "Kursbild"
 
-#: frontend/templates/frontend/course/view.html:120
+#: templates/frontend/course/view.html:120
 msgid "Table of Contents"
 msgstr "Inhaltsverzeichnis"
 
-#: frontend/templates/frontend/course/view.html:151
-#: frontend/templates/frontend/course/view_course.html:58
+#: templates/frontend/course/view.html:151
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
-#: frontend/templates/frontend/course/view.html:218
+#: templates/frontend/course/view.html:218
 msgid "No Topics"
 msgstr "Keine Themen"
 
-#: frontend/templates/frontend/course/view.html:221
+#: templates/frontend/course/view.html:221
 msgid "This course doesn't have topics at the moment."
 msgstr "Der Kurs hat momentan keine Themen."
 
-#: frontend/templates/frontend/course/view.html:233
+#: templates/frontend/course/view.html:233
 msgid "Delete Confirmation"
 msgstr "Löschbestätigung"
 
-#: frontend/templates/frontend/course/view.html:238
+#: templates/frontend/course/view.html:238
 msgid ""
 "Are you sure you want to delete this course? Only the structure is deleted - "
 "the topics are retained."
@@ -439,79 +436,79 @@ msgstr ""
 "Sind Sie sicher, dass Sie diesen Kurs löschen möchten? Nur die Kursstruktur "
 "wird gelöscht. Die Themen bleiben erhalten."
 
-#: frontend/templates/frontend/course_lists/card_category.html:34
-#: frontend/templates/frontend/course_lists/card_period.html:23
-#: frontend/templates/frontend/course_lists/courses.html:12
-#: frontend/templates/frontend/search.html:24
+#: templates/frontend/course_lists/card_category.html:34
+#: templates/frontend/course_lists/card_period.html:23
+#: templates/frontend/course_lists/courses.html:12
+#: templates/frontend/search.html:24
 msgid "Courses"
 msgstr "Kurse"
 
-#: frontend/templates/frontend/course_lists/card_course.html:51
+#: templates/frontend/course_lists/card_course.html:51
 msgid "Contents"
 msgstr "Inhalte"
 
-#: frontend/templates/frontend/course_lists/course_cards_paginated.html:13
+#: templates/frontend/course_lists/course_cards_paginated.html:13
 msgid "No matching courses found"
 msgstr "Keine passenden Kurse gefunden"
 
-#: frontend/templates/frontend/course_lists/courses.html:25
-#: frontend/templates/frontend/course_lists/courses_category.html:26
-#: frontend/templates/frontend/course_lists/courses_period.html:25
+#: templates/frontend/course_lists/courses.html:25
+#: templates/frontend/course_lists/courses_category.html:26
+#: templates/frontend/course_lists/courses_period.html:25
 msgid "Sort by:"
 msgstr "Sortieren nach:"
 
-#: frontend/templates/frontend/course_lists/courses.html:43
+#: templates/frontend/course_lists/courses.html:43
 msgid "Add Course"
 msgstr "Kurs hinzufügen"
 
-#: frontend/templates/frontend/course_lists/courses_category.html:12
+#: templates/frontend/course_lists/courses_category.html:12
 msgid "Courses for Category"
 msgstr "Kurse für die Kategorie"
 
-#: frontend/templates/frontend/course_lists/courses_category.html:19
-#: frontend/templates/frontend/course_lists/courses_period.html:19
-#: frontend/templates/frontend/navbar.html:16
+#: templates/frontend/course_lists/courses_category.html:19
+#: templates/frontend/course_lists/courses_period.html:19
+#: templates/frontend/navbar.html:16
 msgid "All Courses"
 msgstr "Alle Kurse"
 
-#: frontend/templates/frontend/course_lists/courses_category.html:20
+#: templates/frontend/course_lists/courses_category.html:20
 msgid "for Category"
 msgstr "für die Kategorie"
 
-#: frontend/templates/frontend/course_lists/courses_category.html:31
-#: frontend/templates/frontend/course_lists/courses_period.html:29
+#: templates/frontend/course_lists/courses_category.html:31
+#: templates/frontend/course_lists/courses_period.html:29
 msgid "Date (newest)"
 msgstr "Datum (neuste)"
 
-#: frontend/templates/frontend/course_lists/courses_category.html:35
-#: frontend/templates/frontend/course_lists/courses_period.html:32
+#: templates/frontend/course_lists/courses_category.html:35
+#: templates/frontend/course_lists/courses_period.html:32
 msgid "Date (oldest)"
 msgstr "Datum (älteste)"
 
-#: frontend/templates/frontend/course_lists/courses_category.html:39
-#: frontend/templates/frontend/course_lists/courses_period.html:35
+#: templates/frontend/course_lists/courses_category.html:39
+#: templates/frontend/course_lists/courses_period.html:35
 msgid "Title (A-Z)"
 msgstr "Title (A-Z)"
 
-#: frontend/templates/frontend/course_lists/courses_category.html:43
-#: frontend/templates/frontend/course_lists/courses_period.html:38
+#: templates/frontend/course_lists/courses_category.html:43
+#: templates/frontend/course_lists/courses_period.html:38
 msgid "Title (Z-A)"
 msgstr "Titel (Z-A)"
 
-#: frontend/templates/frontend/course_lists/courses_period.html:12
+#: templates/frontend/course_lists/courses_period.html:12
 msgid "Courses for"
 msgstr "Kurse für"
 
-#: frontend/templates/frontend/course_lists/courses_period.html:19
+#: templates/frontend/course_lists/courses_period.html:19
 msgid "for"
 msgstr "für"
 
-#: frontend/templates/frontend/coursebook/rendering-error.html:9
-#: frontend/templates/frontend/coursebook/rendering-error.html:14
+#: templates/frontend/coursebook/rendering-error.html:9
+#: templates/frontend/coursebook/rendering-error.html:14
 msgid "Error"
 msgstr "Fehler"
 
-#: frontend/templates/frontend/coursebook/rendering-error.html:17
+#: templates/frontend/coursebook/rendering-error.html:17
 msgid ""
 "An error occurred while generating your coursebook. Please see the log file "
 "below."
@@ -519,38 +516,38 @@ msgstr ""
 "Beim Generieren Ihres Coursebooks ist ein Fehler aufgetreten. Weitere "
 "Informationen dazu finden Sie in der Protokolldatei."
 
-#: frontend/templates/frontend/coursebook/rendering-error.html:23
+#: templates/frontend/coursebook/rendering-error.html:23
 msgid "Latex Template"
 msgstr "LaTeX Template"
 
-#: frontend/templates/frontend/dashboard.html:11
+#: templates/frontend/dashboard.html:11
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: frontend/templates/frontend/dashboard.html:15
+#: templates/frontend/dashboard.html:15
 msgid "Your Courses"
 msgstr "Deine Kurse"
 
-#: frontend/templates/frontend/dashboard.html:27
-#: frontend/templates/frontend/profile/profile.html:51
+#: templates/frontend/dashboard.html:27
+#: templates/frontend/profile/profile.html:51
 msgid "Stared Courses"
 msgstr "Favorisierte Kurse"
 
-#: frontend/templates/frontend/dashboard.html:37
+#: templates/frontend/dashboard.html:37
 msgid "All Courses by Period"
 msgstr "Alle Kurse für den Zeitraum"
 
-#: frontend/templates/frontend/dashboard.html:46
+#: templates/frontend/dashboard.html:46
 msgid "All Courses by Category"
 msgstr "Alle Kurse für die Kategorie"
 
-#: frontend/templates/frontend/data_protection.html:11
-#: frontend/templates/frontend/data_protection_accept.html:11
-#: frontend/templates/frontend/data_protection_accept.html:22
+#: templates/frontend/data_protection.html:11
+#: templates/frontend/data_protection_accept.html:11
+#: templates/frontend/data_protection_accept.html:22
 msgid "Data Protection"
 msgstr "Datenschutz"
 
-#: frontend/templates/frontend/data_protection_accept.html:24
+#: templates/frontend/data_protection_accept.html:24
 msgid ""
 "Please review and accept the following data privacy note to continue using "
 "Collab Coursebook"
@@ -558,95 +555,95 @@ msgstr ""
 "Bitte die folgende Datenschutzerklärung lesen und akzeptieren, um Collab "
 "Coursebook zu verwenden"
 
-#: frontend/templates/frontend/data_protection_accept.html:37
+#: templates/frontend/data_protection_accept.html:37
 msgid "Continue"
 msgstr "Fortfahren"
 
-#: frontend/templates/frontend/history/history.html:16
-#: frontend/templates/frontend/history/history.html:24
-#: frontend/templates/frontend/tutorial/history.html:8
+#: templates/frontend/history/history.html:16
+#: templates/frontend/history/history.html:24
+#: templates/frontend/tutorial/history.html:8
 msgid "History"
 msgstr "Versionsgeschichte"
 
-#: frontend/templates/frontend/history/history.html:22
+#: templates/frontend/history/history.html:22
 msgid "Back"
 msgstr "Zurück"
 
-#: frontend/templates/frontend/history/history_compare_header.html:22
+#: templates/frontend/history/history_compare_header.html:22
 msgid "Compare"
 msgstr "Vergleichen"
 
-#: frontend/templates/frontend/history/history_compare_header.html:27
+#: templates/frontend/history/history_compare_header.html:27
 msgid "Version 1"
 msgstr "Version 1"
 
-#: frontend/templates/frontend/history/history_compare_header.html:30
+#: templates/frontend/history/history_compare_header.html:30
 msgid "Version 2"
 msgstr "Version 2"
 
-#: frontend/templates/frontend/history/history_compare_header.html:35
+#: templates/frontend/history/history_compare_header.html:35
 msgid "Date/time"
 msgstr "Datum/Uhrzeit"
 
-#: frontend/templates/frontend/history/history_compare_header.html:39
-#: frontend/templates/frontend/profile/profile.html:25
+#: templates/frontend/history/history_compare_header.html:39
+#: templates/frontend/profile/profile.html:25
 msgid "User"
 msgstr "Benutzer*in"
 
-#: frontend/templates/frontend/history/history_compare_header.html:80
-#: frontend/templates/frontend/history/history_compare_header.html:83
-#: frontend/templates/frontend/history/history_compare_view.html:48
-#: frontend/templates/frontend/history/history_compare_view.html:49
-#: frontend/templates/frontend/history/history_compare_view.html:53
-#: frontend/templates/frontend/history/history_compare_view.html:86
+#: templates/frontend/history/history_compare_header.html:80
+#: templates/frontend/history/history_compare_header.html:83
+#: templates/frontend/history/history_compare_view.html:48
+#: templates/frontend/history/history_compare_view.html:49
+#: templates/frontend/history/history_compare_view.html:53
+#: templates/frontend/history/history_compare_view.html:86
 msgid "DATETIME_FORMAT"
 msgstr "DATETIME_FORMAT"
 
-#: frontend/templates/frontend/history/history_compare_view.html:11
+#: templates/frontend/history/history_compare_view.html:11
 msgid "Attachment"
 msgstr "Anhang"
 
-#: frontend/templates/frontend/history/history_compare_view.html:27
+#: templates/frontend/history/history_compare_view.html:27
 msgid "There are no differences."
 msgstr "Es gibt keine Unterschiede."
 
-#: frontend/templates/frontend/history/history_compare_view.html:35
+#: templates/frontend/history/history_compare_view.html:35
 msgid "Change log:"
 msgstr "Änderungsprotokoll:"
 
-#: frontend/templates/frontend/history/history_compare_view.html:38
+#: templates/frontend/history/history_compare_view.html:38
 msgid "(no comment exists)"
 msgstr "(kein Kommentar)"
 
-#: frontend/templates/frontend/history/history_compare_view.html:43
+#: templates/frontend/history/history_compare_view.html:43
 msgid "Compare information"
 msgstr "Informationen zum Vergleich"
 
-#: frontend/templates/frontend/history/history_compare_view.html:47
+#: templates/frontend/history/history_compare_view.html:47
 msgid "Compare Version 1"
 msgstr "Vergleich von Version 1"
 
-#: frontend/templates/frontend/history/history_compare_view.html:48
+#: templates/frontend/history/history_compare_view.html:48
 msgid "with Version 2"
 msgstr "mit Version 2"
 
-#: frontend/templates/frontend/history/history_compare_view.html:52
+#: templates/frontend/history/history_compare_view.html:52
 msgid "Revert to Version 1"
 msgstr "Zurückkehren zu Version 1"
 
-#: frontend/templates/frontend/history/history_compare_view.html:62
+#: templates/frontend/history/history_compare_view.html:62
 msgid "Compare previous two Versions"
 msgstr "Die vorherigen beiden Versionen vergleichen"
 
-#: frontend/templates/frontend/history/history_compare_view.html:69
+#: templates/frontend/history/history_compare_view.html:69
 msgid "Compare next two Versions"
 msgstr "Die nächsten beiden Versionen vergleichen"
 
-#: frontend/templates/frontend/history/history_compare_view.html:80
+#: templates/frontend/history/history_compare_view.html:80
 msgid "Reversion of"
 msgstr "Überschreiben vom"
 
-#: frontend/templates/frontend/history/history_compare_view.html:86
+#: templates/frontend/history/history_compare_view.html:86
 #, python-format
 msgid ""
 "Are you sure you want to revert to Version <strong>%(date1)s</strong>? You "
@@ -656,82 +653,79 @@ msgstr ""
 "<strong>%(date1)s</strong> überschreiben möchten? Sie können Ihre Änderungen "
 "auch später noch rückgängig machen."
 
-#: frontend/templates/frontend/history/history_compare_view.html:115
+#: templates/frontend/history/history_compare_view.html:115
 msgid "Go back to history list"
 msgstr "Zurück zur Versionsgeschichte"
 
-#: frontend/templates/frontend/history/history_compare_view.html:121
+#: templates/frontend/history/history_compare_view.html:121
 msgid "Overwrite fields with these changes?"
 msgstr "Felder überschreiben mit diesen Änderungen?"
 
-#: frontend/templates/frontend/index.html:19
-#: frontend/templates/frontend/navbar.html:73
+#: templates/frontend/index.html:19 templates/frontend/navbar.html:73
 msgid "Logout"
 msgstr "Ausloggen"
 
-#: frontend/templates/frontend/index.html:30
+#: templates/frontend/index.html:30
 msgid "Create content. Store knowledge. Learn together."
 msgstr "Erschaffe Inhalt. Speichere Wissen. Lerne gemeinsam."
 
-#: frontend/templates/frontend/index.html:35
+#: templates/frontend/index.html:35
 msgid "Login"
 msgstr "Einloggen"
 
-#: frontend/templates/frontend/index.html:39
+#: templates/frontend/index.html:39
 msgid "Go to dashboard"
 msgstr "Zum Dashboard"
 
-#: frontend/templates/frontend/navbar.html:8
-#: frontend/templates/frontend/search.html:10
+#: templates/frontend/navbar.html:8 templates/frontend/search.html:10
 msgid "Search"
 msgstr "Suche"
 
-#: frontend/templates/frontend/navbar.html:20
+#: templates/frontend/navbar.html:20
 msgid "Admin Menu"
 msgstr "Admin-Menü"
 
-#: frontend/templates/frontend/navbar.html:29
-#: frontend/templates/frontend/profile/profile.html:39
+#: templates/frontend/navbar.html:29 templates/frontend/profile/profile.html:39
 msgid "User profile picture"
 msgstr "Profilbild"
 
-#: frontend/templates/frontend/navbar.html:44
+#: templates/frontend/navbar.html:44
 msgid "Language"
 msgstr "Sprache"
 
-#: frontend/templates/frontend/profile/profile.html:10
+#: templates/frontend/profile/profile.html:10
 msgid "Profile"
 msgstr "Profil"
 
-#: frontend/templates/frontend/profile/profile.html:32
+#: templates/frontend/profile/profile.html:32
 msgid "Biography"
 msgstr "Biographie"
 
-#: frontend/templates/frontend/profile/profile_edit.html:9
+#: templates/frontend/profile/profile_edit.html:9
 msgid "Edit profile"
 msgstr "Profil bearbeiten"
 
-#: frontend/templates/frontend/profile/profile_edit.html:13
+#: templates/frontend/profile/profile_edit.html:13
 msgid "Edit your profile"
 msgstr "Profil bearbeiten"
 
-#: frontend/templates/frontend/search.html:21
+#: templates/frontend/search.html:21
 msgid "Search Results for "
 msgstr "Suchergebnisse für "
 
-#: frontend/templates/frontend/search.html:40
+#: templates/frontend/search.html:40
 msgid "No courses found"
 msgstr "Keine Kurse gefunden"
 
-#: frontend/templates/frontend/search.html:59
+#: templates/frontend/search.html:59
 msgid "No topics found"
 msgstr "Keine Themen gefunden"
 
-#: frontend/templates/frontend/tutorial.html:10
+#: templates/frontend/tutorial.html:10
 msgid "Tutorial"
 msgstr "Tutorial"
 
-#: frontend/templates/frontend/tutorial.html:18
+#: templates/frontend/tutorial.html:18
 msgid ""
 "Welcome to the “Collab Coursebook” tutorial! In this tutorial we will "
 "present our website and clarify its various functions."
@@ -739,7 +733,7 @@ msgstr ""
 "Herzlich Willkommen zum “Collab Coursebook” Tutorial. In diesem Tutorial "
 "werden wir unsere Website und die dazugehörigen Funktionen präsentieren. "
 
-#: frontend/templates/frontend/tutorial/add_content.html:14
+#: templates/frontend/tutorial/add_content.html:14
 msgid ""
 "After selecting “ADD CONTENT” on the course site, you can choose a type of "
 "the content which you want to create. Here we choose LaTeX content as an "
@@ -749,7 +743,7 @@ msgstr ""
 "Sie einen der Inhaltstypen auswählen, den Sie erstellen möchten. Hier nehmen "
 "wir LaTeX als Beispiel:"
 
-#: frontend/templates/frontend/tutorial/add_content.html:21
+#: templates/frontend/tutorial/add_content.html:21
 msgid ""
 "in ① you can click on the “?” to see detailed instruction for the latex code "
 "field."
@@ -757,7 +751,7 @@ msgstr ""
 "In ① können Sie auf das “?” klicken um eine detaillierte Anleitung für das "
 "LaTeX-Codefeld zu sehen."
 
-#: frontend/templates/frontend/tutorial/add_content.html:26
+#: templates/frontend/tutorial/add_content.html:26
 msgid ""
 "in ② you can select “ADD ATTACHMENT” to select an image file from your local "
 "computer as an attachment to this content."
@@ -765,7 +759,7 @@ msgstr ""
 "In ② können Sie „ANHANG HINZUFÜGEN“ selektieren, um eine Bilddatei von Ihrem "
 "lokalen Computer als Anhang zu diesem Inhalt hinzufügen."
 
-#: frontend/templates/frontend/tutorial/add_content.html:32
+#: templates/frontend/tutorial/add_content.html:32
 msgid ""
 "after you click on “ADD ATTACHMENT” there will also appear a “REMOVE "
 "ATTACHMENT” button, which allows you to remove the last attachment."
@@ -774,11 +768,11 @@ msgstr ""
 "Schaltfläche „ANHANG ENTFERNEN“ angezeigt, mit der Sie den zuletzt "
 "hinzugefügten Anhang entfernen können."
 
-#: frontend/templates/frontend/tutorial/content.html:6
+#: templates/frontend/tutorial/content.html:6
 msgid "Content"
 msgstr "Inhalt"
 
-#: frontend/templates/frontend/tutorial/content.html:9
+#: templates/frontend/tutorial/content.html:9
 msgid ""
 "Click on any content on the course page in order to view details. Similar to "
 "the course page, you can also click on an “ACTIONS” menu to access several "
@@ -788,11 +782,11 @@ msgstr ""
 "Details dazu anzusehen. Ähnlich wie auf der Kursseite können Sie auch hier "
 "auf „AKTIONEN“ klicken, um auf mehrere Hauptfunktionen zuzugreifen:"
 
-#: frontend/templates/frontend/tutorial/content.html:16
+#: templates/frontend/tutorial/content.html:16
 msgid "reading mode"
 msgstr "Lesemodus"
 
-#: frontend/templates/frontend/tutorial/content.html:21
+#: templates/frontend/tutorial/content.html:21
 msgid ""
 "add or remove content from coursebook (the changes should be noticeable on "
 "the course page)"
@@ -800,36 +794,36 @@ msgstr ""
 "den Inhalt zum Kursbuch hinzufügen oder aus dem Kursbuch entfernen (die "
 "Änderungen sollten auf der Kursseite sichtbar sein)"
 
-#: frontend/templates/frontend/tutorial/content.html:26
+#: templates/frontend/tutorial/content.html:26
 msgid "edit, similar to section “Add Content”"
 msgstr "den Inhalt bearbeiten, ähnlich wie im Abschnitt „Inhalt hinzufügen“ "
 
-#: frontend/templates/frontend/tutorial/content.html:31
+#: templates/frontend/tutorial/content.html:31
 msgid "view history, similar to section “History”"
 msgstr ""
 "Versionsgeschichte des Inhalts anschauen, ähnlich wie im Abschnitt "
 "„Versionsgeschichte“ "
 
-#: frontend/templates/frontend/tutorial/content.html:36
+#: templates/frontend/tutorial/content.html:36
 msgid "delete"
 msgstr "löschen"
 
-#: frontend/templates/frontend/tutorial/course.html:8
+#: templates/frontend/tutorial/course.html:8
 msgid "Course"
 msgstr "Kurs"
 
-#: frontend/templates/frontend/tutorial/course.html:14
+#: templates/frontend/tutorial/course.html:14
 msgid "The key functions of the course site are as follows:"
 msgstr "Die Schlüsselfunktionen der Kursseite sind die folgenden:"
 
-#: frontend/templates/frontend/tutorial/course.html:20
+#: templates/frontend/tutorial/course.html:20
 msgid ""
 "in ① you can select “ACTIONS” in order to access the following functions:"
 msgstr ""
 "In ① können Sie “AKTIONEN” selektieren, um Zugriff auf die folgenden "
 "Funktionen zu erlangen:"
 
-#: frontend/templates/frontend/tutorial/course.html:25
+#: templates/frontend/tutorial/course.html:25
 msgid ""
 "“ADD TO/ REMOVE FROM FAVOURITE”: Add/Remove the viewed course to your list "
 "of favourite courses."
@@ -837,31 +831,31 @@ msgstr ""
 "“ZU FAVORITEN HINZUFÜGEN/ AUS FAVORITEN ENTFERNEN”: Den betrachteten Kurses "
 "zur Liste von Favoritenkursen hinzufügen/entfernen."
 
-#: frontend/templates/frontend/tutorial/course.html:31
+#: templates/frontend/tutorial/course.html:31
 msgid "DUPLICATE COURSE: Duplicate this course"
 msgstr "KURS DUPLIZIEREN: Den betrachteten Kurs duplizieren"
 
-#: frontend/templates/frontend/tutorial/course.html:36
+#: templates/frontend/tutorial/course.html:36
 msgid "EXPORT COURSE: Export all course contents in a PDF"
 msgstr "KURS EXPORTIEREN: Alle Kursinhalte in einer PDF exportieren"
 
-#: frontend/templates/frontend/tutorial/course.html:41
+#: templates/frontend/tutorial/course.html:41
 msgid "EDIT COURSE - more information in a later section"
 msgstr "KURS BEARBEITEN - mehr Informationen in einem späteren Abschnitt"
 
-#: frontend/templates/frontend/tutorial/course.html:46
+#: templates/frontend/tutorial/course.html:46
 msgid "EDIT STRUCTURE - more information in a later section"
 msgstr "STRUKTUR BEARBEITEN - mehr Informationen in einem späteren Abschnitt"
 
-#: frontend/templates/frontend/tutorial/course.html:51
+#: templates/frontend/tutorial/course.html:51
 msgid "VIEW HISTORY - more information in a later section"
 msgstr "VERSIONSGESCHICHTE - mehr Informationen in einem späteren Abschnitt"
 
-#: frontend/templates/frontend/tutorial/course.html:56
+#: templates/frontend/tutorial/course.html:56
 msgid "DELETE COURSE: Delete the course"
 msgstr "KURS LÖSCHEN: Den betrachteten Kurs löschen"
 
-#: frontend/templates/frontend/tutorial/course.html:63
+#: templates/frontend/tutorial/course.html:63
 msgid ""
 "in ② you can click on the name of a specific topic for quick topic jumping, "
 "and click on the hamburger button to toggle/untoggle the topic list."
@@ -870,7 +864,7 @@ msgstr ""
 "zum ausgewählten Thema zu springen, und auf die Hamburger-Schaltfläche "
 "klicken, um die Themenliste ein- oder auszuschalten."
 
-#: frontend/templates/frontend/tutorial/course.html:69
+#: templates/frontend/tutorial/course.html:69
 msgid ""
 "in the “Coursebook” part you can see marked coursebook content. In ③ you can "
 "also click on the hamburger button in order to toggle/untoggle the "
@@ -880,7 +874,7 @@ msgstr ""
 "können Sie auch auf die Hamburger-Schaltfläche klicken, um das Kursbuch ein- "
 "oder auszuschalten."
 
-#: frontend/templates/frontend/tutorial/course.html:75
+#: templates/frontend/tutorial/course.html:75
 msgid ""
 "if there is any content in your “Coursebook”, there will be an “EXPORT” "
 "button (see ④), which you can select to download a pdf containing all "
@@ -890,7 +884,7 @@ msgstr ""
 "auftauchen, worüber Sie eine PDF Datei herunterladen können, welche alle "
 "Inhalte des Kursbuchs enthält. "
 
-#: frontend/templates/frontend/tutorial/course.html:81
+#: templates/frontend/tutorial/course.html:81
 msgid ""
 "on the right side of each topic there is an “ADD CONTENT” button (see ⑤). "
 "Click to add new content to the corresponding topic."
@@ -899,7 +893,7 @@ msgstr ""
 "HINZUFÜGEN“ (siehe ⑤). Selektieren Sie diese, um dem entsprechenden Thema "
 "einen neuen Inhalt hinzuzufügen."
 
-#: frontend/templates/frontend/tutorial/edit_course.html:14
+#: templates/frontend/tutorial/edit_course.html:14
 msgid ""
 "If you click “EDIT COURSE” in the “ACTIONS” menu of the course, you will be "
 "redirected to an “Edit course” page like this."
@@ -907,18 +901,18 @@ msgstr ""
 "Wenn Sie im Aktionsmenü des Kurses auf “KURS BEARBEITEN” klicken, werden Sie "
 "zu einer solchen “Kurs bearbeiten” Seite weitergeleitet."
 
-#: frontend/templates/frontend/tutorial/edit_course.html:21
+#: templates/frontend/tutorial/edit_course.html:21
 msgid "fields marked with asterisks are required."
 msgstr " Mit Sternchen markierte Felder sind erforderlich. "
 
-#: frontend/templates/frontend/tutorial/edit_course.html:26
+#: templates/frontend/tutorial/edit_course.html:26
 msgid ""
 "the text in “Change Log” will be shown later in the history list as comment."
 msgstr ""
 "Der Text im „Änderungsprotokoll“ wird später in der Versionsliste als "
 "Kommentar angezeigt ."
 
-#: frontend/templates/frontend/tutorial/edit_structure.html:14
+#: templates/frontend/tutorial/edit_structure.html:14
 msgid ""
 "If you select “EDIT STRUCTURE” in the “ACTIONS” menu of the course, you will "
 "be redirected to an “Edit Course Structure” page like this."
@@ -926,7 +920,7 @@ msgstr ""
 "Wenn Sie im Aktionsmenü des Kurses auf “STRUKTUR BEARBEITEN” klicken, werden "
 "Sie zu einer solchen “Kursstruktur bearbeiten” Seite weitergeleitet."
 
-#: frontend/templates/frontend/tutorial/edit_structure.html:21
+#: templates/frontend/tutorial/edit_structure.html:21
 msgid ""
 "in ① you can view all existing topics by selecting the dropdown-menu. Select "
 "one and click “ADD TOPIC” in order to add the topic to the course structure "
@@ -936,7 +930,7 @@ msgstr ""
 "selektierst. Wählen Sie ein Thema aus und klicken Sie auf „THEMA "
 "HINZUFÜGEN“, um das Thema zur Kursstruktur hinzuzufügen (siehe Teil ③)."
 
-#: frontend/templates/frontend/tutorial/edit_structure.html:27
+#: templates/frontend/tutorial/edit_structure.html:27
 msgid ""
 "in ① you can click “EXPAND STRUCTURE” to view all topics including the "
 "subtopics of the course in part ③, and click “COLLAPSE STRUCTURE” to view "
@@ -947,7 +941,7 @@ msgstr ""
 "ZUKLAPPEN” klicken, um alle Themen ohne die Unterthemen des Kurses in Teil ③ "
 "anzusehen. "
 
-#: frontend/templates/frontend/tutorial/edit_structure.html:34
+#: templates/frontend/tutorial/edit_structure.html:34
 msgid ""
 "in ② you can add new topics by denoting a title, selecting a category and "
 "then clicking “CREATE TOPIC”. The new topic will then be added to the list "
@@ -958,7 +952,7 @@ msgstr ""
 "wird dann zur Liste aller Themen in Teil ① sowie der Struktur des Kurses in "
 "Teil ③ hinzugefügt."
 
-#: frontend/templates/frontend/tutorial/edit_structure.html:41
+#: templates/frontend/tutorial/edit_structure.html:41
 msgid ""
 "in ③ you can see the current structure of the course. You can update the "
 "structure via Drag & Drop of the hamburger buttons in front of the topic "
@@ -967,11 +961,11 @@ msgstr ""
 "In ③ sehen Sie die aktuelle Struktur des Kurses. Sie können die Struktur per "
 "Drag & Drop der Hamburger-Schaltflächen vor den Themennamen umordnen."
 
-#: frontend/templates/frontend/tutorial/edit_structure.html:47
+#: templates/frontend/tutorial/edit_structure.html:47
 msgid "Don’t forget to save your changes!"
 msgstr "Vergissen Sie nicht, Ihre Änderungen zu speichern! "
 
-#: frontend/templates/frontend/tutorial/history.html:14
+#: templates/frontend/tutorial/history.html:14
 msgid ""
 "If you select “VIEW HISTORY” in the “ACTIONS” menu of the course, you will "
 "be redirected to a “History” page like this."
@@ -979,7 +973,7 @@ msgstr ""
 "Wenn Sie im Aktionsmenü des Kurses auf “VERSIONSGESCHICHTE” klicken, werden "
 "Sie zu einer solchen “Versionsgeschichte” Seite weitergeleitet."
 
-#: frontend/templates/frontend/tutorial/history.html:21
+#: templates/frontend/tutorial/history.html:21
 msgid ""
 "in the presented table all versions of the corresponding course are "
 "displayed. Every time after you edit the course, there will be a version "
@@ -989,7 +983,7 @@ msgstr ""
 "angezeigt. Jedes Mal, nachdem Sie den Kurs bearbeitet haben, wird eine "
 "Version mit den neuen Änderungen zur Tabelle hinzugefügt. "
 
-#: frontend/templates/frontend/tutorial/history.html:27
+#: templates/frontend/tutorial/history.html:27
 msgid ""
 "You can select two different versions in part ② and then click on the "
 "“COMPARE” button (see ①) in order to view the differences between the two "
@@ -999,7 +993,7 @@ msgstr ""
 "Schaltfläche „VERGLEICHEN“ (siehe ①) klicken, um die Unterschiede zwischen "
 "den beiden Versionen anzusehen."
 
-#: frontend/templates/frontend/tutorial/history.html:33
+#: templates/frontend/tutorial/history.html:33
 msgid ""
 "After you click “COMPARE”, regardless how you have selected the two "
 "versions, the left version (Version 1) will always be the older one"
@@ -1008,22 +1002,22 @@ msgstr ""
 "1) immer die ältere, unabhängig davon, in welcher Reihenfolge Sie die beiden "
 "Versionen ausgewählt haben. "
 
-#: frontend/templates/frontend/tutorial/history_compare.html:8
+#: templates/frontend/tutorial/history_compare.html:8
 msgid "History Compare"
 msgstr "Versionsgeschichte vergleichen"
 
-#: frontend/templates/frontend/tutorial/history_compare.html:14
+#: templates/frontend/tutorial/history_compare.html:14
 msgid ""
 "After you click on the “COMPARE” button, text will appear below the table:"
 msgstr ""
 "Nachdem Sie auf die Schaltfläche „VERGLEICHEN“ geklickt haben, wird Text "
 "bezüglich des Vergleichs unter der Tabelle angezeigt: "
 
-#: frontend/templates/frontend/tutorial/history_compare.html:20
+#: templates/frontend/tutorial/history_compare.html:20
 msgid "in ① you can see the fields where changes were made."
 msgstr "In ① sehen Sie die Felder, an denen Änderungen vorgenommen wurden."
 
-#: frontend/templates/frontend/tutorial/history_compare.html:25
+#: templates/frontend/tutorial/history_compare.html:25
 msgid ""
 "in ② you can see the details of the changes. The newly added texts are "
 "marked with green, the deleted texts are marked with red."
@@ -1031,11 +1025,11 @@ msgstr ""
 "In ② sehen Sie die Details der Änderungen. Die neu hinzugefügten Texte sind "
 "grün markiert, die gelöschten Texte sind rot markiert. "
 
-#: frontend/templates/frontend/tutorial/history_compare.html:31
+#: templates/frontend/tutorial/history_compare.html:31
 msgid "in ③ you can see which two versions are being compared."
 msgstr "In ③ sehen Sie, welche zwei Versionen verglichen werden."
 
-#: frontend/templates/frontend/tutorial/history_compare.html:36
+#: templates/frontend/tutorial/history_compare.html:36
 msgid ""
 "in ④ you can select “COMPARE PREVIOUS TWO VERSIONS” to see the comparison "
 "between the previous two versions, or select “COMPARE NEXT TWO VERSIONS” to "
@@ -1046,7 +1040,7 @@ msgstr ""
 "NÄCHSTEN BEIDEN VERSIONEN VERGLEICHEN“ auswählen, um den Vergleich zwischen "
 "den nächsten beiden Versionen anzusehen. "
 
-#: frontend/templates/frontend/tutorial/history_compare.html:42
+#: templates/frontend/tutorial/history_compare.html:42
 msgid ""
 "select “OVERWRITE FIELDS WITH THESE CHANGES?” in order to revert to Version "
 "1. After the revert has been completed, the status of the course will be "
@@ -1056,17 +1050,17 @@ msgstr ""
 "1 zurückzukehren. Sie sollten daraufhin auf die Kursseite weitergeleitet "
 "werden, wobei der Kurs auf Version 1 zurückgesetzt sein sollte. "
 
-#: frontend/templates/frontend/tutorial/history_compare.html:48
+#: templates/frontend/tutorial/history_compare.html:48
 msgid "select “GO BACK TO HISTORY LIST” to close the compare view"
 msgstr ""
 "Selektieren Sie „ZURÜCK ZUR VERSIONSGESCHICHTE“, um die Vergleichsansicht zu "
 "schließen"
 
-#: frontend/templates/frontend/tutorial/navbar.html:8
+#: templates/frontend/tutorial/navbar.html:8
 msgid "Navigation Bar"
 msgstr "Navigationsbar"
 
-#: frontend/templates/frontend/tutorial/navbar.html:14
+#: templates/frontend/tutorial/navbar.html:14
 msgid ""
 "Once you have logged in, we have prepared several functions on the "
 "navigation bar which you can access anytime during browsing."
@@ -1074,12 +1068,12 @@ msgstr ""
 "Sobald Sie sich eingeloggt haben, sind mehrere Funktionen auf der "
 "Navigationsbar verfügbar, welche Sie jederzeit abrufen können:"
 
-#: frontend/templates/frontend/tutorial/navbar.html:21
+#: templates/frontend/tutorial/navbar.html:21
 msgid "Click on “Collab Coursebook” (see ①) to open the Dashboard."
 msgstr ""
 "Klicken Sie auf  “Collab Coursebook” (siehe ①), um das Dashboard zu öffnen."
 
-#: frontend/templates/frontend/tutorial/navbar.html:26
+#: templates/frontend/tutorial/navbar.html:26
 msgid ""
 "Type any key words and click on the green button (see ②) to search for "
 "specific content."
@@ -1087,13 +1081,13 @@ msgstr ""
 "Geben Sie ein Schlüsselwort ein und klicken Sie auf den grünen Knopf (siehe "
 "②), um nach spezifischen Inhalten zu suchen."
 
-#: frontend/templates/frontend/tutorial/navbar.html:31
+#: templates/frontend/tutorial/navbar.html:31
 msgid "Select “ALL COURSES” (see ③) to view all available courses."
 msgstr ""
 "Selektieren Sie “ALLE KURSE” (siehe ③), um alle verfügbaren Kurse angezeigt "
 "zu bekommen."
 
-#: frontend/templates/frontend/tutorial/navbar.html:36
+#: templates/frontend/tutorial/navbar.html:36
 msgid ""
 "There will be an \"ADMIN MENU\" button in ④ only if you are the supervisor "
 "of the website, click to access the admin site."
@@ -1101,11 +1095,11 @@ msgstr ""
 "Nur wenn Sie Supervisor der Webseite sind, wird hier der “ADMIN MENÜ” Button "
 "(siehe ④) angezeigt. Selektieren Sie diesen, um die Admin-Seite aufzurufen."
 
-#: frontend/templates/frontend/tutorial/navbar.html:42
+#: templates/frontend/tutorial/navbar.html:42
 msgid "Select your user name (see ⑤) in order to check your profile."
 msgstr "Selektieren Sie Ihren Nutzernamen (siehe ⑤), um Ihr Profil aufzurufen."
 
-#: frontend/templates/frontend/tutorial/navbar.html:47
+#: templates/frontend/tutorial/navbar.html:47
 msgid ""
 "Select the dropdown-toggle button (see ⑥) in order to change the language, "
 "access the tutorial or log out."
@@ -1113,44 +1107,44 @@ msgstr ""
 "Selektieren Sie den Dropdown-toggle Knopf (siehe ⑥), um die Sprache zu "
 "wechseln, auf das Tutorial zuzugreifen oder sich auszuloggen."
 
-#: frontend/views/comment.py:52 frontend/views/comment.py:164
+#: views/comment.py:52 views/comment.py:164
 msgid "You do not have permission to do this."
 msgstr "Sie haben keine Berechtigung, um diesen Vorgang durchzuführen."
 
-#: frontend/views/comment.py:75
+#: views/comment.py:75
 msgid "Successfully deleted comment."
 msgstr "Kommentar erfolgreich gelöscht."
 
-#: frontend/views/comment.py:138
+#: views/comment.py:138
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: frontend/views/content.py:53
+#: views/content.py:54
 msgid "There exists no example yet."
 msgstr "Es ist momentan kein Beispiel verfügbar."
 
-#: frontend/views/content.py:124
+#: views/content.py:125
 #, python-format
 msgid "Content %(title)s successfully added"
 msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
-#: frontend/views/content.py:136 frontend/views/content.py:331
+#: views/content.py:137 views/content.py:344
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: frontend/views/content.py:317
+#: views/content.py:330
 msgid "You are not allowed to edit this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
-#: frontend/views/content.py:450
+#: views/content.py:476
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: frontend/views/content.py:705
+#: views/content.py:734
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 
-#: frontend/views/course.py:61
+#: views/course.py:63
 #, python-format
 msgid ""
 "Course %(title1)s successfully created. All settings and contents of the "
@@ -1159,27 +1153,27 @@ msgstr ""
 "Kurs %(title1)s erfolgreich erstellt. Alle Einstellungen und Inhalte des "
 "Kurses %(title)s wurden kopiert."
 
-#: frontend/views/course.py:136
+#: views/course.py:140
 #, python-format
 msgid "Course %(title)s successfully created"
 msgstr "Kurs %(title)s erfolgreich angelegt"
 
-#: frontend/views/course.py:191
+#: views/course.py:195
 #, python-format
 msgid "Course %(title)s successfully edited"
 msgstr "Kurs %(title)s erfolgreich bearbeitet"
 
-#: frontend/views/course.py:531
+#: views/course.py:535
 #, python-format
 msgid "Course %(title)s successfully deleted"
 msgstr "Kurs %(title)s erfolgreich gelöscht"
 
-#: frontend/views/history.py:321 frontend/views/history.py:402
+#: views/history.py:321 views/history.py:402
 #, python-format
 msgid "Reverted to Version: %s"
 msgstr "Zurückgekehrt zu Version: %s"
 
-#: frontend/views/profile.py:71
+#: views/profile.py:71
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
 

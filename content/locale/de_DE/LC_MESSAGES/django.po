@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-15 11:01+0000\n"
+"POT-Creation-Date: 2022-01-09 03:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,64 +17,63 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: content/attachment/models.py:37 content/attachment/models.py:56
+#: attachment/models.py:37 attachment/models.py:56
 msgid "Image Attachment"
 msgstr "Bildanhang"
 
-#: content/attachment/models.py:40 content/models.py:36
+#: attachment/models.py:40 models.py:40
 msgid "Content"
 msgstr "Inhalt"
 
-#: content/attachment/models.py:43 content/models.py:149 content/models.py:151
+#: attachment/models.py:43 models.py:153 models.py:155
 msgid "Image"
 msgstr "Bild"
 
-#: content/attachment/models.py:57
+#: attachment/models.py:57
 msgid "Image Attachments"
 msgstr "Bildanhänge"
 
-#: content/models.py:72 content/models.py:244
+#: models.py:76 models.py:248
 msgid "PDF"
 msgstr "PDF"
 
-#: content/models.py:120 content/models.py:203 content/models.py:292
-#: content/templates/content/reading_mode/Image.html:15
-#: content/templates/content/reading_mode/Latex.html:16
-#: content/templates/content/reading_mode/PDF.html:18
-#: content/templates/content/reading_mode/Textfield.html:14
-#: content/templates/content/view/AttachedImage.html:10
-#: content/templates/content/view/Image.html:7
-#: content/templates/content/view/Latex.html:10
-#: content/templates/content/view/PDF.html:10
-#: content/templates/content/view/Textfield.html:10
+#: models.py:124 models.py:207 models.py:299 models.py:351
+#: templates/content/reading_mode/Image.html:15
+#: templates/content/reading_mode/Latex.html:16
+#: templates/content/reading_mode/MD.html:16
+#: templates/content/reading_mode/PDF.html:18
+#: templates/content/reading_mode/Textfield.html:14
+#: templates/content/view/AttachedImage.html:10
+#: templates/content/view/Image.html:7 templates/content/view/Latex.html:10
+#: templates/content/view/MD.html:13 templates/content/view/PDF.html:10
+#: templates/content/view/Textfield.html:10
 msgid "Source"
 msgstr "Quelle"
 
-#: content/models.py:121 content/templates/content/reading_mode/Image.html:25
-#: content/templates/content/reading_mode/PDF.html:28
-#: content/templates/content/view/AttachedImage.html:18
-#: content/templates/content/view/Image.html:15
-#: content/templates/content/view/PDF.html:18
+#: models.py:125 templates/content/reading_mode/Image.html:25
+#: templates/content/reading_mode/PDF.html:28
+#: templates/content/view/AttachedImage.html:18
+#: templates/content/view/Image.html:15 templates/content/view/PDF.html:18
 msgid "License"
 msgstr "Lizenz"
 
-#: content/models.py:164
+#: models.py:168
 msgid "Image Content"
 msgstr "Bild-Inhalt"
 
-#: content/models.py:165
+#: models.py:169
 msgid "Image Contents"
 msgstr "Bild-Inhalte"
 
-#: content/models.py:197
+#: models.py:201
 msgid "Text (LaTeX)"
 msgstr "Text (LaTeX)"
 
-#: content/models.py:199
+#: models.py:203
 msgid "Latex Code"
 msgstr "LaTeX-Code"
 
-#: content/models.py:200
+#: models.py:204
 #, python-brace-format
 msgid ""
 "Please insert only valid LaTeX code. The packages and \\begin{document} and "
@@ -83,64 +82,92 @@ msgstr ""
 "Bitte geben Sie nur gültigen LaTeX-Code ein. Die Packages und "
 "\\begin{document} und \\end{document} werden automatisch hinzugefügt."
 
-#: content/models.py:215
+#: models.py:219
 msgid "Latex Content"
 msgstr "Latex-Inhalt"
 
-#: content/models.py:216
+#: models.py:220
 msgid "Latex Contents"
 msgstr "Latex-Inhalte"
 
-#: content/models.py:256
+#: models.py:260
 msgid "PDF Content"
 msgstr "PDF-Inhalt"
 
-#: content/models.py:257
+#: models.py:261
 msgid "PDF Contents"
 msgstr "PDF-Inhalte"
 
-#: content/models.py:289 content/models.py:291
+#: models.py:289
+msgid "Markdown"
+msgstr "Markdown"
+
+#: models.py:291
+msgid "Markdown File"
+msgstr "Markdown Datei"
+
+#: models.py:296
+msgid "Markdown Script"
+msgstr "Markdown Skript"
+
+#: models.py:297
+msgid "Insert your Markdown script here:"
+msgstr "Fügen Sie Ihr Markdown Skript hier ein:"
+
+#: models.py:311
+msgid "MD Content"
+msgstr "MD-Inhalt"
+
+#: models.py:312
+msgid "MD Contents"
+msgstr "MD-Inhalte"
+
+#: models.py:348 models.py:350
 msgid "Text"
 msgstr "Text"
 
-#: content/models.py:304
+#: models.py:363
 msgid "Textfield Content"
 msgstr "Textfeld-Inhalt"
 
-#: content/models.py:305
+#: models.py:364
 msgid "Textfield Contents"
 msgstr "Textfeld-Inhalte"
 
-#: content/models.py:335
+#: models.py:394
 msgid "YouTube Video"
 msgstr "YouTube-Video"
 
-#: content/models.py:337
+#: models.py:396
 msgid "Video URL"
 msgstr "Video-URL"
 
-#: content/models.py:349
+#: models.py:408
 msgid "YouTube Video Content"
 msgstr "YouTube-Video-Inhalt"
 
-#: content/models.py:350
+#: models.py:409
 msgid "YouTube Video Contents"
 msgstr "YouTube-Video-Inhalte"
 
-#: content/templates/content/reading_mode/YouTubeVideo.html:17
-#: content/templates/content/view/YouTubeVideo.html:12
+#: templates/content/reading_mode/YouTubeVideo.html:17
+#: templates/content/view/YouTubeVideo.html:12
 msgid "View on YouTube"
 msgstr "Auf YouTube ansehen"
 
-#: content/templates/content/reading_mode/base.html:16
+#: templates/content/reading_mode/base.html:16
 msgid "Description"
 msgstr "Beschreibung"
 
-#: content/templates/content/view/invalid.html:5
+#: templates/content/view/MD.html:22
+msgid "Download"
+msgstr "Herunterladen"
+
+#: templates/content/view/invalid.html:5
 msgid "Invalid type"
 msgstr "Ungültiger Typ"
 
-#: content/templates/content/view/invalid.html:8
+#: templates/content/view/invalid.html:8
 msgid ""
 "The type of content you are trying to view is not supported and cannot be "
 "displayed"
