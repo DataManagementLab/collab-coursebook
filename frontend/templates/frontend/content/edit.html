@@ -51,10 +51,17 @@
                                 {% comment %}
                                 Existing attachment did not have a copy button from dynamic_attachment.html which is why we
                                 have to manually add it here.
+                                Depending on the content type (Markdown or LaTeX), a corresponding function is bound to the button.
                                 {% endcomment %}
+                                {% if is_latex_content %}
                                 <button type="button" class="btn btn-info"
                                         onclick="copyEmbeddedAttachment(this)">{% trans 'Copy Attachment-Embedding Code' %}
                                 </button>
+                                {% elif is_markdown_content %}
+                                <button type="button" class="btn btn-info"
+                                        onclick="md_generateRelativeImagePath(this)">{% trans 'Copy Attachment-Embedding Code' %}
+                                </button>
+                                {% endif %}
                             </table>
                         </div>
                     {% endfor %}

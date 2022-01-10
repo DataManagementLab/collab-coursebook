@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 from base.models import Content
 
-from content.models import BaseSourceModel, Latex, TextField
+from content.models import BaseSourceModel, Latex, TextField, MDContent
 
 
 class ImageAttachment(BaseSourceModel):
@@ -70,7 +70,8 @@ class ImageAttachment(BaseSourceModel):
 # Set: Content types which allow image attachments
 IMAGE_ATTACHMENT_TYPES = {
     TextField.TYPE,
-    Latex.TYPE
+    Latex.TYPE,
+    MDContent.TYPE
 }
 
 # Register models for reversion if it is not already done in admin,
