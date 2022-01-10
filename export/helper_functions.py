@@ -3,9 +3,13 @@
 This file contains utility functions related to exporting and rendering files.
 """
 
+from markdown_it import MarkdownIt
+import pdfkit
 import os
 import re
 import tempfile
+
+from django.utils.translation import gettext
 
 from subprocess import Popen, PIPE
 
@@ -89,6 +93,10 @@ class Latex:
                     pdf = file.read()
             except FileNotFoundError:
                 pdf = None
+        #remove any temporary files
+        dir = os.path.dirname(os.path.abspath(__file__))[:-7] + '/media/uploads/temp'
+        for temp in os.listdir(dir):
+            os.remove(os.path.join(dir, temp))
         return pdf, pdflatex_output, rendered_tpl
 
     @staticmethod
@@ -152,6 +160,28 @@ class Latex:
 
         # Set context for rendering
         context = {'content': content, 'export_pdf': export_flag}
+        
+        #for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
+        if (no_error and content.type == 'MD'):
+            #create MarkdownIt instance
+            md = MarkdownIt()
+            #parse markdown to html
+            html = md.render(content.mdcontent.textfield)
+            if export_flag:
+                #for the export embed the title and description in the html so the LaTeX document doesn't render a new page just for description and title
+                html += f"<hr><h2><span style=\"font-weight:normal\">{content.topic.title}</span></h2><i>"+gettext("Description")+f":</i> {content.description}"
+            #create a path for the temporary file with pk in name to ensure uniqueness
+            pdf_path = f'media/uploads/temp/MD{content.mdcontent.pk}.pdf'
+            #convert the html to a temporary pdf
+            pdfkit.from_string(html, pdf_path)
+            #the absolute path to the base of the project
+            base_folder_path = os.path.dirname(os.path.abspath(__file__))[:-7]
+            #the path to the temporary file from the base folder
+            file_path = f'/media/uploads/temp/MD{content.mdcontent.pk}.pdf'
+            #write the complete path into the context to be rendered
+            context['path'] =  base_folder_path + file_path
+    
+        
 
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data

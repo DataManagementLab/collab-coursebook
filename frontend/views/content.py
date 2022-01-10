@@ -2,7 +2,7 @@
 
 This file describes the frontend views related to content types.
 """
-import markdown
+from markdown_it import MarkdownIt
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -465,7 +465,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 if content_type == 'MD':
                     Validator.validate_md(get_user(request),
                                             content,
-                                            content_type_data)
+                                            content_type_data,
+                                            False)
 
                 # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \
@@ -603,7 +604,8 @@ class ContentView(DetailView):
                 context['markdown'] = html"""
 
         if content.type == "MD":
-            html = markdown.markdown(content.mdcontent.textfield, extensions=["tables"])
+            md = MarkdownIt()
+            html = md.render(content.mdcontent.textfield)
             context['html'] = html
 
         context['comment_form'] = CommentForm()
@@ -816,7 +818,8 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
                                 self.request.GET.get('f')
 
         if content.type == "MD":
-            html = markdown.markdown(content.mdcontent.textfield, extensions=["tables"])
+            md = MarkdownIt()
+            html = md.render(content.mdcontent.textfield)
             context['html'] = html
 
         return context
