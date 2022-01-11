@@ -477,7 +477,6 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
                 # If the content type is MD, compile an HTML version of it and store in DB
                 if content_type == 'MD':
-                    is_file = bool(content_type_data.md)
                     Validator.validate_md(get_user(request),
                                             content,
                                             content_type_data,
