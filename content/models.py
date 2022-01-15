@@ -284,6 +284,12 @@ class MDContent(BaseContentModel):
     :type MDContent.TYPE: str
     :attr MDContent.DESC: Describes the name of this model
     :type MDContent.DESC: __proxy__
+    :attr MDContent.md: The md file for this content
+    :type MDContent.md: FileField
+    :attr MDContent.textfield: The md code of this content
+    :type MDContent.source: TextField
+    :attr MDContent.source: The source of this content
+    :type MDContent.source: TextField
     """
     TYPE = "MD"
     DESC = _("Markdown")
@@ -395,6 +401,8 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
+    startTime = models.TimeField()
+
     class Meta:
         """Meta options
 
@@ -468,7 +476,7 @@ reversion.register(PDFContent,
                    fields=['content', 'pdf', 'source', 'license'],
                    follow=['content'])
 reversion.register(YTVideoContent,
-                   fields=['content', 'url'],
+                   fields=['content', 'url', 'startTime'],
                    follow=['content'])
 reversion.register(MDContent,
                    fields=['content', 'md', 'textfield', 'source'],
