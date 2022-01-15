@@ -401,8 +401,6 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
-    startTime = models.TimeField()
-
     class Meta:
         """Meta options
 
@@ -476,7 +474,7 @@ reversion.register(PDFContent,
                    fields=['content', 'pdf', 'source', 'license'],
                    follow=['content'])
 reversion.register(YTVideoContent,
-                   fields=['content', 'url', 'startTime'],
+                   fields=['content', 'url'],
                    follow=['content'])
 reversion.register(MDContent,
                    fields=['content', 'md', 'textfield', 'source'],
