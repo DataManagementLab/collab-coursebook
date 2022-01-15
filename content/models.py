@@ -23,6 +23,11 @@ from content.validator import Validator
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 
+import json
+import urllib
+
+import isodate
+
 
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
@@ -395,6 +400,10 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
+    startTime = models.PositiveIntegerField(verbose_name=_("Video Start Time in Seconds"), default=0)
+
+    endTime = models.PositiveIntegerField(verbose_name=_("Video End Time in Seconds"), default=0)
+
     class Meta:
         """Meta options
 
@@ -414,7 +423,7 @@ class YTVideoContent(BaseContentModel):
 
         Splits the url by the symbol "=" to get the id of the YouTube url.
 
-        return: The id fo the YouTube video
+        return: The id of the YouTube video
         rtype: str
         """
         if 'youtube.com' in self.url:
@@ -443,6 +452,21 @@ class YTVideoContent(BaseContentModel):
         return contents.filter(ytvideocontent__isnull=False)
 
 
+    def clean(self):
+        if (self.startTime >= self.endTime): raise ValidationError('Please make sure the start time is smaller than the end time.')
+        yt_api_key = "AIzaSyAO5AcyGanrUXNCrzIqbS8DEWBRx72wpGQ"
+        yt_url = "https://www.googleapis.com/youtube/v3/videos?id="+self.id+"&key="+yt_api_key+"&part=contentDetails"
+        response = urllib.request.urlopen(yt_url).read()
+        data = json.loads(response)
+        data_items=data['items']
+        duration=data_items[0]['contentDetails']['duration']
+        dur = isodate.parse_duration(duration)
+        seconds = dur.total_seconds()
+        if (self.startTime > seconds and self.endTime > seconds): raise ValidationError('Please make sure your start and end times are smaller than the videos length.')
+        elif (self.startTime > seconds): raise ValidationError('Please make sure your start time is smaller than the videos length.')
+        elif (self.endTime > seconds): raise ValidationError('Please make sure your end time is smaller than the videos length.')
+
+
 # dict: Contains all available content types.
 CONTENT_TYPES = {
     PDFContent.TYPE: PDFContent,
@@ -468,7 +492,7 @@ reversion.register(PDFContent,
                    fields=['content', 'pdf', 'source', 'license'],
                    follow=['content'])
 reversion.register(YTVideoContent,
-                   fields=['content', 'url'],
+                   fields=['content', 'url', 'startTime', 'endTime'],
                    follow=['content'])
 reversion.register(MDContent,
                    fields=['content', 'md', 'textfield', 'source'],

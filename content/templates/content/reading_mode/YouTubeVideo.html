@@ -5,7 +5,7 @@
 
 {% block reading_header %}
     <iframe style="margin: 16px auto;display: block;" width="560" height="315"
-            src="https://www.youtube-nocookie.com/embed/{{ content.ytvideocontent.id }}"
+            src="https://www.youtube-nocookie.com/embed/{{ content.ytvideocontent.id }}?start={{ content.ytvideocontent.startTime }}&end={{ content.ytvideocontent.endTime }}"
             frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen>
     </iframe>

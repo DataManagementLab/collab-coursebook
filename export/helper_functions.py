@@ -8,6 +8,7 @@ import pdfkit
 import os
 import re
 import tempfile
+import math
 
 from django.utils.translation import gettext
 
@@ -181,7 +182,27 @@ class Latex:
             #write the complete path into the context to be rendered
             context['path'] =  base_folder_path + file_path
     
-        
+        if (no_error and content.type == 'YouTubeVideo'):
+
+            seconds_total = content.ytvideocontent.startTime
+
+            hour = math.floor(seconds_total/3600)
+            minute = math.floor((seconds_total-3600*hour)/60)
+            second = seconds_total-3600*hour-60*minute
+
+            context['start_seconds'] = second
+            context['start_minutes'] = minute
+            context['start_hours'] = hour
+
+            seconds_total = content.ytvideocontent.endTime
+
+            hour = math.floor(seconds_total/3600)
+            minute = math.floor((seconds_total-3600*hour)/60)
+            second = seconds_total-3600*hour-60*minute
+
+            context['end_seconds'] = second
+            context['end_minutes'] = minute
+            context['end_hours'] = hour
 
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data

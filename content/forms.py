@@ -64,7 +64,7 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = YTVideoContent
-        fields = ['url']
+        fields = ['url', 'startTime', 'endTime']
 
 
 class AddContentFormImage(forms.ModelForm):
