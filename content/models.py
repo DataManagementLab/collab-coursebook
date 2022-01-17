@@ -324,14 +324,6 @@ class MDContent(BaseContentModel):
     def filter_by_own_type(contents):
         return contents.filter(markdown__isnull=False)
 
-    """def clean(self):
-        if self.options == 'file' and not self.md:
-            raise ValidationError("You must input a Markdown file")
-        if self.options == 'text' and not self.textfield:
-            raise ValidationError("You must input text")
-        if not (self.textfield or self.md):
-            raise ValidationError("You must input either text or a Markdown file")"""
-
 
 class TextField(BaseContentModel):
     """Text field

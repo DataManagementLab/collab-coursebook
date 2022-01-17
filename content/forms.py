@@ -217,8 +217,6 @@ class AddMD(forms.ModelForm):
                                                     'required': ''}),
         }
 
-    """ field_order =[]"""
-
     def clean(self):
         cleaned_data = self.cleaned_data
         if 'options' in cleaned_data and (cleaned_data['options'] == 'file'
