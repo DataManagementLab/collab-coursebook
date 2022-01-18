@@ -8,6 +8,7 @@ from django import forms
 from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
+from django.utils.translation import gettext_lazy as _
 
 
 # str: Relative directory path of the forms examples
@@ -53,6 +54,8 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
     This model represents the add form for YouTube videos.
     """
 
+    option = forms.BooleanField(label=_("Select start and end time for video"))
+
     class Meta:
         """Meta options
 
@@ -64,7 +67,7 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = YTVideoContent
-        fields = ['url', 'startTime', 'endTime']
+        fields = ['url', 'option', 'startTime', 'endTime']
 
 
 class AddContentFormImage(forms.ModelForm):
