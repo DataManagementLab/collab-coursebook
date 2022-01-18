@@ -462,9 +462,9 @@ class YTVideoContent(BaseContentModel):
         duration=data_items[0]['contentDetails']['duration']
         dur = isodate.parse_duration(duration)
         seconds = dur.total_seconds()
-        if (self.startTime > seconds and self.endTime > seconds): raise ValidationError('Please make sure your start and end times are smaller than the videos length.')
-        elif (self.startTime > seconds): raise ValidationError('Please make sure your start time is smaller than the videos length.')
-        elif (self.endTime > seconds): raise ValidationError('Please make sure your end time is smaller than the videos length.')
+        if (self.startTime > seconds and self.endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
+        elif (self.startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
+        elif (self.endTime > seconds): raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))
 
 
 # dict: Contains all available content types.
