@@ -95,9 +95,20 @@
 
 
 {% block bottom_script %}
-    {# Script for radio buttons in MD add form #}
-    {%if is_markdown_content%}
+    {% if is_markdown_content %}
+        {# Script and css for editor #}
+        <link href="{% static 'css/toastui-editor.css' %}" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="{% static 'js/toastui-editor-all.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/editor.js' %}"></script>
+        {# Script for radio buttons in MD add form #}
         <script type="text/javascript" src="{% static 'js/md_form.js' %}"></script>
-        <script> initButtons();</script>
-    {%endif%}
-{%endblock%}
+        {# Initialize editor and radio buttons #}
+        {# Editor should be initialized before buttons, because when buttons are initialized the text window will be detached from the document #}
+        <script>
+            $(function(){
+                initEditor();
+                initButtons();
+            });
+        </script>
+    {% endif %}
+{% endblock %}

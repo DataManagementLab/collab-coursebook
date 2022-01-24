@@ -20,7 +20,7 @@ from base.models import Content
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
-from django.core.exceptions import ValidationError
+
 from django.core.validators import FileExtensionValidator
 
 
@@ -294,9 +294,9 @@ class MDContent(BaseContentModel):
     DESC = _("Markdown")
 
     md = models.FileField(verbose_name=_("Markdown File"),
-                           upload_to='uploads/contents/%Y/%m/%d/',
-                           blank=True,
-                            validators = [FileExtensionValidator(['md'])])
+                          upload_to='uploads/contents/%Y/%m/%d/',
+                          blank=True,
+                          validators = [FileExtensionValidator(['md'])])
 
     textfield = models.TextField(verbose_name=_("Markdown Script"),
                                  help_text=_("Insert your Markdown script here:"),
