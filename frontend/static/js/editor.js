@@ -19,7 +19,6 @@ function initEditor() {
 
     editor.on("change", function () {
       document.getElementById("id_textfield").value = editor.getMarkdown();
-      //updateAttachmentLinks();
     });
 }
 
