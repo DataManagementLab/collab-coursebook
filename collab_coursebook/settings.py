@@ -194,3 +194,7 @@ REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
 DATA_PROTECTION_REQURE_CONFIRMATION = False
 
 include(optional("settings/*.py"))
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)

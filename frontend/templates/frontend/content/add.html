@@ -92,3 +92,12 @@
         {% include 'frontend/content/attachment_embedding_help.html' %}
     {% endif %}
 {% endblock %}
+
+
+{% block bottom_script %}
+    {# Script for radio buttons in MD add form #}
+    {%if is_markdown_content%}
+        <script type="text/javascript" src="{% static 'js/md_form.js' %}"></script>
+        <script> initButtons();</script>
+    {%endif%}
+{%endblock%}

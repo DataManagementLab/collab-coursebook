@@ -24,7 +24,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 
 
-
 class BaseContentModel(models.Model, GeneratePreviewMixin):
     """Base content model
 
@@ -330,10 +329,6 @@ class MDContent(BaseContentModel):
     @staticmethod
     def filter_by_own_type(contents):
         return contents.filter(markdown__isnull=False)
-
-    def clean(self):
-        if not (self.textfield or self.md):
-            raise ValidationError("You must input either a Markdown file or Markdown script.")
 
 
 class TextField(BaseContentModel):

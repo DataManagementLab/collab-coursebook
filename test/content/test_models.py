@@ -43,16 +43,3 @@ class LatexTestCase(MediaTestCase):  # pylint: disable=too-few-public-methods)
 
         self.assertEqual('uploads/previews/Topic_Category.jpg', content.preview.name)
         self.assertTrue(bool(content.preview))
-
-class MDContentTestCase(MediaTestCase): # pylint: disable=too-few-public-methods)
-    """LaTeX test case
-
-        Defines the test cases for the model MDContent.
-    """
-    def testClean(self):
-        md = model.MDContent.objects.create()
-        self.assertFalse(bool(md.md))
-        self.assertFalse(bool(md.textfield))
-        with self.assertRaises(ValidationError) as context_manager:
-            md.clean()
-        self.assertEqual("You must input either a Markdown file or Markdown script.", context_manager.exception.message)

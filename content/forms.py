@@ -9,7 +9,6 @@ from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
-
 # str: Relative directory path of the forms examples
 FORMS_EXAMPLES_DIRECTORY = 'content/templates/form/examples/'
 
@@ -180,11 +179,17 @@ class AddLatex(forms.ModelForm):
                 attrs={'placeholder': get_placeholder(Latex.TYPE, 'textfield')})
         }
 
+
 class AddMD(forms.ModelForm):
     """Add Markdown
 
     This model represents the add form for Markdown code.
     """
+    CHOICES = [
+        ('file', 'Upload as file'),
+        ('text', 'Upload as text'),
+    ]
+    options = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial='file')
 
     class Meta:
         """Meta options
@@ -199,16 +204,31 @@ class AddMD(forms.ModelForm):
         :type Meta.widgets: dict[str, Widget]
         """
         model = MDContent
-        fields = ['md', 'textfield', 'source']
+        fields = ['options', 'md', 'textfield', 'source']
         widgets = {
             'source': forms.Textarea(
                 attrs={
                     'style': 'height: 100px',
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
             'textfield': forms.Textarea(
-                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown'})
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
+                       'required': ''}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain',
+                                                    'required': ''}),
         }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if 'options' in cleaned_data and (cleaned_data['options'] == 'file'
+                                          or cleaned_data['options'] == 'text'):
+            options = cleaned_data['options']
+            if options == 'file' and not ('md' in cleaned_data and bool(self.cleaned_data['md'])):
+                raise forms.ValidationError("You must upload a Markdown file.")
+            elif options == 'text' and not ('textfield' in cleaned_data and bool(self.cleaned_data['textfield'])):
+                raise forms.ValidationError("You must put in some text.")
+        else:
+            raise forms.ValidationError("None of the options were chosen.")
+
 
 class EditMD(forms.ModelForm):
     """Edit Markdown
@@ -236,9 +256,15 @@ class EditMD(forms.ModelForm):
                     'style': 'height: 100px',
                     'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
             'textfield': forms.Textarea(
-                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield')}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'})
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
+                       'required': ''}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
         }
+
+    def clean(self):
+        if not bool(self.cleaned_data['textfield']):
+            raise forms.ValidationError("You must put in some text.")
+
 
 # dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {
