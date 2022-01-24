@@ -5,6 +5,7 @@
 
 {# Load JavaScript #}
 <script type="text/javascript" src="{% static 'js/copy.js' %}"></script>
+<script> const IS_MARKDOWN = {{ is_markdown_content | lower }} </script>
 <script type="text/javascript" src="{% static 'js/attachment.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/form.js' %}"></script>
 
