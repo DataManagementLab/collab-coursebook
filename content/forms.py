@@ -54,7 +54,7 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
     This model represents the add form for YouTube videos.
     """
 
-    option = forms.BooleanField(label=_("Select start and end time for video"))
+    option = forms.BooleanField(label=_("Advanced Options"), required=False)
 
     class Meta:
         """Meta options

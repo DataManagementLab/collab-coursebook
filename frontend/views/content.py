@@ -5,6 +5,7 @@ This file describes the frontend views related to content types.
 import re
 
 import markdown
+import math
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -183,6 +184,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
+            
 
         # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
@@ -626,6 +628,28 @@ class ContentView(DetailView):
         if content.type == "MD":
             md_text = content.mdcontent.textfield
             context['html'] = md_to_html(md_text,content)
+
+        if content.type =='YouTubeVideo':
+            seconds_total = content.ytvideocontent.startTime
+
+            hour = math.floor(seconds_total/3600)
+            minute = math.floor((seconds_total-3600*hour)/60)
+            second = seconds_total-3600*hour-60*minute
+
+            context['start_seconds'] = second
+            context['start_minutes'] = minute
+            context['start_hours'] = hour
+
+            seconds_total = content.ytvideocontent.endTime
+
+            hour = math.floor(seconds_total/3600)
+            minute = math.floor((seconds_total-3600*hour)/60)
+            second = seconds_total-3600*hour-60*minute
+
+            context['end_seconds'] = second
+            context['end_minutes'] = minute
+            context['end_hours'] = hour
+
         context['comment_form'] = CommentForm()
 
         context['comments'] = Comment.objects.filter(content=self.get_object()
