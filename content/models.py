@@ -454,7 +454,7 @@ class YTVideoContent(BaseContentModel):
 
     def clean(self):
         if (self.startTime >= self.endTime and not self.startTime == 0): raise ValidationError('Please make sure the start time is smaller than the end time.')
-        yt_api_key = "insert api key here"
+        yt_api_key = "AIzaSyAO5AcyGanrUXNCrzIqbS8DEWBRx72wpGQ"#"insert api key here"
         yt_url = "https://www.googleapis.com/youtube/v3/videos?id="+self.id+"&key="+yt_api_key+"&part=contentDetails"
         response = urllib.request.urlopen(yt_url).read()
         data = json.loads(response)
