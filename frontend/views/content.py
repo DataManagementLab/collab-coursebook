@@ -5,6 +5,7 @@ This file describes the frontend views related to content types.
 import re
 
 import markdown
+import math
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -30,6 +31,8 @@ from frontend.forms.content import AddContentForm, EditContentForm, TranslateFor
 from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
+
+from content.static.yt_api import *
 
 
 def clean_attachment(content, image_formset):
@@ -103,6 +106,7 @@ def md_to_html(text, content):
     return markdown.markdown(text)
 
 
+
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """Add content view
 
@@ -174,11 +178,16 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if content type is of type Markdown
         context['is_markdown_content'] = content_type == 'MD'
 
+        # Checks if content type is of type Markdown
+        context['is_yt_content'] = content_type == 'YouTubeVideo'
+        
+
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
 
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
+            
 
         # Retrieves parameters
         course = Course.objects.get(pk=self.kwargs['course_id'])
@@ -400,6 +409,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['is_latex_content'] = content_type == 'Latex'
         # Checks if content type if of type MDContent
         context['is_markdown_content'] = content_type == 'MD'
+        # Checks if content type is of type Markdown
+        context['is_yt_content'] = content_type == 'YouTubeVideo'
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
 
@@ -626,6 +637,19 @@ class ContentView(DetailView):
         if content.type == "MD":
             md_text = content.mdcontent.textfield
             context['html'] = md_to_html(md_text,content)
+
+        if content.type =='YouTubeVideo':
+            seconds_total = content.ytvideocontent.startTime
+            context['start_hours'], context['start_minutes'], context['start_seconds'] = seconds_to_time(seconds_total)
+
+            seconds_total = content.ytvideocontent.endTime
+            if(seconds_total == 0):
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(get_video_length(content.ytvideocontent.id))
+            else:
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(seconds_total)
+
+            context['length'] = get_video_length(content.ytvideocontent.id)
+
         context['comment_form'] = CommentForm()
 
         context['comments'] = Comment.objects.filter(content=self.get_object()

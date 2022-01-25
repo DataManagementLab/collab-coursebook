@@ -15,8 +15,10 @@ from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
 
-from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
+from django.utils.translation import gettext_lazy as _
 
+from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
+from content.static.yt_api import *
 
 class Latex:
     """LaTeX Export
@@ -181,7 +183,29 @@ class Latex:
             #write the complete path into the context to be rendered
             context['path'] =  base_folder_path + file_path
     
-        
+        if (no_error and content.type == 'YouTubeVideo'):
+
+            seconds_total = content.ytvideocontent.startTime
+            context['start_hours'], context['start_minutes'], context['start_seconds'] = seconds_to_time(seconds_total)
+
+            total_hours, total_minutes, total_seconds = seconds_to_time(get_video_length(content.ytvideocontent.id))
+
+            seconds_total = content.ytvideocontent.endTime
+            if(seconds_total == 0):
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = total_hours, total_minutes, total_seconds
+            else:
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(seconds_total)
+
+            len = ""
+            if (total_hours > 0): 
+                len += f"{total_hours} "+_("Hours")
+                if (total_minutes or total_seconds > 0): len += ", "
+            if (total_minutes > 0): 
+                len += f"{total_minutes} "+_("Minutes")
+                if (total_seconds > 0): len += ", "
+            if ((total_seconds > 0) or total_hours and total_minutes == 0): len += f"{total_seconds} "+_("Seconds")
+
+            context['length'] = len
 
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data
