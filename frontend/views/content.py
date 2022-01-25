@@ -178,7 +178,7 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if content type is of type Markdown
         context['is_markdown_content'] = content_type == 'MD'
 
-        # Checks if content type is of type Markdown
+        # Checks if content type is of type YouTubeVideo
         context['is_yt_content'] = content_type == 'YouTubeVideo'
         
 
@@ -409,7 +409,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['is_latex_content'] = content_type == 'Latex'
         # Checks if content type if of type MDContent
         context['is_markdown_content'] = content_type == 'MD'
-        # Checks if content type is of type Markdown
+        # Checks if content type is of type YouTube
         context['is_yt_content'] = content_type == 'YouTubeVideo'
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE

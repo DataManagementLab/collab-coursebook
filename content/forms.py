@@ -216,7 +216,7 @@ class AddMD(forms.ModelForm):
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
                        'required': ''}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain',
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown',
                                                     'required': ''}),
         }
 
@@ -261,7 +261,7 @@ class EditMD(forms.ModelForm):
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
                        'required': ''}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown'}),
         }
 
     def clean(self):
