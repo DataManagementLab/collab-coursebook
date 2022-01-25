@@ -14,79 +14,6 @@ const CHILDREN = $('#items-form-container').children().length;
 ADD_BUTTON.style.visibility = CHILDREN < MAX_ATTACHMENT ? "visible" : "hidden";
 REMOVE_BUTTON.style.visibility = CHILDREN === 0 ? "hidden" : "visible";
 
-const URL_ARRAY = [];
-
-function updateAttachmentLinks() {
-    if ($('#id_form-TOTAL_FORMS').length) {
-    console.log("Replacing all instances of image attachments with corresponding link..");
-    const numAttachments = parseInt($('#id_form-TOTAL_FORMS').val());
-    for (let i = 0 ; i < numAttachments ; i ++) {
-        var img = $("img[src='Image-" + i +"']",".toastui-editor-main-container");
-        if (img.length) {
-            //fileInput = document.getElementById("id_form-" + i + "-image").files;
-            if (/*fileInput.length && fileInput[0]['type'].split('/')[0] === 'image' && */URL_ARRAY[i] != null) {
-                img.attr('src',URL_ARRAY[i]);
-            }
-
-        }
-    }
-    }
-}
-
-function revertAttachmentLinks(index) { // Assuming element at index is not undefined
-    console.log("Revoking old URL entry..");
-    URL.revokeObjectURL(URL_ARRAY[index]);
-    var img = $("img[src='"+ URL_ARRAY[index] + "']",".toastui-editor-main-container");
-    if (img.length) {
-       console.log("Removing url from html..")
-       img.attr('src','Image-'+ index);
-    }
-    delete URL_ARRAY[index];
-}
-
-function validateInput(input) {
-   return input.files.length && input.files[0]['type'].split('/')[0] === 'image';
-}
-
-function generateNewAttachmentURLs(id, children) {
-
-            console.log("Generating new URL...");
-            const url = URL.createObjectURL(id.files[0]);
-            URL_ARRAY[children] = url;
-}
-
-function addAttachmentEvent(attachment, id) {
-    // Assume attachment exists
-    attachment.on("change",function() {
-        console.log("Changes detected.");
-        if (URL_ARRAY[id] != null) {
-            revertAttachmentLinks(id);
-        }
-        if (validateInput(this)) {
-            generateNewAttachmentURLs(this,id);
-            updateAttachmentLinks();
-        }
-    });
-}
-
-function generateExistingAttachmentURLs() {
-    if ($('#id_form-TOTAL_FORMS').length) {
-    const numAttachments = parseInt($('#id_form-TOTAL_FORMS').val());
-    console.log("There are " + numAttachments + " attachments.");
-    for (let i = 0 ; i < numAttachments ; i ++) {
-        var attachment = $('#id_form-' + i + '-image');
-        if (attachment.length && attachment.parent().length && attachment.parent().parent().length) {
-            var existingURL = $("a",attachment.parent().parent());
-            if (existingURL.length) {
-                console.log("Populating URL_ARRAY at pos " + i);
-                URL_ARRAY[i] = existingURL.attr("href");
-            }
-            addAttachmentEvent(attachment,i);
-        }
-    }
-    }
-}
-
 
 /**
  * Adds an attachment form to the current attachment div. Additionally
@@ -132,9 +59,13 @@ function addAttachment(event) {
         // Update form count
         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
         const attachment = $('#id_form-' + children + '-image');
-        if (attachment.length) {
-            console.log("Field id:" + children);
-            addAttachmentEvent(attachment,children);
+
+        // Add listener to update URL when attachment changes
+        // IS_MARKDOWN is a const declared in dynamic_attachment.html
+        if (IS_MARKDOWN) {
+            if (attachment.length) {
+                addAttachmentEvent(attachment,children);
+            }
         }
     }
 }
@@ -175,8 +106,11 @@ function removeAttachment(event) {
     // Update form count
     $('#id_form-TOTAL_FORMS').attr('value', children - 1);
 
-    if (URL_ARRAY[children - 1] != null) {
-        revertAttachmentLinks(children-1);
-        URL_ARRAY.pop();
+    // Remove corresponding URL when attachment is removed
+    if (IS_MARKDOWN) {
+        if (URL_ARRAY[children - 1] != null) {
+            revertAttachmentLinks(children-1);
+            URL_ARRAY.pop();
+        }
     }
 }
