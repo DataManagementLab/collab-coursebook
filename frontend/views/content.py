@@ -32,6 +32,8 @@ from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
 
+from content.static.yt_api import *
+
 
 def clean_attachment(content, image_formset):
     """Clean attachment
@@ -102,6 +104,7 @@ def md_to_html(text, content):
                           rf"![\1]({attachment.image.url})",
                           text)
     return markdown.markdown(text)
+
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -631,24 +634,15 @@ class ContentView(DetailView):
 
         if content.type =='YouTubeVideo':
             seconds_total = content.ytvideocontent.startTime
-
-            hour = math.floor(seconds_total/3600)
-            minute = math.floor((seconds_total-3600*hour)/60)
-            second = seconds_total-3600*hour-60*minute
-
-            context['start_seconds'] = second
-            context['start_minutes'] = minute
-            context['start_hours'] = hour
+            context['start_hours'], context['start_minutes'], context['start_seconds'] = seconds_to_time(seconds_total)
 
             seconds_total = content.ytvideocontent.endTime
+            if(seconds_total == 0):
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(get_video_length(content.ytvideocontent.id))
+            else:
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(seconds_total)
 
-            hour = math.floor(seconds_total/3600)
-            minute = math.floor((seconds_total-3600*hour)/60)
-            second = seconds_total-3600*hour-60*minute
-
-            context['end_seconds'] = second
-            context['end_minutes'] = minute
-            context['end_hours'] = hour
+            context['length'] = get_video_length(content.ytvideocontent.id)
 
         context['comment_form'] = CommentForm()
 

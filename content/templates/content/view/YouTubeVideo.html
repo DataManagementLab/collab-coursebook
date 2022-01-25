@@ -6,15 +6,10 @@
         allowfullscreen>
 </iframe>
 
-{% if content.ytvideocontent.startTime > 0 or content.ytvideocontent.endTime > 0 %}
 <h3>{% trans 'Timestamps' %}:</h3>
-{% endif %}
-{% if content.ytvideocontent.startTime > 0 %}
-<b>{% trans 'Start' %}: {% if start_hours > 0 %}{{ start_hours }}H {% endif %}{% if start_minutes > 0 %}{{ start_minutes }}M {% endif %}{{ start_seconds }}S</b><br>
-{% endif %}
-{% if content.ytvideocontent.endTime > 0 %}
-<b>{% trans 'End' %}: {% if end_hours > 0 %}{{ end_hours }}H {% endif %}{% if end_minutes > 0 %}{{ end_minutes }}M {% endif %}{{ end_seconds }}S</b>
-{% endif %}
+<b>{% trans 'Start' %}: {% if start_hours > 0 %}{{ start_hours }}:{% endif %}{{ start_minutes }}:{{ start_seconds }}</b><br>
+<b>{% trans 'End' %}: {% if end_hours > 0 %}{{ end_hours }}:{% endif %}{{ end_minutes }}:{{ end_seconds }}</b>
+
 
 <br>
 <br>

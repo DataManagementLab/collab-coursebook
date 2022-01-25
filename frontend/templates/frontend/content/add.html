@@ -96,7 +96,7 @@
 {% block bottom_script %}
     {# Script checkbox in YouTube video forms #}
     {%if is_yt_content%}
-        <script type="text/javascript" src="{% static 'js/yt_times.js' %}"></script>
+        {% include 'frontend/content/yt_video_times.html' %}
         <script> initButtons();</script>
     {%endif%}
 {%endblock%}

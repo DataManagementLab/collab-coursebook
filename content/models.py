@@ -23,11 +23,7 @@ from content.validator import Validator
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 
-import json
-import urllib
-
-import isodate
-
+from content.static.yt_api import get_video_length
 
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
@@ -453,15 +449,7 @@ class YTVideoContent(BaseContentModel):
 
 
     def clean(self):
-        if (self.startTime >= self.endTime and not self.startTime == 0): raise ValidationError('Please make sure the start time is smaller than the end time.')
-        yt_api_key = "AIzaSyAO5AcyGanrUXNCrzIqbS8DEWBRx72wpGQ"#"insert api key here"
-        yt_url = "https://www.googleapis.com/youtube/v3/videos?id="+self.id+"&key="+yt_api_key+"&part=contentDetails"
-        response = urllib.request.urlopen(yt_url).read()
-        data = json.loads(response)
-        data_items=data['items']
-        duration=data_items[0]['contentDetails']['duration']
-        dur = isodate.parse_duration(duration)
-        seconds = dur.total_seconds()
+        seconds = get_video_length(self.id)
         if (self.startTime > seconds and self.endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
         elif (self.startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
         elif (self.endTime > seconds): raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))

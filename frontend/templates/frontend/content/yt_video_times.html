@@ -1,12 +1,17 @@
-/**
+{% load i18n %}
+
+<script type="text/javascript">
+    /**
  * Changes the states of the start and end element input fields to visible or invisible depending on their current state and
  * resets their values if setting them to invisible.
  */
- function changeState() {
+function changeState() {
     var startElement = document.getElementById("id_startTime").parentElement;
     var endElement = document.getElementById("id_endTime").parentElement;
+    var label = document.getElementById("times-label");
     startElement.style.display = startElement.style.display === "block" ? "none" : "block"; 
     endElement.style.display = endElement.style.display === "block" ? "none" : "block";
+    label.style.display = label.style.display === "block" ? "none" : "block";
 
     if (startElement.style.display === "none") document.getElementById("id_startTime").value = 0;
     if (endElement.style.display === "none") document.getElementById("id_endTime").value = 0;
@@ -23,12 +28,19 @@ function initButtons() {
     var startElement = document.getElementById("id_startTime");
     var endElement = document.getElementById("id_endTime");
 
-    const label = document.createElement("label");
-    label.innerText = "Leave fields at 0 ";
-    checkBox.parentNode.insertBefore(br, checkBox.nextSibling.nextSibling);
+    var innerHTML = "<label id='times-label'>{% trans 'Leave fields at 0 for the start/end of the video.' %}</label>"
+
+    const div = document.createElement("div");
+    checkBoxDiv = checkBox.parentElement
+    div.innerHTML = innerHTML
+    
+    checkBoxDiv.parentNode.insertBefore(div.firstChild, checkBoxDiv.nextSibling)
+
+    var label = document.getElementById("times-label");
 
     startElement.parentElement.style.display = "none"
     endElement.parentElement.style.display = "none"
+    label.style.display = "none"
 
     valStartTime = startElement.value
     valEndTime = endElement.value
@@ -39,3 +51,4 @@ function initButtons() {
     }
 
 }
+</script>

@@ -8,7 +8,6 @@ import pdfkit
 import os
 import re
 import tempfile
-import math
 
 from django.utils.translation import gettext
 
@@ -16,8 +15,10 @@ from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
 
-from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
+from django.utils.translation import gettext_lazy as _
 
+from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
+from content.static.yt_api import *
 
 class Latex:
     """LaTeX Export
@@ -185,24 +186,26 @@ class Latex:
         if (no_error and content.type == 'YouTubeVideo'):
 
             seconds_total = content.ytvideocontent.startTime
+            context['start_hours'], context['start_minutes'], context['start_seconds'] = seconds_to_time(seconds_total)
 
-            hour = math.floor(seconds_total/3600)
-            minute = math.floor((seconds_total-3600*hour)/60)
-            second = seconds_total-3600*hour-60*minute
-
-            context['start_seconds'] = second
-            context['start_minutes'] = minute
-            context['start_hours'] = hour
+            total_hours, total_minutes, total_seconds = seconds_to_time(get_video_length(content.ytvideocontent.id))
 
             seconds_total = content.ytvideocontent.endTime
+            if(seconds_total == 0):
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = total_hours, total_minutes, total_seconds
+            else:
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(seconds_total)
 
-            hour = math.floor(seconds_total/3600)
-            minute = math.floor((seconds_total-3600*hour)/60)
-            second = seconds_total-3600*hour-60*minute
+            len = ""
+            if (total_hours > 0): 
+                len += f"{total_hours} "+_("Hours")
+                if (total_minutes or total_seconds > 0): len += ", "
+            if (total_minutes > 0): 
+                len += f"{total_minutes} "+_("Minutes")
+                if (total_seconds > 0): len += ", "
+            if ((total_seconds > 0) or total_hours and total_minutes == 0): len += f"{total_seconds} "+_("Seconds")
 
-            context['end_seconds'] = second
-            context['end_minutes'] = minute
-            context['end_hours'] = hour
+            context['length'] = len
 
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data

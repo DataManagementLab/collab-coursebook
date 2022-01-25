@@ -17,12 +17,13 @@
 \vskip 1em
 
 % YouTube link
-\url{ {{ content.ytvideocontent.url }} }
+\url{ {{ content.ytvideocontent.url }} } \\
+{% trans 'Video Length' %}: {{ length }}
 {% if content.ytvideocontent.startTime > 0 %}
-Starting at: {% if start_hours > 0 %}{{ start_hours }}H {% endif %}{% if start_minutes > 0 %}{{ start_minutes }}M {% endif %}{{ start_seconds }}S\\
+{% trans 'Starting at' %}: {% if start_hours > 0 %}{{ start_hours }}:{% endif %}{{ start_minutes }}:{{ start_seconds }}
 {% endif %}
 {% if content.ytvideocontent.endTime > 0 %}
-Ending at: {% if end_hours > 0 %}{{ end_hours }}H {% endif %}{% if end_minutes > 0 %}{{ end_minutes }}M {% endif %}{{ end_seconds }}S
+{% trans 'Ending at' %}: {% if end_hours > 0 %}{{ end_hours }}:{% endif %}{{ end_minutes }}:{{ end_seconds }}
 {% endif %}
 
 \vskip 3em
