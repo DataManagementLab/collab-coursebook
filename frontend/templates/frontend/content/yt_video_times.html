@@ -6,9 +6,9 @@
  * resets their values if setting them to invisible.
  */
 function changeState() {
-    var startElement = document.getElementById("id_startTime").parentElement;
-    var endElement = document.getElementById("id_endTime").parentElement;
-    var label = document.getElementById("times-label");
+    let startElement = document.getElementById("id_startTime").parentElement;
+    let endElement = document.getElementById("id_endTime").parentElement;
+    let label = document.getElementById("times-label");
     startElement.style.display = startElement.style.display === "block" ? "none" : "block"; 
     endElement.style.display = endElement.style.display === "block" ? "none" : "block";
     label.style.display = label.style.display === "block" ? "none" : "block";
@@ -21,14 +21,14 @@ function changeState() {
  * Adds a listener to the checkbox with changeState() and initializes the input fields as invisible unless either has a 
  * non-zero value
  */
-function initButtons() {
-    var checkBox = document.getElementById("id_option");
+function initYouTubeButton() {
+    let checkBox = document.getElementById("id_option");
     checkBox.addEventListener('click',changeState);
 
-    var startElement = document.getElementById("id_startTime");
-    var endElement = document.getElementById("id_endTime");
+    let startElement = document.getElementById("id_startTime");
+    let endElement = document.getElementById("id_endTime");
 
-    var innerHTML = "<label id='times-label'>{% trans 'Leave fields at 0 for the start/end of the video.' %}</label>"
+    let innerHTML = "<label id='times-label'>{% trans 'Leave fields at 0 for the start/end of the video.' %}</label>"
 
     const div = document.createElement("div");
     checkBoxDiv = checkBox.parentElement
@@ -36,7 +36,7 @@ function initButtons() {
     
     checkBoxDiv.parentNode.insertBefore(div.firstChild, checkBoxDiv.nextSibling)
 
-    var label = document.getElementById("times-label");
+    let label = document.getElementById("times-label");
 
     startElement.parentElement.style.display = "none"
     endElement.parentElement.style.display = "none"
@@ -51,4 +51,5 @@ function initButtons() {
     }
 
 }
+initYouTubeButton();
 </script>
