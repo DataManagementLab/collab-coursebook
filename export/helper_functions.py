@@ -3,7 +3,7 @@
 This file contains utility functions related to exporting and rendering files.
 """
 
-from markdown_it import MarkdownIt
+import markdown
 import pdfkit
 import os
 import re
@@ -19,6 +19,18 @@ from django.utils.translation import gettext_lazy as _
 
 from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
 from content.static.yt_api import *
+#from frontend.views.content import md_to_html
+
+#TODO fix bug
+def md_to_html(text, content):
+    if content.ImageAttachments.count() > 0:
+        attachments = content.ImageAttachments.all()
+        for idx, attachment in enumerate(attachments):
+                    path = ret_path(attachment.image.url)
+                    text = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
+                                          rf"\\includegraphics\1{{{path}}}",
+                                          text)
+    return markdown.markdown(text)
 
 class Latex:
     """LaTeX Export
@@ -165,10 +177,8 @@ class Latex:
         
         #for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
         if (no_error and content.type == 'MD'):
-            #create MarkdownIt instance
-            md = MarkdownIt()
             #parse markdown to html
-            html = md.render(content.mdcontent.textfield)
+            html = md_to_html(content.mdcontent.textfield, content)
             if export_flag:
                 #for the export embed the title and description in the html so the LaTeX document doesn't render a new page just for description and title
                 html += f"<hr><h2><span style=\"font-weight:normal\">{content.topic.title}</span></h2><i>"+gettext("Description")+f":</i> {content.description}"
