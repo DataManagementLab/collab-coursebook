@@ -3,12 +3,12 @@
 This file contains utility functions related to exporting and rendering files.
 """
 
+from pathlib import Path
 import markdown
 import pdfkit
 import os
 import re
 import tempfile
-from pathlib import Path
 
 from django.utils.translation import gettext
 
@@ -28,7 +28,7 @@ def md_to_html(text, content):
         for idx, attachment in enumerate(attachments):
             absolute = str(Path.cwd())+attachment.image.url
             text = re.sub(rf"!\[(.*?)]\(Image-{idx}\)",
-                          rf"<img src='{absolute}', alt='{idx}'>",
+                          rf"![\1]({absolute})",
                           text)
     return markdown.markdown(text)
 
@@ -178,7 +178,7 @@ class Latex:
         #for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
         if (no_error and content.type == 'MD'):
             #parse markdown to html
-            html = md_to_html(content.mdcontent.textfield, content)
+            html = md_to_html(content.mdcontent.textfield,content)
             if export_flag:
                 #for the export embed the title and description in the html so the LaTeX document doesn't render a new page just for description and title
                 html += f"<hr><h2><span style=\"font-weight:normal\">{content.topic.title}</span></h2><i>"+gettext("Description")+f":</i> {content.description}"
