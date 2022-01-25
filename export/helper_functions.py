@@ -8,6 +8,7 @@ import pdfkit
 import os
 import re
 import tempfile
+from pathlib import Path
 
 from django.utils.translation import gettext
 
@@ -21,15 +22,14 @@ from export.templatetags.cc_export_tags import export_template, tex_escape, ret_
 from content.static.yt_api import *
 #from frontend.views.content import md_to_html
 
-#TODO fix bug
 def md_to_html(text, content):
     if content.ImageAttachments.count() > 0:
         attachments = content.ImageAttachments.all()
         for idx, attachment in enumerate(attachments):
-                    path = ret_path(attachment.image.url)
-                    text = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
-                                          rf"\\includegraphics\1{{{path}}}",
-                                          text)
+            absolute = str(Path.cwd())+attachment.image.url
+            text = re.sub(rf"!\[(.*?)]\(Image-{idx}\)",
+                          rf"<img src='{absolute}', alt='{idx}'>",
+                          text)
     return markdown.markdown(text)
 
 class Latex:
@@ -185,7 +185,10 @@ class Latex:
             #create a path for the temporary file with pk in name to ensure uniqueness
             pdf_path = f'media/uploads/temp/MD{content.mdcontent.pk}.pdf'
             #convert the html to a temporary pdf
-            pdfkit.from_string(html, pdf_path)
+            options = {
+                "enable-local-file-access": None
+            }
+            pdfkit.from_string(html, pdf_path, options=options)
             #the absolute path to the base of the project
             base_folder_path = os.path.dirname(os.path.abspath(__file__))[:-7]
             #the path to the temporary file from the base folder
