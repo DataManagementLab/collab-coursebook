@@ -453,6 +453,7 @@ class YTVideoContent(BaseContentModel):
 
 
     def clean(self):
+        if (self.endTime > 0 and self.startTime > self.endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
         seconds = get_video_length(self.id)
         if (self.startTime > seconds and self.endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
         elif (self.startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
