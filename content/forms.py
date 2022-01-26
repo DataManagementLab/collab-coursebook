@@ -189,8 +189,8 @@ class AddMD(forms.ModelForm):
     This model represents the add form for Markdown code.
     """
     CHOICES = [
-        ('file', 'Upload as file'),
-        ('text', 'Upload as text'),
+        ('file', _('Upload as file')),
+        ('text', _('Upload as text')),
     ]
     options = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial='file')
 
@@ -226,11 +226,11 @@ class AddMD(forms.ModelForm):
                                           or cleaned_data['options'] == 'text'):
             options = cleaned_data['options']
             if options == 'file' and not ('md' in cleaned_data and bool(self.cleaned_data['md'])):
-                raise forms.ValidationError("You must upload a Markdown file.")
+                raise forms.ValidationError(_("You must upload a Markdown file."))
             elif options == 'text' and not ('textfield' in cleaned_data and bool(self.cleaned_data['textfield'])):
-                raise forms.ValidationError("You must put in some text.")
+                raise forms.ValidationError(_("You must put in some text."))
         else:
-            raise forms.ValidationError("None of the options were chosen.")
+            raise forms.ValidationError(_("None of the options were chosen."))
 
 
 class EditMD(forms.ModelForm):
@@ -266,7 +266,7 @@ class EditMD(forms.ModelForm):
 
     def clean(self):
         if not bool(self.cleaned_data['textfield']):
-            raise forms.ValidationError("You must put in some text.")
+            raise forms.ValidationError(_("You must put in some text."))
 
 
 # dict[str, ModelForm]: Contains all available content types form.
