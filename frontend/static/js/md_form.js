@@ -54,7 +54,7 @@ function initButtons() {
     textButton = document.getElementById("id_options_1");
     fileButton.addEventListener('click',updateFormState);
     textButton.addEventListener('click',updateFormState);
-    updateOptionsState();
+    updateFormState();
 }
 
 
