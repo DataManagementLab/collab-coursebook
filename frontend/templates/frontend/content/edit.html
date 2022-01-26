@@ -14,6 +14,9 @@
 {% block imports %}
     {# Load CSS #}
     <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
+    {% if is_markdown_content %}
+    <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -107,14 +110,23 @@
 
 {% block bottom_script %}
     {% if is_markdown_content %}
+        {# jsi18n #}
+        <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
         {# Script and css for editor #}
         <link href="{% static 'css/toastui-editor.css' %}" type="text/css" rel="stylesheet"/>
         <script type="text/javascript" src="{% static 'js/toastui-editor-all.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/editor.js' %}"></script>
         {# Initialize editor #}
-        <script>
+        <script type="text/javascript">
             $(function(){
-                initEditor();
+                args = {
+                  previewStyle: "vertical",
+                  height: "450px",
+                  initialEditType: "markdown",
+                  previewHighlight: false,
+                  placeholder: gettext("Markdown Script"),
+                }
+                initEditor(args);
                 editor.setMarkdown(document.getElementById("id_textfield").value);
                 $('.ProseMirror').removeClass('ProseMirror-focused');
             });
