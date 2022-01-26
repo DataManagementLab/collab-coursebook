@@ -3,16 +3,34 @@
 This file contains utility functions related to exporting and rendering files.
 """
 
+from pathlib import Path
+import markdown
+import pdfkit
 import os
 import re
 import tempfile
+
+from django.utils.translation import gettext
 
 from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
 
-from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
+from django.utils.translation import gettext_lazy as _
 
+from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
+from content.static.yt_api import *
+#from frontend.views.content import md_to_html
+
+def md_to_html(text, content):
+    if content.ImageAttachments.count() > 0:
+        attachments = content.ImageAttachments.all()
+        for idx, attachment in enumerate(attachments):
+            absolute = str(Path.cwd())+attachment.image.url
+            text = re.sub(rf"!\[(.*?)]\(Image-{idx}\)",
+                          rf"![\1]({absolute})",
+                          text)
+    return markdown.markdown(text)
 
 class Latex:
     """LaTeX Export
@@ -89,6 +107,10 @@ class Latex:
                     pdf = file.read()
             except FileNotFoundError:
                 pdf = None
+        #remove any temporary files
+        dir = os.path.dirname(os.path.abspath(__file__))[:-7] + '/media/uploads/temp'
+        for temp in os.listdir(dir):
+            os.remove(os.path.join(dir, temp))
         return pdf, pdflatex_output, rendered_tpl
 
     @staticmethod
@@ -152,6 +174,51 @@ class Latex:
 
         # Set context for rendering
         context = {'content': content, 'export_pdf': export_flag}
+        
+        #for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
+        if (no_error and content.type == 'MD'):
+            #parse markdown to html
+            html = md_to_html(content.mdcontent.textfield,content)
+            if export_flag:
+                #for the export embed the title and description in the html so the LaTeX document doesn't render a new page just for description and title
+                html += f"<hr><h2><span style=\"font-weight:normal\">{content.topic.title}</span></h2><i>"+gettext("Description")+f":</i> {content.description}"
+            #create a path for the temporary file with pk in name to ensure uniqueness
+            pdf_path = f'media/uploads/temp/MD{content.mdcontent.pk}.pdf'
+            #convert the html to a temporary pdf
+            options = {
+                "enable-local-file-access": None
+            }
+            pdfkit.from_string(html, pdf_path, options=options)
+            #the absolute path to the base of the project
+            base_folder_path = os.path.dirname(os.path.abspath(__file__))[:-7]
+            #the path to the temporary file from the base folder
+            file_path = f'/media/uploads/temp/MD{content.mdcontent.pk}.pdf'
+            #write the complete path into the context to be rendered
+            context['path'] =  base_folder_path + file_path
+    
+        if (no_error and content.type == 'YouTubeVideo'):
+
+            seconds_total = content.ytvideocontent.startTime
+            context['start_hours'], context['start_minutes'], context['start_seconds'] = seconds_to_time(seconds_total)
+
+            total_hours, total_minutes, total_seconds = seconds_to_time(get_video_length(content.ytvideocontent.id))
+
+            seconds_total = content.ytvideocontent.endTime
+            if(seconds_total == 0):
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = total_hours, total_minutes, total_seconds
+            else:
+                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(seconds_total)
+
+            len = ""
+            if (total_hours > 0): 
+                len += f"{total_hours} "+_("Hours")
+                if (total_minutes or total_seconds > 0): len += ", "
+            if (total_minutes > 0): 
+                len += f"{total_minutes} "+_("Minutes")
+                if (total_seconds > 0): len += ", "
+            if ((total_seconds > 0) or total_hours and total_minutes == 0): len += f"{total_seconds} "+_("Seconds")
+
+            context['length'] = len
 
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data

@@ -14,9 +14,6 @@
 {% block imports %}
     {# Load CSS #}
     <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
-    {% if is_markdown_content %}
-    <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
-    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -129,7 +126,13 @@
                 initEditor(args);
                 editor.setMarkdown(document.getElementById("id_textfield").value);
                 $('.ProseMirror').removeClass('ProseMirror-focused');
+                generateExistingAttachmentURLs();
+                updateAttachmentLinks();
             });
         </script>
     {% endif %}
+    {# Script checkbox in YouTube video forms #}
+    {%if is_yt_content%}
+        {% include 'frontend/content/yt_video_times.html' %}
+    {%endif%}}
 {%endblock%}

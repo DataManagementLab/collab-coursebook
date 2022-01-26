@@ -9,6 +9,7 @@ import os
 
 from django.conf import settings
 from django.db import models
+from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 import reversion
@@ -22,6 +23,9 @@ from content.validator import Validator
 
 
 from django.core.validators import FileExtensionValidator
+
+from content.static.yt_api import get_video_length
+
 
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
@@ -283,6 +287,12 @@ class MDContent(BaseContentModel):
     :type MDContent.TYPE: str
     :attr MDContent.DESC: Describes the name of this model
     :type MDContent.DESC: __proxy__
+    :attr MDContent.md: The md file for this content
+    :type MDContent.md: FileField
+    :attr MDContent.textfield: The md code of this content
+    :type MDContent.source: TextField
+    :attr MDContent.source: The source of this content
+    :type MDContent.source: TextField
     """
     TYPE = "MD"
     DESC = _("Markdown")
@@ -323,14 +333,6 @@ class MDContent(BaseContentModel):
     @staticmethod
     def filter_by_own_type(contents):
         return contents.filter(markdown__isnull=False)
-
-    """def clean(self):
-        if self.options == 'file' and not self.md:
-            raise ValidationError("You must input a Markdown file")
-        if self.options == 'text' and not self.textfield:
-            raise ValidationError("You must input text")
-        if not (self.textfield or self.md):
-            raise ValidationError("You must input either text or a Markdown file")"""
 
 
 class TextField(BaseContentModel):
@@ -398,6 +400,10 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
+    startTime = models.PositiveIntegerField(verbose_name=_("Video Start Time in Seconds"), default=0)
+
+    endTime = models.PositiveIntegerField(verbose_name=_("Video End Time in Seconds"), default=0)
+
     class Meta:
         """Meta options
 
@@ -417,7 +423,7 @@ class YTVideoContent(BaseContentModel):
 
         Splits the url by the symbol "=" to get the id of the YouTube url.
 
-        return: The id fo the YouTube video
+        return: The id of the YouTube video
         rtype: str
         """
         if 'youtube.com' in self.url:
@@ -446,6 +452,14 @@ class YTVideoContent(BaseContentModel):
         return contents.filter(ytvideocontent__isnull=False)
 
 
+    def clean(self):
+        if (self.endTime > 0 and self.startTime > self.endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
+        seconds = get_video_length(self.id)
+        if (self.startTime > seconds and self.endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
+        elif (self.startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
+        elif (self.endTime > seconds): raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))
+
+
 # dict: Contains all available content types.
 CONTENT_TYPES = {
     PDFContent.TYPE: PDFContent,
@@ -471,7 +485,7 @@ reversion.register(PDFContent,
                    fields=['content', 'pdf', 'source', 'license'],
                    follow=['content'])
 reversion.register(YTVideoContent,
-                   fields=['content', 'url'],
+                   fields=['content', 'url', 'startTime', 'endTime'],
                    follow=['content'])
 reversion.register(MDContent,
                    fields=['content', 'md', 'textfield', 'source'],

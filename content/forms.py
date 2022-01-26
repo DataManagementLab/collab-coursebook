@@ -8,6 +8,7 @@ from django import forms
 from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
+from django.utils.translation import gettext_lazy as _
 
 # str: Relative directory path of the forms examples
 FORMS_EXAMPLES_DIRECTORY = 'content/templates/form/examples/'
@@ -52,6 +53,8 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
     This model represents the add form for YouTube videos.
     """
 
+    option = forms.BooleanField(label=_("Advanced Options"), required=False)
+
     class Meta:
         """Meta options
 
@@ -63,7 +66,7 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = YTVideoContent
-        fields = ['url']
+        fields = ['url', 'option', 'startTime', 'endTime']
 
 
 class AddContentFormImage(forms.ModelForm):
@@ -186,8 +189,8 @@ class AddMD(forms.ModelForm):
     This model represents the add form for Markdown code.
     """
     CHOICES = [
-        ('file', 'Upload as file'),
-        ('text', 'Upload as text'),
+        ('file', _('Upload as file')),
+        ('text', _('Upload as text')),
     ]
     options = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial='file')
 
@@ -213,11 +216,9 @@ class AddMD(forms.ModelForm):
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
                        'required': ''}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain',
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown',
                                                     'required': ''}),
         }
-
-    """ field_order =[]"""
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -225,11 +226,11 @@ class AddMD(forms.ModelForm):
                                           or cleaned_data['options'] == 'text'):
             options = cleaned_data['options']
             if options == 'file' and not ('md' in cleaned_data and bool(self.cleaned_data['md'])):
-                raise forms.ValidationError("You must upload a Markdown file.")
+                raise forms.ValidationError(_("You must upload a Markdown file."))
             elif options == 'text' and not ('textfield' in cleaned_data and bool(self.cleaned_data['textfield'])):
-                raise forms.ValidationError("You must put in some text.")
+                raise forms.ValidationError(_("You must put in some text."))
         else:
-            raise forms.ValidationError("None of the options were chosen.")
+            raise forms.ValidationError(_("None of the options were chosen."))
 
 
 class EditMD(forms.ModelForm):
@@ -260,12 +261,12 @@ class EditMD(forms.ModelForm):
             'textfield': forms.Textarea(
                 attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
                        'required': ''}),
-            'md': ModifiedClearableFileInput(attrs={'accept': 'text/plain'}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown'}),
         }
 
     def clean(self):
         if not bool(self.cleaned_data['textfield']):
-            raise forms.ValidationError("You must put in some text.")
+            raise forms.ValidationError(_("You must put in some text."))
 
 
 # dict[str, ModelForm]: Contains all available content types form.

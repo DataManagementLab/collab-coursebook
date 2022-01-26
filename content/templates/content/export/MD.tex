@@ -1,0 +1,10 @@
+{% load cc_export_tags %}
+{% load i18n %}
+{% autoescape off %}
+
+%show markdown content
+\includepdf[pages=-]{~~{{path}}} % ~~ is escape char
+
+\vskip 3em
+
+{% endautoescape %}

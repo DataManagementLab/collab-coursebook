@@ -93,7 +93,6 @@
     {% endif %}
 {% endblock %}
 
-
 {% block bottom_script %}
     {% if is_markdown_content %}
         {# jsi18n #}
@@ -123,4 +122,8 @@
             });
         </script>
     {% endif %}
-{%endblock%}
+    {# Script checkbox in YouTube video forms #}
+    {%if is_yt_content%}
+        {% include 'frontend/content/yt_video_times.html' %}
+    {%endif%}
+{% endblock %}

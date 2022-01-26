@@ -59,6 +59,14 @@ function addAttachment(event) {
         // Update form count
         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
         const attachment = $('#id_form-' + children + '-image');
+
+        // Add listener to update URL when attachment changes
+        // IS_MARKDOWN is a const declared in dynamic_attachment.html
+        if (IS_MARKDOWN) {
+            if (attachment.length) {
+                addAttachmentEvent(attachment,children);
+            }
+        }
     }
 }
 
@@ -97,4 +105,12 @@ function removeAttachment(event) {
 
     // Update form count
     $('#id_form-TOTAL_FORMS').attr('value', children - 1);
+
+    // Remove corresponding URL when attachment is removed
+    if (IS_MARKDOWN) {
+        if (URL_ARRAY[children - 1] != null) {
+            revertAttachmentLinks(children-1);
+            URL_ARRAY.pop();
+        }
+    }
 }
