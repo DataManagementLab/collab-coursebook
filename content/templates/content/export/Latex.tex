@@ -17,7 +17,11 @@
 \vskip 1em
 
 % Show latex content
-{{ content.latex.textfield }}
+{% if preview_flag %}
+    {{ latex_data }}
+{% else %}
+    {{ content.latex.textfield }}
+{% endif %}
 
 \vskip 3em
 

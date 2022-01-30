@@ -7,11 +7,15 @@
 {# Load JavaScript #}
 <script type="text/javascript" src="{% static 'js/copy.js' %}"></script>
 
-{# Tooltip content #}
+{# Tooltip content and preview button #}
 <script type="text/html" id="latex-tooltip">
     <a onclick="popupTooltip()" class="btn">
         {% fa5_icon "question" "fas" size='fa-lg' %}
     </a>
+    {# Preview button #}
+    <button type="button" id="preview" class="btn btn-primary mb-1" onclick="previewLatex()">
+                    {% trans 'Preview' %}
+    </button>
     <br>
     <div id="overlay" class="form-group" style="display: none">
         <label for="latex-tooltip-information">

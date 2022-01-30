@@ -153,3 +153,42 @@ def generate_pdf_from_latex(user, content, template="content/export/base.tex", c
     # pdf = pdf, pdflatex_output, tex_template
     pdf = Latex.render(context, template, [])
     return pdf[0]
+
+
+def latex_preview(request, user, topic, formset, template="content/export/base.tex", content_type='application/pdf'):
+    """Latex preview
+    Returns a HttpResponse containing the compiled pdf, if the request is successful or
+    a message indicating why compiling failed.
+    This method assumes the request is already a previewing request, skipping the
+    check for the preview flag, but it does not assume the validity of request content.
+
+    :param request: previewing request
+    :type request: HttpRequest
+    :param user: user requesting the preview
+    :type user: User
+    :param topic: topic, needed for pdf header
+    :type topic: Topic
+    :param formset: special image formset containing all the image attachments of the content
+    :type formset: LatexPreviewImageAttachmentFormSet
+    :param template: the path of the LaTeX template to use
+    :type template: str
+    :param content_type: MIME type of the data packed in response when preview request is successful
+    :type content_type: str
+    """
+    reasons = ['OK',
+               'Invalid attachment data',
+               'Textfield is empty',
+               'Invalid data']
+    if 'textfield' in request.POST:
+        latex = request.POST['textfield']
+        if not latex:
+            return HttpResponse(reason=reasons[2])
+        if not formset.is_valid():
+            return HttpResponse(reason=reasons[1])
+        # Generates the preview pdf
+        context = {'preview_data': latex, 'image_formset': formset,
+                   'export_pdf': False, 'user': user, 'topic': topic,
+                   'contents': []}
+        pdf, _, _ = Latex.render(context, template, [])
+        return HttpResponse(pdf, content_type=content_type, reason=reasons[0])
+    return HttpResponse(reason=reasons[3])

@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.files.base import ContentFile
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
@@ -21,7 +21,7 @@ from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 
-from content.attachment.forms import ImageAttachmentFormSet
+from content.attachment.forms import ImageAttachmentFormSet, LatexPreviewImageAttachmentFormSet
 from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
 from content.forms import CONTENT_TYPE_FORMS, EditMD
 from content.models import CONTENT_TYPES
@@ -33,7 +33,7 @@ from frontend.views.history import Reversion
 from frontend.views.validator import Validator
 
 from content.static.yt_api import *
-
+from export.views import latex_preview
 
 def clean_attachment(content, image_formset):
     """Clean attachment
@@ -215,6 +215,11 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
+        if 'latex-preview' in request.POST and request.is_ajax():
+            return latex_preview(request, get_user(request),
+                                 Topic.objects.get(pk=self.kwargs['topic_id']),
+                                 LatexPreviewImageAttachmentFormSet(request.POST, request.FILES))
+
         # Retrieves content type form
         if 'type' in self.kwargs:
             content_type = self.kwargs['type']

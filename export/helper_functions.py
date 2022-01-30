@@ -81,12 +81,32 @@ class Latex:
         template = get_template(template_name)
         rendered_tpl = template.render(context).encode(Latex.encoding)
         # Prerender content templates
-        for content in context['contents']:
-            rendered_tpl += Latex.pre_render(content, context['export_pdf'])
-        rendered_tpl += r"\end{document}".encode(Latex.encoding)
+        if 'preview_data' not in context:
+            for content in context['contents']:
+                rendered_tpl += Latex.pre_render(content, context['export_pdf'])
+            rendered_tpl += r"\end{document}".encode(Latex.encoding)
 
         with tempfile.TemporaryDirectory() as tempdir:
+            if 'preview_data' in context:
+                formset = context['image_formset']
+                rendered_tpl += Latex.preview_prerender(context['preview_data'], formset)
+                # This part can maybe be optimized because the same loop is used in preview_prerender
+                # But then we would have to put tempdir as a parameter, which would make it unclear which
+                # temporary directory is used?
 
+                # formset should already be valid at this point so this check might not be necessary
+                if formset.is_valid():
+                    for idx, form in enumerate(formset):
+                        used_form = form.save(commit=False)
+                        # Make each attachment's name unique to prevent files from being accidentally overwritten
+                        name = f'{idx}_{os.path.basename(used_form.image.name)}'
+                        temp_path = os.path.join(tempdir, name)
+                        attachment = used_form.image
+                        with open(temp_path, 'wb') as temp_attachment:
+                            # Save the attachment to tempdir in chunks so that memory is not overloaded.
+                            for chunk in attachment.chunks():
+                                temp_attachment.write(chunk)
+                            temp_attachment.close()
             process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
 
             # Output is a byte tuple of stdout and stderr
@@ -179,9 +199,10 @@ class Latex:
             template = get_template(export_template(template_type))
 
         # Set context for rendering
-        context = {'content': content, 'export_pdf': export_flag}
+        # Set value for preview_flag to avoid error when rendering template for LaTeX
+        context = {'content': content, 'export_pdf': export_flag, 'preview_flag': False}
 
-        # for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
+        #for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
         if (no_error and content.type == 'MD'):
             # parse markdown to html
             html = md_to_html(content.mdcontent.textfield, content)
@@ -249,3 +270,41 @@ class Latex:
 
         # Encode the template with Latex Encoding
         return rendered_tpl.encode(Latex.encoding)
+
+    @staticmethod
+    def preview_prerender(text, formset, template_type='Latex'):
+        """Prerender data for previewing
+        Pre renders the given LaTeX data for the purpose of generating a preview data
+        of the LaTeX.
+        Uses the same template for pre rendering normal LaTeX content (i.e content that will be
+        saved to server) but does not use the same context for rendering.
+        This method is created with the intention of pre rendering a preview for only LaTeX content.
+
+        :param text: LaTeX data to pre render
+        :type text: str
+        :param formset: valid special image formset containing all the image attachments of the content
+        :type formset: LatexPreviewImageAttachmentFormSet
+        :param template_type: type of the template to use
+        :type template_type: str
+        """
+        template = get_template(export_template(template_type))
+        # Set context for rendering
+        context = {'preview_flag': True, 'latex_data': text, 'export_pdf': False}
+        # render the template and use escape for triple braces with escape character ~~
+        # this is relevant when using triple braces for file paths in tex data
+        rendered_tpl = template.render(context)
+        rendered_tpl = re.sub('{~~', '{', rendered_tpl)
+        # formset should already be valid at this point so this check might not be necessary
+        if formset.is_valid():
+            # Replace all placeholders with image path
+            # The images are all located inside the temporary directory where the PDF is compiled
+            # so the image path only needs to contain image name
+            for idx, form in enumerate(formset):
+                used_form = form.save(commit=False)
+                name = f'{idx}_{used_form.image.name}'
+                rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
+                                      rf"\\includegraphics\1{{{name}}}",
+                                      rendered_tpl)
+        rendered_tpl += r"\end{document}"
+        return rendered_tpl.encode(Latex.encoding)
+

@@ -54,3 +54,12 @@ ImageAttachmentFormSet = forms.modelformset_factory(
         'image': ModifiedClearableFileInput(attrs={'required': 'true'})
     }
 )
+# BaseModelFormSet: Image attachment form set, used for rendering LaTeX preview to remove validation for source field
+LatexPreviewImageAttachmentFormSet = forms.modelformset_factory(
+    ImageAttachment,
+    fields=("license", "image"),
+    extra=0,
+    widgets={
+        'image': ModifiedClearableFileInput(attrs={'required': 'true'})
+    }
+)
