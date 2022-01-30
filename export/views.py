@@ -11,10 +11,9 @@ from base.models import Course, Favorite, Content
 from export.helper_functions import Latex
 
 
-
 def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
-                        template="content/export/base.tex",
-                        context=None):
+                template="content/export/base.tex",
+                context=None):
     """Generate course book
 
     There is also a flag which indicates if the whole course or only the coursebook should be exported.
@@ -63,7 +62,7 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
     return pdf, pdflatex_output, tex_template
 
 
-def generate_coursebook_response(request, pk, exp_all, file_name = None):  # pylint: disable=invalid-name
+def generate_coursebook_response(request, pk, exp_all, file_name=None):  # pylint: disable=invalid-name
     """Generate coursebook response
 
     There is also a flag which indicates if the whole course or only the coursebook should be exported.
