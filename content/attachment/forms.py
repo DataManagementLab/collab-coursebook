@@ -4,10 +4,12 @@ This file contains forms associated with the attachments.
 """
 
 from django import forms
+from django.forms import BaseModelFormSet
 
 from base.models import Content
 from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
 from content.widgets import ModifiedClearableFileInput
+from django.utils.translation import gettext_lazy as _
 
 
 class AdminImageAttachmentForm(forms.ModelForm):
@@ -54,12 +56,34 @@ ImageAttachmentFormSet = forms.modelformset_factory(
         'image': ModifiedClearableFileInput(attrs={'required': 'true'})
     }
 )
+
+
+class BaseLatexPreviewImageAttachmentFormset(BaseModelFormSet):
+    """
+    Formset used to override clean().
+
+    Because formset is created with bulk adding in mind, a form in the formset will
+    not be validated if it its fields are unchanged. Since an image attachment's file field
+    is empty at start and will not be checked by default, a manual check has to be implemented.
+    """
+    def clean(self):
+        super().clean()
+        for form in self.forms:
+            # Check for form validity; the form is still considered valid if its ImageField is empty
+            # (initial state) so after the form is considered valid it still has to be checked again
+            if form.is_valid():
+                used_form = form.save(commit=False)
+                if not used_form.image:
+                    raise forms.ValidationError(_('This field is required.'))
+
+
 # BaseModelFormSet: Image attachment form set, used for rendering LaTeX preview to remove validation for source field
 LatexPreviewImageAttachmentFormSet = forms.modelformset_factory(
     ImageAttachment,
-    fields=("license", "image"),
+    fields=("image",),
     extra=0,
     widgets={
         'image': ModifiedClearableFileInput(attrs={'required': 'true'})
-    }
+    },
+    formset=BaseLatexPreviewImageAttachmentFormset
 )
