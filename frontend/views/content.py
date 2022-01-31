@@ -193,6 +193,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Topic
         context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
 
+        context['is_add_form'] = True
+
         # Setup formset
         if 'item_forms' not in context:
             formset = ImageAttachmentFormSet(queryset=ImageAttachment.objects.none())
@@ -416,6 +418,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['is_yt_content'] = content_type == 'YouTubeVideo'
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
+
+        context['is_add_form'] = False
 
         if content_type in IMAGE_ATTACHMENT_TYPES and 'item_forms' not in context:
 

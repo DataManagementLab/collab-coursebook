@@ -1,0 +1,36 @@
+{# Load the tag library #}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+{# Load JavaScript #}
+<script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
+<script type="text/javascript" src="{% static 'js/request.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/latex_preview.js' %}"></script>
+
+<script type="text/html" id="latex-preview-frame">
+    <div class="row">
+        <div class="col">
+            <embed type="application/pdf" height="700px" width="100%" style="display:none" id="preview_frame">
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    /**
+     * Sends a preview request to the view of the corresponding form for LaTeX Content.
+     */
+    function previewLatex() {
+      // Setup arguments for the request
+      args = {
+        {% if is_add_form %}
+        url: "{% url 'frontend:content-add' course.id topic.id 'Latex' %}",
+        {% endif %}
+      };
+      sendPreviewRequest(args);
+    }
+    $(function() {
+        const previewFrame = document.getElementById('latex-preview-frame').textContent;
+        $('label[for="id_textfield"]').parent().after(previewFrame);
+    });
+</script>

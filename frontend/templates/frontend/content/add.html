@@ -14,9 +14,6 @@
 {% block imports %}
     {# Load CSS #}
     <link href="{% static 'css/content_detail.css' %}" type="text/css" rel="stylesheet"/>
-    {% if is_latex_content %}
-    <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
-    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -131,27 +128,6 @@
     {%endif%}
     {% if is_latex_content %}
         {# Script for previewing latex content #}
-        <script type="text/javascript" src="{% static 'js/latex_preview.js' %}"></script>
-        <script type="text/javascript">
-            /**
-             * Sends a preview request to the view of the add form for LaTeX Content.
-             */
-            function previewLatex() {
-              // Setup arguments for the request
-              args = {
-                url: "{% url 'frontend:content-add' course.id topic.id 'Latex' %}",
-              };
-              sendPreviewRequest(args);
-            }
-            $(function() {
-              // Attributes of preview frame
-              args = {
-                height: '700px',
-                width: '100%',
-                style: 'display:none',
-              }
-              initPreviewFrame(args);
-            });
-        </script>
+        {% include 'frontend/content/latex_preview.html' %}
     {% endif %}
 {% endblock %}
