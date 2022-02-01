@@ -13,8 +13,14 @@
         {% fa5_icon "question" "fas" size='fa-lg' %}
     </a>
     {# Preview button #}
-    <button type="button" id="preview" class="btn btn-primary mb-1" onclick="previewLatex()">
-                    {% trans 'Preview' %}
+    <button type="button" id="latex-preview-button" class="btn btn-primary mb-1" onclick="previewLatex()">
+        <div id="latex-ready">
+            {% trans 'Preview' %}
+        </div>
+        <div id="latex-loading" style="display:none;">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            {% trans 'Compiling...' %}
+        </div>
     </button>
     <br>
     <div id="overlay" class="form-group" style="display: none">

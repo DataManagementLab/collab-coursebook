@@ -28,7 +28,14 @@
     /**
      * Sends a preview request to the view of the corresponding form for LaTeX Content.
      */
-    function previewLatex() {
+    async function previewLatex() {
+      // Set preview button to loading state
+      const ready = $('#latex-ready', '#latex-preview-button');
+      const loading = $('#latex-loading', '#latex-preview-button');
+      const button = $('#latex-preview-button');
+      button.attr('disabled','');
+      ready.attr('style','display:none;');
+      loading.attr('style','display:inline;');
       // Setup arguments for the request
       args = {
         {% if is_add_form %}
@@ -37,7 +44,11 @@
             url: "{% url 'frontend:content-edit' course_id topic.id content.pk %}",
         {% endif %}
       };
-      sendPreviewRequest(args);
+      await sendPreviewRequest(args);
+      // Set preview button to ready state
+      button.removeAttr('disabled');
+      loading.attr('style','display:none;');
+      ready.attr('style','display:inline;');
     }
     $(function() {
         const previewFrame = document.getElementById('latex-preview-frame').textContent;

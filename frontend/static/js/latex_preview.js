@@ -9,6 +9,7 @@ let currentURL;
  * the reason for failure.
  *
  * @param args data for the Ajax request
+ * @returns jqXHR object which implements the Promise object
  */
 function sendPreviewRequest(args) {
     // Get preview frame
@@ -32,7 +33,7 @@ function sendPreviewRequest(args) {
         }
     });
     // Ajax request
-    $.ajax({
+    return $.ajax({
         xhrFields: {responseType: 'blob'},
         url: args.url,
         type: "POST",
