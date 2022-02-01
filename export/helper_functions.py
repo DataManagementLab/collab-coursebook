@@ -93,20 +93,21 @@ class Latex:
                 # This part can maybe be optimized because the same loop is used in preview_prerender
                 # But then we would have to put tempdir as a parameter, which would make it unclear which
                 # temporary directory is used?
-
                 # formset should already be valid at this point so this check might not be necessary
                 if formset.is_valid():
                     for idx, form in enumerate(formset):
                         used_form = form.save(commit=False)
-                        # Make each attachment's name unique to prevent files from being accidentally overwritten
-                        name = f'{idx}_{os.path.basename(used_form.image.name)}'
-                        temp_path = os.path.join(tempdir, name)
                         attachment = used_form.image
-                        with open(temp_path, 'wb') as temp_attachment:
-                            # Save the attachment to tempdir in chunks so that memory is not overloaded.
-                            for chunk in attachment.chunks():
-                                temp_attachment.write(chunk)
-                            temp_attachment.close()
+                        # If the attachment is already saved in the server no need to write it in tempdir
+                        if '/' not in attachment.name:
+                            # Make each attachment's name unique to prevent files from being accidentally overwritten
+                            name = f'{idx}_{os.path.basename(attachment.name)}'
+                            temp_path = os.path.join(tempdir, name)
+                            with open(temp_path, 'wb') as temp_attachment:
+                                # Save the attachment to tempdir in chunks so that memory is not overloaded.
+                                for chunk in attachment.chunks():
+                                    temp_attachment.write(chunk)
+                                temp_attachment.close()
             process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
 
             # Output is a byte tuple of stdout and stderr
@@ -301,7 +302,12 @@ class Latex:
             # so the image path only needs to contain image name
             for idx, form in enumerate(formset):
                 used_form = form.save(commit=False)
-                name = f'{idx}_{used_form.image.name}'
+                name = used_form.image.name
+                # If the attachment is already saved in the server then just use it.
+                if '/' in name:
+                    name = ret_path(used_form.image.url)
+                else:
+                    name = f'{idx}_{used_form.image.name}'
                 rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
                                       rf"\\includegraphics\1{{{name}}}",
                                       rendered_tpl)

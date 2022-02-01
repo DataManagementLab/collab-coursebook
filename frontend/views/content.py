@@ -418,6 +418,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['is_yt_content'] = content_type == 'YouTubeVideo'
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
+            context['latex_initial_pdf'] = content.latex.pdf.url
 
         context['is_add_form'] = False
 
@@ -450,6 +451,11 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
+        if 'latex-preview' in request.POST and request.is_ajax():
+            return latex_preview(request, get_user(request),
+                                 Topic.objects.get(pk=self.kwargs['topic_id']),
+                                 LatexPreviewImageAttachmentFormSet(request.POST, request.FILES))
+
         self.object = self.get_object()
         form = self.get_form()
 
