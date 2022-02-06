@@ -12,7 +12,7 @@ from django.test import TestCase
 import content.models as model
 
 import export.helper_functions as helper
-
+from content.attachment.forms import LatexPreviewImageAttachmentFormSet
 from export.templatetags.cc_export_tags import tex_escape
 
 
@@ -76,3 +76,28 @@ class LaTeXTestCase(TestCase):
         pre_render = helper.Latex.pre_render(content, False)
         self.assertIn(latex_content.textfield, pre_render.decode(helper.Latex.encoding))
         self.assertNotIn(content.description, pre_render.decode(helper.Latex.encoding))
+
+    def test_prerender_latex_preview(self):
+        """Prerender test case - LaTeX preview
+
+        Tests that the function preview_prerender renders the latex code correctly and replaces
+        all the attachment embedding codes with their corresponding modified file names.
+        """
+        latex_code = "Lorem ipsum " \
+                     "\\includegraphics[width=\\textwidth]{Image-0}" \
+                     "\\includegraphics[width=\\textwidth]{Image-1}"
+        test_files = [utils.generate_image_file(0), utils.generate_image_file(1)]
+        data = {
+            'form-TOTAL_FORMS': '2',
+            'form-INITIAL_FORMS': '0',
+        }
+        files = {
+            'form-0-image': test_files[0],
+            'form-1-image': test_files[1],
+        }
+        formset = LatexPreviewImageAttachmentFormSet(data, files)
+        pre_render = helper.Latex.preview_prerender(latex_code, formset)
+        latex_code = "Lorem ipsum " \
+                     f"\\includegraphics[width=\\textwidth]{{0_{test_files[0].name}}}" \
+                     f"\\includegraphics[width=\\textwidth]{{1_{test_files[1].name}}}"
+        self.assertIn(latex_code, pre_render.decode(helper.Latex.encoding))
