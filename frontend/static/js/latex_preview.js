@@ -67,25 +67,3 @@ function sendPreviewRequest(args) {
         },
     });
 }
-
-/**
- * Initializes the frame used for previewing LaTeX content.
- *
- * @param args attributes used to customize the preview frame
- */
-function initPreviewFrame(args) {
-    previewFrame = document.createElement('embed');
-    // Set attributes for preview frame
-    attributes = Object.keys(args)
-    for (let idx in attributes) {
-        attr = attributes[idx];
-        previewFrame.setAttribute(attr, args[attr]);
-    }
-    // Constrain id and embedding type regardless of args
-    previewFrame.setAttribute('id', 'preview_frame');
-    previewFrame.setAttribute('type', 'application/pdf');
-    // Add preview frame to form
-    $('label[for="id_textfield"]').parent().after('<div class="row"><div class="col">'
-                                                   + previewFrame.outerHTML +
-                                                  '</div></div>');
-}

@@ -349,6 +349,118 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(content.textfield, '\\textbf{Test}')
         self.assertTrue(bool(content.pdf))
 
+    def test_latex_preview_success(self):
+        """POST test case - LaTeX preview - success
+
+        Tests that the POST preview request is sent and processed correctly, returning
+        an appropriating response indicating that the request was successful.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'Latex'
+        })
+        old_objects_count = model.Latex.objects.count()
+        old_attachments_count = ImageAttachment.objects.count()
+        data = {
+            'textfield': 'Lorem ipsum',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'form-0-image': utils.generate_image_file(0),
+            'latex-preview': True,
+        }
+        # Last parameter is used to make the request an ajax request
+        response = self.client.post(path, data, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.reason_phrase, 'OK')
+        self.assertEqual(response['Content-Type'], 'application/pdf')
+        self.assertEqual(model.Latex.objects.count(), old_objects_count)
+        self.assertEqual(ImageAttachment.objects.count(), old_attachments_count)
+
+    def test_latex_preview_invalid_request(self):
+        """POST test case LaTeX preview - failure
+
+         Tests that the POST preview request is sent and rejected because the request was
+         invalid, returning an appropriating response with the corresponding
+         reason.
+         """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'Latex'
+        })
+        old_objects_count = model.Latex.objects.count()
+        old_attachments_count = ImageAttachment.objects.count()
+        data = {
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'latex-preview': True,
+        }
+        # Last parameter is used to make the request an ajax request
+        response = self.client.post(path, data, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.reason_phrase, 'Invalid data')
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
+        self.assertEqual(model.Latex.objects.count(), old_objects_count)
+        self.assertEqual(ImageAttachment.objects.count(), old_attachments_count)
+
+    def test_latex_preview_fail_text(self):
+        """POST test case LaTeX preview - failure
+
+        Tests that the POST preview request is sent and rejected because no LaTeX code
+        was sent in the request, returning an appropriating response with the corresponding
+        reason.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'Latex'
+        })
+        old_objects_count = model.Latex.objects.count()
+        old_attachments_count = ImageAttachment.objects.count()
+        data = {
+            'textfield': '',
+            'form-TOTAL_FORMS': '0',
+            'form-INITIAL_FORMS': '0',
+            'latex-preview': True,
+        }
+        # Last parameter is used to make the request an ajax request
+        response = self.client.post(path, data, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.reason_phrase, 'Textfield is empty')
+        self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
+        self.assertEqual(model.Latex.objects.count(), old_objects_count)
+        self.assertEqual(ImageAttachment.objects.count(), old_attachments_count)
+
+    def test_latex_preview_fail_invalid_attachments(self):
+        """POST test case LaTeX preview - failure
+
+        Tests that the POST preview request is sent and rejected because of one of the following reasons:
+        1. At least one of the attachments is not an image
+        2. At least one of the attachments was empty
+        An appropriating response with the corresponding reason message will then be sent back.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'Latex'
+        })
+        old_objects_count = model.Latex.objects.count()
+        old_attachments_count = ImageAttachment.objects.count()
+        test_file = SimpleUploadedFile("test_file.md", b"A")
+        data = [{
+            'textfield': 'Test invalid image extension',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'form-0-image': test_file,
+            'latex-preview': True,
+        }, {
+            'textfield': 'Test empty form in formset',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0',
+            'latex-preview': True,
+        }]
+        # Last parameter is used to make the request an ajax request
+        for i in range(0, len(data)):
+            response = self.client.post(path, data[i], **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.reason_phrase, 'Invalid attachment data')
+            self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')
+            self.assertEqual(model.Latex.objects.count(), old_objects_count)
+            self.assertEqual(ImageAttachment.objects.count(), old_attachments_count)
+
     def test_add_attachments(self):
         """POST test case - add attachments
 

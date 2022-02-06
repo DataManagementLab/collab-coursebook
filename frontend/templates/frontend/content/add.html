@@ -88,8 +88,10 @@
     {% endif %}
 
     {# LaTeX embedded help for attachment #}
+    {# Preview LaTeX #}
     {% if is_latex_content %}
         {% include 'frontend/content/attachment_embedding_help.html' %}
+        {% include 'frontend/content/latex_preview.html' %}
     {% endif %}
 {% endblock %}
 
@@ -126,8 +128,4 @@
     {%if is_yt_content%}
         {% include 'frontend/content/yt_video_times.html' %}
     {%endif%}
-    {% if is_latex_content %}
-        {# Script for previewing latex content #}
-        {% include 'frontend/content/latex_preview.html' %}
-    {% endif %}
 {% endblock %}
