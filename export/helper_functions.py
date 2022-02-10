@@ -132,12 +132,10 @@ class Latex:
             except FileNotFoundError:
                 pdf = None
         # remove any temporary files
-        # TODO fix this bug
-        """
-        dir = os.path.dirname(os.path.abspath(__file__))[:-7] + '/media/uploads/temp'
-        for temp in os.listdir(dir):
-            os.remove(os.path.join(dir, temp))
-        """
+        md_dir = os.path.dirname(os.path.abspath(__file__))[:-7] + '/media/uploads/temp'
+        if os.path.exists(md_dir):
+            for temp in os.listdir(md_dir):
+                os.remove(os.path.join(md_dir, temp))
         return pdf, pdflatex_output, rendered_tpl
 
     @staticmethod
@@ -203,7 +201,7 @@ class Latex:
         # Set value for preview_flag to avoid error when rendering template for LaTeX
         context = {'content': content, 'export_pdf': export_flag, 'preview_flag': False}
 
-        #for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
+        # for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
         if (no_error and content.type == 'MD'):
             # parse markdown to html
             html = md_to_html(content.mdcontent.textfield, content)
@@ -313,4 +311,3 @@ class Latex:
                                       rendered_tpl)
         rendered_tpl += r"\end{document}"
         return rendered_tpl.encode(Latex.encoding)
-
