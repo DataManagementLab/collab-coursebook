@@ -13,4 +13,4 @@ pillow==8.3.2
 polib==1.1.1
 python-magic==0.4.24
 Markdown==3.3.6
-wkhtmltopdf=0.2
+wkhtmltopdf==0.2
