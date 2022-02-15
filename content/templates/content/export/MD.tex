@@ -2,8 +2,23 @@
 {% load i18n %}
 {% autoescape off %}
 
+% Show topic title when exporting
+{% if export_pdf %}
+{\Large \textbf{ {{content.topic.title}}   }}
+{% endif %}
+
+\vskip 1em
+
+% Show description when exporting
+{% if export_pdf %}
+\textit{~~{% trans "Description" %}:} {{content.description|tex_escape}}
+{% endif %}
+
+\vskip 1em
+
 %show markdown content
-\includepdf[pages=-]{~~{{path}}} % ~~ is escape char
+%\includepdf[pages=-]{~~{{path}}} % ~~ is escape char
+{{ mdtext }}
 
 \vskip 3em
 

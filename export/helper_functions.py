@@ -9,6 +9,7 @@ import pdfkit
 import os
 import re
 import tempfile
+import mdx_latex
 
 from django.utils.translation import gettext
 
@@ -32,7 +33,10 @@ def md_to_html(text, content):
             text = re.sub(rf"!\[(.*?)]\(Image-{idx}\)",
                           rf"![\1]({absolute})",
                           text)
-    return markdown.markdown(text)
+    md = markdown.Markdown()
+    latex_mdx = mdx_latex.LaTeXExtension()
+    latex_mdx.extendMarkdown(md, markdown.__dict__)
+    return md.convert(text)
 
 
 class Latex:
@@ -204,24 +208,8 @@ class Latex:
         # for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
         if (no_error and content.type == 'MD'):
             # parse markdown to html
-            html = md_to_html(content.mdcontent.textfield, content)
-            if export_flag:
-                # for the export embed the title and description in the html so the LaTeX document doesn't render a new page just for description and title
-                html += f"<hr><h2><span style=\"font-weight:normal\">{content.topic.title}</span></h2><i>" + gettext(
-                    "Description") + f":</i> {content.description}"
-            # create a path for the temporary file with pk in name to ensure uniqueness
-            pdf_path = f'media/uploads/temp/MD{content.mdcontent.pk}.pdf'
-            # convert the html to a temporary pdf
-            options = {
-                "enable-local-file-access": None
-            }
-            pdfkit.from_string(html, pdf_path, options=options)
-            # the absolute path to the base of the project
-            base_folder_path = os.path.dirname(os.path.abspath(__file__))[:-7]
-            # the path to the temporary file from the base folder
-            file_path = f'/media/uploads/temp/MD{content.mdcontent.pk}.pdf'
-            # write the complete path into the context to be rendered
-            context['path'] = base_folder_path + file_path
+            latex = md_to_html(content.mdcontent.textfield, content)
+            context['mdtext'] = latex[8:-10]
 
         if (no_error and content.type == 'YouTubeVideo'):
 
