@@ -2,12 +2,15 @@
 
 {% load fontawesome_5 %}
 
-<div class="text" style="font-family: Segoe UI; padding: 0.5em; font-size: 120%; background-color: #efefef">
+<div class="markdown">
     {% autoescape off %}
     {{html}}
     {% endautoescape %}
 </div>
 
+<script type="text/javascript">
+    $('table','.markdown').attr('class','table table-striped');
+</script>
 
 <b>
     {% trans 'Source' %}:
