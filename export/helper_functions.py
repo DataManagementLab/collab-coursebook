@@ -38,6 +38,16 @@ def md_to_html(text, content):
     latex_mdx.extendMarkdown(md, markdown.__dict__)
     return md.convert(text)
 
+def md_to_html_2(text, content):
+    if content.ImageAttachments.count() > 0:
+        attachments = content.ImageAttachments.all()
+        for idx, attachment in enumerate(attachments):
+            absolute = ret_path(attachment.image.url)
+            text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
+                          rf"![\1]({absolute}\2)",
+                          text)
+    return text
+
 
 class Latex:
     """LaTeX Export
@@ -112,13 +122,15 @@ class Latex:
                                 for chunk in attachment.chunks():
                                     temp_attachment.write(chunk)
                                 temp_attachment.close()
-            process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
+            # Use shell-escape to allow the package 'markdown' to access shell
+            process = Popen(['pdflatex', '--shell-escape'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
 
             # Output is a byte tuple of stdout and stderr
             pdflatex_output = process.communicate(rendered_tpl)
 
             # Filter error messages in log (stdout)
             error_log = Latex.errors(pdflatex_output[0])
+            print(error_log)
             # Error log
             if len(error_log) != 0:
                 rendered_tpl = template.render(context).encode(Latex.encoding)
@@ -208,8 +220,8 @@ class Latex:
         # for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
         if (no_error and content.type == 'MD'):
             # parse markdown to html
-            latex = md_to_html(content.mdcontent.textfield, content)
-            context['mdtext'] = latex[8:-10]
+            latex = md_to_html_2(content.mdcontent.textfield, content)
+            context['mdtext'] = latex
 
         if (no_error and content.type == 'YouTubeVideo'):
 

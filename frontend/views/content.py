@@ -31,6 +31,10 @@ from frontend.forms.content import AddContentForm, EditContentForm, TranslateFor
 from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
+from markdown_it import MarkdownIt
+from mdit_py_plugins.front_matter import front_matter_plugin
+from mdit_py_plugins.footnote import footnote_plugin
+
 
 from content.static.yt_api import *
 from export.views import latex_preview
@@ -100,10 +104,18 @@ def md_to_html(text, content):
     if content.ImageAttachments.count() > 0:
         attachments = content.ImageAttachments.all()
         for idx, attachment in enumerate(attachments):
-            text = re.sub(rf"!\[(.*?)]\(Image-{idx}\)",
-                          rf"![\1]({attachment.image.url})",
+            text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
+                          rf"![\1]({attachment.image.url}\2)",
                           text)
-    return markdown.markdown(text)
+    md = (
+        MarkdownIt()
+        .use(front_matter_plugin)
+        .use(footnote_plugin)
+        .enable('table')
+        .enable('strikethrough')
+        .enable('linkify')
+    )
+    return md.render(text)
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
