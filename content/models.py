@@ -332,7 +332,7 @@ class MDContent(BaseContentModel):
 
     @staticmethod
     def filter_by_own_type(contents):
-        return contents.filter(markdown__isnull=False)
+        return contents.filter(mdcontent__isnull=False)
 
 
 class TextField(BaseContentModel):

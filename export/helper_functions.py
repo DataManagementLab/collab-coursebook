@@ -9,7 +9,7 @@ import pdfkit
 import os
 import re
 import tempfile
-import mdx_latex
+#import mdx_latex
 
 from django.utils.translation import gettext
 
@@ -25,7 +25,7 @@ from content.static.yt_api import *
 
 # from frontend.views.content import md_to_html
 
-def md_to_html(text, content):
+'''def md_to_html(text, content):
     if content.ImageAttachments.count() > 0:
         attachments = content.ImageAttachments.all()
         for idx, attachment in enumerate(attachments):
@@ -37,7 +37,7 @@ def md_to_html(text, content):
     latex_mdx = mdx_latex.LaTeXExtension()
     latex_mdx.extendMarkdown(md, markdown.__dict__)
     return md.convert(text)
-
+'''
 def md_to_html_2(text, content):
     if content.ImageAttachments.count() > 0:
         attachments = content.ImageAttachments.all()
