@@ -142,7 +142,7 @@ class Latex:
                     if context['export_pdf']:
                         md += f"<meta charset='UTF-8'>" \
                              f"<hr><h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
-                             + gettext("Description") + f":</i> {content.description}"
+                             + gettext("Description") + f":</i> {tex_escape(content.description)}"
                     md += md_to_html(content.mdcontent.textfield, content)
                     pdf = pdfkit.from_string(md, options=options)
                     name = f'MD_{content.pk}.pdf'
