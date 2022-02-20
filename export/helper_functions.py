@@ -3,16 +3,15 @@
 This file contains utility functions related to exporting and rendering files.
 """
 
-from pathlib import Path
-import markdown
-import pdfkit
 import os
 import re
 import tempfile
-#import mdx_latex
-
+import pdfkit
+import markdown
+from markdown_it import MarkdownIt
+from mdit_py_plugins.front_matter import front_matter_plugin
+from mdit_py_plugins.footnote import footnote_plugin
 from django.utils.translation import gettext
-
 from subprocess import Popen, PIPE
 
 from django.template.loader import get_template
@@ -22,10 +21,8 @@ from django.utils.translation import gettext_lazy as _
 from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
 from content.static.yt_api import *
 
-
-# from frontend.views.content import md_to_html
-
-'''def md_to_html(text, content):
+'''
+def md_to_html(text, content):
     if content.ImageAttachments.count() > 0:
         attachments = content.ImageAttachments.all()
         for idx, attachment in enumerate(attachments):
@@ -38,15 +35,25 @@ from content.static.yt_api import *
     latex_mdx.extendMarkdown(md, markdown.__dict__)
     return md.convert(text)
 '''
-def md_to_html_2(text, content):
+
+
+def md_to_html(text, content):
     if content.ImageAttachments.count() > 0:
         attachments = content.ImageAttachments.all()
         for idx, attachment in enumerate(attachments):
-            absolute = ret_path(attachment.image.url)
+            path = ret_path(attachment.image.url)
             text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
-                          rf"![\1]({absolute}\2)",
+                          rf"![\1]({path}\2)",
                           text)
-    return text
+    md = (
+        MarkdownIt()
+        .use(front_matter_plugin)
+        .use(footnote_plugin)
+        .enable('table')
+        .enable('strikethrough')
+        .enable('linkify')
+    )
+    return md.render(text)
 
 
 class Latex:
@@ -122,6 +129,24 @@ class Latex:
                                 for chunk in attachment.chunks():
                                     temp_attachment.write(chunk)
                                 temp_attachment.close()
+            options = {
+                '--enable-local-file-access': '',
+            }
+            for content in context['contents']:
+                if content.type == 'MD':
+                    md = ''
+                    if context['export_pdf']:
+                        md += f"<meta charset='UTF-8'>" \
+                             f"<hr><h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
+                             + gettext("Description") + f":</i> {content.description}"
+                    md += md_to_html(content.mdcontent.textfield, content)
+                    pdf = pdfkit.from_string(md, options=options)
+                    name = f'MD_{content.pk}.pdf'
+                    path = os.path.join(tempdir, name)
+                    with open(path, 'wb') as temp_pdf:
+                        temp_pdf.write(pdf)
+                        temp_pdf.close()
+
             # Use shell-escape to allow the package 'markdown' to access shell
             process = Popen(['pdflatex', '--shell-escape'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
 
@@ -218,12 +243,21 @@ class Latex:
         context = {'content': content, 'export_pdf': export_flag, 'preview_flag': False}
 
         # for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
+        '''
         if (no_error and content.type == 'MD'):
             # parse markdown to html
-            latex = md_to_html_2(content.mdcontent.textfield, content)
+            if content.ImageAttachments.count() > 0:
+                attachments = content.ImageAttachments.all()
+                for idx, attachment in enumerate(attachments):
+                    absolute = ret_path(attachment.image.url)
+                    text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
+                                  rf"![\1]({absolute}\2)",
+                                  text)
+            latex = md_to_html(content.mdcontent.textfield, content)
             context['mdtext'] = latex
+        '''
 
-        if (no_error and content.type == 'YouTubeVideo'):
+        if no_error and content.type == 'YouTubeVideo':
 
             seconds_total = content.ytvideocontent.startTime
             context['start_hours'], context['start_minutes'], context['start_seconds'] = seconds_to_time(seconds_total)
@@ -250,22 +284,40 @@ class Latex:
 
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data
+        context['test'] = ret_path('/media/uploads/temps/test.pdf')
+        if no_error and content.type == 'MD':
+            context['md_path'] = f'MD_{content.pk}.pdf'
         rendered_tpl = template.render(context)
         rendered_tpl = re.sub('{~~', '{', rendered_tpl)
-
         # Check that we are not compiling an error template (otherwise the content would be an int)
         if no_error:
-
             # If there exists an attachment, replace all placeholders in the tex file with
             # image path
             if content.ImageAttachments.count() > 0:
                 attachments = content.ImageAttachments.all()
-
+                # md = content.mdcontent.textfield
                 for idx, attachment in enumerate(attachments):
                     path = ret_path(attachment.image.url)
-                    rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
-                                          rf"\\includegraphics\1{{{path}}}",
-                                          rendered_tpl)
+                    if content.type == 'MD':
+                        '''rendered_tpl = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
+                                              rf"![\1]({path}\2)",
+                                              rendered_tpl)
+                        md = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
+                                              rf"![\1]({path}\2)",
+                                              md)'''
+                    else:
+                        rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
+                                              rf"\\includegraphics\1{{{path}}}",
+                                              rendered_tpl)
+                '''md = markdown.markdown(md)
+                options = {
+                    '--enable-local-file-access': ''
+                }
+                pdf = pdfkit.from_string(md, options=options)
+                with open(ret_path('/media/uploads/temps/test.pdf'),'wb') as f:
+                    f.write(pdf)
+                    f.close()
+                '''
 
         # Encode the template with Latex Encoding
         return rendered_tpl.encode(Latex.encoding)

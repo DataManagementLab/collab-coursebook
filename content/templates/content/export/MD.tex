@@ -2,25 +2,19 @@
 {% load i18n %}
 {% autoescape off %}
 
-% Show topic title when exporting
-{% if export_pdf %}
-{\Large \textbf{ {{content.topic.title}}   }}
-{% endif %}
 
-\vskip 1em
-
-% Show description when exporting
-{% if export_pdf %}
-\textit{~~{% trans "Description" %}:} {{content.description|tex_escape}}
-{% endif %}
-
-\vskip 1em
 
 % show markdown content
-%\includepdf[pages=-]{~~{{path}}} % ~~ is escape char
-\begin{markdown}
-{{ mdtext }}
-\end{markdown}
+%\begin{minipage}{\textwidth}
+\includepdf[pages=-]{~~{{md_path}}} % ~~ is escape char
+%\includepdf[scale=0.8,pages=-]{~~{{md_path}}}
+%\fbox{\includegraphics[page=1]{~~{{md_path}}}}
+%\end{minipage}
+%\begin{markdown}
+
+%\end{markdown}
+
+
 
 \vskip 3em
 
