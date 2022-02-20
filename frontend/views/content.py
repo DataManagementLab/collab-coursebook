@@ -2,15 +2,11 @@
 
 This file describes the frontend views related to content types.
 """
-import re
 
-import markdown
-import math
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.files.base import ContentFile
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -31,13 +27,12 @@ from frontend.forms.content import AddContentForm, EditContentForm, TranslateFor
 from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
-from markdown_it import MarkdownIt
-from mdit_py_plugins.front_matter import front_matter_plugin
-from mdit_py_plugins.footnote import footnote_plugin
+from export.helper_functions import Markdown
 
 
 from content.static.yt_api import *
 from export.views import latex_preview
+
 
 def clean_attachment(content, image_formset):
     """Clean attachment
@@ -98,24 +93,6 @@ def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disab
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
-
-
-def md_to_html(text, content):
-    if content.ImageAttachments.count() > 0:
-        attachments = content.ImageAttachments.all()
-        for idx, attachment in enumerate(attachments):
-            text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
-                          rf"![\1]({attachment.image.url}\2)",
-                          text)
-    md = (
-        MarkdownIt()
-        .use(front_matter_plugin)
-        .use(footnote_plugin)
-        .enable('table')
-        .enable('strikethrough')
-        .enable('linkify')
-    )
-    return md.render(text)
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -660,8 +637,7 @@ class ContentView(DetailView):
                 context['markdown'] = html"""
 
         if content.type == "MD":
-            md_text = content.mdcontent.textfield
-            context['html'] = md_to_html(md_text, content)
+            context['html'] = Markdown.render(content, False)
 
         if content.type == 'YouTubeVideo':
             seconds_total = content.ytvideocontent.startTime
@@ -886,7 +862,6 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
                                 self.request.GET.get('f')
 
         if content.type == "MD":
-            md_text = content.mdcontent.textfield
-            context['html'] = md_to_html(md_text, content)
+            context['html'] = Markdown.render(content, False)
 
         return context

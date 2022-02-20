@@ -15,4 +15,5 @@ polib==1.1.1
 python-magic==0.4.24
 Markdown==3.3.6
 markdown-it-py[linkify,plugins]==2.0.1
+pdfkit==1.0.0
 

@@ -7,7 +7,6 @@ import os
 import re
 import tempfile
 import pdfkit
-import markdown
 from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
@@ -21,39 +20,45 @@ from django.utils.translation import gettext_lazy as _
 from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
 from content.static.yt_api import *
 
-'''
-def md_to_html(text, content):
-    if content.ImageAttachments.count() > 0:
-        attachments = content.ImageAttachments.all()
-        for idx, attachment in enumerate(attachments):
-            absolute = str(Path.cwd()) + attachment.image.url
-            text = re.sub(rf"!\[(.*?)]\(Image-{idx}\)",
-                          rf"![\1]({absolute})",
-                          text)
-    md = markdown.Markdown()
-    latex_mdx = mdx_latex.LaTeXExtension()
-    latex_mdx.extendMarkdown(md, markdown.__dict__)
-    return md.convert(text)
-'''
 
+class Markdown:
+    """Markdown
 
-def md_to_html(text, content):
-    if content.ImageAttachments.count() > 0:
-        attachments = content.ImageAttachments.all()
-        for idx, attachment in enumerate(attachments):
-            path = ret_path(attachment.image.url)
-            text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
-                          rf"![\1]({path}\2)",
-                          text)
-    md = (
-        MarkdownIt()
-        .use(front_matter_plugin)
-        .use(footnote_plugin)
-        .enable('table')
-        .enable('strikethrough')
-        .enable('linkify')
-    )
-    return md.render(text)
+    This class provides the function for rendering Markdown into HTML.
+    """
+    @staticmethod
+    def render(content, is_absolute):
+        """Render
+
+        Replaces all attachment embedding code in the Markdown content with the path of
+        the corresponding attachment, either relative or absolute,
+        then compiles and returns the HTML from the Markdown content.
+
+        :param content: Markdown content to compile HTML from
+        :type content: MDContent
+        :param is_absolute: decides whether absolute or relative path will be used
+        :type is_absolute: bool
+        """
+        text = content.mdcontent.textfield
+        if content.ImageAttachments.count() > 0:
+            attachments = content.ImageAttachments.all()
+            for idx, attachment in enumerate(attachments):
+                if is_absolute:
+                    path = ret_path(attachment.image.url)
+                else:
+                    path = attachment.image.url
+                text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
+                              rf"![\1]({path}\2)",
+                              text)
+        md = (
+            MarkdownIt()
+            .use(front_matter_plugin)
+            .use(footnote_plugin)
+            .enable('table')
+            .enable('strikethrough')
+            .enable('linkify')
+        )
+        return md.render(text)
 
 
 class Latex:
@@ -143,7 +148,7 @@ class Latex:
                         md += f"<meta charset='UTF-8'>" \
                              f"<hr><h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
                              + gettext("Description") + f":</i> {tex_escape(content.description)}"
-                    md += md_to_html(content.mdcontent.textfield, content)
+                    md += Markdown.render(content, True)
                     pdf = pdfkit.from_string(md, options=options)
                     name = f'MD_{content.pk}.pdf'
                     path = os.path.join(tempdir, name)
