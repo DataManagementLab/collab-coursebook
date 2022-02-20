@@ -131,6 +131,10 @@ class Latex:
                                 temp_attachment.close()
             options = {
                 '--enable-local-file-access': '',
+                'margin-top': '2cm',
+                'margin-right': '1cm',
+                'margin-bottom': '2cm',
+                'margin-left': '1cm'
             }
             for content in context['contents']:
                 if content.type == 'MD':
