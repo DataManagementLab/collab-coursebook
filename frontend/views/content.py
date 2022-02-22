@@ -228,27 +228,28 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Checks if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
-
             # Saves author etc.
             content = add_content_form.save(commit=False)
             content.author = get_user(self.request)
             topic_id = self.kwargs['topic_id']
             content.topic = Topic.objects.get(pk=topic_id)
             content.type = content_type
+
+            # Checks if attachments are allowed for the given content type
+            if content_type in IMAGE_ATTACHMENT_TYPES:
+                if image_formset.is_valid():
+                    redirect = Validator.validate_attachment(content, image_formset)
+                else:
+                    return self.render_to_response(
+                            self.get_context_data(form=add_content_form,
+                                                  content_type_form=content_type_form,
+                                                  item_forms=image_formset))
             content.save()
             # Evaluates generic form
             content_type_data = content_type_form.save(commit=False)
 
             content_type_data.content = content
             content_type_data.save()
-
-            # Checks if attachments are allowed for the given content type
-            if content_type in IMAGE_ATTACHMENT_TYPES:
-                # Validates attachments
-                redirect = Validator.validate_attachment(content,
-                                                         image_formset)
-                if redirect is not None:
-                    return redirect
 
             # If the content type is LaTeX, compile the LaTeX Code and store in DB
             if content_type == 'Latex':
@@ -472,22 +473,22 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
-                content = form.save()
+                content = form.save(commit=False)
                 content_type = content.type
-                content_type_data = content_type_form.save()
-
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
-
                     # Removes images from database
                     clean_attachment(content, image_formset)
-
                     # Validates attachments
-                    redirect = Validator.validate_attachment(content,
-                                                             image_formset)
-                    if redirect is not None:
-                        return redirect
-
+                    if image_formset.is_valid():
+                        redirect = Validator.validate_attachment(content, image_formset)
+                    else:
+                        return self.render_to_response(
+                            self.get_context_data(form=form,
+                                                  content_type_form=content_type_form,
+                                                  item_forms=image_formset))
+                content.save()
+                content_type_data = content_type_form.save()
                 # If the content type is LaTeX, compile the LaTeX Code and store in DB
                 if content_type == 'Latex':
                     Validator.validate_latex(get_user(request),

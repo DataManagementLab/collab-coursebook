@@ -50,11 +50,13 @@ function addAttachment(event) {
             id.setAttribute('value', value);
         }
 
+        /* Error from code of the group before
         // Restore value
         if (STACK.length > 0) {
             const id = document.getElementById('id_form-' + (children - 1) + '-id');
             id.setAttribute('value', STACK.pop());
         }
+        */
 
         // Update form count
         $('#id_form-TOTAL_FORMS').attr('value', children + 1);
