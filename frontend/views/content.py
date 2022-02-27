@@ -238,13 +238,15 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
                 if image_formset.is_valid():
+                    content.save()
                     redirect = Validator.validate_attachment(content, image_formset)
                 else:
                     return self.render_to_response(
                             self.get_context_data(form=add_content_form,
                                                   content_type_form=content_type_form,
                                                   item_forms=image_formset))
-            content.save()
+            else:
+                content.save()
             # Evaluates generic form
             content_type_data = content_type_form.save(commit=False)
 
@@ -481,13 +483,15 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     clean_attachment(content, image_formset)
                     # Validates attachments
                     if image_formset.is_valid():
+                        content.save()
                         redirect = Validator.validate_attachment(content, image_formset)
                     else:
                         return self.render_to_response(
                             self.get_context_data(form=form,
                                                   content_type_form=content_type_form,
                                                   item_forms=image_formset))
-                content.save()
+                else:
+                    content.save()
                 content_type_data = content_type_form.save()
                 # If the content type is LaTeX, compile the LaTeX Code and store in DB
                 if content_type == 'Latex':

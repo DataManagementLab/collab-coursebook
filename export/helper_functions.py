@@ -106,55 +106,38 @@ class Latex:
         """
         template = get_template(template_name)
         rendered_tpl = template.render(context).encode(Latex.encoding)
-        # Prerender content templates
-        if 'preview_data' not in context:
-            for content in context['contents']:
-                rendered_tpl += Latex.pre_render(content, context['export_pdf'])
-            rendered_tpl += r"\end{document}".encode(Latex.encoding)
 
         with tempfile.TemporaryDirectory() as tempdir:
             if 'preview_data' in context:
                 formset = context['image_formset']
-                rendered_tpl += Latex.preview_prerender(context['preview_data'], formset)
-                # This part can maybe be optimized because the same loop is used in preview_prerender
-                # But then we would have to put tempdir as a parameter, which would make it unclear which
-                # temporary directory is used?
-                # formset should already be valid at this point so this check might not be necessary
-                if formset.is_valid():
-                    for idx, form in enumerate(formset):
-                        used_form = form.save(commit=False)
-                        attachment = used_form.image
-                        # If the attachment is already saved in the server no need to write it in tempdir
-                        if '/' not in attachment.name:
-                            # Make each attachment's name unique to prevent files from being accidentally overwritten
-                            name = f'{idx}_{os.path.basename(attachment.name)}'
-                            temp_path = os.path.join(tempdir, name)
-                            with open(temp_path, 'wb') as temp_attachment:
-                                # Save the attachment to tempdir in chunks so that memory is not overloaded.
-                                for chunk in attachment.chunks():
-                                    temp_attachment.write(chunk)
-                                temp_attachment.close()
-            options = {
-                '--enable-local-file-access': '',
-                'margin-top': '2cm',
-                'margin-right': '1cm',
-                'margin-bottom': '2cm',
-                'margin-left': '1cm'
-            }
-            for content in context['contents']:
-                if content.type == 'MD':
-                    md = ''
-                    if context['export_pdf']:
-                        md += f"<meta charset='UTF-8'>" \
-                             f"<hr><h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
-                             + gettext("Description") + f":</i> {tex_escape(content.description)}"
-                    md += Markdown.render(content, True)
-                    pdf = pdfkit.from_string(md, options=options)
-                    name = f'MD_{content.pk}.pdf'
-                    path = os.path.join(tempdir, name)
-                    with open(path, 'wb') as temp_pdf:
-                        temp_pdf.write(pdf)
-                        temp_pdf.close()
+                rendered_tpl += Latex.preview_prerender(context['preview_data'], formset, tempdir)
+            else:
+                # Options for wkhtmltopdf
+                options = {
+                    '--enable-local-file-access': '',
+                    'margin-top': '2cm',
+                    'margin-right': '1cm',
+                    'margin-bottom': '2cm',
+                    'margin-left': '1cm'
+                }
+                # Prerender content templates
+                for content in context['contents']:
+                    rendered_tpl += Latex.pre_render(content, context['export_pdf'])
+                    if content.type == 'MD':
+                        md = ''
+                        if context['export_pdf']:
+                            # File header
+                            md += f"<meta charset='UTF-8'>" \
+                                  f"<hr><h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
+                                  + gettext("Description") + f":</i> {tex_escape(content.description)}"
+                        md += Markdown.render(content, True)
+                        pdf = pdfkit.from_string(md, options=options)
+                        name = f'MD_{content.pk}.pdf'
+                        md_path = os.path.join(tempdir, name)
+                        with open(md_path, 'wb') as temp_pdf:
+                            temp_pdf.write(pdf)
+                            temp_pdf.close()
+                rendered_tpl += r"\end{document}".encode(Latex.encoding)
 
             # Use shell-escape to allow the package 'markdown' to access shell
             process = Popen(['pdflatex', '--shell-escape'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
@@ -164,6 +147,7 @@ class Latex:
 
             # Filter error messages in log (stdout)
             error_log = Latex.errors(pdflatex_output[0])
+            print(error_log)
             # Error log
             if len(error_log) != 0:
                 rendered_tpl = template.render(context).encode(Latex.encoding)
@@ -180,11 +164,6 @@ class Latex:
                     pdf = file.read()
             except FileNotFoundError:
                 pdf = None
-        # remove any temporary files
-        md_dir = os.path.dirname(os.path.abspath(__file__))[:-7] + '/media/uploads/temp'
-        if os.path.exists(md_dir):
-            for temp in os.listdir(md_dir):
-                os.remove(os.path.join(md_dir, temp))
         return pdf, pdflatex_output, rendered_tpl
 
     @staticmethod
@@ -250,21 +229,6 @@ class Latex:
         # Set value for preview_flag to avoid error when rendering template for LaTeX
         context = {'content': content, 'export_pdf': export_flag, 'preview_flag': False}
 
-        # for markdown files parse them to html, then create a temporary file with pdfkit and add the path to the context, remove all temporary files after
-        '''
-        if (no_error and content.type == 'MD'):
-            # parse markdown to html
-            if content.ImageAttachments.count() > 0:
-                attachments = content.ImageAttachments.all()
-                for idx, attachment in enumerate(attachments):
-                    absolute = ret_path(attachment.image.url)
-                    text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
-                                  rf"![\1]({absolute}\2)",
-                                  text)
-            latex = md_to_html(content.mdcontent.textfield, content)
-            context['mdtext'] = latex
-        '''
-
         if no_error and content.type == 'YouTubeVideo':
 
             seconds_total = content.ytvideocontent.startTime
@@ -292,7 +256,6 @@ class Latex:
 
         # render the template and use escape for triple braces with escape character ~~
         # this is relevant when using triple braces for file paths in tex data
-        context['test'] = ret_path('/media/uploads/temps/test.pdf')
         if no_error and content.type == 'MD':
             context['md_path'] = f'MD_{content.pk}.pdf'
         rendered_tpl = template.render(context)
@@ -303,39 +266,22 @@ class Latex:
             # image path
             if content.ImageAttachments.count() > 0:
                 attachments = content.ImageAttachments.all()
-                # md = content.mdcontent.textfield
                 for idx, attachment in enumerate(attachments):
                     path = ret_path(attachment.image.url)
-                    if content.type == 'MD':
-                        '''rendered_tpl = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
-                                              rf"![\1]({path}\2)",
-                                              rendered_tpl)
-                        md = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
-                                              rf"![\1]({path}\2)",
-                                              md)'''
-                    else:
-                        rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
-                                              rf"\\includegraphics\1{{{path}}}",
-                                              rendered_tpl)
-                '''md = markdown.markdown(md)
-                options = {
-                    '--enable-local-file-access': ''
-                }
-                pdf = pdfkit.from_string(md, options=options)
-                with open(ret_path('/media/uploads/temps/test.pdf'),'wb') as f:
-                    f.write(pdf)
-                    f.close()
-                '''
-
+                    rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
+                                          rf"\\includegraphics\1{{{path}}}",
+                                          rendered_tpl)
         # Encode the template with Latex Encoding
         return rendered_tpl.encode(Latex.encoding)
 
     @staticmethod
-    def preview_prerender(text, formset, template_type='Latex'):
+    def preview_prerender(text, formset, directory, template_type='Latex'):
         """Prerender data for previewing
         Pre renders the given LaTeX data for the purpose of generating a preview data
         of the LaTeX.
-        Uses the same template for pre rendering normal LaTeX content (i.e content that will be
+        Also prepares all the attachments needed for the LaTeX content and saves them in the provided
+        directory. Usually this directory is the one where the LaTeX compiling process is run.
+        Uses the same template for pre rendering normal LaTeX content (i.e. content that will be
         saved to server) but does not use the same context for rendering.
         This method is created with the intention of pre rendering a preview for only LaTeX content.
 
@@ -343,6 +289,8 @@ class Latex:
         :type text: str
         :param formset: valid special image formset containing all the image attachments of the content
         :type formset: LatexPreviewImageAttachmentFormSet
+        :param directory: directory to save the attachments to
+        :type directory: str
         :param template_type: type of the template to use
         :type template_type: str
         """
@@ -360,12 +308,19 @@ class Latex:
             # so the image path only needs to contain image name
             for idx, form in enumerate(formset):
                 used_form = form.save(commit=False)
-                name = used_form.image.name
+                attachment = used_form.image
                 # If the attachment is already saved in the server then just use it.
-                if '/' in name:
-                    name = ret_path(used_form.image.url)
+                if '/' in attachment.name:
+                    name = ret_path(attachment.url)
                 else:
-                    name = f'{idx}_{used_form.image.name}'
+                    name = f'{idx}_{os.path.basename(attachment.name)}'
+                    # Temporarily save attachment in directory
+                    temp_path = os.path.join(directory, name)
+                    with open(temp_path, 'wb') as temp_attachment:
+                        # Save the attachment to tempdir in chunks so that memory is not overloaded.
+                        for chunk in attachment.chunks():
+                            temp_attachment.write(chunk)
+                        temp_attachment.close()
                 rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
                                       rf"\\includegraphics\1{{{name}}}",
                                       rendered_tpl)
