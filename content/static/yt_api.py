@@ -3,7 +3,7 @@ import math
 import isodate
 import urllib
 
-yt_api_key = "AIzaSyAO5AcyGanrUXNCrzIqbS8DEWBRx72wpGQ"#insert api key here"
+yt_api_key = "insert api key here"
 
 def seconds_to_time(seconds_total):
     """Seconds to Time
