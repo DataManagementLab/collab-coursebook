@@ -24,7 +24,7 @@ from content.validator import Validator
 
 from django.core.validators import FileExtensionValidator
 
-from content.static.yt_api import get_video_length
+from content.static.yt_api import get_video_length, timestamp_to_seconds, seconds_to_timestamp
 
 import re
 
@@ -402,9 +402,11 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
-    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8)
+    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8, default = "0:00", 
+                                help_text = _("Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
-    endTime = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8)
+    endTime = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default = "0:00",
+                                help_text = _("Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
     class Meta:
         """Meta options
@@ -457,21 +459,27 @@ class YTVideoContent(BaseContentModel):
     def clean(self):
 
         colonRegEx = "^((((0?[1-9]|1[0-2]):)?[0-5][0-9]:[0-5][0-9])|[0-9]:[0-5][0-9])$"
-        letterRegEx = "^((?=\S)((0?[1-9]|1[0-2])h)?([0-5]?[0-9]m)?([0-5]?[0-9]s)?)$"
 
         colonPattern = re.compile(colonRegEx)
-        letterPattern = re.compile(letterRegEx)
 
         if not (colonPattern.match(self.startTime)):
-            raise ValidationError("Test")
+            raise ValidationError(_("Please input a correct format for your starting time."))
+        if not (colonPattern.match(self.endTime)):
+            raise ValidationError(_("Please input a correct format for your ending time."))
 
-        #TODO check regexes, convert to seconds to check times, adapt display in export and detailView
-
-        if (self.endTime > 0 and self.startTime > self.endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
         seconds = get_video_length(self.id)
-        if (self.startTime > seconds and self.endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
-        elif (self.startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
-        elif (self.endTime > seconds): raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))
+        startTime = timestamp_to_seconds(self.startTime)
+        endTime = timestamp_to_seconds(self.endTime) 
+        if (endTime == 0):
+            endTimestamp = seconds_to_timestamp(seconds)
+            self.endTime = endTimestamp
+            self.save()
+            endTime = timestamp_to_seconds(endTimestamp)
+
+        if (startTime > endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
+        if (startTime > seconds and endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
+        elif (startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
+        elif (endTime > seconds): raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))
 
 
 # dict: Contains all available content types.

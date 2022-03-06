@@ -267,17 +267,10 @@ class Latex:
 
         if no_error and content.type == 'YouTubeVideo':
 
-            seconds_total = content.ytvideocontent.startTime
-            context['start_hours'], context['start_minutes'], context['start_seconds'] = seconds_to_time(seconds_total)
+            context['startTime'] = content.ytvideocontent.startTime
+            context['endTime'] = content.ytvideocontent.endTime
 
             total_hours, total_minutes, total_seconds = seconds_to_time(get_video_length(content.ytvideocontent.id))
-
-            seconds_total = content.ytvideocontent.endTime
-            if (seconds_total == 0):
-                context['end_hours'], context['end_minutes'], context[
-                    'end_seconds'] = total_hours, total_minutes, total_seconds
-            else:
-                context['end_hours'], context['end_minutes'], context['end_seconds'] = seconds_to_time(seconds_total)
 
             len = ""
             if (total_hours > 0):

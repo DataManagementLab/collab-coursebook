@@ -3,7 +3,7 @@ import math
 import isodate
 import urllib
 
-yt_api_key = "insert api key here"
+yt_api_key = "AIzaSyAO5AcyGanrUXNCrzIqbS8DEWBRx72wpGQ"#insert api key here"
 
 def seconds_to_time(seconds_total):
     """Seconds to Time
@@ -20,6 +20,69 @@ def seconds_to_time(seconds_total):
     minute = math.floor((seconds_total-3600*hour)/60)
     second = math.floor(seconds_total-3600*hour-60*minute)
     return hour, minute, second
+
+def seconds_to_timestamp(seconds):
+    """Get Video Length
+
+    Converts an amount of seconds into a timestamp of the format HH:MM:SS
+
+    :attr seconds: the amount of seconds to be converted
+    :type id: int
+
+    :return: the converted timestamp
+    :rtype: String
+    """
+    hour, minute, second = seconds_to_time(seconds)
+    timestamp =  ""
+    if (hour > 0):
+        timestamp += f"{hour}:"
+    if (hour > 0 and minute < 10):
+        timestamp += "0"
+    timestamp += f"{minute}:"
+    if (second < 10):
+        timestamp += "0"
+    timestamp += f"{second}"
+
+    return timestamp
+
+def timestamp_to_times(timestamp):
+    """Get Video Length
+
+    Extracts hours, minutes and seconds from a timestamp of the format HH:MM:SS
+
+    :attr timestamp: the timestamp to extract times from
+    :type id: String
+
+    :return: the extracted times from the timestamp
+    :rtype: tuple(int, int, int)
+    """
+    times = timestamp.split(":")
+
+    if len(times) == 3:
+        hour = times[0]
+        minute = times[1]
+        second = times[2]
+    else:
+        hour = 0
+        minute = times[0]
+        second = times[1]
+
+    return hour, minute, second
+
+def timestamp_to_seconds(timestamp):
+    """Get Video Length
+
+    Converts a timsetamp in the format HH:MM:SS to seconds
+
+    :attr timestamp: the timestamp convert into seconds
+    :type id: String
+
+    :return: the amount of seconds in the timestamp
+    :rtype: int
+    """
+    hour, minute, second = timestamp_to_times(timestamp)
+    seconds = int(hour) * 3600 + int(minute) * 60 + int(second)
+    return seconds
 
 def get_video_length(id):
     """Get Video Length
