@@ -53,8 +53,6 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
     This model represents the add form for YouTube videos.
     """
 
-    option = forms.BooleanField(label=_("Advanced Options"), required=False)
-
     class Meta:
         """Meta options
 
@@ -66,7 +64,15 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = YTVideoContent
-        fields = ['url', 'option', 'startTime', 'endTime']
+        fields = ['url', 'startTime', 'endTime']
+        widgets = {
+            'startTime': forms.TextInput(
+                attrs={
+                    'placeholder': get_placeholder(YTVideoContent.TYPE, 'startTime')}),
+            'endTime': forms.TextInput(
+                attrs={
+                    'placeholder': get_placeholder(YTVideoContent.TYPE, 'endTime')})
+        }
 
 
 class AddContentFormImage(forms.ModelForm):

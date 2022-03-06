@@ -1,0 +1,1 @@
+Accepted formats: HH:MM:SS (2:05:10, 2:05, 0:50), HHhMMmSSs(2h5m10s, 2m5s, 50s)

@@ -26,6 +26,8 @@ from django.core.validators import FileExtensionValidator
 
 from content.static.yt_api import get_video_length
 
+import re
+
 
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
@@ -400,9 +402,9 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
-    startTime = models.PositiveIntegerField(verbose_name=_("Video Start Time in Seconds"), default=0)
+    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8)
 
-    endTime = models.PositiveIntegerField(verbose_name=_("Video End Time in Seconds"), default=0)
+    endTime = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8)
 
     class Meta:
         """Meta options
@@ -453,6 +455,18 @@ class YTVideoContent(BaseContentModel):
 
 
     def clean(self):
+
+        colonRegEx = "^((((0?[1-9]|1[0-2]):)?[0-5][0-9]:[0-5][0-9])|[0-9]:[0-5][0-9])$"
+        letterRegEx = "^((?=\S)((0?[1-9]|1[0-2])h)?([0-5]?[0-9]m)?([0-5]?[0-9]s)?)$"
+
+        colonPattern = re.compile(colonRegEx)
+        letterPattern = re.compile(letterRegEx)
+
+        if not (colonPattern.match(self.startTime)):
+            raise ValidationError("Test")
+
+        #TODO check regexes, convert to seconds to check times, adapt display in export and detailView
+
         if (self.endTime > 0 and self.startTime > self.endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
         seconds = get_video_length(self.id)
         if (self.startTime > seconds and self.endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
