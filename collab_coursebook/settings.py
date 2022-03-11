@@ -193,6 +193,9 @@ REVERSION_COMPARE_IGNORE_NOT_REGISTERED = False
 
 DATA_PROTECTION_REQURE_CONFIRMATION = False
 
+# Allowed image extensions
+ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpeg', 'jpg']
+
 include(optional("settings/*.py"))
 
 if DEBUG:

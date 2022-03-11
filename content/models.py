@@ -21,11 +21,9 @@ from base.models import Content
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
-
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, validate_image_file_extension
 
 from content.static.yt_api import get_video_length
-
 
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
@@ -156,7 +154,8 @@ class ImageContent(BaseContentModel, BaseSourceModel):
     DESC = _("Image")
 
     image = models.ImageField(verbose_name=_("Image"),
-                              upload_to='uploads/contents/%Y/%m/%d/')
+                              upload_to='uploads/contents/%Y/%m/%d/',
+                              validators=[FileExtensionValidator(settings.ALLOWED_IMAGE_EXTENSIONS)])
 
     class Meta:
         """Meta options
@@ -300,7 +299,7 @@ class MDContent(BaseContentModel):
     md = models.FileField(verbose_name=_("Markdown File"),
                           upload_to='uploads/contents/%Y/%m/%d/',
                           blank=True,
-                          validators = [FileExtensionValidator(['md'])])
+                          validators=[FileExtensionValidator(['md'])])
 
     textfield = models.TextField(verbose_name=_("Markdown Script"),
                                  help_text=_("Insert your Markdown script here:"),
@@ -451,13 +450,16 @@ class YTVideoContent(BaseContentModel):
     def filter_by_own_type(contents):
         return contents.filter(ytvideocontent__isnull=False)
 
-
     def clean(self):
-        if (self.endTime > 0 and self.startTime > self.endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
+        if (self.endTime > 0 and self.startTime > self.endTime): raise ValidationError(
+            _('Please make sure that your end time is larger than your start time.'))
         seconds = get_video_length(self.id)
-        if (self.startTime > seconds and self.endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
-        elif (self.startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
-        elif (self.endTime > seconds): raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))
+        if (self.startTime > seconds and self.endTime > seconds):
+            raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
+        elif (self.startTime > seconds):
+            raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
+        elif (self.endTime > seconds):
+            raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))
 
 
 # dict: Contains all available content types.
