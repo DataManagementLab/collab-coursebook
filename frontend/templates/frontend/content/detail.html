@@ -18,8 +18,12 @@
 
 {% block content %}
     {# Drop down actions #}
-    <div class="float-right text-right">
-        <div class="dropdown show">
+    <div class="float-right text-right"> 
+        <div style="display:inline" class="dropdown show">
+            <a href="{% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}"
+                class= "btn btn-primary text-blue">
+                {% fa5_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
+            </a>
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 {% trans 'Actions' %}
@@ -27,11 +31,6 @@
 
             {# Drop down menu #}
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item"
-                   href="
-                           {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">
-                    {% fa5_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
-                </a>
                 {# Remove and add to course book option #}
                 {% if user.is_authenticated %}
                     {% if favorite %}
