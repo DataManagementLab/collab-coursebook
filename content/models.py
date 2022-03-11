@@ -473,7 +473,6 @@ class YTVideoContent(BaseContentModel):
         if (endTime == 0):
             endTimestamp = seconds_to_timestamp(seconds)
             self.endTime = endTimestamp
-            self.save()
             endTime = timestamp_to_seconds(endTimestamp)
 
         if (startTime > endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
