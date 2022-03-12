@@ -493,12 +493,10 @@ class AddContentViewTestCase(MediaTestCase):
         for image_attachment in content.ImageAttachments.all():
             self.assertTrue(bool(image_attachment.image))
 
-    def test_add_empty_attachments(self):
-        """POST test case - add attachments
+    def test_add_empty_attachment(self):
+        """POST test case - add empty attachment
 
-        Tests the function post that Image Attachments get created and saved properly after sending
-        a POST request to content-add and that the POST request redirects to
-        the content page.
+        Tests the function post that an empty image attachment does not get added.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
