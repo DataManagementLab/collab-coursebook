@@ -21,7 +21,7 @@ from base.models import Content
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
-from django.core.validators import FileExtensionValidator, validate_image_file_extension
+from django.core.validators import FileExtensionValidator
 
 from content.static.yt_api import get_video_length
 
