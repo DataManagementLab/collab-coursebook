@@ -147,7 +147,6 @@ class Latex:
 
             # Filter error messages in log (stdout)
             error_log = Latex.errors(pdflatex_output[0])
-            print(error_log)
             # Error log
             if len(error_log) != 0:
                 rendered_tpl = template.render(context).encode(Latex.encoding)

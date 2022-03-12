@@ -95,11 +95,10 @@ class AddContentViewTestCase(MediaTestCase):
         self.post_redirects_to_content(path, data)
         self.assertEqual(model.MDContent.objects.count(), 1)
         content = model.MDContent.objects.first()
-        self.assertTrue((bool)(content.md))
+        self.assertTrue(bool(content.md))
         self.assertEqual(content.source, "src")
         self.assertEqual(content.textfield, "test text")
         self.assertEqual(content.textfield,content.md.open().read().decode('utf-8'))
-
 
     def test_add_md_file(self):
         """POST test case - add Markdown
@@ -123,7 +122,7 @@ class AddContentViewTestCase(MediaTestCase):
         self.post_redirects_to_content(path, data)
         self.assertEqual(model.MDContent.objects.count(), 1)
         content = model.MDContent.objects.first()
-        self.assertTrue((bool)(content.md))
+        self.assertTrue(bool(content.md))
         self.assertTrue(content.md.name,"test_file")
         self.assertEqual(content.source, "src")
         self.assertEqual(content.textfield, "test text")
@@ -154,7 +153,7 @@ class AddContentViewTestCase(MediaTestCase):
         self.post_redirects_to_content(path, data)
         self.assertEqual(model.MDContent.objects.count(), 1)
         content = model.MDContent.objects.first()
-        self.assertTrue((bool)(content.md))
+        self.assertTrue(bool(content.md))
         self.assertTrue(content.md.name,"test_file")
         self.assertEqual(content.source, "src")
         self.assertEqual(content.textfield, "A")
@@ -185,7 +184,7 @@ class AddContentViewTestCase(MediaTestCase):
         self.post_redirects_to_content(path, data)
         self.assertEqual(model.MDContent.objects.count(), 1)
         content = model.MDContent.objects.first()
-        self.assertTrue((bool)(content.md))
+        self.assertTrue(bool(content.md))
         self.assertEqual(content.source, "src")
         self.assertEqual(content.textfield, "B")
         self.assertEqual(content.textfield, content.md.open().read().decode('utf-8'))
@@ -493,6 +492,30 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(content.ImageAttachments.count(), 2)
         for image_attachment in content.ImageAttachments.all():
             self.assertTrue(bool(image_attachment.image))
+
+    def test_add_empty_attachments(self):
+        """POST test case - add attachments
+
+        Tests the function post that Image Attachments get created and saved properly after sending
+        a POST request to content-add and that the POST request redirects to
+        the content page.
+        """
+        path = reverse('frontend:content-add', kwargs={
+            'course_id': 1, 'topic_id': 1, 'type': 'Textfield'
+        })
+        data = {
+            'language': 'de',
+            'textfield': 'Lorem ipsum',
+            'source': 'src',
+            'form-0-source': '',
+            'form-0-image': '',
+            'form-TOTAL_FORMS': '1',
+            'form-INITIAL_FORMS': '0'
+        }
+        response = self.client.post(path, data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(model.TextField.objects.count(), 0)
+        self.assertEqual(ImageAttachment.objects.count(), 0)
 
     def test_get(self):
         """GET test case
