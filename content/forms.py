@@ -68,10 +68,10 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         widgets = {
             'startTime': forms.TextInput(
                 attrs={
-                    'placeholder': get_placeholder(YTVideoContent.TYPE, 'startTime')}),
+                    'placeholder': _("Default: 0:00")}),
             'endTime': forms.TextInput(
                 attrs={
-                    'placeholder': get_placeholder(YTVideoContent.TYPE, 'endTime')})
+                    'placeholder': _("Default: 0:00")})
         }
 
 

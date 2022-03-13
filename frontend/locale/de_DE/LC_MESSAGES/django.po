@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-09 03:45+0100\n"
+"POT-Creation-Date: 2022-03-13 18:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,9 +95,9 @@ msgstr "Bestätigen"
 
 #: templates/frontend/comment/delete_confirm.html:33
 #: templates/frontend/comment/edit.html:26
-#: templates/frontend/content/add.html:80
+#: templates/frontend/content/add.html:77
 #: templates/frontend/content/detail.html:164
-#: templates/frontend/content/edit.html:86
+#: templates/frontend/content/edit.html:93
 #: templates/frontend/course/create.html:32
 #: templates/frontend/course/duplicate.html:37
 #: templates/frontend/course/edit.html:34
@@ -129,36 +129,44 @@ msgstr "Inhalt hinzufügen"
 msgid "Topic"
 msgstr "Thema"
 
-#: templates/frontend/content/add.html:45
+#: templates/frontend/content/add.html:42
 #: templates/frontend/content/edit.html:42
 msgid "Image Attachments"
 msgstr "Bildanhänge"
 
-#: templates/frontend/content/add.html:58
-#: templates/frontend/content/edit.html:65
+#: templates/frontend/content/add.html:55
+#: templates/frontend/content/edit.html:72
 msgid "Add attachment"
 msgstr "Anhang hinzufügen"
 
-#: templates/frontend/content/add.html:61
-#: templates/frontend/content/edit.html:68
+#: templates/frontend/content/add.html:58
+#: templates/frontend/content/edit.html:75
 msgid "Remove attachment"
 msgstr "Anhang entfernen"
 
-#: templates/frontend/content/add.html:77
+#: templates/frontend/content/add.html:74
 #: templates/frontend/course/create.html:29
 #: templates/frontend/course/duplicate.html:34
 msgid "Create"
 msgstr "Erstellen"
 
 #: templates/frontend/content/attachment_embedding_help.html:18
+msgid "Preview"
+msgstr "Vorschau"
+
+#: templates/frontend/content/attachment_embedding_help.html:22
+msgid "Compiling..."
+msgstr "Kompiliert..."
+
+#: templates/frontend/content/attachment_embedding_help.html:28
 msgid "Instruction"
 msgstr "Instruktion"
 
-#: templates/frontend/content/attachment_embedding_help.html:27
+#: templates/frontend/content/attachment_embedding_help.html:37
 msgid "Information"
 msgstr "Informationen"
 
-#: templates/frontend/content/attachment_embedding_help.html:29
+#: templates/frontend/content/attachment_embedding_help.html:39
 msgid ""
 "Please insert only the LaTeX code within the document body since the "
 "preamble and the configuration are already set. Do not include any packages."
@@ -167,12 +175,12 @@ msgstr ""
 "die Präambel und Konfigurationen bereits gesetzt wurden. Bitte fügen Sie "
 "keine weiteren Pakete hinzu."
 
-#: templates/frontend/content/attachment_embedding_help.html:35
-#: templates/frontend/content/attachment_embedding_help.html:58
+#: templates/frontend/content/attachment_embedding_help.html:45
+#: templates/frontend/content/attachment_embedding_help.html:68
 msgid "Example"
 msgstr "Beispiel"
 
-#: templates/frontend/content/attachment_embedding_help.html:37
+#: templates/frontend/content/attachment_embedding_help.html:47
 msgid ""
 "Here is an example LaTeX code which can be copied by pressing the following "
 "button:"
@@ -180,30 +188,30 @@ msgstr ""
 "Hier ist ein Beispiel LaTeX Code verfübar, welche kopiert werden kann, in "
 "dem der gegeben Button gedrückt wird:"
 
-#: templates/frontend/content/attachment_embedding_help.html:42
+#: templates/frontend/content/attachment_embedding_help.html:52
 msgid "Copy Example"
 msgstr "Kopiere Beispiel"
 
-#: templates/frontend/content/attachment_embedding_help.html:47
+#: templates/frontend/content/attachment_embedding_help.html:57
 msgid "Embedded attachment"
 msgstr "Eingebettete Anhänge"
 
-#: templates/frontend/content/attachment_embedding_help.html:49
+#: templates/frontend/content/attachment_embedding_help.html:59
 msgid "Command:"
 msgstr "Befehl"
 
-#: templates/frontend/content/attachment_embedding_help.html:52
+#: templates/frontend/content/attachment_embedding_help.html:62
 msgid "LaTeX specific options"
 msgstr "LaTeX spezifische Optionen"
 
-#: templates/frontend/content/attachment_embedding_help.html:55
+#: templates/frontend/content/attachment_embedding_help.html:65
 msgid ""
 "The number of the attachment. The first attachment you upload has the number "
 "0."
 msgstr ""
 "Die Nummer des Anhangs. Der erste Anhang, den Sie hochladen hat die Nummer 0."
 
-#: templates/frontend/content/attachment_embedding_help.html:61
+#: templates/frontend/content/attachment_embedding_help.html:71
 #, python-format
 msgid ""
 "If you add an attachment, you can click on the %(copy)s button to copy the "
@@ -291,8 +299,10 @@ msgstr "Kommentar hinzufügen"
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: templates/frontend/content/dynamic_attachment.html:30
-#: templates/frontend/content/edit.html:57
+#: templates/frontend/content/dynamic_attachment.html:31
+#: templates/frontend/content/dynamic_attachment.html:36
+#: templates/frontend/content/edit.html:59
+#: templates/frontend/content/edit.html:63
 msgid "Copy Attachment-Embedding Code"
 msgstr "Code für Anhangseinbettung kopieren"
 
@@ -300,7 +310,7 @@ msgstr "Code für Anhangseinbettung kopieren"
 msgid "Edit content"
 msgstr "Inhalt bearbeiten"
 
-#: templates/frontend/content/edit.html:83
+#: templates/frontend/content/edit.html:90
 #: templates/frontend/course/edit_structure.html:87
 msgid "Save"
 msgstr "Speichern"
@@ -1119,28 +1129,28 @@ msgstr "Kommentar erfolgreich gelöscht."
 msgid "Successfully edited Comment."
 msgstr "Kommentar erfolgreich bearbeitet."
 
-#: views/content.py:54
+#: views/content.py:59
 msgid "There exists no example yet."
 msgstr "Es ist momentan kein Beispiel verfügbar."
 
-#: views/content.py:125
+#: views/content.py:130
 #, python-format
 msgid "Content %(title)s successfully added"
 msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
-#: views/content.py:137 views/content.py:344
+#: views/content.py:142 views/content.py:361
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: views/content.py:330
+#: views/content.py:347
 msgid "You are not allowed to edit this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
-#: views/content.py:476
+#: views/content.py:511
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: views/content.py:734
+#: views/content.py:775
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 

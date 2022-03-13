@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-21 23:13+0100\n"
+"POT-Creation-Date: 2022-03-13 19:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: attachment/forms.py:67
+msgid "This field is required."
+msgstr ""
 
 #: attachment/models.py:37 attachment/models.py:56
 msgid "Image Attachment"
@@ -33,15 +37,35 @@ msgstr "Bild"
 msgid "Image Attachments"
 msgstr "Bildanhänge"
 
-#: forms.py:57
-msgid "Advanced Options"
+#: forms.py:71 forms.py:74
+msgid "Default: 0:00"
+msgstr "Standard: 0:00"
+
+#: forms.py:198
+msgid "Upload as file"
+msgstr ""
+
+#: forms.py:199
+msgid "Upload as text"
+msgstr ""
+
+#: forms.py:235
+msgid "You must upload a Markdown file."
+msgstr ""
+
+#: forms.py:237 forms.py:275
+msgid "You must put in some text."
+msgstr ""
+
+#: forms.py:239
+msgid "None of the options were chosen."
 msgstr ""
 
 #: models.py:81 models.py:253
 msgid "PDF"
 msgstr "PDF"
 
-#: models.py:129 models.py:212 models.py:304 models.py:356
+#: models.py:129 models.py:212 models.py:310 models.py:358
 #: templates/content/reading_mode/Image.html:15
 #: templates/content/reading_mode/Latex.html:16
 #: templates/content/reading_mode/MD.html:16
@@ -49,7 +73,7 @@ msgstr "PDF"
 #: templates/content/reading_mode/Textfield.html:14
 #: templates/content/view/AttachedImage.html:10
 #: templates/content/view/Image.html:7 templates/content/view/Latex.html:10
-#: templates/content/view/MD.html:13 templates/content/view/PDF.html:10
+#: templates/content/view/MD.html:16 templates/content/view/PDF.html:10
 #: templates/content/view/Textfield.html:10
 msgid "Source"
 msgstr "Quelle"
@@ -102,83 +126,105 @@ msgstr "PDF-Inhalt"
 msgid "PDF Contents"
 msgstr "PDF-Inhalte"
 
-#: models.py:294
+#: models.py:300
 msgid "Markdown"
 msgstr "Markdown"
 
-#: models.py:296
+#: models.py:302
 msgid "Markdown File"
 msgstr "Markdown Datei"
 
-#: models.py:301
+#: models.py:307
 msgid "Markdown Script"
 msgstr "Markdown Skript"
 
-#: models.py:302
+#: models.py:308
 msgid "Insert your Markdown script here:"
 msgstr "Fügen Sie Ihr Markdown Skript hier ein:"
 
-#: models.py:316
+#: models.py:322
 msgid "MD Content"
 msgstr "MD-Inhalt"
 
-#: models.py:317
+#: models.py:323
 msgid "MD Contents"
 msgstr "MD-Inhalte"
 
-#: models.py:353 models.py:355
+#: models.py:355 models.py:357
 msgid "Text"
 msgstr "Text"
 
-#: models.py:368
+#: models.py:370
 msgid "Textfield Content"
 msgstr "Textfeld-Inhalt"
 
-#: models.py:369
+#: models.py:371
 msgid "Textfield Contents"
 msgstr "Textfeld-Inhalte"
 
-#: models.py:399
+#: models.py:401
 msgid "YouTube Video"
 msgstr "YouTube-Video"
 
-#: models.py:401
+#: models.py:403
 msgid "Video URL"
 msgstr "Video-URL"
 
-#: models.py:403
-msgid "Video Start Time in Seconds"
-msgstr "Start des Videos in Sekunden"
-
 #: models.py:405
-msgid "Video End Time in Seconds"
-msgstr "Ende des Videos in Sekunden"
+msgid "Video Start Timestamp"
+msgstr "Start des Videos"
 
-#: models.py:417
+#: models.py:406 models.py:409
+msgid "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."
+msgstr "Geben sie Zeiten im Format HH:MM:SS an (z.B. 2:05:10, 2:05, 0:50)."
+
+#: models.py:408
+msgid "Video End Timestamp"
+msgstr "Ende des Videos"
+
+#: models.py:421
 msgid "YouTube Video Content"
 msgstr "YouTube-Video-Inhalt"
 
-#: models.py:418
+#: models.py:422
 msgid "YouTube Video Contents"
 msgstr "YouTube-Video-Inhalte"
 
-#: models.py:465
+#: models.py:466
+msgid "Please input a correct format for your starting time."
+msgstr "Bitte geben sie die Startzeit in einem korrekten Format an."
+
+#: models.py:468
+msgid "Please input a correct format for your ending time."
+msgstr "Bitte geben sie die Endzeit in einem korrekten Format an."
+
+#: models.py:478
+msgid "Please make sure that your start and end time are different."
+msgstr ""
+"Bittetellen sie sicher dass ihre Start- und Endzeiten verschieden sind."
+
+#: models.py:479
+msgid "Please make sure that your end time is larger than your start time."
+msgstr ""
+"Stellen sie sicher dass ihre Endzeit kleiner ist als die ihre Startzeit."
+
+#: models.py:480
 msgid ""
 "Please make sure your start and end times are smaller than the videos length."
 msgstr ""
 "Stellen sie sicher dass ihre Start- und Endzeiten kleiner sind als die "
 "Videolänge."
 
-#: models.py:466
+#: models.py:481
 msgid "Please make sure your start time is smaller than the videos length."
 msgstr "Stellen sie sicher dass ihre Startzeit kleiner ist als die Videolänge."
 
-#: models.py:467
+#: models.py:482
 msgid "Please make sure your end time is smaller than the videos length."
 msgstr "Stellen sie sicher dass ihre Endzeit kleiner ist als die Videolänge."
 
-#: templates/content/reading_mode/YouTubeVideo.html:21
-#: templates/content/view/YouTubeVideo.html:22
+#: templates/content/reading_mode/YouTubeVideo.html:19
+#: templates/content/view/YouTubeVideo.html:17
 msgid "View on YouTube"
 msgstr "Auf YouTube ansehen"
 
@@ -186,19 +232,19 @@ msgstr "Auf YouTube ansehen"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: templates/content/view/MD.html:22
+#: templates/content/view/MD.html:25
 msgid "Download"
 msgstr "Herunterladen"
 
-#: templates/content/view/YouTubeVideo.html:10
+#: templates/content/view/YouTubeVideo.html:9
 msgid "Timestamps"
 msgstr "Zeitstempel"
 
-#: templates/content/view/YouTubeVideo.html:13
+#: templates/content/view/YouTubeVideo.html:10
 msgid "Start"
 msgstr "Start"
 
-#: templates/content/view/YouTubeVideo.html:16
+#: templates/content/view/YouTubeVideo.html:11
 msgid "End"
 msgstr "Ende"
 

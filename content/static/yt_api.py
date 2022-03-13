@@ -3,7 +3,9 @@ import math
 import isodate
 import urllib
 
-yt_api_key = "insert api key here"
+import collab_coursebook.settings_secrets as secrets
+
+yt_api_key = secrets.YT_API_KEY
 
 def seconds_to_time(seconds_total):
     """Seconds to Time
@@ -72,7 +74,7 @@ def timestamp_to_times(timestamp):
 def timestamp_to_seconds(timestamp):
     """Get Video Length
 
-    Converts a timsetamp in the format HH:MM:SS to seconds
+    Converts a timestamp in the format HH:MM:SS to seconds
 
     :attr timestamp: the timestamp convert into seconds
     :type id: String
