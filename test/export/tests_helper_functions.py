@@ -104,6 +104,12 @@ class LaTeXTestCase(TestCase):
 
 
 class MarkdownTestCase(TestCase):
+    def setUp(self):
+        """
+        Sets up the test database
+        """
+        utils.setup_database()
+
     def test_markdown_render(self):
         """Markdown render test case
 
