@@ -189,8 +189,8 @@ class AddMD(forms.ModelForm):
     This model represents the add form for Markdown code.
     """
     CHOICES = [
-        ('file', _('Upload as file')),
-        ('text', _('Upload as text')),
+        ('file', _('Upload an existing Markdown file')),
+        ('text', _('Write Markdown with editor')),
     ]
     options = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial='file')
 
