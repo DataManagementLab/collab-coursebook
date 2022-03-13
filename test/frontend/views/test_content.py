@@ -165,8 +165,8 @@ class AddContentViewTestCase(MediaTestCase):
         Tests the function post that:
         a Markdown content gets created by text when both file and text are inputted and the option "Upload by text"
         is chosen.
-        The content should then be saved properly after sending a POST request to content-add and that the POST request redirects to
-        the content page.
+        The content should then be saved properly after sending a POST request to content-add and that the POST request
+        redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'MD'

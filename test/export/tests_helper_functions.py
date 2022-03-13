@@ -101,3 +101,38 @@ class LaTeXTestCase(TestCase):
                      f"\\includegraphics[width=\\textwidth]{{0_{test_files[0].name}}}" \
                      f"\\includegraphics[width=\\textwidth]{{1_{test_files[1].name}}}"
         self.assertIn(latex_code, pre_render.decode(helper.Latex.encoding))
+
+
+class MarkdownTestCase(TestCase):
+    def test_markdown_render(self):
+        """Markdown render test case
+
+        Tests if the Markdown compiler renders the Markdown text correctly with extended Markdown syntax.
+        """
+        text1 = "| Option | Description | \n" \
+                "| ------ | ----------- | \n" \
+                "| text   | text |"
+        res1 = "<table>\n" \
+               "<thead>\n" \
+               "<tr>\n" \
+               "<th>Option</th>\n" \
+               "<th>Description</th>\n" \
+               "</tr>\n" \
+               "</thead>\n" \
+               "<tbody>\n" \
+               "<tr>\n" \
+               "<td>text</td>\n" \
+               "<td>text</td>\n" \
+               "</tr>\n" \
+               "</tbody>\n" \
+               "</table>\n"
+        text2 = "~~Strikethrough~~"
+        res2 = "<p><s>Strikethrough</s></p>\n"
+        content1 = utils.create_content(model.MDContent.TYPE)
+        content2 = utils.create_content(model.MDContent.TYPE)
+        model.MDContent.objects.create(textfield=text1, content=content1)
+        model.MDContent.objects.create(textfield=text2, content=content2)
+        md1 = helper.Markdown.render(content1, False)
+        self.assertEqual(md1, res1)
+        md2 = helper.Markdown.render(content2, False)
+        self.assertEqual(md2, res2)
