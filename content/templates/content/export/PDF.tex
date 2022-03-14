@@ -2,6 +2,11 @@
 {% load i18n %}
 {% autoescape off %}
 
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "PDF Content" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
+
 % show topic title when exporting
 {% if export_pdf %}
 {\Large \textbf{ {{content.topic.title}}   }}
@@ -18,7 +23,6 @@
 
 % show pdf content
 \includepdf[pages=-]{~~{{content.pdfcontent.pdf.url|ret_path}}} % ~~ is escape char
-
 
 \vskip 3em
 
