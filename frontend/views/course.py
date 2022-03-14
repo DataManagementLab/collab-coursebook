@@ -17,7 +17,7 @@ from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin, CreateView, DeleteView, UpdateView
 from django.utils.translation import gettext_lazy as _
 
-from base.models import Course, CourseStructureEntry, Topic
+from base.models import Course, CourseStructureEntry, Topic, Favorite
 from base.utils import check_owner_permission
 
 from frontend.forms import AddCourseForm, EditCourseForm, FilterAndSortForm
@@ -413,12 +413,17 @@ class CourseView(DetailView, FormMixin):
         :return: the context data
         :rtype: dict[str, Any]
         """
+        
+        course_id = self.get_object().id
+        favorite_list = [] # Favorite.objects.filter(course=course_id, user=get_user(self.request).profile)
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
             objects.filter(course=context["course"]).order_by('index')
-
         topics_recursive = []
         current_topic = None
+        for favorite in Favorite.objects.filter(course=course_id, user=get_user(self.request).profile):
+            favorite_list.append(favorite.content)
+
         for entry in structure_entries:
             index_split = entry.index.split('/')
             # Topic
@@ -435,9 +440,11 @@ class CourseView(DetailView, FormMixin):
                                                        entry.topic.
                                                   get_contents(self.sorted_by, self.filtered_by)})
 
+
         context["structure"] = topics_recursive
         context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()
-
+        context['user'] = self.request.user
+        context['favorite'] = favorite_list
         if self.sorted_by is not None:
             context['sorting'] = self.sorted_by
         if self.filtered_by is not None:

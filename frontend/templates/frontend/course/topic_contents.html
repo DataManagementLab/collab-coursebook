@@ -47,10 +47,19 @@
                                 {% fa5_icon 'eye' 'far' %}
                             </a>
                             &middot;
+                            {% if user.is_authenticated %}
+                            {% if content in favorite %}
                             <a class="badge badge-primary"
-                            href="{% url 'frontend:coursebook-add' course.pk content.topic.pk content.pk %}">
+                                href="{% url 'frontend:coursebook-remove-courseview' course.pk content.topic.pk content.pk %}">
+                                {% fa5_icon 'minus' 'fas' %}
+                            </a>
+                            {% else %}
+                            <a class="badge badge-primary"
+                                href="{% url 'frontend:coursebook-add-courseview' course.pk content.topic.pk content.pk %}">
                                 {% fa5_icon 'plus' 'fas' %}
                             </a>
+                            {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
