@@ -300,7 +300,7 @@ class MDContent(BaseContentModel):
     md = models.FileField(verbose_name=_("Markdown File"),
                           upload_to='uploads/contents/%Y/%m/%d/',
                           blank=True,
-                          validators = [FileExtensionValidator(['md'])])
+                          validators=[FileExtensionValidator(['md']), Validator.validate_md])
 
     textfield = models.TextField(verbose_name=_("Markdown Script"),
                                  help_text=_("Insert your Markdown script here:"),

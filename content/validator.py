@@ -54,3 +54,21 @@ class Validator:  # pylint: disable=too-few-public-methods)
         valid_url = re.match(r"^(http(s)?://)?(www\.|m\.)?youtu(\.?)be(\.com)?/.*", url)
         if valid_url is None:
             raise ValidationError('Invalid URL')
+
+    @staticmethod
+    def validate_md(file):
+        """
+        Validates if the given file has the correct Markdown MIME type. If not, a validation error
+        will be thrown.
+
+        :param file: the file to be checked
+        :type file: file
+
+        :return: a validation error, if the MIME type of the file is incorrect
+        :rtype: None or ValidationError
+        """
+        # Somehow python-magic interprets the MIME type of Markdown files as text/plain
+        valid_types = ['text/markdown', 'text/plain']
+        file_type = magic.from_buffer(file.read(1024), mime=True)
+        if file_type not in valid_types:
+            raise ValidationError('Unsupported file type.')
