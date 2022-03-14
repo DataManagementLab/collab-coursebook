@@ -157,7 +157,11 @@ class ImageContent(BaseContentModel, BaseSourceModel):
 
     image = models.ImageField(verbose_name=_("Image"),
                               upload_to='uploads/contents/%Y/%m/%d/',
-                              validators=[FileExtensionValidator(settings.ALLOWED_IMAGE_EXTENSIONS)])
+                              validators=
+                              [FileExtensionValidator(settings.ALLOWED_IMAGE_EXTENSIONS)],
+                              help_text=_("Allowed extensions are: ")
+                                        + ", ".join(settings.ALLOWED_IMAGE_EXTENSIONS) + "."
+                              )
 
     class Meta:
         """Meta options
@@ -401,11 +405,14 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
-    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8, default = "0:00",
-                                help_text = _("Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
+    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8,
+                                 default="0:00",
+                                 help_text=_(
+                                     "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
-    endTime = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default = "0:00",
-                                help_text = _("Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
+    endTime = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default="0:00",
+                               help_text=_(
+                                   "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
     class Meta:
         """Meta options
@@ -454,7 +461,6 @@ class YTVideoContent(BaseContentModel):
     def filter_by_own_type(contents):
         return contents.filter(ytvideocontent__isnull=False)
 
-
     def clean(self):
 
         colonRegEx = "^((((0?[1-9]|1[0-2]):)?[0-5][0-9]:[0-5][0-9])|[0-9]:[0-5][0-9])$"
@@ -474,11 +480,19 @@ class YTVideoContent(BaseContentModel):
             self.endTime = endTimestamp
             endTime = timestamp_to_seconds(endTimestamp)
 
-        if (startTime == endTime): raise ValidationError(_('Please make sure that your start and end time are different.'))
-        if (startTime > endTime): raise ValidationError(_('Please make sure that your end time is larger than your start time.'))
-        if (startTime > seconds and endTime > seconds): raise ValidationError(_('Please make sure your start and end times are smaller than the videos length.'))
-        elif (startTime > seconds): raise ValidationError(_('Please make sure your start time is smaller than the videos length.'))
-        elif (endTime > seconds): raise ValidationError(_('Please make sure your end time is smaller than the videos length.'))
+        if (startTime == endTime): raise ValidationError(
+            _('Please make sure that your start and end time are different.'))
+        if (startTime > endTime): raise ValidationError(
+            _('Please make sure that your end time is larger than your start time.'))
+        if (startTime > seconds and endTime > seconds):
+            raise ValidationError(
+                _('Please make sure your start and end times are smaller than the videos length.'))
+        elif (startTime > seconds):
+            raise ValidationError(
+                _('Please make sure your start time is smaller than the videos length.'))
+        elif (endTime > seconds):
+            raise ValidationError(
+                _('Please make sure your end time is smaller than the videos length.'))
 
 
 # dict: Contains all available content types.
