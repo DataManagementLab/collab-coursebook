@@ -267,12 +267,14 @@ class Latex:
         return rendered_tpl.encode(Latex.encoding)
 
     @staticmethod
-    def preview_prerender(text, formset, directory, template_type='Latex'):
+    def preview_prerender(text, formset, directory=None, template_type='Latex'):
         """Prerender data for previewing
         Pre renders the given LaTeX data for the purpose of generating a preview data
         of the LaTeX.
-        Also prepares all the attachments needed for the LaTeX content and saves them in the provided
+        Also prepares all the attachments needed for the LaTeX content and saves them in the provided (optional)
         directory. Usually this directory is the one where the LaTeX compiling process is run.
+        If the directory is not provided, the attachments won't be saved into the directory; the code will still
+        be pre rendered.
         Uses the same template for pre rendering normal LaTeX content (i.e. content that will be
         saved to server) but does not use the same context for rendering.
         This method is created with the intention of pre rendering a preview for only LaTeX content.
@@ -282,7 +284,7 @@ class Latex:
         :param formset: valid special image formset containing all the image attachments of the content
         :type formset: LatexPreviewImageAttachmentFormSet
         :param directory: directory to save the attachments to
-        :type directory: str
+        :type directory: str or None
         :param template_type: type of the template to use
         :type template_type: str
         """
@@ -306,13 +308,14 @@ class Latex:
                     name = ret_path(attachment.url)
                 else:
                     name = f'{idx}_{os.path.basename(attachment.name)}'
-                    # Temporarily save attachment in directory
-                    temp_path = os.path.join(directory, name)
-                    with open(temp_path, 'wb') as temp_attachment:
-                        # Save the attachment to tempdir in chunks so that memory is not overloaded.
-                        for chunk in attachment.chunks():
-                            temp_attachment.write(chunk)
-                        temp_attachment.close()
+                    if directory is not None:
+                        # Temporarily save attachment in directory
+                        temp_path = os.path.join(directory, name)
+                        with open(temp_path, 'wb') as temp_attachment:
+                            # Save the attachment to tempdir in chunks so that memory is not overloaded.
+                            for chunk in attachment.chunks():
+                                temp_attachment.write(chunk)
+                            temp_attachment.close()
                 rendered_tpl = re.sub(rf"\\includegraphics(\[.*])?{{Image-{idx}}}",
                                       rf"\\includegraphics\1{{{name}}}",
                                       rendered_tpl)

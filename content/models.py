@@ -21,13 +21,11 @@ from base.models import Content
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 
-
 from django.core.validators import FileExtensionValidator
 
 from content.static.yt_api import get_video_length, timestamp_to_seconds, seconds_to_timestamp
 
 import re
-
 
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
@@ -158,7 +156,8 @@ class ImageContent(BaseContentModel, BaseSourceModel):
     DESC = _("Image")
 
     image = models.ImageField(verbose_name=_("Image"),
-                              upload_to='uploads/contents/%Y/%m/%d/')
+                              upload_to='uploads/contents/%Y/%m/%d/',
+                              validators=[FileExtensionValidator(settings.ALLOWED_IMAGE_EXTENSIONS)])
 
     class Meta:
         """Meta options
@@ -402,7 +401,7 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
-    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8, default = "0:00", 
+    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8, default = "0:00",
                                 help_text = _("Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
     endTime = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default = "0:00",
@@ -469,7 +468,7 @@ class YTVideoContent(BaseContentModel):
 
         seconds = get_video_length(self.id)
         startTime = timestamp_to_seconds(self.startTime)
-        endTime = timestamp_to_seconds(self.endTime) 
+        endTime = timestamp_to_seconds(self.endTime)
         if (endTime == 0):
             endTimestamp = seconds_to_timestamp(seconds)
             self.endTime = endTimestamp
