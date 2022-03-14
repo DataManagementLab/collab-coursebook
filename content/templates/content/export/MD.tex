@@ -2,20 +2,13 @@
 {% load i18n %}
 {% autoescape off %}
 
-
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "MD Content" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
 
 % show markdown content
-%\begin{minipage}{\textwidth}
 \includepdf[pages=-]{~~{{md_path}}} % ~~ is escape char
-%\includepdf[scale=0.8,pages=-]{~~{{md_path}}}
-%\fbox{\includegraphics[page=1]{~~{{md_path}}}}
-%\end{minipage}
-%\begin{markdown}
-
-%\end{markdown}
-
-
-
 \vskip 3em
 
 {% endautoescape %}

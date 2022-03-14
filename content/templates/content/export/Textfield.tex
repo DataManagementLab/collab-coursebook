@@ -2,6 +2,11 @@
 {% load i18n %}
 {% autoescape off %}
 
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "Text Content" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
+
 % Show topic title when exporting
 {% if export_pdf %}
 {\Large \textbf{ {{content.topic.title}}   }}

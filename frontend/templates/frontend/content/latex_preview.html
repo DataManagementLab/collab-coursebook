@@ -44,7 +44,10 @@
             url: "{% url 'frontend:content-edit' course_id topic.id content.pk %}",
         {% endif %}
       };
-      await sendPreviewRequest(args);
+      try {
+        await sendPreviewRequest(args);
+      } catch(e) {
+      }
       // Set preview button to ready state
       button.removeAttr('disabled');
       loading.attr('style','display:none;');

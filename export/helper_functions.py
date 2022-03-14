@@ -124,11 +124,12 @@ class Latex:
                 for content in context['contents']:
                     rendered_tpl += Latex.pre_render(content, context['export_pdf'])
                     if content.type == 'MD':
+                        # Convert Markdown to HTML to PDF to put into export file
                         md = ''
                         if context['export_pdf']:
                             # File header
                             md += f"<meta charset='UTF-8'>" \
-                                  f"<hr><h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
+                                  f"<h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
                                   + gettext("Description") + f":</i> {tex_escape(content.description)}"
                         md += Markdown.render(content, True)
                         pdf = pdfkit.from_string(md, options=options)
@@ -138,13 +139,11 @@ class Latex:
                             temp_pdf.write(pdf)
                             temp_pdf.close()
                 rendered_tpl += r"\end{document}".encode(Latex.encoding)
-
-            # Use shell-escape to allow the package 'markdown' to access shell
-            process = Popen(['pdflatex', '--shell-escape'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
-
-            # Output is a byte tuple of stdout and stderr
-            pdflatex_output = process.communicate(rendered_tpl)
-
+            # Have to compile 2 times for table of contents to work
+            for i in range(0, 2 if context['export_pdf'] else 1):
+                process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
+                # Output is a byte tuple of stdout and stderr
+                pdflatex_output = process.communicate(rendered_tpl)
             # Filter error messages in log (stdout)
             error_log = Latex.errors(pdflatex_output[0])
             # Error log
@@ -157,7 +156,6 @@ class Latex:
 
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
                 pdflatex_output = process.communicate(rendered_tpl)
-
             try:
                 with open(os.path.join(tempdir, 'texput.pdf'), 'rb') as file:
                     pdf = file.read()
@@ -227,7 +225,11 @@ class Latex:
         # Set context for rendering
         # Set value for preview_flag to avoid error when rendering template for LaTeX
         context = {'content': content, 'export_pdf': export_flag, 'preview_flag': False}
-
+        if no_error:
+            if content.description == '':
+                context['no_desc'] = True
+            else:
+                context['no_desc'] = False
         if no_error and content.type == 'YouTubeVideo':
 
             context['startTime'] = content.ytvideocontent.startTime
