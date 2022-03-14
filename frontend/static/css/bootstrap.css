@@ -10631,7 +10631,8 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .text-muted {
-  color: #cccccc !important;
+  /* color: #cccccc !important; */
+  color:#918b8b !important;
 }
 
 .text-black-50 {
