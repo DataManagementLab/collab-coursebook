@@ -4,10 +4,9 @@ import isodate
 import urllib
 
 # noinspection PyUnresolvedReferences
-import collab_coursebook.settings_secrets as secrets
+from django.conf import settings
 
-
-yt_api_key = secrets.YT_API_KEY
+yt_api_key = settings.YT_API_KEY
 
 def seconds_to_time(seconds_total):
     """Seconds to Time
