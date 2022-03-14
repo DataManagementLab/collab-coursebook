@@ -1,0 +1,56 @@
+name: Django CI with Docker Image
+
+# Can be improved by packing Python and Texlive into a single Docker image then build
+# the image from a Dockerfile. The image can then be cached using GitHub caching
+
+# The time to run the tests can also be improved by tagging all the tests that uses LaTeX
+# to run them separately since most of the tests don't need texlive to run and therefore
+# don't need to run with the Docker image.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    container:
+      image: texlive/texlive:latest
+      options: --name Texlive
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      #matrix:
+        #python-version: [ 3.7, 3.8 ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python 3.9
+        run: |
+          apt-get -y update
+          apt-get -y install python3 python3-pip python3-distutils python3-pip python3-apt libmagic1
+      - name: Install LaTeX/PDF Dependencies
+        run: |
+           apt-get -y install poppler-utils
+      - name: Install other system Dependencies
+        run: |
+           apt-get -y install gettext
+      - name: Install Python Dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run Check
+        run: |
+          python manage.py check
+      - name: Check for missing migrations
+        run: |
+          python manage.py makemigrations --check
+      - name: Run Tests
+        run: |
+          python manage.py test
+      - name: Check translations
+        run: |
+          python manage.py makemessages -l de_DE --ignore venv
+          python utils/check_translations.py
