@@ -62,6 +62,7 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 1. Compile translations ``python manage.py compilemessages``
 1. Create a privileged user, credentials are entered interactively on CLI ``python manage.py createsuperuser``
 1. Deactivate virtualenv ``deactivate``
+1. Create the file ``collab_coursebook/settings_secrets.py`` (copy from ``settings_secrets.py.sample``) and fill in the YouTube API key for development regarding YouTube Videos
 
 **Development Server**
 
@@ -84,6 +85,7 @@ In your browser, access ``http://127.0.0.1:8000/`` and continue from there.
 1. Compile translations ``python manage.py compilemessages``
 1. Create a privileged user, credentials are entered interactively on CLI ``python manage.py createsuperuser``
 1. Deactivate virtualenv ``deactivate``
+1. Create the file ``collab_coursebook/settings_secrets.py`` (copy from ``settings_secrets.py.sample``) and fill in the YouTube API key for development regarding YouTube Videos
 
 **Development Server**
 

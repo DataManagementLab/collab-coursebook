@@ -1,14 +1,14 @@
 {% load i18n %}
 
 <iframe style="margin: 16px auto;display: block;" width="560" height="315"
-        src="https://www.youtube-nocookie.com/embed/{{ content.ytvideocontent.id }}?start={{ content.ytvideocontent.startTime }}&end={{ content.ytvideocontent.endTime }}"
+        src="https://www.youtube-nocookie.com/embed/{{ content.ytvideocontent.id }}?start={{ startSeconds }}&end={{ endSeconds }}"
         frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen>
 </iframe>
 
 <h3>{% trans 'Timestamps' %}:</h3>
-<b>{% trans 'Start' %}: {% if start_hours > 0 %}{{ start_hours }}:{% endif %}{{ start_minutes }}:{{ start_seconds }}</b><br>
-<b>{% trans 'End' %}: {% if end_hours > 0 %}{{ end_hours }}:{% endif %}{{ end_minutes }}:{{ end_seconds }}</b>
+<b>{% trans 'Start' %}: {{ startTime }}</b><br>
+<b>{% trans 'End' %}: {{ endTime }}</b>
 
 
 <br>
