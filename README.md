@@ -62,7 +62,7 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 1. Compile translations ``python manage.py compilemessages``
 1. Create a privileged user, credentials are entered interactively on CLI ``python manage.py createsuperuser``
 1. Deactivate virtualenv ``deactivate``
-1. Create the file ``collab_coursebook/settings_secrets.py`` (copy from ``settings_secrets.py.sample``) and fill in the YouTube API key for development regarding YouTube Videos
+1. Create the file ``collab_coursebook/settings_secrets.py`` (copy from ``settings_secrets.py.sample``) and fill in the YouTube API key
 
 **Development Server**
 
@@ -93,6 +93,11 @@ To start the application for development use ``python manage.py runserver 0.0.0.
 *Do not use this for deployment!*
 
 In your browser, access ``http://127.0.0.1:8000/`` and continue from there.
+
+### PyLint
+
+To be able to run PyLint, go into content/static/yt_api.py, comment out the import from secret settings and set yt_api_key = "". Otherwise PyLint will not run because
+it tries to import from a file that doesn't exist.
 
 ### Deployment Setup
 

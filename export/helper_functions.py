@@ -21,7 +21,7 @@ from export.templatetags.cc_export_tags import export_template, tex_escape, ret_
 from content.static.yt_api import seconds_to_time, get_video_length
 
 
-class Markdown:# pylint: disable=too-few-public-methods
+class Markdown: # pylint: disable=too-few-public-methods
     """Markdown
 
     This class provides the function for rendering Markdown into HTML.
@@ -79,6 +79,7 @@ class Latex:
     error_prefix = '!'
     error_template = 'error'
 
+    # TODO documentation parameters
     @staticmethod
     def render(context, template_name):# pylint: disable=too-many-local-variables
         """Render
@@ -238,7 +239,7 @@ class Latex:
                 if total_minutes or total_seconds > 0: len += ", "
             if total_minutes > 0:
                 len += f"{total_minutes} " + _("Minutes")
-                if total_seconds > 0: len += ", "
+                if (total_seconds > 0): len += ", "
             if (total_seconds > 0) or total_hours and total_minutes == 0: 
                 len += f"{total_seconds} " + _("Seconds")
 
