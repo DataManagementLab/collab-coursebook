@@ -64,12 +64,12 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = YTVideoContent
-        fields = ['url', 'startTime', 'endTime']
+        fields = ['url', 'start_time', 'end_time']
         widgets = {
-            'startTime': forms.TextInput(
+            'start_time': forms.TextInput(
                 attrs={
                     'placeholder': _("Default: 0:00")}),
-            'endTime': forms.TextInput(
+            'end_time': forms.TextInput(
                 attrs={
                     'placeholder': _("Default: 0:00")})
         }

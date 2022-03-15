@@ -469,11 +469,11 @@ class YTVideoContent(BaseContentModel):
             raise ValidationError(_("Please input a correct format for your ending time."))
 
         seconds = get_video_length(self.id)
-        start_time = timestamp_to_seconds(self.startTime)
-        end_time = timestamp_to_seconds(self.endTime)
+        start_time = timestamp_to_seconds(self.start_time)
+        end_time = timestamp_to_seconds(self.end_time)
         if (end_time == 0):
             end_timestamp = seconds_to_timestamp(seconds)
-            self.endTime = end_timestamp
+            self.end_time = end_timestamp
             end_time = timestamp_to_seconds(end_timestamp)
 
         if (start_time == end_time):

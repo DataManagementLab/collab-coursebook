@@ -224,8 +224,8 @@ class AddContentViewTestCase(MediaTestCase):
         data = {
             'language': 'de',
             'url': 'https://www.youtube.com/watch?v=9xwazD5SyVg',
-            'startTime': '0:00',
-            'endTime': '0:00',
+            'start_time': '0:00',
+            'end_time': '0:00',
             'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0'
         }
@@ -247,8 +247,8 @@ class AddContentViewTestCase(MediaTestCase):
         data = {
             'language': 'de',
             'url': 'https://www.youtube.com/watch?v=9xwazD5SyVg',
-            'startTime': '0:01',
-            'endTime': '0:05',
+            'start_time': '0:01',
+            'end_time': '0:05',
             'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0'
         }
@@ -256,8 +256,8 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(model.YTVideoContent.objects.count(), 1)
         content = model.YTVideoContent.objects.first()
         self.assertEqual(content.url, "https://www.youtube.com/watch?v=9xwazD5SyVg")
-        self.assertEqual(content.startTime, "0:01")
-        self.assertEqual(content.endTime, "0:05")
+        self.assertEqual(content.start_time, "0:01")
+        self.assertEqual(content.end_time, "0:05")
 
     def test_add_yt_wrong_times(self):
         """POST test case - add YouTube Video
@@ -272,8 +272,8 @@ class AddContentViewTestCase(MediaTestCase):
         data = {
             'language': 'de',
             'url': 'https://www.youtube.com/watch?v=9xwazD5SyVg',
-            'startTime': '0:05',
-            'endTime': '0:01',
+            'start_time': '0:05',
+            'end_time': '0:01',
             'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0'
         }
@@ -294,8 +294,8 @@ class AddContentViewTestCase(MediaTestCase):
         data = {
             'language': 'de',
             'url': 'https://www.youtube.com/watch?v=9xwazD5SyVg',
-            'startTime': '0:05',
-            'endTime': '0:05',
+            'start_time': '0:05',
+            'end_time': '0:05',
             'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0'
         }
@@ -316,8 +316,8 @@ class AddContentViewTestCase(MediaTestCase):
         data = {
             'language': 'de',
             'url': 'https://www.youtube.com/watch?v=9xwazD5SyVg',
-            'startTime': '0:07',
-            'endTime': '0:20',
+            'start_time': '0:07',
+            'end_time': '0:20',
             'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0'
         }
@@ -338,8 +338,8 @@ class AddContentViewTestCase(MediaTestCase):
         data = {
             'language': 'de',
             'url': 'https://www.youtube.com/watch?v=9xwazD5SyVg',
-            'startTime': '0:7',
-            'endTime': '0:00',
+            'start_time': '0:7',
+            'end_time': '0:00',
             'form-TOTAL_FORMS': '0',
             'form-INITIAL_FORMS': '0'
         }
@@ -347,17 +347,17 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(model.YTVideoContent.objects.count(), 0)
 
-        data['startTime'] = "13:00:10"
+        data['start_time'] = "13:00:10"
         response = self.client.post(path, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(model.YTVideoContent.objects.count(), 0)
 
-        data['startTime'] = "10"
+        data['start_time'] = "10"
         response = self.client.post(path, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(model.YTVideoContent.objects.count(), 0)
 
-        data['startTime'] = "0h0m0s"
+        data['start_time'] = "0h0m0s"
         response = self.client.post(path, data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(model.YTVideoContent.objects.count(), 0)

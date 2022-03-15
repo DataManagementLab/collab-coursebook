@@ -645,11 +645,11 @@ class ContentView(DetailView):
             context['html'] = Markdown.render(content, False)
 
         if content.type == 'YouTubeVideo':
-            context['startTime'] = content.ytvideocontent.startTime
-            context['endTime'] = content.ytvideocontent.endTime
+            context['startTime'] = content.ytvideocontent.start_time
+            context['endTime'] = content.ytvideocontent.end_time
 
-            context['startSeconds'] = timestamp_to_seconds(content.ytvideocontent.startTime)
-            context['endSeconds'] = timestamp_to_seconds(content.ytvideocontent.endTime)
+            context['startSeconds'] = timestamp_to_seconds(content.ytvideocontent.start_time)
+            context['endSeconds'] = timestamp_to_seconds(content.ytvideocontent.end_time)
 
         context['comment_form'] = CommentForm()
 
