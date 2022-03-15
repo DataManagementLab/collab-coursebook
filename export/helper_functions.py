@@ -303,7 +303,7 @@ class Latex:
                         # Temporarily save attachment in directory
                         temp_path = os.path.join(directory, name)
                         with open(temp_path, 'wb') as temp_attachment:
-                            # Save the attachment to tempdir in chunks 
+                            # Save the attachment to tempdir in chunks
                             # so that memory is not overloaded
                             for chunk in attachment.chunks():
                                 temp_attachment.write(chunk)

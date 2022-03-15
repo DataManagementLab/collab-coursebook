@@ -2,7 +2,7 @@
 
 This file contains the test cases for /frontend/forms/content.py.
 """
-from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 from test import utils
 from test.test_cases import MediaTestCase
@@ -11,6 +11,7 @@ from unittest import skip
 
 from django.test import TestCase
 from django.urls import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from base.models import Content, Course
 
