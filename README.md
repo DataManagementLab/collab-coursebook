@@ -94,6 +94,11 @@ To start the application for development use ``python manage.py runserver 0.0.0.
 
 In your browser, access ``http://127.0.0.1:8000/`` and continue from there.
 
+### PyLint
+
+To be able to run PyLint, go into content/static/yt_api.py, comment out the import from secret settings and set yt_api_key = "". Otherwise PyLint will not run because
+it tries to import from a file that doesn't exist.
+
 ### Deployment Setup
 
 This application can be deployed using a web server as any other Django application.
@@ -149,11 +154,6 @@ or create a new config (.conf) file (similar to ``apache-collab-coursebook.conf`
 1. Execute the update script ``./utils/update.sh --prod``
 1. If not already active on that server, obtain an SSL certificate, e.g., through [Let's Encrypt](https://certbot.eff.org/lets-encrypt/)
 
-
-### PyLint
-
-To be able to run PyLint, go into content/static/yt_api.py, comment out the import from secret settings and set yt_api_key = "". Otherwise PyLint will not run because
-it tries to import from a file that doesn't exist.
 ### Updates
 
 To update the setup to the current version on the main branch of the repository use the update script ``utils/update.sh`` or ``utils/update.sh --prod`` in production.
