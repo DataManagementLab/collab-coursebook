@@ -21,16 +21,15 @@ from content.attachment.forms import ImageAttachmentFormSet, LatexPreviewImageAt
 from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
 from content.forms import CONTENT_TYPE_FORMS, EditMD
 from content.models import CONTENT_TYPES
+from content.static.yt_api import timestamp_to_seconds
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
 from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
+
 from export.helper_functions import Markdown
-
-
-from content.static.yt_api import *
 from export.views import latex_preview
 
 

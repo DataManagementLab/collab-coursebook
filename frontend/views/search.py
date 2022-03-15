@@ -6,7 +6,7 @@ This file describes the frontend views related to search.
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from base.models import Course, CourseStructureEntry, Content
+from base.models import Course, CourseStructureEntry
 
 
 class SearchView(ListView, LoginRequiredMixin):  # pylint: disable=too-many-ancestors
@@ -43,7 +43,8 @@ class SearchView(ListView, LoginRequiredMixin):  # pylint: disable=too-many-ance
             contents = entry.topic.get_contents('None', 'None').filter(description__icontains=query)
             if contents:
                 content_list.append([entry, contents])
-        return {'courses': courses, 'course_structure_entries': course_structure_entries, 'content_list': content_list}
+        return {'courses': courses, 'course_structure_entries': course_structure_entries,
+                'content_list': content_list}
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """Context data

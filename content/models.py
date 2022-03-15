@@ -471,24 +471,24 @@ class YTVideoContent(BaseContentModel):
         seconds = get_video_length(self.id)
         start_time = timestamp_to_seconds(self.start_time)
         end_time = timestamp_to_seconds(self.end_time)
-        if (end_time == 0):
+        if end_time == 0:
             end_timestamp = seconds_to_timestamp(seconds)
             self.end_time = end_timestamp
             end_time = timestamp_to_seconds(end_timestamp)
 
-        if (start_time == end_time):
+        if start_time == end_time:
             raise ValidationError(
             _('Please make sure that your start and end time are different.'))
-        if (start_time > end_time):
+        if start_time > end_time:
             raise ValidationError(
             _('Please make sure that your end time is larger than your start time.'))
         if (start_time > seconds and end_time > seconds):
             raise ValidationError(
                 _('Please make sure your start and end times are smaller than the videos length.'))
-        if (start_time > seconds):
+        if start_time > seconds:
             raise ValidationError(
                 _('Please make sure your start time is smaller than the videos length.'))
-        if (end_time > seconds):
+        if end_time > seconds:
             raise ValidationError(
                 _('Please make sure your end time is smaller than the videos length.'))
 

@@ -94,6 +94,11 @@ To start the application for development use ``python manage.py runserver 0.0.0.
 
 In your browser, access ``http://127.0.0.1:8000/`` and continue from there.
 
+### PyLint
+
+To be able to run PyLint, go into content/static/yt_api.py, comment out the import from secret settings and set yt_api_key = "". Otherwise PyLint will not run because
+it tries to import from a file that doesn't exist.
+
 ### Deployment Setup
 
 This application can be deployed using a web server as any other Django application.
