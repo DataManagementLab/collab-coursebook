@@ -27,7 +27,6 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '_-xt(rpt+&&-c_^5h1bxgx(n63uctron!gi*k)*=4$rgu@nfs!'
-YT_API_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

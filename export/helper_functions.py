@@ -18,10 +18,10 @@ from django.template.loader import get_template
 from django.utils.translation import gettext_lazy as _
 
 from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
-from content.static.yt_api import *
+from content.static.yt_api import seconds_to_time, get_video_length
 
 
-class Markdown:
+class Markdown:# pylint: disable=too-few-public-methods
     """Markdown
 
     This class provides the function for rendering Markdown into HTML.
@@ -50,7 +50,7 @@ class Markdown:
                 text = re.sub(rf"!\[(.*?)]\(Image-{idx}(.*?)\)",
                               rf"![\1]({path}\2)",
                               text)
-        md = (
+        md_instance = (
             MarkdownIt()
             .use(front_matter_plugin)
             .use(footnote_plugin)
@@ -58,7 +58,7 @@ class Markdown:
             .enable('strikethrough')
             .enable('linkify')
         )
-        return md.render(text)
+        return md_instance.render(text)
 
 
 class Latex:
@@ -79,9 +79,8 @@ class Latex:
     error_prefix = '!'
     error_template = 'error'
 
-    # TODO documentation parameters
     @staticmethod
-    def render(context, template_name, assets, app='export', external_assets=None):
+    def render(context, template_name):# pylint: disable=too-many-local-variables
         """Render
 
         Renders the LaTeX code with its content and then compiles the code to generate
@@ -94,12 +93,6 @@ class Latex:
         :type context: dict
         :param template_name: The name of the template to use
         :type template_name: str
-        :param assets:
-        :type assets:
-        :param app:
-        :type: str
-        :param external_assets:
-        :type external_assets:
 
         :return: the rendered LaTeX code as PDF, PDF LaTeX output and its the rendered template
         :rtype: tuple[bytes, tuple[bytes, bytes], str]
@@ -129,8 +122,10 @@ class Latex:
                         if context['export_pdf']:
                             # File header
                             md += f"<meta charset='UTF-8'>" \
-                                  f"<h2><span style=\"font-weight:bold\">{content.topic.title}</span></h2><i>" \
-                                  + gettext("Description") + f":</i> {tex_escape(content.description)}"
+                                  f"<h2><span style=\"font-weight:bold\">{content.topic.title}" \
+                                  + "</span></h2><i>" \
+                                  + gettext("Description") \
+                                  + f":</i> {tex_escape(content.description)}"
                         md += Markdown.render(content, True)
                         pdf = pdfkit.from_string(md, options=options)
                         name = f'MD_{content.pk}.pdf'
@@ -238,13 +233,14 @@ class Latex:
             total_hours, total_minutes, total_seconds = seconds_to_time(get_video_length(content.ytvideocontent.id))
 
             len = ""
-            if (total_hours > 0):
+            if total_hours > 0:
                 len += f"{total_hours} " + _("Hours")
-                if (total_minutes or total_seconds > 0): len += ", "
-            if (total_minutes > 0):
+                if total_minutes or total_seconds > 0: len += ", "
+            if total_minutes > 0:
                 len += f"{total_minutes} " + _("Minutes")
-                if (total_seconds > 0): len += ", "
-            if ((total_seconds > 0) or total_hours and total_minutes == 0): len += f"{total_seconds} " + _("Seconds")
+                if total_seconds > 0: len += ", "
+            if (total_seconds > 0) or total_hours and total_minutes == 0: 
+                len += f"{total_seconds} " + _("Seconds")
 
             context['length'] = len
 
@@ -273,17 +269,19 @@ class Latex:
         """Prerender data for previewing
         Pre renders the given LaTeX data for the purpose of generating a preview data
         of the LaTeX.
-        Also prepares all the attachments needed for the LaTeX content and saves them in the provided (optional)
-        directory. Usually this directory is the one where the LaTeX compiling process is run.
-        If the directory is not provided, the attachments won't be saved into the directory; the code will still
-        be pre rendered.
-        Uses the same template for pre rendering normal LaTeX content (i.e. content that will be
-        saved to server) but does not use the same context for rendering.
-        This method is created with the intention of pre rendering a preview for only LaTeX content.
+        Also prepares all the attachments needed for the LaTeX content and saves them in the 
+        provided (optional) directory. Usually this directory is the one where the LaTeX 
+        compiling process is run. If the directory is not provided, the attachments won't be 
+        saved into the directory; the code will still be pre rendered.
+        Uses the same template for pre rendering normal LaTeX content (i.e. content that will 
+        be saved to server) but does not use the same context for rendering.
+        This method is created with the intention of pre rendering a preview for only LaTeX 
+        content.
 
         :param text: LaTeX data to pre render
         :type text: str
-        :param formset: valid special image formset containing all the image attachments of the content
+        :param formset: valid special image formset containing all the image attachments 
+                        of the content
         :type formset: LatexPreviewImageAttachmentFormSet
         :param directory: directory to save the attachments to
         :type directory: str or None

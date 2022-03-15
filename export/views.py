@@ -58,7 +58,7 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
         ]
 
     # Perform compilation given context and template
-    (pdf, pdflatex_output, tex_template) = Latex.render(context, template, [])
+    (pdf, pdflatex_output, tex_template) = Latex.render(context, template)
     return pdf, pdflatex_output, tex_template
 
 
@@ -151,7 +151,7 @@ def generate_pdf_from_latex(user, content, template="content/export/base.tex", c
 
     # Performs compilation given context and template
     # pdf = pdf, pdflatex_output, tex_template
-    pdf = Latex.render(context, template, [])
+    pdf = Latex.render(context, template)
     return pdf[0]
 
 
@@ -189,6 +189,6 @@ def latex_preview(request, user, topic, formset, template="content/export/base.t
         context = {'preview_data': latex, 'image_formset': formset,
                    'export_pdf': False, 'user': user, 'topic': topic,
                    'contents': []}
-        pdf, _, _ = Latex.render(context, template, [])
+        pdf, _, _ = Latex.render(context, template)
         return HttpResponse(pdf, content_type=content_type, reason=reasons[0])
     return HttpResponse(reason=reasons[3])
