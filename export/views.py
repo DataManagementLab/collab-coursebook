@@ -15,8 +15,8 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
                 template="content/export/base.tex",
                 context=None):
     """Generate course book
-
-    There is also a flag which indicates if the whole course or only the coursebook should be exported.
+    There is also a flag which indicates if the whole
+    course or only the coursebook should be exported.
 
     :param request: The given request
     :type request: WSGIRequest
@@ -65,7 +65,8 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
 def generate_coursebook_response(request, pk, exp_all, file_name=None):  # pylint: disable=invalid-name
     """Generate coursebook response
 
-    There is also a flag which indicates if the whole course or only the coursebook should be exported.
+    There is also a flag which indicates if the whole
+    course or only the coursebook should be exported.
 
     :param request: The given request
     :type request: WSGIRequest
@@ -88,7 +89,6 @@ def generate_coursebook_response(request, pk, exp_all, file_name=None):  # pylin
     # Call the method for pdf compilation and write the output afterwards
     (pdf, pdflatex_output, tex_template) = pdf_compile(request, pk, exp_all)
     return write_response(request, pdf, pdflatex_output, tex_template, file_name + ".pdf")
-
 
 def write_response(request, pdf, pdflatex_output, tex_template, filename,
                    content_type='application/pdf'):
@@ -153,7 +153,6 @@ def generate_pdf_from_latex(user, content, template="content/export/base.tex", c
     # pdf = pdf, pdflatex_output, tex_template
     pdf = Latex.render(context, template)
     return pdf[0]
-
 
 def latex_preview(request, user, topic, formset, template="content/export/base.tex", content_type='application/pdf'):
     """Latex preview
