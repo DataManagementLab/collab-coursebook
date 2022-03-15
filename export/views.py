@@ -16,8 +16,8 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
                 context=None):
     """Generate course book
 
-    There is also a flag which indicates if the whole course or only the coursebook
-    should be exported.
+    There is also a flag which indicates if the whole
+    course or only the coursebook should be exported.
 
     :param request: The given request
     :type request: WSGIRequest
@@ -67,8 +67,8 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
 def generate_coursebook_response(request, pk, exp_all, file_name=None):  # pylint: disable=invalid-name
     """Generate coursebook response
 
-    There is also a flag which indicates if the whole course or only the coursebook
-    should be exported.
+    There is also a flag which indicates if
+    the whole course or only the coursebook should be exported.
 
     :param request: The given request
     :type request: WSGIRequest
