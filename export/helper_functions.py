@@ -227,8 +227,8 @@ class Latex:
                 context['no_desc'] = False
         if no_error and content.type == 'YouTubeVideo':
 
-            context['startTime'] = content.ytvideocontent.startTime
-            context['endTime'] = content.ytvideocontent.endTime
+            context['startTime'] = content.ytvideocontent.start_time
+            context['endTime'] = content.ytvideocontent.end_time
 
             total_hours, total_minutes, total_seconds = seconds_to_time(get_video_length(content.ytvideocontent.id))
 
