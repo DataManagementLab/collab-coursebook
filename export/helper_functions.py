@@ -129,7 +129,7 @@ class Latex:
                                   + gettext("Description") \
                                   + f":</i> {tex_escape(content.description)}"
                         md_string += Markdown.render(content, True)
-                        pdf = pdfkit.from_string(md, options=options)
+                        pdf = pdfkit.from_string(md_string, options=options)
                         name = f'MD_{content.pk}.pdf'
                         md_path = os.path.join(tempdir, name)
                         with open(md_path, 'wb') as temp_pdf:
@@ -296,7 +296,7 @@ class Latex:
             for idx, form in enumerate(formset):
                 used_form = form.save(commit=False)
                 attachment = used_form.image
-                # If the attachment is already saved in the server then just use it.
+                # If the attachment is already saved in the server then just use it
                 if '/' in attachment.name:
                     name = ret_path(attachment.url)
                 else:
@@ -306,7 +306,7 @@ class Latex:
                         temp_path = os.path.join(directory, name)
                         with open(temp_path, 'wb') as temp_attachment:
                             # Save the attachment to tempdir in chunks 
-                            #so that memory is not overloaded.
+                            # so that memory is not overloaded
                             for chunk in attachment.chunks():
                                 temp_attachment.write(chunk)
                             temp_attachment.close()

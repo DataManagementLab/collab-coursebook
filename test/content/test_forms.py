@@ -44,7 +44,8 @@ class AddMDTestCase(TestCase):
     def test_invalid_options(self):
         """Test invalid options field
 
-        Tests that when the options field has no value, the form is invalid and returns the correct message.
+        Tests that when the options field has no value, the form is invalid and returns the
+        correct message.
         The form should be invalid even when the file field and the text field are valid.
         """
         form_data = {'textfield': 'Lorem ipsum',
@@ -60,7 +61,8 @@ class AddMDTestCase(TestCase):
         """
         Test invalid file field (with valid textfield supplied)
 
-        Tests that when the options field is set to 'file', but there is no file inputted in the field,
+        Tests that when the options field is set to 'file', but there is no file inputted
+        in the field,
         then the form is invalid and returns the correct message.
         The same message should be given out regardless of whether the textfield is inputted or not.
         """
@@ -76,7 +78,8 @@ class AddMDTestCase(TestCase):
         """
         Test invalid file field (with no value of textfield)
 
-        Tests that when the options field is set to 'file', but there is no file inputted in the field,
+        Tests that when the options field is set to 'file', but there is no file inputted
+        in the field,
         then the form is invalid and returns the correct message.
         The same message should be given out regardless of whether the textfield is inputted or not.
         """
@@ -91,9 +94,11 @@ class AddMDTestCase(TestCase):
         """
         Test invalid text field (with file field supplied, but has the wrong extension).
 
-        Tests that when the options field is set to 'text', but there no text is inputted in the field,
+        Tests that when the options field is set to 'text', but there no text is inputted
+        in the field,
         then the form is invalid and returns the correct message.
-        The same message should be given out regardless of whether the file field is inputted (with correct/incorrect
+        The same message should be given out regardless of whether the file field is inputted
+        (with correct/incorrect
         extensions) or not.
         """
         form_data = {'options': 'text',
@@ -108,9 +113,11 @@ class AddMDTestCase(TestCase):
         """
         Test invalid textfield (with no files uploaded to the file field).
 
-        Tests that when the options field is set to 'text', but there no text is inputted in the field,
+        Tests that when the options field is set to 'text', but there no text is inputted in the
+        field,
         then the form is invalid and returns the correct message.
-        The same message should be given out regardless of whether the file field is inputted (with correct/incorrect
+        The same message should be given out regardless of whether the file field is inputted
+        (with correct/incorrect
         extensions) or not.
         """
         form_data = {'options': 'text',

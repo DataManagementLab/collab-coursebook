@@ -4,7 +4,6 @@ import isodate
 import urllib
 from django.utils.translation import gettext_lazy as _
 
-# noinspection PyUnresolvedReferences
 #import collab_coursebook.settings_secrets as secrets
 
 yt_api_key = ""#secrets.YT_API_KEY

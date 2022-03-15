@@ -2,23 +2,24 @@
 
 This file contains the test cases for /frontend/forms/content.py.
 """
-from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from test import utils
 from test.test_cases import MediaTestCase
 
+from unittest import skip
+
 from django.test import TestCase
 from django.urls import reverse
 
 from base.models import Content, Course
+
 import content.forms as form
 import content.models as model
 from content.attachment.forms import ImageAttachmentFormSet
 from content.attachment.models import ImageAttachment
 
 from frontend.forms import AddContentForm
-
 from frontend.views.content import clean_attachment
 
 
@@ -77,9 +78,9 @@ class AddContentViewTestCase(MediaTestCase):
     def test_add_md_text(self):
         """POST test case - add Markdown
 
-        Tests the function post that a Markdown content gets created by text and saved properly after sending
-        a POST request to content-add and that the POST request redirects to
-        the content page.
+        Tests the function post that a Markdown content gets created by text and saved properly
+        after sending a POST request to content-add
+        and that the POST request redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'MD'
@@ -103,7 +104,8 @@ class AddContentViewTestCase(MediaTestCase):
     def test_add_md_file(self):
         """POST test case - add Markdown
 
-        Tests the function post that a Markdown content gets created by file and saved properly after sending
+        Tests the function post that a Markdown content gets created by file and saved properly
+        after sending
         a POST request to content-add and that the POST request redirects to
         the content page.
         """
@@ -132,15 +134,15 @@ class AddContentViewTestCase(MediaTestCase):
         """POST test case - add Markdown
 
         Tests the function post that:
-        a Markdown content gets created by file when both file and text are inputted and the option "Upload by file"
-        is chosen.
-        The content should then be saved properly after sending a POST request to content-add and that the POST request redirects to
-        the content page.
+        a Markdown content gets created by file when both file and text are inputted
+        and the option "Upload by file" is chosen.
+        The content should then be saved properly after sending a POST request to content-add
+        and that the POST request redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'MD'
         })
-        test_file = SimpleUploadedFile("test_file.md",b"A")
+        test_file = SimpleUploadedFile("test_file.md",b"AB")
         data = {
             'options': 'file',
             'language': 'de',
@@ -156,22 +158,22 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertTrue(bool(content.md))
         self.assertTrue(content.md.name,"test_file")
         self.assertEqual(content.source, "src")
-        self.assertEqual(content.textfield, "A")
+        self.assertEqual(content.textfield, "AB")
         self.assertEqual(content.textfield,content.md.open().read().decode('utf-8'))
 
     def test_add_md_text_options(self):
         """POST test case - add Markdown
 
         Tests the function post that:
-        a Markdown content gets created by text when both file and text are inputted and the option "Upload by text"
-        is chosen.
-        The content should then be saved properly after sending a POST request to content-add and that the POST request
-        redirects to the content page.
+        a Markdown content gets created by text when both file and text are inputted
+        and the option "Upload by text" is chosen.
+        The content should then be saved properly after sending a POST request to content-add
+        and that the POST request redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'MD'
         })
-        test_file = SimpleUploadedFile("test_file.md", b"A")
+        test_file = SimpleUploadedFile("test_file.md", b"AB")
         data = {
             'options': 'text',
             'language': 'de',
@@ -211,12 +213,13 @@ class AddContentViewTestCase(MediaTestCase):
         content = model.TextField.objects.first()
         self.assertEqual(content.textfield, "Lorem ipsum")
 
+    @skip('Need Youtube API Key')
     def test_add_yt(self):
         """POST test case - add YouTube Video
 
-        Tests the function post that a YouTube Video without timestamps gets created and saved properly after sending
-        a POST request to content-add and that the POST request redirects to
-        the content page.
+        Tests the function post that a YouTube Video without timestamps gets created
+        and saved properly after sending a POST request to content-add
+        and that the POST request redirects to the content page.
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'YouTubeVideo'
@@ -234,12 +237,14 @@ class AddContentViewTestCase(MediaTestCase):
         content = model.YTVideoContent.objects.first()
         self.assertEqual(content.url, "https://www.youtube.com/watch?v=9xwazD5SyVg")
 
+    @skip('Need Youtube API Key')
     def test_add_yt_correct_times(self):
         """POST test case - add YouTube Video
 
-        Tests the function post that a YouTube Video with correct timestamps gets created and saved properly after sending
-        a POST request to content-add and that the POST request redirects to
-        the content page.
+        Tests the function post that a YouTube Video with correct timestamps gets created
+        and saved properly after sending a POST request to content-add
+        and that the POST request redirects to the content page.
+
         """
         path = reverse('frontend:content-add', kwargs={
             'course_id': 1, 'topic_id': 1, 'type': 'YouTubeVideo'
@@ -259,10 +264,12 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(content.start_time, "0:01")
         self.assertEqual(content.end_time, "0:05")
 
+    @skip('Need Youtube API Key')
     def test_add_yt_wrong_times(self):
         """POST test case - add YouTube Video
 
-        Tests the function post that a YouTube Video with correct timestamps gets created and saved properly after sending
+        Tests the function post that a YouTube Video with correct timestamps gets created
+        and saved properly after sending
         a POST request to content-add and that the POST request redirects to
         the content page.
         """
@@ -281,10 +288,12 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(model.YTVideoContent.objects.count(), 0)
 
+    @skip('Need Youtube API Key')
     def test_add_yt_equal_times(self):
         """POST test case - add YouTube Video
 
-        Tests the function post that a YouTube Video with correct timestamps gets created and saved properly after sending
+        Tests the function post that a YouTube Video with correct timestamps gets created
+        saved properly after sending
         a POST request to content-add and that the POST request redirects to
         the content page.
         """
@@ -303,10 +312,12 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(model.YTVideoContent.objects.count(), 0)
 
+    @skip('Need Youtube API Key')
     def test_add_yt_times_longer_than_video(self):
         """POST test case - add YouTube Video
 
-        Tests the function post that a YouTube Video with correct timestamps gets created and saved properly after sending
+        Tests the function post that a YouTube Video with correct timestamps gets created
+        and saved properly after sending
         a POST request to content-add and that the POST request redirects to
         the content page.
         """
@@ -325,10 +336,12 @@ class AddContentViewTestCase(MediaTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(model.YTVideoContent.objects.count(), 0)
 
+    @skip('Need Youtube API Key')
     def test_add_yt_wrong_timestamps(self):
         """POST test case - add YouTube Video
 
-        Tests the function post that a YouTube Video with correct timestamps gets created and saved properly after sending
+        Tests the function post that a YouTube Video with correct timestamps gets created
+        and saved properly after sending
         a POST request to content-add and that the POST request redirects to
         the content page.
         """
@@ -465,7 +478,8 @@ class AddContentViewTestCase(MediaTestCase):
     def test_latex_preview_fail_invalid_attachments(self):
         """POST test case LaTeX preview - failure
 
-        Tests that the POST preview request is sent and rejected because of one of the following reasons:
+        Tests that the POST preview request is sent and rejected
+        because of one of the following reasons:
         1. At least one of the attachments is not an image
         2. At least one of the attachments was empty
         An appropriating response with the corresponding reason message will then be sent back.
@@ -476,7 +490,7 @@ class AddContentViewTestCase(MediaTestCase):
         old_objects_count = model.Latex.objects.count()
         old_attachments_count = ImageAttachment.objects.count()
         test_file = SimpleUploadedFile("test_file.md", b"A")
-        data = [{
+        datas = [{
             'textfield': 'Test invalid image extension',
             'form-TOTAL_FORMS': '1',
             'form-INITIAL_FORMS': '0',
@@ -489,8 +503,10 @@ class AddContentViewTestCase(MediaTestCase):
             'latex-preview': True,
         }]
         # Last parameter is used to make the request an ajax request
-        for i in range(0, len(data)):
-            response = self.client.post(path, data[i], **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        for data in datas:
+            response = self.client.post(path,
+                                        data,
+                                        **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.reason_phrase, 'Invalid attachment data')
             self.assertEqual(response['Content-Type'], 'text/html; charset=utf-8')

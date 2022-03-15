@@ -424,7 +424,7 @@ class YTVideoContent(BaseContentModel):
         verbose_name_plural = _("YouTube Video Contents")
 
     @property
-    def id(self):
+    def id(self):  # pylint: disable=C0103
         """ID
 
         Splits the url by the symbol "=" to get the id of the YouTube url.

@@ -62,7 +62,7 @@ class LaTeXTestCase(TestCase):
         content = model.Content.objects.first()
         latex_content = model.Latex.objects.first()
         pre_render = helper.Latex.pre_render(content, True)
-        self.assertIn(latex_content.textfield, pre_render.decode(helper.Latex.encoding))
+        self.assertIn(latex_content.pdf.url, pre_render.decode(helper.Latex.encoding))
         self.assertIn(content.description, pre_render.decode(helper.Latex.encoding))
 
     def test_prerender_latex_no_export(self):
@@ -104,6 +104,10 @@ class LaTeXTestCase(TestCase):
 
 
 class MarkdownTestCase(TestCase):
+    """Markdown test case
+
+    Defines the test cases for the class Markdown.
+    """
     def setUp(self):
         """
         Sets up the test database
@@ -113,7 +117,8 @@ class MarkdownTestCase(TestCase):
     def test_markdown_render(self):
         """Markdown render test case
 
-        Tests if the Markdown compiler renders the Markdown text correctly with extended Markdown syntax.
+        Tests if the Markdown compiler renders the Markdown text correctly with extended Markdown
+        syntax.
         """
         text1 = "| Option | Description | \n" \
                 "| ------ | ----------- | \n" \

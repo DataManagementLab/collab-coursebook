@@ -228,13 +228,13 @@ class AddMD(forms.ModelForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        if 'options' in cleaned_data and (cleaned_data['options'] == 'file'
-                                          or cleaned_data['options'] == 'text'):
+        if 'options' in cleaned_data \
+                and (cleaned_data['options'] == 'file' or cleaned_data['options'] == 'text'):
             options = cleaned_data['options']
             if options == 'file' and not ('md' in cleaned_data and bool(self.cleaned_data['md'])):
                 raise forms.ValidationError(_("You must upload a Markdown file."))
             if options == 'text' \
-                and not ('textfield' in cleaned_data and bool(self.cleaned_data['textfield'])):
+                    and not ('textfield' in cleaned_data and bool(self.cleaned_data['textfield'])):
                 raise forms.ValidationError(_("You must put in some text."))
         else:
             raise forms.ValidationError(_("None of the options were chosen."))

@@ -5,10 +5,9 @@ This file contains the test cases for /content/models.py.
 
 import os
 
-from django.core.exceptions import ValidationError
 
 from test.test_cases import MediaTestCase
-import test.utils as utils
+from test import utils
 
 from django.test import override_settings
 
