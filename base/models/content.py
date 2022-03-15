@@ -17,6 +17,8 @@ from fontawesome_5.fields import IconField
 
 from base.models import Profile
 
+from content.models import CONTENT_TYPES
+
 from .social import Rating
 
 
@@ -273,7 +275,6 @@ class Topic(models.Model):
         # filtered by is a String and represents the decision of the user
         # , how they want to filter the data,
         # e.g. 'Text' means they want to only see all text fields in the topic
-        from content.models import CONTENT_TYPES
 
         if filtered_by is not None and filtered_by != 'None' and filtered_by in CONTENT_TYPES:
             contents = CONTENT_TYPES[filtered_by].filter_by_own_type(contents)
