@@ -30,7 +30,6 @@ def pdf_compile(request, pk, exp_all,  # pylint: disable=invalid-name
     :type template: str
     :param context: The context of the content
     :type context: dict[str, Any]
-
     :return: the generated coursebook as PDF, PDF LaTeX output and as an rendered
             template
     :rtype: tuple[bytes, tuple[bytes, bytes], str]
