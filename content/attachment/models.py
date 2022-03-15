@@ -8,13 +8,13 @@ import reversion
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 from base.models import Content
 
 from content.models import BaseSourceModel, Latex, TextField, MDContent
 
-from django.conf import settings
-from django.core.validators import validate_image_file_extension, FileExtensionValidator
 
 class ImageAttachment(BaseSourceModel):
     """image attachment
