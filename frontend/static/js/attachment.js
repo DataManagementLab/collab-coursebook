@@ -65,8 +65,12 @@ function addAttachment(event) {
         // Add listener to update URL when attachment changes
         // IS_MARKDOWN is a const declared in dynamic_attachment.html
         if (IS_MARKDOWN) {
+            // Remove help text if attachment is the first one to be added to the list
+            if (children == 0)
+                ATTACHMENT_LIST.children[1].style.display = 'none';
+            appendAttachmentToList(children);
             if (attachment.length) {
-                addAttachmentEvent(attachment,children);
+                addAttachmentEvent(attachment, children);
             }
         }
     }
@@ -110,6 +114,7 @@ function removeAttachment(event) {
 
     // Remove corresponding URL when attachment is removed
     if (IS_MARKDOWN) {
+        popAttachmentFromList();
         if (URL_ARRAY[children - 1] != null) {
             revertAttachmentLinks(children-1);
             URL_ARRAY.pop();

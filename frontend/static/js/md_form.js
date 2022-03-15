@@ -6,7 +6,6 @@ let fileButton;
 let textButton;
 let form_attach;
 
-
 /**
  * This method updates the AddMD form by replacing the element with the provided label
  * with the element saved in form_attach, if an element with such label exists in the form.
@@ -56,7 +55,3 @@ function initButtons() {
     textButton.addEventListener('click',updateFormState);
     updateFormState();
 }
-
-
-
-

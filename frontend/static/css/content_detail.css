@@ -32,8 +32,9 @@
     max-width: 100%
 }
 
-input[type='text']::placeholder {
-    color:gray;
+#markdown-attachment-list button:hover {
+    background-color: #efefef;
+    color: #333333;
 }
 
 
