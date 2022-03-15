@@ -320,11 +320,11 @@ msgid "Close"
 msgstr "Schließen"
 
 #: templates/frontend/content/reading_mode.html:27
-msgid "Next"
-msgstr "Vor"
+msgid "Next content"
+msgstr "Nächstes Dokument"
 
 #: templates/frontend/content/reading_mode.html:31
-msgid "Previous"
+msgid "Previous content"
 msgstr "Zurück"
 
 #: templates/frontend/course/coursebook.html:12
