@@ -44,7 +44,8 @@ class Profile(models.Model):
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
     stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"),
                                             related_name="staring_users", blank=True)
-    accepted_privacy_note = models.BooleanField(verbose_name=_("Accepted privacy note?"), blank=True, default=False)
+    accepted_privacy_note = models.BooleanField(verbose_name=_("Accepted privacy note?"),\
+         blank=True, default=False)
 
     def __str__(self):
         """String representation

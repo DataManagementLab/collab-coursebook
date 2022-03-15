@@ -2,6 +2,7 @@ import json
 import math
 import isodate
 import urllib
+from django.utils.translation import gettext_lazy as _
 
 # noinspection PyUnresolvedReferences
 #import collab_coursebook.settings_secrets as secrets
@@ -105,3 +106,17 @@ def get_video_length(id):
     duration=data_items[0]['contentDetails']['duration']
     dur = isodate.parse_duration(duration)
     return dur.total_seconds()
+
+def time_to_string(total_hours, total_minutes, total_seconds):
+    vid_len = ""
+    if total_hours > 0:
+        vid_len += f"{total_hours} " + _("Hours")
+        if total_minutes or total_seconds > 0: 
+            vid_len += ", "
+    if total_minutes > 0:
+        vid_len += f"{total_minutes} " + _("Minutes")
+        if total_seconds > 0: 
+            vid_len += ", "
+    if (total_seconds > 0) or total_hours and total_minutes == 0:
+        vid_len += f"{total_seconds} " + _("Seconds")
+    return vid_len
