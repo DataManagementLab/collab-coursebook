@@ -52,7 +52,16 @@
                                 Existing attachment did not have a copy button from dynamic_attachment.html which is why we
                                 have to manually add it here.
                                 Depending on the content type (Markdown or LaTeX), a corresponding function is bound to the button.
+                                Added a div for the Notification
                                 {% endcomment %}
+                                <div id='notification-copy-{{ forloop.counter0  }}' class="alert alert-dismissible" style="display: none">
+                                    <button onclick='hideNotificationCopy({{ forloop.counter0 }})' type="button" class="close">
+                                        &times;
+                                    </button>
+                    
+                                    <div id="notification-message-copy-{{ forloop.counter0 }}">
+                                    </div>
+                                </div>
                                 {% if is_latex_content %}
                                 <button type="button" class="btn btn-info"
                                         onclick="copyEmbeddedAttachment(this)">{% trans 'Copy Attachment-Embedding Code' %}
