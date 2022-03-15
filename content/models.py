@@ -6,13 +6,13 @@ registered in admin.py.
 """
 
 import os
+import reversion
 
 from django.conf import settings
 from django.db import models
 from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
-
-import reversion
+from django.core.validators import FileExtensionValidator
 
 from pdf2image import convert_from_path
 
@@ -20,9 +20,6 @@ from base.models import Content
 
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
-
-from django.core.validators import FileExtensionValidator
-
 from content.static.yt_api import get_video_length, timestamp_to_seconds, seconds_to_timestamp
 
 import re
@@ -405,12 +402,12 @@ class YTVideoContent(BaseContentModel):
 
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
-    startTime = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8,
+    start_time = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8,
                                  default="0:00",
                                  help_text=_(
                                      "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
-    endTime = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default="0:00",
+    end_time = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default="0:00",
                                help_text=_(
                                    "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
@@ -463,34 +460,36 @@ class YTVideoContent(BaseContentModel):
 
     def clean(self):
 
-        colonRegEx = "^((((0?[1-9]|1[0-2]):)?[0-5][0-9]:[0-5][0-9])|[0-9]:[0-5][0-9])$"
+        colon_regex = "^((((0?[1-9]|1[0-2]):)?[0-5][0-9]:[0-5][0-9])|[0-9]:[0-5][0-9])$"
 
-        colonPattern = re.compile(colonRegEx)
+        colon_pattern = re.compile(colon_regex)
 
-        if not (colonPattern.match(self.startTime)):
+        if not colon_pattern.match(self.start_time):
             raise ValidationError(_("Please input a correct format for your starting time."))
-        if not (colonPattern.match(self.endTime)):
+        if not colon_pattern.match(self.end_time):
             raise ValidationError(_("Please input a correct format for your ending time."))
 
         seconds = get_video_length(self.id)
-        startTime = timestamp_to_seconds(self.startTime)
-        endTime = timestamp_to_seconds(self.endTime)
-        if (endTime == 0):
-            endTimestamp = seconds_to_timestamp(seconds)
-            self.endTime = endTimestamp
-            endTime = timestamp_to_seconds(endTimestamp)
+        start_time = timestamp_to_seconds(self.start_time)
+        end_time = timestamp_to_seconds(self.end_time)
+        if end_time == 0:
+            end_timestamp = seconds_to_timestamp(seconds)
+            self.end_time = end_timestamp
+            end_time = timestamp_to_seconds(end_timestamp)
 
-        if (startTime == endTime): raise ValidationError(
-            _('Please make sure that your start and end time are different.'))
-        if (startTime > endTime): raise ValidationError(
-            _('Please make sure that your end time is larger than your start time.'))
-        if (startTime > seconds and endTime > seconds):
+        if start_time == end_time:
+            raise ValidationError(
+                _('Please make sure that your start and end time are different.'))
+        if start_time > end_time: 
+            raise ValidationError(
+                _('Please make sure that your end time is larger than your start time.'))
+        if (start_time > seconds and end_time > seconds):
             raise ValidationError(
                 _('Please make sure your start and end times are smaller than the videos length.'))
-        elif (startTime > seconds):
+        if start_time > seconds:
             raise ValidationError(
                 _('Please make sure your start time is smaller than the videos length.'))
-        elif (endTime > seconds):
+        if end_time > seconds:
             raise ValidationError(
                 _('Please make sure your end time is smaller than the videos length.'))
 
@@ -520,7 +519,7 @@ reversion.register(PDFContent,
                    fields=['content', 'pdf', 'source', 'license'],
                    follow=['content'])
 reversion.register(YTVideoContent,
-                   fields=['content', 'url', 'startTime', 'endTime'],
+                   fields=['content', 'url', 'start_time', 'end_time'],
                    follow=['content'])
 reversion.register(MDContent,
                    fields=['content', 'md', 'textfield', 'source'],

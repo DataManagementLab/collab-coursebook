@@ -72,3 +72,4 @@ class Validator:  # pylint: disable=too-few-public-methods)
         file_type = magic.from_buffer(file.read(1024), mime=True)
         if file_type not in valid_types:
             raise ValidationError('Unsupported file type.')
+            
