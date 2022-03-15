@@ -41,6 +41,7 @@ def export_template(content_type):
     path = base_path + "/templates/content/export"
 
     # Type must be a content type or the error type for an invalid latex compilation
+    # pylint: disable=consider-iterating-dictionary
     if content_type in CONTENT_TYPES.keys() or content_type == 'error':
         return path + f"/{content_type}.tex"
     return path + "/invalid.tex"

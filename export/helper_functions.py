@@ -15,8 +15,6 @@ from django.utils.translation import gettext
 
 from django.template.loader import get_template
 
-from django.utils.translation import gettext_lazy as _
-
 from export.templatetags.cc_export_tags import export_template, tex_escape, ret_path
 from content.static.yt_api import seconds_to_time, get_video_length, time_to_string
 
@@ -137,7 +135,7 @@ class Latex:
                             temp_pdf.close()
                 rendered_tpl += r"\end{document}".encode(Latex.encoding)
             # Have to compile 2 times for table of contents to work
-            for idx in range(0, 2 if context['export_pdf'] else 1):
+            for i in range(0, 2 if context['export_pdf'] else 1):
                 process = Popen(['pdflatex'], stdin=PIPE, stdout=PIPE, cwd=tempdir, )
                 # Output is a byte tuple of stdout and stderr
                 pdflatex_output = process.communicate(rendered_tpl)
@@ -264,7 +262,7 @@ class Latex:
         of the LaTeX.
         Also prepares all the attachments needed for the LaTeX content and saves them in the
         provided (optional) directory. Usually this directory is the one where the LaTeX
-        compiling process is run. If the directory is not provided, the attachments won't be 
+        compiling process is run. If the directory is not provided, the attachments won't be
         saved into the directory; the code will still be pre rendered.
         Uses the same template for pre rendering normal LaTeX content (i.e. content that will
         be saved to server) but does not use the same context for rendering.
