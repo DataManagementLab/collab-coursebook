@@ -5,11 +5,10 @@ This file contains forms associated with the attachments.
 
 from django import forms
 from django.forms import BaseModelFormSet
-
+from django.utils.translation import gettext_lazy as _
 from base.models import Content
 from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
 from content.widgets import ModifiedClearableFileInput
-from django.utils.translation import gettext_lazy as _
 
 
 class AdminImageAttachmentForm(forms.ModelForm):
@@ -57,7 +56,8 @@ class ModifiedImageAttachmentFormset(BaseModelFormSet):
     def clean(self):
         super().clean()
         for form in self.forms:
-            # Check for form validity; the form is still considered valid if all of its fields are empty
+            # Check for form validity; the form is still considered valid
+            # if all of its fields are empty
             # (initial state) so after the form is considered valid it still has to be checked again
             if form.is_valid():
                 used_form = form.save(commit=False)
@@ -83,7 +83,8 @@ ImageAttachmentFormSet = forms.modelformset_factory(
 )
 
 
-# BaseModelFormSet: Image attachment form set, used for rendering LaTeX preview to remove validation for source field
+# BaseModelFormSet: Image attachment form set,
+# used for rendering LaTeX preview to remove validation for source field
 LatexPreviewImageAttachmentFormSet = forms.modelformset_factory(
     ImageAttachment,
     fields=("image",),

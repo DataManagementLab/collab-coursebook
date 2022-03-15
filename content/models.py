@@ -6,13 +6,14 @@ registered in admin.py.
 """
 
 import os
+import re
 import reversion
-
 from django.conf import settings
 from django.db import models
 from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
+
 
 from pdf2image import convert_from_path
 
@@ -21,8 +22,6 @@ from base.models import Content
 from content.mixin import GeneratePreviewMixin
 from content.validator import Validator
 from content.static.yt_api import get_video_length, timestamp_to_seconds, seconds_to_timestamp
-
-import re
 
 
 class BaseContentModel(models.Model, GeneratePreviewMixin):
@@ -470,26 +469,26 @@ class YTVideoContent(BaseContentModel):
             raise ValidationError(_("Please input a correct format for your ending time."))
 
         seconds = get_video_length(self.id)
-        start_time = timestamp_to_seconds(self.start_time)
-        end_time = timestamp_to_seconds(self.end_time)
-        if end_time == 0:
+        start_time = timestamp_to_seconds(self.startTime)
+        end_time = timestamp_to_seconds(self.endTime)
+        if (end_time == 0):
             end_timestamp = seconds_to_timestamp(seconds)
-            self.end_time = end_timestamp
+            self.endTime = end_timestamp
             end_time = timestamp_to_seconds(end_timestamp)
 
-        if start_time == end_time:
+        if (start_time == end_time):
             raise ValidationError(
-                _('Please make sure that your start and end time are different.'))
-        if start_time > end_time: 
+            _('Please make sure that your start and end time are different.'))
+        if (start_time > end_time):
             raise ValidationError(
-                _('Please make sure that your end time is larger than your start time.'))
+            _('Please make sure that your end time is larger than your start time.'))
         if (start_time > seconds and end_time > seconds):
             raise ValidationError(
                 _('Please make sure your start and end times are smaller than the videos length.'))
-        if start_time > seconds:
+        if (start_time > seconds):
             raise ValidationError(
                 _('Please make sure your start time is smaller than the videos length.'))
-        if end_time > seconds:
+        if (end_time > seconds):
             raise ValidationError(
                 _('Please make sure your end time is smaller than the videos length.'))
 
