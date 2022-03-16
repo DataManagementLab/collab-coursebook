@@ -2,8 +2,6 @@
  This file contains the logic for controlling the behavior of the two radio buttons
  in the 'Options' field of the AddMD form.
 */
-let fileButton;
-let textButton;
 let form_attach;
 
 /**
@@ -32,26 +30,3 @@ function changeForm(detachID) {
     }
 }
 
-/**
- * Checks which option is currently checked, then updates the form correspondingly.
-*/
-function updateFormState() {
-    if (fileButton.checked) {
-        changeForm('id_textfield');
-    }
-    else if (textButton.checked) {
-        changeForm('id_md');
-    }
-}
-
-/**
- * Adds listener to the two radio buttons in the add form so that
- * they can attach/reattach the corresponding fields when clicked.
-*/
-function initButtons() {
-    fileButton = document.getElementById("id_options_0");
-    textButton = document.getElementById("id_options_1");
-    fileButton.addEventListener('click',updateFormState);
-    textButton.addEventListener('click',updateFormState);
-    updateFormState();
-}

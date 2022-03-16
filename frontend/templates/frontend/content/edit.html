@@ -105,33 +105,10 @@
         {% include 'frontend/content/latex_preview.html' %}
         {% include 'frontend/content/attachment_embedding_help.html' %}
     {% endif %}
+    {% if is_markdown_content %}
+        {% include 'frontend/content/md_form.html' %}
+    {% endif %}
 {% endblock %}
 
 {% block bottom_script %}
-    {% if is_markdown_content %}
-        {# jsi18n #}
-        <script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
-        {# Script and css for editor #}
-        <link href="{% static 'css/toastui-editor.css' %}" type="text/css" rel="stylesheet"/>
-        <script type="text/javascript" src="{% static 'js/toastui-editor-all.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/editor.js' %}"></script>
-        {# Initialize editor #}
-        <script type="text/javascript">
-            $(function(){
-                args = {
-                  previewStyle: "vertical",
-                  height: "450px",
-                  initialEditType: "markdown",
-                  previewHighlight: false,
-                  placeholder: gettext("Markdown Script"),
-                }
-                initEditor(args);
-                editor.setMarkdown(document.getElementById("id_textfield").value);
-                $('.ProseMirror').removeClass('ProseMirror-focused');
-                generateExistingAttachmentURLs();
-                updateAttachmentLinks();
-            });
-        </script>
-    {% endif %}
-    {# Script checkbox in YouTube video forms #}
 {%endblock%}

@@ -13,6 +13,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
+from django.conf import settings
 
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
@@ -181,7 +182,11 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Topic
         context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
 
+        # Add form so set to true
         context['is_add_form'] = True
+
+        # Allowed image extensions
+        context['allowed_extensions'] = settings.ALLOWED_IMAGE_EXTENSIONS
 
         # Setup formset
         if 'item_forms' not in context:
@@ -411,7 +416,11 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             context['latex_tooltip'] = LATEX_EXAMPLE
             context['latex_initial_pdf'] = content.latex.pdf.url
 
+        # Edit form so set to false
         context['is_add_form'] = False
+
+        # Allowed image extensions
+        context['allowed_extensions'] = settings.ALLOWED_IMAGE_EXTENSIONS
 
         if content_type in IMAGE_ATTACHMENT_TYPES and 'item_forms' not in context:
 

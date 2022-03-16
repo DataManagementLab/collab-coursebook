@@ -1,11 +1,13 @@
 /**
-@ Editor used: ToastUI Editor version 3.1.2 | Mon Dec 27 2021
+@ Editor used: ToastUI Editor
+@ Local version: 3.1.3 | Thu Feb 10 2022
 @ For further reference:
     https://nhn.github.io/tui.editor/latest/ [1]
     https://ui.toast.com/tui-editor [2]
     https://github.com/nhn/tui.editor [3]
 */
-// Instance of markdown editor
+
+// Instance of Markdown editor
 let editor;
 
 // Attachment list for editor
@@ -20,10 +22,18 @@ const HELP_TEXT = gettext('You can only add valid attachments.')
                     + gettext('Invalid attachments will be grayed out.');
 const EMPTY_TEXT = gettext('There are currently no attachments');
 const ATTACHMENT_TEXT = gettext('Attachment');
+
 // Allowed image extensions
-const ALLOWED_EXTENSIONS = ['png','jpeg','jpg'];
+const ALLOWED_EXTENSIONS = [];
 
-
+/**
+* Adds an image extension to the allowed list.
+* @param extension extension to add
+* @type char
+*/
+function addAllowedExtensions(extension) {
+    ALLOWED_EXTENSIONS.push(extension);
+}
 
 /**
 * Adds a button to insert attachment with the given ID to ATTACHMENT_LIST
@@ -40,7 +50,7 @@ function appendAttachmentToList(id) {
     button.setAttribute('disabled','');
     // -1 is reserved for 'No attachments'
     if (id == -1)
-        button.innerHTML = "There are currently no attachments."
+        button.innerHTML = gettext("There are currently no attachments.");
     else {
         button.innerHTML = ATTACHMENT_TEXT + ' ' + id;
         button.addEventListener('click', () => {
@@ -83,6 +93,7 @@ function initEditor(args) {
     args['el'] = document.querySelector('#editor');
     args['usageStatistics'] = false;
     editor = new toastui.Editor(args)
+    editor.setMarkdown(textArea.value);
 
     // Hide the textfield because the user will input text through the editor now
     // The text that is sent to the server is still the text in Textfield, not in editor.
@@ -91,7 +102,7 @@ function initEditor(args) {
     // Remove 'Attach image' button of editor because we use the Image Attachment application
     editor.removeToolbarItem("image");
 
-    // Initialize attachment list
+    // Initialize attachment list for modified 'Insert attachment' button
     let helpTextBox = document.createElement('div');
     helpTextBox.innerHTML = HELP_TEXT;
     ATTACHMENT_LIST.setAttribute('id', 'markdown-attachment-list');
@@ -103,18 +114,18 @@ function initEditor(args) {
     if (NUM_ATTACHMENTS > 0)
         ATTACHMENT_LIST.children[1].style.display = 'none';
 
-    // Add modified 'Attach image' button
+    // Add modified 'Insert attachment' button
     let imageButtonIndex = {
         groupIndex: 3,
         listIndex: 3,
     };
     let imageButton = {
         name: 'modified_image',
-        tooltip: 'Insert image',
+        tooltip: gettext('Insert attachment'),
         className: 'image toastui-editor-toolbar-icons',
         popup: {
             body: ATTACHMENT_LIST,
-            style: {width: 'auto'},
+            style: {width: 'auto', height: 'auto'},
         },
     };
     editor.insertToolbarItem(imageButtonIndex, imageButton);
@@ -178,15 +189,16 @@ function getExtension(filename) {
 }
 
 /**
- * Checks if a given <input> element currently has a file and if that file is an image with an allowed extension,
- * based on its MIME type and ALLOWED_EXTENSIONS.
+ * Checks if a given <input> element currently has a file and if that file is an image, based
+ * on its MIME type, and whether the file has an allowed extensions.
  * @param input HTMLInputElement
+ * @param extensions list of allowed extensions
  * @return True if input has a file and that file is an image, False otherwise
  */
-function validateInput(input) {
+function validateInput(input, extensions) {
    return input.files.length
         && input.files[0]['type'].split('/')[0] === 'image'
-        && ALLOWED_EXTENSIONS.includes(getExtension(input.files[0].name));
+        && extensions.includes(getExtension(input.files[0].name));
 }
 
 /**
@@ -221,7 +233,7 @@ function addAttachmentEvent(attachment, id) {
         if (this.files.length)
             ATTACHMENT_LIST.children[id+2].innerHTML += ": " + this.files[0].name;
         // Generate new URL only when attachment is valid
-        if (validateInput(this)) {
+        if (validateInput(this, ALLOWED_EXTENSIONS)) {
             generateNewAttachmentURLs(this,id);
             updateAttachmentLinks();
             ATTACHMENT_LIST.children[id+2].removeAttribute('disabled');
