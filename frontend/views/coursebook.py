@@ -31,7 +31,7 @@ def add_to_coursebook(request, *args, **kwargs):  # pylint: disable=unused-argum
     content = get_object_or_404(Content, pk=kwargs['content_id'])
 
     Favorite.objects.create(content=content, user=user, course=course)
-    return HttpResponseRedirect(reverse('frontend:course',
+    return HttpResponseRedirect(reverse('frontend:content',
                                         args=(course.id,
                                               topic.id,
                                               content.id,)))
@@ -80,8 +80,10 @@ def remove_from_coursebook(request, *args, **kwargs):  # pylint: disable=unused-
     content = get_object_or_404(Content, pk=kwargs['content_id'])
 
     Favorite.objects.filter(course=course, user=user, content=content).delete()
-    return HttpResponseRedirect(reverse('frontend:course',
-                                        args=(course.id,)))
+    return HttpResponseRedirect(reverse('frontend:content',
+                                        args=(course.id,
+                                            topic.id,
+                                            content.id,)))
 
 def remove_from_coursebook_from_courseview(request, *args, **kwargs):  # pylint: disable=unused-argument
     """Remove from course book
