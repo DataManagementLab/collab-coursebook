@@ -29,4 +29,57 @@ function changeForm(detachID) {
         form_attach = form_detach.detach();
     }
 }
+/**
+* Reads the uploaded file and copy the text content into the Markdown editor,
+* if the file is valid.
+*/
+function copyFileContentToEditor() {
+    let input = $('#id_md');
+    const ready = $('#md-ready', '#md-preview-button');
+    const loading = $('#md-loading', '#md-preview-button');
+    const button = $('#md-preview-button');
+    const ERROR_MESSAGE = gettext('Error while reading the file.');
+    const CONFIRMATION_MESSAGE = gettext('There are currently text in the editor. Do you really want to replace the content in the editor with the content of the file?');
+    const NO_FILES_MESSAGE = gettext("There are no files to read.");
+    const INVALID_EXTENSIONS_MESSAGE = gettext("Invalid file extension. Please upload a 'md' file.");
+    const SUCCESS_MESSAGE = gettext("Markdown file read successfully.");
+    if (input.length && $(input[0].files).length && input[0].files.length){
+        if (getExtension(input[0].files[0].name) == 'md') {
+            button.attr('disabled','');
+            ready.attr('style','display:none;');
+            loading.attr('style','display:inline;');
+            reader = new FileReader();
+            reader.addEventListener('load', () => {
+                TEXT_BUTTON.click();
+                if (typeof reader.result == 'string')
+                    editor.hide();
+                    if (editor.getMarkdown() == '' || window.confirm(CONFIRMATION_MESSAGE)) {
+                        editor.setMarkdown(reader.result);
+                        editor.show();
+                        showNotification(SUCCESS_MESSAGE, "alert-info");
+                    }
+                else {
+                    showNotification(ERROR_MESSAGE, "alert-danger");
+                }
+            });
+            reader.addEventListener('error',() => {
+                showNotification(ERROR_MESSAGE, "alert-danger");
+            });
+            reader.addEventListener('loadend', () => {
+                button.removeAttr('disabled');
+                loading.attr('style','display:none;');
+                ready.attr('style','display:inline;');
+            });
+            reader.readAsText(document.getElementById('id_md').files[0]);
+        }
+        else {
+            showNotification(INVALID_EXTENSIONS_MESSAGE, "alert-danger");
+        }
+    }
+    else {
+        showNotification(NO_FILES_MESSAGE, "alert-danger");
+    }
+
+}
+
 
