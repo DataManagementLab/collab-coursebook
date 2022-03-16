@@ -39,7 +39,7 @@ function copyFileContentToEditor() {
     const loading = $('#md-loading', '#md-preview-button');
     const button = $('#md-preview-button');
     const ERROR_MESSAGE = gettext('Error while reading the file.');
-    const CONFIRMATION_MESSAGE = gettext('There are currently text in the editor. Do you really want to replace the content in the editor with the content of the file?');
+    const CONFIRMATION_MESSAGE = gettext('There is currently text in the editor. Do you really want to replace the content in the editor with the content of the file?');
     const NO_FILES_MESSAGE = gettext("There are no files to read.");
     const INVALID_EXTENSIONS_MESSAGE = gettext("Invalid file extension. Please upload a 'md' file.");
     const SUCCESS_MESSAGE = gettext("Markdown file read successfully.");

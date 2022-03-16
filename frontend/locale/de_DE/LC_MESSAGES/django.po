@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-13 18:53+0000\n"
+"POT-Creation-Date: 2022-03-16 17:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr "Dein Kommentar"
 msgid "Date"
 msgstr "Datum"
 
-#: forms/course.py:108 templates/frontend/content/detail.html:198
+#: forms/course.py:108 templates/frontend/content/detail.html:195
 msgid "Rating"
 msgstr "Bewertung"
 
@@ -87,7 +87,7 @@ msgid "Are you sure you want to delete the following comment?"
 msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 
 #: templates/frontend/comment/delete_confirm.html:30
-#: templates/frontend/content/detail.html:167
+#: templates/frontend/content/detail.html:164
 #: templates/frontend/course/view.html:252
 #: templates/frontend/history/history_compare_view.html:101
 msgid "Confirm"
@@ -96,8 +96,8 @@ msgstr "Bestätigen"
 #: templates/frontend/comment/delete_confirm.html:33
 #: templates/frontend/comment/edit.html:26
 #: templates/frontend/content/add.html:77
-#: templates/frontend/content/detail.html:164
-#: templates/frontend/content/edit.html:93
+#: templates/frontend/content/detail.html:161
+#: templates/frontend/content/edit.html:102
 #: templates/frontend/course/create.html:32
 #: templates/frontend/course/duplicate.html:37
 #: templates/frontend/course/edit.html:34
@@ -135,12 +135,12 @@ msgid "Image Attachments"
 msgstr "Bildanhänge"
 
 #: templates/frontend/content/add.html:55
-#: templates/frontend/content/edit.html:72
+#: templates/frontend/content/edit.html:81
 msgid "Add attachment"
 msgstr "Anhang hinzufügen"
 
 #: templates/frontend/content/add.html:58
-#: templates/frontend/content/edit.html:75
+#: templates/frontend/content/edit.html:84
 msgid "Remove attachment"
 msgstr "Anhang entfernen"
 
@@ -221,55 +221,55 @@ msgstr ""
 "%(copy)s um den LaTeX-Code zu kopieren und es alseingegebetten Anhang in den "
 "Code zu integrieren."
 
-#: templates/frontend/content/detail.html:25
-#: templates/frontend/course/view.html:30
-msgid "Actions"
-msgstr "Aktionen"
-
-#: templates/frontend/content/detail.html:33
+#: templates/frontend/content/detail.html:24
 #: templates/frontend/content/reading_mode.html:12
 msgid "Reading Mode"
 msgstr "Lesemodus"
 
-#: templates/frontend/content/detail.html:40
-#: templates/frontend/content/detail.html:45
+#: templates/frontend/content/detail.html:29
+#: templates/frontend/course/view.html:30
+msgid "Actions"
+msgstr "Aktionen"
+
+#: templates/frontend/content/detail.html:39
+#: templates/frontend/content/detail.html:44
 #: templates/frontend/course/coursebook.html:21 urls.py:75
 msgid "Coursebook"
 msgstr "Kursbuch"
 
-#: templates/frontend/content/detail.html:54
+#: templates/frontend/content/detail.html:53
 #: templates/frontend/profile/profile.html:18
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: templates/frontend/content/detail.html:62
-#: templates/frontend/content/detail.html:69
-#: templates/frontend/content/detail.html:76
-#: templates/frontend/content/detail.html:82
-#: templates/frontend/content/detail.html:89
-#: templates/frontend/content/detail.html:96
+#: templates/frontend/content/detail.html:61
+#: templates/frontend/content/detail.html:68
+#: templates/frontend/content/detail.html:75
+#: templates/frontend/content/detail.html:81
+#: templates/frontend/content/detail.html:88
+#: templates/frontend/content/detail.html:95
 #: templates/frontend/course/view.html:70
 msgid "View History"
 msgstr "Versionsgeschichte"
 
-#: templates/frontend/content/detail.html:103
-#: templates/frontend/content/detail.html:149
+#: templates/frontend/content/detail.html:102
+#: templates/frontend/content/detail.html:146
 msgid "Delete"
 msgstr "Löschen"
 
-#: templates/frontend/content/detail.html:114
+#: templates/frontend/content/detail.html:113
 msgid "Back to course "
 msgstr "Zurück zum Kurs"
 
-#: templates/frontend/content/detail.html:123
+#: templates/frontend/content/detail.html:122
 msgid "By"
 msgstr "Von"
 
-#: templates/frontend/content/detail.html:138
+#: templates/frontend/content/detail.html:137
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: templates/frontend/content/detail.html:154
+#: templates/frontend/content/detail.html:151
 #, python-format
 msgid ""
 "Are you sure you want to delete this %(type)s? This action cannot be undone."
@@ -277,21 +277,21 @@ msgstr ""
 "Soll dieses %(type)s wirklich gelöscht werden? Diese Aktion kann nicht "
 "rückgängig gemacht werden."
 
-#: templates/frontend/content/detail.html:183
+#: templates/frontend/content/detail.html:180
 #: templates/frontend/course/view.html:100
 msgid "Description"
 msgstr "Beschreibung"
 
-#: templates/frontend/content/detail.html:206
+#: templates/frontend/content/detail.html:203
 msgid "No rating yet"
 msgstr "Bisher keine Bewertungen"
 
-#: templates/frontend/content/detail.html:220
+#: templates/frontend/content/detail.html:217
 msgid "Comments"
 msgstr "Kommentare"
 
-#: templates/frontend/content/detail.html:228
-msgid "Add comment"
+#: templates/frontend/content/detail.html:225
+msgid "Send comment"
 msgstr "Kommentar hinzufügen"
 
 #: templates/frontend/content/detail_attachment.html:8
@@ -299,10 +299,10 @@ msgstr "Kommentar hinzufügen"
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: templates/frontend/content/dynamic_attachment.html:31
-#: templates/frontend/content/dynamic_attachment.html:36
-#: templates/frontend/content/edit.html:59
-#: templates/frontend/content/edit.html:63
+#: templates/frontend/content/dynamic_attachment.html:42
+#: templates/frontend/content/dynamic_attachment.html:48
+#: templates/frontend/content/edit.html:68
+#: templates/frontend/content/edit.html:72
 msgid "Copy Attachment-Embedding Code"
 msgstr "Code für Anhangseinbettung kopieren"
 
@@ -310,10 +310,18 @@ msgstr "Code für Anhangseinbettung kopieren"
 msgid "Edit content"
 msgstr "Inhalt bearbeiten"
 
-#: templates/frontend/content/edit.html:90
+#: templates/frontend/content/edit.html:99
 #: templates/frontend/course/edit_structure.html:87
 msgid "Save"
 msgstr "Speichern"
+
+#: templates/frontend/content/md_form.html:26
+msgid "View File Content in Editor"
+msgstr "Datei im Editor anzeigen"
+
+#: templates/frontend/content/md_form.html:30
+msgid "Reading..."
+msgstr "Wird gelesen..."
 
 #: templates/frontend/content/reading_mode.html:20
 msgid "Close"
@@ -332,8 +340,14 @@ msgid "Export"
 msgstr "Exportieren"
 
 #: templates/frontend/course/coursebook.html:29
-msgid "Your coursebook is empty"
-msgstr "Dein Kursbuch ist leer"
+msgid ""
+"Your coursebook is empty. You can add contents here via the add content page "
+"or directly from the overview and then export them all at once in the PDF "
+"format."
+msgstr ""
+"Ihr Kursbuch ist leer. Sie können hier Inhalte via der Inhalt-Seite oder "
+"direkt von der Übersicht aus hinzufügen und dann alle auf einmal im PDF-"
+"Format exportieren."
 
 #: templates/frontend/course/create.html:9
 #: templates/frontend/course/create.html:18
@@ -534,22 +548,22 @@ msgstr "LaTeX Template"
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: templates/frontend/dashboard.html:15
-msgid "Your Courses"
-msgstr "Deine Kurse"
-
-#: templates/frontend/dashboard.html:27
+#: templates/frontend/dashboard.html:17
 #: templates/frontend/profile/profile.html:51
 msgid "Stared Courses"
 msgstr "Favorisierte Kurse"
 
-#: templates/frontend/dashboard.html:37
+#: templates/frontend/dashboard.html:27
 msgid "All Courses by Period"
 msgstr "Alle Kurse für den Zeitraum"
 
-#: templates/frontend/dashboard.html:46
+#: templates/frontend/dashboard.html:36
 msgid "All Courses by Category"
 msgstr "Alle Kurse für die Kategorie"
+
+#: templates/frontend/dashboard.html:45
+msgid "Your Courses"
+msgstr "Deine Kurse"
 
 #: templates/frontend/data_protection.html:11
 #: templates/frontend/data_protection_accept.html:11
@@ -730,6 +744,14 @@ msgstr "Keine Kurse gefunden"
 #: templates/frontend/search.html:59
 msgid "No topics found"
 msgstr "Keine Themen gefunden"
+
+#: templates/frontend/search.html:69
+msgid "Contents are sorted by Courses -> Topics."
+msgstr "Inhalte sind sortiert nach Kurse -> Themen."
+
+#: templates/frontend/search.html:93
+msgid "No contents found"
+msgstr "Keine Inhalte gefunden"
 
 #: templates/frontend/tutorial.html:10
 msgid "Tutorial"
@@ -1138,19 +1160,19 @@ msgstr "Es ist momentan kein Beispiel verfügbar."
 msgid "Content %(title)s successfully added"
 msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
-#: views/content.py:142 views/content.py:361
+#: views/content.py:142 views/content.py:367
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: views/content.py:347
+#: views/content.py:353
 msgid "You are not allowed to edit this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
-#: views/content.py:511
+#: views/content.py:523
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: views/content.py:775
+#: views/content.py:787
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 
@@ -1173,12 +1195,12 @@ msgstr "Kurs %(title)s erfolgreich angelegt"
 msgid "Course %(title)s successfully edited"
 msgstr "Kurs %(title)s erfolgreich bearbeitet"
 
-#: views/course.py:535
+#: views/course.py:542
 #, python-format
 msgid "Course %(title)s successfully deleted"
 msgstr "Kurs %(title)s erfolgreich gelöscht"
 
-#: views/history.py:321 views/history.py:402
+#: views/history.py:322 views/history.py:403
 #, python-format
 msgid "Reverted to Version: %s"
 msgstr "Zurückgekehrt zu Version: %s"
@@ -1186,6 +1208,9 @@ msgstr "Zurückgekehrt zu Version: %s"
 #: views/profile.py:71
 msgid "Profile updated"
 msgstr "Profil aktualisiert"
+
+#~ msgid "Your coursebook is empty"
+#~ msgstr "Dein Kursbuch ist leer"
 
 #~ msgid "Text"
 #~ msgstr "Text"
