@@ -171,7 +171,8 @@ function updateAttachmentLinks() {
  */
 function revertAttachmentLinks(index) {
     // Assuming element at index is not undefined
-    URL.revokeObjectURL(URL_ARRAY[index]);
+    window.URL = window.URL || window.webkitURL;
+    window.URL.revokeObjectURL(URL_ARRAY[index]);
     let img = $("img[src='"+ URL_ARRAY[index] + "']",".toastui-editor-main-container");
     if (img.length) {
        img.attr('src','Image-'+ index);
@@ -208,7 +209,8 @@ function validateInput(input, extensions) {
  * @param idx index to save URL to.
  */
 function generateNewAttachmentURLs(input, idx) {
-    const url = URL.createObjectURL(input.files[0]);
+    window.URL = window.URL || window.webkitURL;
+    const url = window.URL.createObjectURL(input.files[0]);
     URL_ARRAY[idx] = url;
 }
 
