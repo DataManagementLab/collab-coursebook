@@ -50,16 +50,17 @@ function copyFileContentToEditor() {
             loading.attr('style','display:inline;');
             reader = new FileReader();
             reader.addEventListener('load', () => {
-                TEXT_BUTTON.click();
-                if (typeof reader.result == 'string')
-                    editor.hide();
-                    if (editor.getMarkdown() == '' || window.confirm(CONFIRMATION_MESSAGE)) {
+                if (editor.getMarkdown() == '' || window.confirm(CONFIRMATION_MESSAGE)) {
+                    TEXT_BUTTON.click();
+                    if (typeof reader.result == 'string') {
+                        editor.hide();
                         editor.setMarkdown(reader.result);
                         editor.show();
                         showNotification(SUCCESS_MESSAGE, "alert-info");
                     }
-                else {
-                    showNotification(ERROR_MESSAGE, "alert-danger");
+                    else {
+                        showNotification(ERROR_MESSAGE, "alert-danger");
+                    }
                 }
             });
             reader.addEventListener('error',() => {
