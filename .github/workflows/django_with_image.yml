@@ -1,7 +1,7 @@
 name: Django CI with Docker Image
 
 # Can be improved by packing Python and Texlive into a single Docker image then build
-# the image from a Dockerfile. The image can then be cached using GitHub caching
+# the image from a Dockerfile. The image can then be cached using GitHub caching.
 
 # The time to run the tests can also be improved by tagging all the tests that uses LaTeX
 # to run them separately since most of the tests don't need texlive to run and therefore
@@ -23,8 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
-      #matrix:
-        #python-version: [ 3.7, 3.8 ]
+      matrix:
+        python-version: [ 3.9 ]
 
     steps:
       - uses: actions/checkout@v2
