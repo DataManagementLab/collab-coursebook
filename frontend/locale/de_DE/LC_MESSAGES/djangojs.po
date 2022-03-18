@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 14:55+0100\n"
+"POT-Creation-Date: 2022-03-18 00:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,70 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ./templates/frontend/course/edit_structure.html/:207
-msgid "The topic %s was successfully added to the course structure."
-msgstr "Das Thema %s wurde erfolgreich zur Kursstruktur hinzugefügt."
+#: static/js/latex_preview.js:54
+msgid "Preview successfully generated."
+msgstr ""
 
-#: ./templates/frontend/course/edit_structure.html/:228
+#: static/js/latex_preview.js:60
+msgid "Failed to generate preview - reason: "
+msgstr "Fehler bei der Vorschau-Generierung - Grund:"
+
+#: static/js/latex_preview.js:65
+#, javascript-format
 msgid "Error during data transfer to the server - status: %s"
 msgstr "Fehler bei der Datenübertragung zum Server - Status: %s"
 
-#: .\views\course.py:524
-msgid "Course %(title)s successfully removed from favourites"
-msgstr "Kurs %(title)s erfolgreich aus den Favoriten entfernt"
+#: static/js/md_editor.js:20
+msgid "You can only add valid attachments."
+msgstr "Sie können nur gültige Anhänge hinzufügen"
 
-#: .\views\course.py:530
-msgid "Course %(title)s successfully added to favourites"
-msgstr "Kurs %(title)s erfolgreich zu den Favoriten hinzugefügt"
+#: static/js/md_editor.js:22
+msgid "Invalid attachments will be grayed out."
+msgstr "Ungültige Anhänge werden ausgegraut."
+
+#: static/js/md_editor.js:23
+msgid "There are currently no attachments"
+msgstr "Momentan gibt es keine Anhänge."
+
+#: static/js/md_editor.js:24
+msgid "Attachment"
+msgstr "Anhang"
+
+#: static/js/md_editor.js:53
+msgid "There are currently no attachments."
+msgstr "Momentan gibt es keine Anhänge."
+
+#: static/js/md_editor.js:124
+msgid "Insert attachment"
+msgstr "Anhang einfügen"
+
+#: static/js/md_form.js:41
+msgid "Error while reading the file."
+msgstr "Fehler beim Lesen der Datei"
+
+#: static/js/md_form.js:42
+msgid ""
+"There is currently text in the editor. Do you really want to replace the "
+"content in the editor with the content of the file?"
+msgstr "Es befindet sich momentan Text im Editor. Möchten sie diesen wirklich mit dem Inhalt Datei ersetzen?"
+
+#: static/js/md_form.js:43
+msgid "There are no files to read."
+msgstr "Es gibt keine Datei zum Lesen."
+
+#: static/js/md_form.js:44
+msgid "Invalid file extension. Please upload a 'md' file."
+msgstr "Ungültige Dateiendung. Laden sie bitte eine 'md' Datei hoch."
+
+#: static/js/md_form.js:45
+msgid "Markdown file read successfully."
+msgstr "Markdown Datei erfolgreich gelesen."
+
+#~ msgid "The topic %s was successfully added to the course structure."
+#~ msgstr "Das Thema %s wurde erfolgreich zur Kursstruktur hinzugefügt."
+
+#~ msgid "Course %(title)s successfully removed from favourites"
+#~ msgstr "Kurs %(title)s erfolgreich aus den Favoriten entfernt"
+
+#~ msgid "Course %(title)s successfully added to favourites"
+#~ msgstr "Kurs %(title)s erfolgreich zu den Favoriten hinzugefügt"
