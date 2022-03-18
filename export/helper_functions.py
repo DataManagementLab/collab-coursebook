@@ -11,7 +11,6 @@ import pdfkit
 from markdown_it import MarkdownIt
 from mdit_py_plugins.front_matter import front_matter_plugin
 from mdit_py_plugins.footnote import footnote_plugin
-from django.utils.translation import gettext
 
 from django.template.loader import get_template
 
@@ -124,7 +123,7 @@ class Latex:
                             md_string += f"<meta charset='UTF-8'>" \
                                   f"<h2><span style=\"font-weight:bold\">{content.topic.title}" \
                                   + "</span></h2><i>" \
-                                  + gettext("Description") \
+                                  + "Description" \
                                   + f":</i> {tex_escape(content.description)}"
                         md_string += Markdown.render(content, True)
                         pdf = pdfkit.from_string(md_string, options=options)
