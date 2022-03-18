@@ -49,7 +49,7 @@
             {% endblocktrans %}
             <br>
             <button type="button" class="btn btn-info"
-                    onclick="copy('{{ latex_tooltip }}')">{% trans 'Copy Example' %}
+                    onclick="copyAndNotfify() ">{% trans 'Copy Example' %}
             </button>
             <br>
             <br>
@@ -96,6 +96,14 @@
         document.getElementById(id).outerHTML =
             tooltip +
             document.getElementById(id).outerHTML
+    }
+    /**
+     * Copies the Latex Example and sends a Notification that it did so.
+     */
+    function copyAndNotfify() {
+        const message = gettext("Example copied!")
+        showNotification(interpolate(message,[topic]),"alert-primary");
+        copy('{{ latex_tooltip }}');
     }
 
     $(document).ready(function () {
