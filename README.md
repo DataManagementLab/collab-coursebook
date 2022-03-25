@@ -22,6 +22,7 @@ Collab Coursebook has two types of requirements: System requirements are depende
 * Virtualenv
 * poppler
 * TeX Distribution (e.g. TeX Live)
+* wkhtmltopdf (used for exporting Markdown as PDF)
 * For production using uwsgi:
   * C compiler e.g. gcc
   * uwsgi
