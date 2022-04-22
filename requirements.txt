@@ -1,4 +1,4 @@
-Django==3.2.12
+Django==3.2.13
 django-bootstrap4==3.0.1
 django-cas-ng==4.2.1
 django-debug-toolbar==3.2.1
