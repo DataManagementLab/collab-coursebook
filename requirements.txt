@@ -9,6 +9,6 @@ django-reversion-compare==0.14.1
 django-split-settings==1.0.1
 django-timezone-field==4.2.1
 pdf2image==1.16.0
-pillow==9.0.1
+pillow==9.3.0
 polib==1.1.1
 python-magic==0.4.24
