@@ -2,6 +2,11 @@
 {% load i18n %}
 {% autoescape off %}
 
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "LaTeX Content" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
+
 % Show topic title when exporting
 {% if export_pdf %}
 {\Large \textbf{ {{content.topic.title}}   }}
@@ -17,7 +22,15 @@
 \vskip 1em
 
 % Show latex content
-{{ content.latex.textfield }}
+{% if preview_flag %}
+    {{ latex_data }}
+{% else %}
+    {% if export_pdf %}
+        \includepdf[pages=-]{~~{{content.latex.pdf.url|ret_path}}} % ~~ is escape char
+    {% else %}
+        {{ content.latex.textfield }}
+    {% endif %}
+{% endif %}
 
 \vskip 3em
 

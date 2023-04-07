@@ -8,7 +8,11 @@ django-reversion==4.0.0
 django-reversion-compare==0.14.1
 django-split-settings==1.0.1
 django-timezone-field==4.2.1
+isodate==0.6.1
 pdf2image==1.16.0
 pillow==9.3.0
 polib==1.1.1
 python-magic==0.4.24
+markdown-it-py[linkify,plugins]==2.0.1
+pdfkit==1.0.0
+

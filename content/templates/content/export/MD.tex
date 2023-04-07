@@ -1,0 +1,14 @@
+{% load cc_export_tags %}
+{% load i18n %}
+{% autoescape off %}
+
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "MD Content" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
+
+% show markdown content
+\includepdf[pages=-]{~~{{md_path}}} % ~~ is escape char
+\vskip 3em
+
+{% endautoescape %}

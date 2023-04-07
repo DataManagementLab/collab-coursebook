@@ -1,0 +1,60 @@
+{# Load the tag library #}
+{% load fontawesome_5 %}
+{% load static %}
+{% load i18n %}
+
+{# Load JavaScript #}
+<script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
+<script type="text/javascript" src="{% static 'js/request.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/latex_preview.js' %}"></script>
+
+{# Preview frame #}
+<script type="text/html" id="latex-preview-frame">
+    <div class="row">
+        <div class="col">
+            <embed type="application/pdf"
+                   {% if is_add_form %}
+                        style="display:none"
+                   {% else %}
+                        src="{{ latex_initial_pdf }}"
+                   {% endif %}
+                   height="700px" width="100%" id="preview_frame">
+        </div>
+    </div>
+</script>
+
+{# Function for the preview button #}
+<script type="text/javascript">
+    /**
+     * Sends a preview request to the view of the corresponding form for LaTeX Content.
+     */
+    async function previewLatex() {
+      // Set preview button to loading state
+      const ready = $('#latex-ready', '#latex-preview-button');
+      const loading = $('#latex-loading', '#latex-preview-button');
+      const button = $('#latex-preview-button');
+      button.attr('disabled','');
+      ready.attr('style','display:none;');
+      loading.attr('style','display:inline;');
+      // Setup arguments for the request
+      args = {
+        {% if is_add_form %}
+            url: "{% url 'frontend:content-add' course.id topic.id 'Latex' %}",
+        {% else %}
+            url: "{% url 'frontend:content-edit' course_id topic.id content.pk %}",
+        {% endif %}
+      };
+      try {
+        await sendPreviewRequest(args);
+      } catch(e) {
+      }
+      // Set preview button to ready state
+      button.removeAttr('disabled');
+      loading.attr('style','display:none;');
+      ready.attr('style','display:inline;');
+    }
+    $(function() {
+        const previewFrame = document.getElementById('latex-preview-frame').textContent;
+        $('label[for="id_textfield"]').parent().after(previewFrame);
+    });
+</script>

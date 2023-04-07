@@ -13,6 +13,17 @@ from reversion_compare.admin import CompareVersionAdmin
 from content.models import ImageContent, Latex
 from content.models import PDFContent, TextField
 from content.models import YTVideoContent
+from content.models import MDContent
+
+@admin.register(MDContent)
+class MDContentAdmin(CompareVersionAdmin):
+    """MD admin
+
+    Represents the Markdown model in the admin panel.
+
+    :attr MDContentAdmin.fields: Including fields into the form
+    :type MDContentAdmin.fields: list[str]
+    """
 
 
 @admin.register(ImageContent)

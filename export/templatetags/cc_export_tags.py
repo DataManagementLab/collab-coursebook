@@ -36,11 +36,12 @@ def export_template(content_type):
     """
     # Alternative solution if the current solution does not return the absolute path and caused a
     # TemplateDoesNotExist
-    # base_path = os.path.abspath(os.path.join(os.path.abspath(content.__file__), os.pardir))
-    base_path = os.path.dirname(content.__file__)
+    base_path = os.path.abspath(os.path.join(os.path.abspath(content.__file__), os.pardir))
+    # base_path = os.path.dirname(content.__file__)
     path = base_path + "/templates/content/export"
 
     # Type must be a content type or the error type for an invalid latex compilation
+    # pylint: disable=consider-iterating-dictionary
     if content_type in CONTENT_TYPES.keys() or content_type == 'error':
         return path + f"/{content_type}.tex"
     return path + "/invalid.tex"

@@ -20,3 +20,23 @@
 .active ~ label {
     color: #ffca08;
 }
+
+.markdown {
+    font-family: Segoe UI;
+    padding: 0.5em;
+    font-size: 120%;
+    background-color: #efefef;
+}
+
+.markdown img {
+    max-width: 100%
+}
+
+#markdown-attachment-list button:hover {
+    background-color: #efefef;
+    color: #333333;
+}
+
+
+
+

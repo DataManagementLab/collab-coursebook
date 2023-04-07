@@ -4,8 +4,9 @@ This file contains forms associated with the content types.
 """
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
-from content.models import YTVideoContent, ImageContent, PDFContent
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -63,7 +64,15 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = YTVideoContent
-        fields = ['url']
+        fields = ['url', 'start_time', 'end_time']
+        widgets = {
+            'start_time': forms.TextInput(
+                attrs={
+                    'placeholder': _("Default: 0:00")}),
+            'end_time': forms.TextInput(
+                attrs={
+                    'placeholder': _("Default: 0:00")})
+        }
 
 
 class AddContentFormImage(forms.ModelForm):
@@ -180,6 +189,93 @@ class AddLatex(forms.ModelForm):
         }
 
 
+class AddMD(forms.ModelForm):
+    """Add Markdown
+
+    This model represents the add form for Markdown code.
+    """
+    CHOICES = [
+        ('file', _('Upload an existing Markdown file')),
+        ('text', _('Write Markdown with editor')),
+    ]
+    options = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial='file')
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = MDContent
+        fields = ['options', 'md', 'textfield', 'source']
+        widgets = {
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
+            'textfield': forms.Textarea(
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
+                       'required': ''}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown',
+                                                    'required': ''}),
+        }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if 'options' in cleaned_data \
+                and (cleaned_data['options'] == 'file' or cleaned_data['options'] == 'text'):
+            options = cleaned_data['options']
+            if options == 'file' and not ('md' in cleaned_data and bool(self.cleaned_data['md'])):
+                raise forms.ValidationError(_("You must upload a Markdown file."))
+            if options == 'text' \
+                    and not ('textfield' in cleaned_data and bool(self.cleaned_data['textfield'])):
+                raise forms.ValidationError(_("You must put in some text."))
+        else:
+            raise forms.ValidationError(_("None of the options were chosen."))
+
+
+class EditMD(forms.ModelForm):
+    """Edit Markdown
+
+    This model represents the edit form for Markdown code, excluding the file field.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = MDContent
+        fields = ['textfield', 'source']
+        widgets = {
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(MDContent.TYPE, 'source')}),
+            'textfield': forms.Textarea(
+                attrs={'placeholder': get_placeholder(MDContent.TYPE, 'textfield'),
+                       'required': ''}),
+            'md': ModifiedClearableFileInput(attrs={'accept': 'text/markdown'}),
+        }
+
+    def clean(self):
+        if not bool(self.cleaned_data['textfield']):
+            raise forms.ValidationError(_("You must put in some text."))
+
+
 # dict[str, ModelForm]: Contains all available content types form.
 CONTENT_TYPE_FORMS = {
     YTVideoContent.TYPE: AddContentFormYoutubeVideo,
@@ -187,4 +283,5 @@ CONTENT_TYPE_FORMS = {
     PDFContent.TYPE: AddContentFormPdf,
     TextField.TYPE: AddTextField,
     Latex.TYPE: AddLatex,
+    MDContent.TYPE: AddMD,
 }

@@ -16,7 +16,7 @@ pip install --upgrade setuptools pip wheel
 pip install -r requirements.txt
 
 # Install poppler (for pdf2image)
-sudo apt-get install poppler-utils
+sudo apt-get install -y poppler-utils libmagic1 gettext
 
 # Setup database
 python manage.py migrate

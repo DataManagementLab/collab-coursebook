@@ -19,3 +19,4 @@ if [[ "$@" == *"--prod"* ]]; then
 fi
 
 ./manage.py check
+./manage.py makemigrations --check

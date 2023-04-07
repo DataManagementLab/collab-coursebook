@@ -25,7 +25,8 @@ from reversion_compare.views import HistoryCompareDetailView
 from base.models import Course, Content, Topic
 
 from content.attachment.models import ImageAttachment
-from content.models import ImageContent, TextField, YTVideoContent, PDFContent, Latex, CONTENT_TYPES
+from content.models import ImageContent, MDContent, TextField, YTVideoContent, PDFContent, Latex, \
+    CONTENT_TYPES
 
 from export.views import generate_pdf_from_latex
 
@@ -481,6 +482,29 @@ class LatexHistoryCompareView(BaseContentHistoryCompareView):
         redirect to the page corresponding to the model.
         """
         super().__init__('content', 'latex-history')
+
+
+class MDHistoryCompareView(BaseContentHistoryCompareView):
+    """Markdown history compare view
+
+    Displays history of this content to the user
+
+    :attr MDistoryCompareView.model: The model of the view
+    :type MDHistoryCompareView.model: Model
+    :attr MDHistoryCompareView.compare_fields: The fields which should be compared
+    :type MDHistoryCompareView.compare_fields: list[str]
+    """
+    model = MDContent
+    compare_fields = ['description', 'language', 'tags', 'readonly',
+                      'public', 'image', 'textfield', 'source', 'license']
+
+    def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
+        super().__init__('content', 'md-history')
 
 
 class PdfHistoryCompareView(BaseContentHistoryCompareView):

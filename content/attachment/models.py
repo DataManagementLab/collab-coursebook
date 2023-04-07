@@ -8,10 +8,12 @@ import reversion
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.core.validators import FileExtensionValidator
 
 from base.models import Content
 
-from content.models import BaseSourceModel, Latex, TextField
+from content.models import BaseSourceModel, Latex, TextField, MDContent
 
 
 class ImageAttachment(BaseSourceModel):
@@ -41,7 +43,11 @@ class ImageAttachment(BaseSourceModel):
                                 related_name='ImageAttachments',
                                 on_delete=models.CASCADE)
     image = models.ImageField(verbose_name=_("Image"),
-                              upload_to='uploads/contents/%Y/%m/%d/')
+                              upload_to='uploads/contents/%Y/%m/%d/',
+                              validators=
+                              [FileExtensionValidator(settings.ALLOWED_IMAGE_EXTENSIONS)],
+                              help_text=_("Allowed extensions are: ")
+                                        + ", ".join(settings.ALLOWED_IMAGE_EXTENSIONS) + ".")
 
     class Meta:
         """Meta options
@@ -70,7 +76,8 @@ class ImageAttachment(BaseSourceModel):
 # Set: Content types which allow image attachments
 IMAGE_ATTACHMENT_TYPES = {
     TextField.TYPE,
-    Latex.TYPE
+    Latex.TYPE,
+    MDContent.TYPE
 }
 
 # Register models for reversion if it is not already done in admin,

@@ -59,6 +59,40 @@
             {% trans 'No topics found' %}
         </p>
     {% endif %}
+    <h3>
+        Contents
+    </h3>
+
+    {% if search_data.content_list %}
+        <ul style="list-style-type: none;">
+            <small class="form-text text-muted">
+                {% trans "Contents are sorted by Courses -> Topics." %}
+            </small>
+            {% for entry, contents in search_data.content_list %}
+                <li>{{ forloop.counter }}.
+                    {{ entry.course.title }} -> {{ entry.topic.title }}:
+                    {% for content in contents %}
+                        <ul>
+                            <li>
+                            <a href="{% url 'frontend:content' entry.course.id entry.topic.id content.pk %}">
+                                <b> {% if content.description %}
+                                        {{ content.description }}
+                                    {% else %}
+                                        {{ content.type }} Content
+                                    {% endif %}
+                                </b>
+                            </a>
+                            </li>
+                        </ul>
+                    {% endfor %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>
+            {% trans 'No contents found' %}
+        </p>
+    {% endif %}
 {% endblock %}
 
 {% block bottom_script %}

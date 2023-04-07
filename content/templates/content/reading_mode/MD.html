@@ -1,0 +1,22 @@
+{% extends 'content/reading_mode/base.html' %}
+
+{# Load the tag library #}
+{% load i18n %}
+
+{% block reading_content %}
+    <div class="text" style="font-family: Segoe UI; padding: 0.5em; font-size: 120%; background-color: #efefef">
+        {% autoescape off %}
+        {{html}}
+        {% endautoescape %}
+    </div>
+
+    <hr>
+
+    <b>
+        {% trans 'Source' %}:
+    </b>
+
+    <p>
+        {{ content.mdcontent.source }}
+    </p>
+{% endblock %}

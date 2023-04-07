@@ -3,29 +3,35 @@
 This file describes the frontend views related to content types.
 """
 
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, CreateView, DeleteView, UpdateView
+from django.conf import settings
 
 from base.models import Content, Comment, Course, Topic, Favorite
 from base.utils import get_user
 
-from content.attachment.forms import ImageAttachmentFormSet
+from content.attachment.forms import ImageAttachmentFormSet, LatexPreviewImageAttachmentFormSet
 from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
-from content.forms import CONTENT_TYPE_FORMS
+from content.forms import CONTENT_TYPE_FORMS, EditMD
 from content.models import CONTENT_TYPES
+from content.static.yt_api import timestamp_to_seconds
 
 from frontend.forms.comment import CommentForm
 from frontend.forms.content import AddContentForm, EditContentForm, TranslateForm
 from frontend.templatetags.cc_frontend_tags import js_escape
 from frontend.views.history import Reversion
 from frontend.views.validator import Validator
+
+from export.helper_functions import Markdown
+from export.views import latex_preview
 
 
 def clean_attachment(content, image_formset):
@@ -157,6 +163,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
+        # Checks if content type is of type Markdown
+        context['is_markdown_content'] = content_type == 'MD'
+
+        # Checks if content type is of type YouTubeVideo
+        context['is_yt_content'] = content_type == 'YouTubeVideo'
+
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
 
@@ -169,6 +181,12 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Topic
         context['topic'] = Topic.objects.get(pk=self.kwargs['topic_id'])
+
+        # Add form so set to true
+        context['is_add_form'] = True
+
+        # Allowed image extensions
+        context['allowed_extensions'] = settings.ALLOWED_IMAGE_EXTENSIONS
 
         # Setup formset
         if 'item_forms' not in context:
@@ -192,6 +210,11 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
+        if 'latex-preview' in request.POST and request.is_ajax():
+            return latex_preview(request, get_user(request),
+                                 Topic.objects.get(pk=self.kwargs['topic_id']),
+                                 LatexPreviewImageAttachmentFormSet(request.POST, request.FILES))
+
         # Retrieves content type form
         if 'type' in self.kwargs:
             content_type = self.kwargs['type']
@@ -209,32 +232,45 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Checks if content forms are valid
         if add_content_form.is_valid() and content_type_form.is_valid():
-
             # Saves author etc.
             content = add_content_form.save(commit=False)
             content.author = get_user(self.request)
             topic_id = self.kwargs['topic_id']
             content.topic = Topic.objects.get(pk=topic_id)
             content.type = content_type
-            content.save()
-            # Evaluates generic form
-            content_type_data = content_type_form.save(commit=False)
-            content_type_data.content = content
-            content_type_data.save()
 
             # Checks if attachments are allowed for the given content type
             if content_type in IMAGE_ATTACHMENT_TYPES:
-                # Validates attachments
-                redirect = Validator.validate_attachment(content,
-                                                         image_formset)
-                if redirect is not None:
-                    return redirect
+                if image_formset.is_valid():
+                    content.save()
+                    redirect = Validator.validate_attachment(content, image_formset)
+                else:
+                    return self.render_to_response(
+                            self.get_context_data(form=add_content_form,
+                                                  content_type_form=content_type_form,
+                                                  item_forms=image_formset))
+            else:
+                content.save()
+            # Evaluates generic form
+            content_type_data = content_type_form.save(commit=False)
+
+            content_type_data.content = content
+            content_type_data.save()
 
             # If the content type is LaTeX, compile the LaTeX Code and store in DB
             if content_type == 'Latex':
                 Validator.validate_latex(get_user(request),
                                          content,
                                          content_type_data)
+
+            # If the content type is MD store in DB, is_file checks if there is a md file
+            # so validator knows if it needs to create a md file or text
+            if content_type == 'MD':
+                is_file = content_type_form.cleaned_data['options'] == 'file'
+                Validator.validate_md(get_user(request),
+                                      content,
+                                      content_type_data,
+                                      is_file)
 
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
@@ -343,6 +379,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :return: the context data
         :rtype: dict[str, Any]
         """
+        content = self.get_object()
         context = super().get_context_data(**kwargs)
         context['course_id'] = self.kwargs['course_id']
         context['topic_id'] = self.kwargs['topic_id']
@@ -356,16 +393,34 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         if 'content_type_form' not in context:
             if content_type in CONTENT_TYPE_FORMS:
                 content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
-                context['content_type_form'] = \
-                    CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+                # if content is MD and there exists an md file in DB for it,
+                # get EditMD so the user can't edit the md file.
+                if content.type == "MD":
+                    if content.mdcontent.md:
+                        context['content_type_form'] = \
+                            EditMD(instance=content_file)
+                else:
+                    context['content_type_form'] = \
+                        CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
 
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
+        # Checks if content type if of type MDContent
+        context['is_markdown_content'] = content_type == 'MD'
+        # Checks if content type is of type YouTube
+        context['is_yt_content'] = content_type == 'YouTubeVideo'
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
+            context['latex_initial_pdf'] = content.latex.pdf.url
+
+        # Edit form so set to false
+        context['is_add_form'] = False
+
+        # Allowed image extensions
+        context['allowed_extensions'] = settings.ALLOWED_IMAGE_EXTENSIONS
 
         if content_type in IMAGE_ATTACHMENT_TYPES and 'item_forms' not in context:
 
@@ -396,6 +451,11 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :return: the response after a post request
         :rtype: HttpResponseRedirect
         """
+        if 'latex-preview' in request.POST and request.is_ajax():
+            return latex_preview(request, get_user(request),
+                                 Topic.objects.get(pk=self.kwargs['topic_id']),
+                                 LatexPreviewImageAttachmentFormSet(request.POST, request.FILES))
+
         self.object = self.get_object()
         form = self.get_form()
 
@@ -410,6 +470,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             content_type_form = CONTENT_TYPE_FORMS.get(self.object.type)(instance=content_object,
                                                                          data=self.request.POST,
                                                                          files=self.request.FILES)
+            if self.object.type == "MD":
+                content_type_form = EditMD(instance=content_object,
+                                           data=self.request.POST,
+                                           files=self.request.FILES)
 
             # Reversion comment
             Reversion.update_comment(request)
@@ -419,27 +483,36 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
             # Check form validity and update both forms/associated models
             if form.is_valid() and content_type_form.is_valid():
-                content = form.save()
+                content = form.save(commit=False)
                 content_type = content.type
-                content_type_data = content_type_form.save()
-
                 # Checks if attachments are allowed for the given content type
                 if content_type in IMAGE_ATTACHMENT_TYPES:
-
                     # Removes images from database
                     clean_attachment(content, image_formset)
-
                     # Validates attachments
-                    redirect = Validator.validate_attachment(content,
-                                                             image_formset)
-                    if redirect is not None:
-                        return redirect
-
+                    if image_formset.is_valid():
+                        content.save()
+                        redirect = Validator.validate_attachment(content, image_formset)
+                    else:
+                        return self.render_to_response(
+                            self.get_context_data(form=form,
+                                                  content_type_form=content_type_form,
+                                                  item_forms=image_formset))
+                else:
+                    content.save()
+                content_type_data = content_type_form.save()
                 # If the content type is LaTeX, compile the LaTeX Code and store in DB
                 if content_type == 'Latex':
                     Validator.validate_latex(get_user(request),
                                              content,
                                              content_type_data)
+
+                # If the content type is MD, compile an HTML version of it and store in DB
+                if content_type == 'MD':
+                    Validator.validate_md(get_user(request),
+                                          content,
+                                          content_type_data,
+                                          False)
 
                 # Generates preview image in 'uploads/contents/'
                 preview = CONTENT_TYPES.get(content_type) \
@@ -574,8 +647,17 @@ class ContentView(DetailView):
                          'Ö': '&Ouml', 'ß': '&szlig'}
                 for char in chars:
                     html = html.replace(char, chars[char])
-                context['markdown'] = html
-        """
+                context['markdown'] = html"""
+
+        if content.type == "MD":
+            context['html'] = Markdown.render(content, False)
+
+        if content.type == 'YouTubeVideo':
+            context['startTime'] = content.ytvideocontent.start_time
+            context['endTime'] = content.ytvideocontent.end_time
+
+            context['startSeconds'] = timestamp_to_seconds(content.ytvideocontent.start_time)
+            context['endSeconds'] = timestamp_to_seconds(content.ytvideocontent.end_time)
 
         context['comment_form'] = CommentForm()
 
@@ -785,4 +867,8 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
         elif self.request.GET.get('s'):
             context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
                                 self.request.GET.get('f')
+
+        if content.type == "MD":
+            context['html'] = Markdown.render(content, False)
+
         return context

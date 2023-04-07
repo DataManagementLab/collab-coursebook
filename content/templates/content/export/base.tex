@@ -41,6 +41,7 @@
 
 % max width for image content in export
 \usepackage[export]{adjustbox}
+
 %%% Settings
 
 %% Generate a latex graphic
@@ -71,6 +72,9 @@
 \begin{document}
 
 \maketitle
+{% if export_pdf %}
+\tableofcontents
+{% endif %}
 
 %\end{document} gets appended in code
 

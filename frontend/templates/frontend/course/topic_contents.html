@@ -24,7 +24,7 @@
                                 {{ content.language }}
                             </span>
                             {% if content.tags.count > 0 %}
-                                &nbsp;&middot;&nbsp;
+                                &middot;
                                 {% for tag in content.tags.all %}
                                     <span class="badge badge-secondary">
                                         {{ tag }}
@@ -32,14 +32,33 @@
                                 {% endfor %}
                             {% endif %}
                             {% if content.get_rate != -1 %}
-                                &nbsp;&middot;&nbsp;
+                                &middot;
                                 <span class="badge badge-info">
                                     {% fa5_icon 'star' 'fas' %} {{ content.get_rate }}
                                 </span>
-                                &nbsp;&middot;&nbsp;
+                                &middot;
                                 <span class="badge badge-info">
                                     {% fa5_icon 'hashtag' 'fas' %} {{ content.get_rate_amount }}
                                 </span>
+                            {% endif %}
+                                &middot;
+                            <a class= "badge badge-primary" 
+                            href="{% url 'frontend:content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
+                                {% fa5_icon 'eye' 'far' %}
+                            </a>
+                            &middot;
+                            {% if user.is_authenticated %}
+                            {% if content in favorite %}
+                            <a class="badge badge-primary"
+                                href="{% url 'frontend:coursebook-remove-courseview' course.pk content.topic.pk content.pk %}">
+                                {% fa5_icon 'minus' 'fas' %}
+                            </a>
+                            {% else %}
+                            <a class="badge badge-primary"
+                                href="{% url 'frontend:coursebook-add-courseview' course.pk content.topic.pk content.pk %}">
+                                {% fa5_icon 'plus' 'fas' %}
+                            </a>
+                            {% endif %}
                             {% endif %}
                         </div>
                     </div>

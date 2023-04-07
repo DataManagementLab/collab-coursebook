@@ -7,11 +7,21 @@
 {# Load JavaScript #}
 <script type="text/javascript" src="{% static 'js/copy.js' %}"></script>
 
-{# Tooltip content #}
+{# Tooltip content and preview button #}
 <script type="text/html" id="latex-tooltip">
     <a onclick="popupTooltip()" class="btn">
         {% fa5_icon "question" "fas" size='fa-lg' %}
     </a>
+    {# Preview button #}
+    <button type="button" id="latex-preview-button" class="btn btn-primary mb-1" onclick="previewLatex()">
+        <div id="latex-ready">
+            {% trans 'Preview' %}
+        </div>
+        <div id="latex-loading" style="display:none;">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            {% trans 'Compiling...' %}
+        </div>
+    </button>
     <br>
     <div id="overlay" class="form-group" style="display: none">
         <label for="latex-tooltip-information">
@@ -39,7 +49,7 @@
             {% endblocktrans %}
             <br>
             <button type="button" class="btn btn-info"
-                    onclick="copy('{{ latex_tooltip }}')">{% trans 'Copy Example' %}
+                    onclick="copyAndNotfify() ">{% trans 'Copy Example' %}
             </button>
             <br>
             <br>
@@ -86,6 +96,14 @@
         document.getElementById(id).outerHTML =
             tooltip +
             document.getElementById(id).outerHTML
+    }
+    /**
+     * Copies the Latex Example and sends a Notification that it did so.
+     */
+    function copyAndNotfify() {
+        const message = gettext("Example copied!")
+        showNotification(interpolate(message,[topic]),"alert-primary");
+        copy('{{ latex_tooltip }}');
     }
 
     $(document).ready(function () {

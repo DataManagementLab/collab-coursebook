@@ -4,7 +4,8 @@ This file contains forms associated with the attachments.
 """
 
 from django import forms
-
+from django.forms import BaseModelFormSet
+from django.utils.translation import gettext_lazy as _
 from base.models import Content
 from content.attachment.models import ImageAttachment, IMAGE_ATTACHMENT_TYPES
 from content.widgets import ModifiedClearableFileInput
@@ -44,6 +45,30 @@ class AdminImageAttachmentForm(forms.ModelForm):
         self.fields['content'].queryset = Content.objects.filter(type__in=IMAGE_ATTACHMENT_TYPES)
 
 
+class ModifiedImageAttachmentFormset(BaseModelFormSet):
+    """
+    Formset used to override clean().
+
+    Because formset is created with bulk adding in mind, a form in the formset will
+    not be validated if all of its fields are unchanged. Since an image attachment's file field
+    is empty at start and will not be checked by default, a manual check has to be implemented.
+    """
+    def clean(self):
+        super().clean()
+        for form in self.forms:
+            # Check for form validity; the form is still considered valid
+            # if all of its fields are empty
+            # (initial state) so after the form is considered valid it still has to be checked again
+            if form.is_valid():
+                used_form = form.save(commit=False)
+                # Only need to check if 'image' field is empty; if one field is already not empty
+                # then the usual validation will be carried out
+                if not used_form.image:
+                    form.add_error('image', _('This field is required.'))
+                    # Add a non-field error to the form, might not be necessary
+                    # raise forms.ValidationError(_('This field is required.'))
+
+
 # BaseModelFormset: Image attachment form set
 ImageAttachmentFormSet = forms.modelformset_factory(
     ImageAttachment,
@@ -52,5 +77,20 @@ ImageAttachmentFormSet = forms.modelformset_factory(
     widgets={
         'source': forms.Textarea(attrs={'style': 'height: 100px', 'required': 'true'}),
         'image': ModifiedClearableFileInput(attrs={'required': 'true'})
-    }
+    },
+    # Use modified formset to prevent the case of empty formset being submitted
+    formset=ModifiedImageAttachmentFormset
+)
+
+
+# BaseModelFormSet: Image attachment form set,
+# used for rendering LaTeX preview to remove validation for source field
+LatexPreviewImageAttachmentFormSet = forms.modelformset_factory(
+    ImageAttachment,
+    fields=("image",),
+    extra=0,
+    widgets={
+        'image': ModifiedClearableFileInput(attrs={'required': 'true'})
+    },
+    formset=ModifiedImageAttachmentFormset
 )

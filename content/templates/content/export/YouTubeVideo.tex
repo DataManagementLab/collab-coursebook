@@ -2,6 +2,11 @@
 {% load i18n %}
 {% autoescape off %}
 
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "YouTube Video Content" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
+
 % Show topic title when exporting
 {% if export_pdf %}
 {\Large \textbf{ {{content.topic.title}}   }}
@@ -17,7 +22,12 @@
 \vskip 1em
 
 % YouTube link
-\url{ {{ content.ytvideocontent.url }} }
+\url{ {{ content.ytvideocontent.url }} } \\
+{% trans 'Video Length' %}: {{ length }}
+
+{% trans 'Starting at' %}: {{ startTime }}
+
+{% trans 'Ending at' %}: {{ endTime}}
 
 \vskip 3em
 

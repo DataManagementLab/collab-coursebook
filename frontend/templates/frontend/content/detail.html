@@ -17,9 +17,13 @@
 {% endblock %}
 
 {% block content %}
-    {# Drop down actions #}
-    <div class="float-right text-right">
-        <div class="dropdown show">
+    <div class="float-right text-right"> 
+        <div style="display:inline" class="dropdown show">
+            <a href="{% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}"
+                class= "btn btn-primary text-blue">
+                {% fa5_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
+            </a>
+            {# Drop down actions #}
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 {% trans 'Actions' %}
@@ -27,11 +31,6 @@
 
             {# Drop down menu #}
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item"
-                   href="
-                           {% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}">
-                    {% fa5_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
-                </a>
                 {# Remove and add to course book option #}
                 {% if user.is_authenticated %}
                     {% if favorite %}
@@ -90,6 +89,13 @@
                         </a>
                     {% endif %}
 
+                    {% if content.type == 'MD' %}
+                        <a class="dropdown-item"
+                           href="{% url 'frontend:md-history' course.id topic.id content.id %}">
+                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                        </a>
+                    {% endif %}
+
                     {# Delete option #}
                     {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
@@ -103,7 +109,7 @@
     {# Back to course option #}
     <a href="
             {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
-       class="">
+       class="" style="font-size:125%">
         {% fa5_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
     </a>
 
@@ -131,8 +137,6 @@
             {% trans 'Created at' %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
         </span>
     </h5>
-
-    {# Delete inline, for 'Delete Confirmation' bootstrap modal #}
     <div class="modal fade" id="deleteContentModal" tabindex="1" role="dialog" aria-labelledby="deleteContentModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -218,7 +222,7 @@
             {% csrf_token %}
             {% bootstrap_form comment_form %}
             <button name="action" value="submit" class="btn btn-outline-primary">
-                {% fa5_icon 'comment-dots' 'far' %} {% trans 'Add comment' %}
+                {% fa5_icon 'comment-dots' 'far' %} {% trans 'Send comment' %}
             </button>
         </form>
     {% endif %}
