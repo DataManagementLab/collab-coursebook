@@ -15,6 +15,10 @@ import os
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from split_settings.tools import optional, include
+try:
+    import collab_coursebook.settings_secrets as secrets
+except ImportError:
+    secrets = None
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -195,6 +199,8 @@ DATA_PROTECTION_REQURE_CONFIRMATION = False
 
 # Allowed image extensions
 ALLOWED_IMAGE_EXTENSIONS = ['png', 'jpeg', 'jpg']
+
+YT_API_KEY = secrets.YT_API_KEY if secrets is not  None else ""
 
 include(optional("settings/*.py"))
 

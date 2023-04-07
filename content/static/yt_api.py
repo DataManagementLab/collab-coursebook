@@ -2,11 +2,12 @@ import json
 import math
 import isodate
 import urllib
+
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-#import collab_coursebook.settings_secrets as secrets
+yt_api_key = settings.YT_API_KEY
 
-yt_api_key = ""#secrets.YT_API_KEY
 
 def seconds_to_time(seconds_total):
     """Seconds to Time
