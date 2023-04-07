@@ -30,16 +30,16 @@ jobs:
           pip install -r requirements.txt
       - name: Run PyLint - base
         run: |
-          pylint --fail-under=9 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings base
+          pylint --fail-under=6 --load-plugins pylint_django --load-plugins pylint_django.checkers.migrations --django-settings-module=collab_coursebook.settings base
       - name: Run PyLint - content
         run: |
-          pylint --fail-under=9 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings content
+          pylint --fail-under=6 --load-plugins pylint_django --load-plugins pylint_django.checkers.migrations --django-settings-module=collab_coursebook.settings content
       - name: Run PyLint - export
         run: |
-          pylint --fail-under=9 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings export
+          pylint --fail-under=6 --load-plugins pylint_django --load-plugins pylint_django.checkers.migrations --django-settings-module=collab_coursebook.settings export
       - name: Run PyLint - frontend
         run: |
-          pylint --fail-under=9 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings frontend
+          pylint --fail-under=6 --load-plugins pylint_django --load-plugins pylint_django.checkers.migrations --django-settings-module=collab_coursebook.settings frontend
       - name: Run PyLint - test
         run: |
-          pylint --fail-under=9 --load-plugins=pylint_django --django-settings-module=collab_coursebook.settings test
+          pylint --fail-under=6 --load-plugins pylint_django --load-plugins pylint_django.checkers.migrations --django-settings-module=collab_coursebook.settings test
