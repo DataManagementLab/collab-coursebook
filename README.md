@@ -18,7 +18,7 @@ Collab Coursebook has two types of requirements: System requirements are depende
 
 #### System Requirements
 
-* Python 3.7+ incl. development tools
+* Python 3.8+ incl. development tools
 * Virtualenv
 * poppler
 * TeX Distribution (e.g. TeX Live)
