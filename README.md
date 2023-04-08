@@ -1,6 +1,6 @@
 # Collab Coursebook
 
-![Django CI](https://github.com/DataManagementLab/collab-coursebook/workflows/Django%20CI/badge.svg)
+![Checks and Tests](https://github.com/DataManagementLab/collab-coursebook/workflows/Checks%20and%20Tests/badge.svg)
 
 ## Description
 

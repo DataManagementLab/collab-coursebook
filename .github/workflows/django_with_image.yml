@@ -1,4 +1,4 @@
-name: Django CI with Docker Image
+name: Checks and Tests
 
 on:
   push:
