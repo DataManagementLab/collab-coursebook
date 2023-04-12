@@ -40,6 +40,7 @@ class Profile(models.Model):
         verbose_name_plural = _("Profiles")
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    display_name = models.CharField(verbose_name=_("Display Name"), blank=False, max_length=150)
     bio = models.TextField(verbose_name=_("Biography"), blank=True)
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
     stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"),
@@ -55,7 +56,7 @@ class Profile(models.Model):
         :return: the string representation of this object
         :rtype: str
         """
-        return str(self.user)
+        return str(self.display_name)
 
 
 @receiver(post_save, sender=User)
@@ -74,7 +75,7 @@ def create_user_profile(sender, instance, created, **kwargs):
     :type kwargs: Any
     """
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance, display_name=instance.username)
 
 
 @receiver(post_save, sender=User)

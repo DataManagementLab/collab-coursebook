@@ -33,7 +33,7 @@
             {% else %}
                 {% fa5_icon 'user' 'far' %}
             {% endif %}
-            {{ user.get_username }}
+            {{ user.profile.display_name }}
         </a>
 
         <div class="btn-group navbar-inline-list" role="group">

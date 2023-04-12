@@ -29,7 +29,7 @@ class AddProfile(forms.ModelForm):
         :type Meta.widgets: dict[str, Widget]
         """
         model = Profile
-        fields = ['bio', 'pic']
+        fields = ['display_name', 'bio', 'pic']
         widgets = {
             'bio': forms.Textarea(attrs={'style': 'height: 100px'}),
             'pic': ModifiedClearableFileInput(attrs={'required': 'true'}),
