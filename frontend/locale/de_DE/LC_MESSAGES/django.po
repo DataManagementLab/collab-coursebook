@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 15:27+0200\n"
+"POT-Creation-Date: 2023-04-12 16:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -703,6 +703,7 @@ msgid "Login"
 msgstr "Einloggen"
 
 #: frontend/templates/frontend/index.html:39
+#: frontend/templates/frontend/tutorial.html:46
 msgid "Go to dashboard"
 msgstr "Zum Dashboard"
 
@@ -776,6 +777,10 @@ msgid ""
 msgstr ""
 "Herzlich Willkommen zum “Collab Coursebook” Tutorial. In diesem Tutorial "
 "werden wir unsere Website und die dazugehörigen Funktionen präsentieren. "
+
+#: frontend/templates/frontend/tutorial.html:25
+msgid "Skip tutorial, go directly to dashboard"
+msgstr "Tutorial überspringen, direkt zum Dashboard"
 
 #: frontend/templates/frontend/tutorial/add_content.html:14
 msgid ""

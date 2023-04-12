@@ -20,6 +20,10 @@
                 its various functions.
             {% endblocktrans %}
         </h5>
+
+        <div class="text-center">
+            <a href="{% url "frontend:dashboard" %}" class="btn btn-primary">{% trans "Skip tutorial, go directly to dashboard" %}</a>
+        </div>
     </div>
     <hr>
     {% include 'frontend/tutorial/navbar.html' %}
@@ -37,5 +41,9 @@
     {% include 'frontend/tutorial/add_content.html' %}
     <hr>
     {% include 'frontend/tutorial/content.html' %}
+
+    <div class="text-center">
+        <a href="{% url "frontend:dashboard" %}" class="btn btn-primary">{% trans "Go to dashboard" %}</a>
+    </div>
 
 {% endblock %}
