@@ -15,6 +15,9 @@
         <a href="{% url 'frontend:courses' %}" class="btn btn-primary navbar-inline-list">
             {% trans "All Courses" %}
         </a>
+        <a href="{% url 'frontend:tutorial' %}" class="btn btn-primary navbar-inline-list">
+            {% trans "Tutorial" %}
+        </a>
         {% if user.is_superuser %}
             <a href="{% url 'admin:index' %}" class="btn btn-danger navbar-inline-list">
                 {% trans "Admin Menu" %}
@@ -60,12 +63,7 @@
                             </button>
                         {% endfor %}
                     </form>
-                    <div class="dropdown-divider">
 
-                    </div>
-                    <a href="{% url 'frontend:tutorial' %}" class="dropdown-item" style="">
-                        Tutorial
-                    </a>
                     <div class="dropdown-divider">
 
                     </div>
