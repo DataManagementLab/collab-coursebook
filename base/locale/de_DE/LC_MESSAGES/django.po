@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 15:12+0200\n"
+"POT-Creation-Date: 2023-04-12 19:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,18 +190,22 @@ msgid "Profiles"
 msgstr "Profile"
 
 #: base/models/profile.py:43
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#: base/models/profile.py:44
 msgid "Biography"
 msgstr "Biografie"
 
-#: base/models/profile.py:44
+#: base/models/profile.py:45
 msgid "Profile picture"
 msgstr "Profilbild"
 
-#: base/models/profile.py:45
+#: base/models/profile.py:46
 msgid "Stared courses:"
 msgstr "Favorisierte Kurse"
 
-#: base/models/profile.py:47
+#: base/models/profile.py:48
 msgid "Accepted privacy note?"
 msgstr "Datenschutzerklärung akzeptiert?"
 

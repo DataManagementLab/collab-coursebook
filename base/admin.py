@@ -113,6 +113,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     Represents the profile model in the admin panel.
     """
+    list_display = ['display_name', 'user']
 
 
 @admin.register(Rating)

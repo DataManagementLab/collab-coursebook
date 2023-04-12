@@ -13,7 +13,7 @@
 
             {% if user.is_authenticated %}
                 <div class="float-right" style="color: #ffffff;font-weight: bold;">
-                    {{ user.get_username }}
+                    {{ user.profile.display_name }}
                     &nbsp;
                     <a href="{% url 'cas_ng_logout' %}" class="btn btn-primary" style="">
                         {% trans 'Logout' %}

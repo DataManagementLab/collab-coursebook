@@ -85,10 +85,7 @@
                 </td>
                 <td scope="row" style="text-align: center">
                     {% if action.revision.user %}
-                        {{ action.revision.user.get_username }}
-                        {% if action.revision.user.get_full_name %}
-                            ({{ action.revision.user.get_full_name }})
-                        {% endif %}
+                        {{ action.revision.user.profile.display_name }}
                     {% endif %}
                 </td>
                 <td>
