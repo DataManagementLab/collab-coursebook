@@ -554,7 +554,7 @@ msgid "Stared Courses"
 msgstr "Favorisierte Kurse"
 
 #: templates/frontend/dashboard.html:27
-msgid "All Courses by Period"
+msgid "All Courses by Term"
 msgstr "Alle Kurse für den Zeitraum"
 
 #: templates/frontend/dashboard.html:36
