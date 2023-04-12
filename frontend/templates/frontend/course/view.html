@@ -69,6 +69,8 @@
                         <a href="{% url 'frontend:course-history' pk=course.pk %}" class="dropdown-item">
                             {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
+                    {% endif %}
+                    {% if user|check_delete_course_permission:course %}
                         <a href="#" class="dropdown-item text-danger" data-toggle="modal"
                            data-target="#deleteCourseModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete Course' %}
                         </a>
