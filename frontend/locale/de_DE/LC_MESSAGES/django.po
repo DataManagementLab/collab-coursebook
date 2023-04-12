@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 15:12+0200\n"
+"POT-Creation-Date: 2023-04-12 15:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -554,7 +554,7 @@ msgstr "Dashboard"
 
 #: frontend/templates/frontend/dashboard.html:17
 #: frontend/templates/frontend/profile/profile.html:51
-msgid "Stared Courses"
+msgid "Starred Courses"
 msgstr "Favorisierte Kurse"
 
 #: frontend/templates/frontend/dashboard.html:27
@@ -690,7 +690,7 @@ msgid "Overwrite fields with these changes?"
 msgstr "Felder überschreiben mit diesen Änderungen?"
 
 #: frontend/templates/frontend/index.html:19
-#: frontend/templates/frontend/navbar.html:71
+#: frontend/templates/frontend/navbar.html:70
 msgid "Logout"
 msgstr "Ausloggen"
 
@@ -725,7 +725,7 @@ msgstr "Admin-Menü"
 msgid "User profile picture"
 msgstr "Profilbild"
 
-#: frontend/templates/frontend/navbar.html:47
+#: frontend/templates/frontend/navbar.html:46
 msgid "Language"
 msgstr "Sprache"
 
@@ -736,6 +736,10 @@ msgstr "Profil"
 #: frontend/templates/frontend/profile/profile.html:32
 msgid "Biography"
 msgstr "Biographie"
+
+#: frontend/templates/frontend/profile/profile.html:58
+msgid "You don't have any starred courses yet."
+msgstr "Du hast noch keine favorisierten Kurse."
 
 #: frontend/templates/frontend/profile/profile_edit.html:9
 msgid "Edit profile"
