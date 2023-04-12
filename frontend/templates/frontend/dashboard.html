@@ -14,7 +14,7 @@
     
     {% if user.profile.stared_courses.count > 0 %}
         <h3 class="text-success" style="margin-top: 40px;">
-            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Stared Courses' %}
+            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Starred Courses' %}
         </h3>
         <div class="row">
             {% for course in user.profile.stared_courses.all %}
@@ -24,7 +24,7 @@
     {% endif %}
 
     <h3 class="text-info" style="margin-top: 40px;">
-        {% fa5_icon 'school' 'fas' %} {% trans 'All Courses by Period' %}
+        {% fa5_icon 'school' 'fas' %} {% trans 'All Courses by Term' %}
     </h3>
     <div class="row">
         {% for period in periods %}

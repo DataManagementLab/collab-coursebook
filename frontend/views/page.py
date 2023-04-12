@@ -90,7 +90,7 @@ class AcceptPrivacyNoteView(FormView):
     """
     template_name = "frontend/data_protection_accept.html"
     form_class = AcceptPrivacyNoteForm
-    success_url = reverse_lazy("frontend:dashboard")
+    success_url = reverse_lazy("frontend:tutorial")
 
     def form_valid(self, form):
         profile = self.request.user.profile

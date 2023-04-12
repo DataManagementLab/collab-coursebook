@@ -7,13 +7,16 @@
         <form class="form-inline float-left" action="{% url 'frontend:search' %}">
             <input class="form-control navbar-inline-list" type="search" name="q" placeholder="{% trans 'Search' %}"
                    aria-label="Search">
-            <button class="btn btn-outline-success navbar-inline-list" type="submit">
+            <button class="btn btn-outline-light navbar-inline-list" type="submit">
                 {% fa5_icon 'search' 'fas' %}
             </button>
         </form>
 
         <a href="{% url 'frontend:courses' %}" class="btn btn-primary navbar-inline-list">
             {% trans "All Courses" %}
+        </a>
+        <a href="{% url 'frontend:tutorial' %}" class="btn btn-primary navbar-inline-list">
+            {% trans "Tutorial" %}
         </a>
         {% if user.is_superuser %}
             <a href="{% url 'admin:index' %}" class="btn btn-danger navbar-inline-list">
@@ -36,8 +39,7 @@
         <div class="btn-group navbar-inline-list" role="group">
             <div class="btn-group" role="group">
                 <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-
+                        aria-haspopup="true" aria-expanded="false">{% fa5_icon "bars" "fas" %}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupNavbar" style="">
                     <div class="dropdown-header">
@@ -60,12 +62,7 @@
                             </button>
                         {% endfor %}
                     </form>
-                    <div class="dropdown-divider">
 
-                    </div>
-                    <a href="{% url 'frontend:tutorial' %}" class="dropdown-item" style="">
-                        Tutorial
-                    </a>
                     <div class="dropdown-divider">
 
                     </div>

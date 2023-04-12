@@ -154,6 +154,24 @@ def check_edit_course_permission(user, course):
 
 
 @register.filter
+def check_delete_course_permission(user, course):
+    """Delete course permission
+
+    Checks if either a user is an owner or the course is public and it is allowed
+    to edit public courses.
+
+    :param user: The user to check permission
+    :type user: User
+    :param course: The course to check permission
+    :type course: Course
+
+    :return: true iff the course can be deleted by the current user
+    :rtype: bool
+    """
+    return user.profile in course.owners.all()
+
+
+@register.filter
 def check_profile_permissions(user, profile):
     """Check Profile Permission
 

@@ -27,7 +27,7 @@
 
     {# Biography and User profile picture #}
     <div class="media">
-        <div class="media-body" style="padding-right: 20px">
+        <div class="media-body" style="padding-right: 20px;min-height: 30vh;">
             {% if profile.bio %}
                 <h2 class="mt-0 mb-1" style="text-align: justify">{% trans 'Biography' %}</h2>
                 {{ profile.bio | linebreaks }}
@@ -42,19 +42,22 @@
         {% endif %}
     </div>
 
-    <div style="clear: both;">
+    <div style="clear: both;" class="mb-5">
 
-    {# Stared courses #}
+    {# Starred courses #}
     {% if user|check_profile_permissions:profile %}
         <h3 class="text-success"
             style="margin-top: 40px;">
-            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Stared Courses' %}
+            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Starred Courses' %}
         </h3>
         <div class="row">
             {% for course in profile.stared_courses.all %}
                 {% cycle 'bg-warning' 'bg-success' 'bg-info' 'bg-primary' as bgcolor silent %}
                 {% include 'frontend/course_lists/card_course.html' %}
+            {% empty %}
+                {% trans "You don't have any starred courses yet." %}
             {% endfor %}
+
         </div>
     {% endif %}
 
