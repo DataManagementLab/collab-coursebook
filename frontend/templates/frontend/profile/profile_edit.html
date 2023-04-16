@@ -2,8 +2,8 @@
 
 {% load static %}
 {% load i18n %}
-{% load bootstrap4 %}
-{% load fontawesome_5 %}
+{% load django_bootstrap5  %}
+{% load fontawesome_6 %}
 
 {% block title %}
     {% trans 'Edit profile' %} - Collab Coursebook
@@ -19,10 +19,10 @@
         {% buttons %}
 
             <a href="{% url 'frontend:profile' pk=user.pk %}" class="btn btn-primary">
-                {% fa5_icon "times" 'fas' %} {% trans 'Cancel' %}
+                {% fa6_icon "times" 'fas' %} {% trans 'Cancel' %}
             </a>
-            <button type="submit" class="save btn btn-primary float-right">
-                {% fa5_icon "check" 'fas' %} {% trans 'Submit' %}
+            <button type="submit" class="save btn btn-primary float-end">
+                {% fa6_icon "check" 'fas' %} {% trans 'Submit' %}
             </button>
         {% endbuttons %}
     </form>

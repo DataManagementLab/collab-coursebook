@@ -1,7 +1,7 @@
 {% load static %}
 {% load i18n %}
-{% load bootstrap4 %}
-{% load fontawesome_5 %}
+{% load django_bootstrap5 %}
+{% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 
 <!DOCTYPE html>
@@ -16,8 +16,9 @@
 
     {# Load Bootstrap CSS and JavaScript as well as font awesome #}
     {% bootstrap_css %}
-    {% bootstrap_javascript jquery='full' %}
-    {% fontawesome_5_static %}
+    {% bootstrap_javascript %}
+    <script src="{% static 'vendor/jquery/jquery-3.6.3.min.js' %}"></script>
+    {% fontawesome_6_static %}
 
     {# Load CSS #}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">

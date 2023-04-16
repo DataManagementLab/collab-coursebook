@@ -1,5 +1,5 @@
 {# Load the tag library #}
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 {% load static %}
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
@@ -21,7 +21,7 @@
     {# Script for radio buttons in MD add form #}
     <script type="text/javascript" src="{% static 'js/md_form.js' %}"></script>
     <script type="text/html" id="md-file-preview">
-        <button type="button" id="md-preview-button" class="btn btn-primary ml-1" onclick="copyFileContentToEditor()">
+        <button type="button" id="md-preview-button" class="btn btn-primary ms-1" onclick="copyFileContentToEditor()">
         <div id="md-ready">
             {% trans 'View File Content in Editor' %}
         </div>

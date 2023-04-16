@@ -1,11 +1,11 @@
 {# Load the tag library #}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5  %}
 {% load static %}
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 
-<div class="card ml-3 mt-3" style="width: 20rem;">
+<div class="card ms-3 mt-3" style="width: 20rem;">
     <div class="card-body">
         <h5 class="card-title">
             <a href="{% url 'frontend:period-courses' pk=period.pk %}">

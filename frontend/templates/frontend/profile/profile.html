@@ -2,8 +2,8 @@
 
 {% load static %}
 {% load i18n %}
-{% load bootstrap4 %}
-{% load fontawesome_5 %}
+{% load django_bootstrap5  %}
+{% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 
 {% block title %}
@@ -12,10 +12,10 @@
 
 {% block content %}
     {# Edit option #}
-    <div class="float-right">
+    <div class="float-end">
         {% if user == profile.user %}
             <a href="{% url 'frontend:profile-edit' profile.pk %}" class="btn btn-primary">
-                {% fa5_icon 'edit' 'far' %} {% trans 'Edit' %}
+                {% fa6_icon 'edit' 'far' %} {% trans 'Edit' %}
             </a>
         {% endif %}
     </div>
@@ -27,19 +27,21 @@
 
     {# Biography and User profile picture #}
     <div class="media">
+        <div class="float-end">
+            {% if profile.pic %}
+                <img src="{{ profile.pic.url }}" class="ms-3" style="
+            width: 250px; height: 250px; object-fit: cover; border-radius: calc(0.25rem - 1px);"
+                     alt="{% trans 'User profile picture' %}">
+            {% else %}
+                <span style="font-size: 100px">{% fa6_icon 'user' 'far' %}</span>
+            {% endif %}
+        </div>
         <div class="media-body" style="padding-right: 20px;min-height: 30vh;">
             {% if profile.bio %}
                 <h2 class="mt-0 mb-1" style="text-align: justify">{% trans 'Biography' %}</h2>
                 {{ profile.bio | linebreaks }}
             {% endif %}
         </div>
-        {% if profile.pic %}
-            <img src="{{ profile.pic.url }}" class="ml-3" style="
-        width: 250px; height: 250px; object-fit: cover; border-radius: calc(0.25rem - 1px);"
-                 alt="{% trans 'User profile picture' %}">
-        {% else %}
-            <span style="font-size: 100px">{% fa5_icon 'user' 'far' %}</span>
-        {% endif %}
     </div>
 
     <div style="clear: both;" class="mb-5">
@@ -48,7 +50,7 @@
     {% if user|check_profile_permissions:profile %}
         <h3 class="text-success"
             style="margin-top: 40px;">
-            {% fa5_icon 'bookmark' 'fas' %} {% trans 'Starred Courses' %}
+            {% fa6_icon 'bookmark' 'fas' %} {% trans 'Starred Courses' %}
         </h3>
         <div class="row">
             {% for course in profile.stared_courses.all %}

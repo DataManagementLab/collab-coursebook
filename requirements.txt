@@ -1,8 +1,9 @@
 Django==3.2.18
-django-bootstrap4==3.0.1
+django-bootstrap5==23.1
+fontawesomefree==6.4.0 # Makes static files (css, fonts) available locally
+django-fontawesome-6==1.0.0.0 # Provides an icon field for models and forms as well as handy shortcuts to render icons
 django-cas-ng==4.2.1
 django-debug-toolbar==3.2.1
-django-fontawesome-5==1.0.18
 django-imagekit==4.0.2
 django-reversion==4.0.0
 django-reversion-compare==0.14.1

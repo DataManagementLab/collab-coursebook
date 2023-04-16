@@ -2,8 +2,8 @@
 
 {# Load the tag library #}
 {% load i18n %}
-{% load bootstrap4 %}
-{% load fontawesome_5 %}
+{% load django_bootstrap5  %}
+{% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 {% load static %}
 
@@ -23,24 +23,24 @@
 
 {% block content %}
     {# Course markings and actions #}
-    <div class="float-right text-right">
+    <div class="float-end text-end">
         <div class="dropdown show">
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                 {% trans 'Actions' %}
             </button>
             {# Drop down menu #}
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                 {# Favourite option #}
                 {% if user.is_authenticated %}
                     {# Add to favourite #}
                     <button onclick="actionOnFavouriteClick()" id="add-fav" class="dropdown-item" style="display:none">
-                        {% fa5_icon 'bookmark' 'far' %} {% trans 'Add to favourite' %}
+                        {% fa6_icon 'bookmark' 'far' %} {% trans 'Add to favourite' %}
                     </button>
                     {# Remove button #}
                     <button onclick="actionOnFavouriteClick()" id="remove-fav" class="dropdown-item"
                             style="display:none">
-                        {% fa5_icon 'bookmark' 'fas' %}
+                        {% fa6_icon 'bookmark' 'fas' %}
                         {% trans 'Remove from favourite' %}
                     </button>
 
@@ -48,12 +48,12 @@
                     {% if user.is_superuser or isCurrentUserOwner %}
                         <a href="{% url 'frontend:course-duplicate' pk=course.pk %}"
                            class="btn dropdown-item">
-                            {% fa5_icon 'copy' 'fas' %} {% trans 'Duplicate Course' %}</a>
+                            {% fa6_icon 'copy' 'fas' %} {% trans 'Duplicate Course' %}</a>
                     {% endif %}
 
                     {# Export option #}
                     <a href="{% url 'frontend:export-course' course.id %}" target="_blank" class="dropdown-item">
-                        {% fa5_icon 'file-export' 'fas' %} {% trans 'Export Course' %}
+                        {% fa6_icon 'file-export' 'fas' %} {% trans 'Export Course' %}
                     </a>
 
                     <div class="dropdown-divider"></div>
@@ -61,18 +61,18 @@
                     {# Edit history and delete option #}
                     {% if user|check_edit_course_permission:course %}
                         <a href="{% url 'frontend:course-edit' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit Course' %}
+                            {% fa6_icon 'pencil-alt' 'fas' %} {% trans 'Edit Course' %}
                         </a>
                         <a href="{% url 'frontend:course-edit-structure' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon 'pencil-alt' 'fas' %} {% trans 'Edit Structure' %}
+                            {% fa6_icon 'pencil-alt' 'fas' %} {% trans 'Edit Structure' %}
                         </a>
                         <a href="{% url 'frontend:course-history' pk=course.pk %}" class="dropdown-item">
-                            {% fa5_icon 'history' 'fas' %} {% trans 'View History' %}
+                            {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
                         </a>
                     {% endif %}
                     {% if user|check_delete_course_permission:course %}
-                        <a href="#" class="dropdown-item text-danger" data-toggle="modal"
-                           data-target="#deleteCourseModal">{% fa5_icon 'trash' 'fas' %} {% trans 'Delete Course' %}
+                        <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal"
+                           data-bs-target="#deleteCourseModal">{% fa6_icon 'trash' 'fas' %} {% trans 'Delete Course' %}
                         </a>
                     {% endif %}
 
@@ -90,7 +90,7 @@
         {% for owner in course.owners.all %}
             <a href="{% url 'frontend:profile' pk=owner.pk %}"
                class="{% if owner == user.profile %}text-danger{% endif %}">
-                {% fa5_icon 'chalkboard-teacher' 'fas' %} {{ owner }}
+                {% fa6_icon 'chalkboard-teacher' 'fas' %} {{ owner }}
             </a>
         {% endfor %}
     </h5>
@@ -104,19 +104,19 @@
             {% endif %}
         </div>
         {% if course.image %}
-            <img src="{{ course.image.url }}" class="ml-3" style="
+            <img src="{{ course.image.url }}" class="ms-3" style="
             width: 250px; height: 250px; object-fit: cover; border-radius: calc(0.25rem - 1px);"
                  alt="{% trans 'Course picture' %}">
         {% else %}
-            <span style="font-size: 100px">{% fa5_icon 'book' 'fas' %}</span>{% endif %}
+            <span style="font-size: 100px">{% fa6_icon 'book' 'fas' %}</span>{% endif %}
     </div>
 
     {# Table of contents #}
     <div class="mt-3" style="margin: 40px 0;">
-        <button class="btn btn-primary float-left mr-1" type="button" data-toggle="collapse"
-                data-target="#collapseToc"
+        <button class="btn btn-primary float-start me-1" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseToc"
                 aria-expanded="false" aria-controls="collapseToc">
-            {% fa5_icon 'bars' 'fas' %}
+            {% fa6_icon 'bars' 'fas' %}
         </button>
         <h2>
             {% trans 'Table of Contents' %}
@@ -166,8 +166,8 @@
               action="{% url 'frontend:course' course.id %}">
             {% csrf_token %}
             {% for f in form %}
-                <div class="form-group" style="margin-right: 10px">
-                    <div style="padding-right: 10px">
+                <div class="form-group" style="margin-end: 10px">
+                    <div style="padding-end: 10px">
                         {{ f.label }}
                     </div>
                     {{ f }}
@@ -182,7 +182,7 @@
             <div id='{{ entry.topic.pk }}'>
                 {% with forloop.counter as outer_index %}
                     {# Filters, Ordering, Add contents #}
-                    <div class="float-right text-right">
+                    <div class="float-end text-end">
                         {% with entry.topic as entry_topic %}
                             {% add_content_button user course.id entry_topic.id %}
                         {% endwith %}
@@ -198,7 +198,7 @@
                     {% if entry.subtopics %}
                         {% for subtopic in entry.subtopics %}
                             <div id='{{ subtopic.topic.pk }}'>
-                                <div class="float-right text-right">
+                                <div class="float-end text-end">
                                     {% with subtopic.topic as subtopic_topic %}
                                         {% add_content_button user course.id subtopic_topic.id %}
                                     {% endwith %}
@@ -244,14 +244,13 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <form action="{% url 'frontend:course-delete' pk=object.id %}" method="post"
-                          class="mb-0">
-                        {% csrf_token %}
-                        <button class="btn btn-secondary" data-dismiss="modal">
-                            {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" onclick="preventDefault();">
+                            {% fa6_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
-                        <button
-                                type="submit" class="btn btn-danger"> {% fa5_icon 'trash' 'fas' %} {% trans 'Confirm' %}
+                    <form action="{% url 'frontend:course-delete' pk=object.id %}" method="post" class="mb-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            {% fa6_icon 'trash' 'fas' %} {% trans 'Confirm' %}
                         </button>
                     </form>
                 </div>

@@ -1,16 +1,16 @@
 {# Load the tag library #}
 {% load i18n %}
-{% load bootstrap4 %}
-{% load fontawesome_5 %}
+{% load django_bootstrap5  %}
+{% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 
-<div class="float-right text-right">
+<div class="float-end text-end">
     <div class="dropdown show">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
             {% trans 'Add Content' %}
         </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
             {% if user.is_authenticated %}
                 {% for content in content_data %}
                     <a class="dropdown-item"

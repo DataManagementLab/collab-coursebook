@@ -1,6 +1,12 @@
+html {
+    /* influence the base font size bootstrap uses for all further calculation of sizes
+    to reduce the overall size a little bit */
+    font-size: 13.5px;
+}
+
 .form-required > label:after {
     content: '*';
-    color: var(--red);
+    color: var(--bs-red);
 }
 
 .navbar-inline-list {
@@ -13,4 +19,8 @@
 
 .badge {
     display: inline-flex;
+}
+
+.row > .card {
+    padding: 0!important;
 }
