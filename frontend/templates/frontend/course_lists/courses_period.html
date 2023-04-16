@@ -2,9 +2,9 @@
 
 {# Load the tag library #}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5  %}
 {% load static %}
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 
 
@@ -21,7 +21,7 @@
         </div>
         <div class="col-md-auto my-auto">
             <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {% trans 'Sort by:' %} {{ sort }}
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

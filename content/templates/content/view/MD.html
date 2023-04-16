@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 
 <div class="markdown">
     {% autoescape off %}
@@ -22,7 +22,7 @@
 <form action="{{ content.mdcontent.md.url }}" method="get" target="_blank">
     {% csrf_token %}
     <button name="action" value="submit" class="btn btn-outline-primary">
-        {% fa5_icon 'download' 'fas' %} {% trans 'Download' %}
+        {% fa6_icon 'download' 'fas' %} {% trans 'Download' %}
     </button>
 </form>
 

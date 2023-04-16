@@ -47,8 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cas_ng',
-    'bootstrap4',
-    'fontawesome_5',
+    'django_bootstrap5',
+    'fontawesomefree',
+    'fontawesome_6',
     'base',
     'frontend',
     'content',
@@ -159,6 +160,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    'static_common',
+)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -169,16 +173,21 @@ INTERNAL_IPS = [
 ]
 
 # Settings for Bootstrap
-BOOTSTRAP4 = {
-    # Use custom CSS
+BOOTSTRAP5 = {
+    "javascript_url": {
+        "url": STATIC_URL + "vendor/bootstrap/bootstrap.bundle.min.js",
+    },
     "css_url": {
-        "href": STATIC_URL + "css/bootstrap.css",
+        "url": STATIC_URL + "vendor/bootstrap/bootstrap.css",
+    },
+    "theme_url": {
+        "url": STATIC_URL + "vendor/bootstrap/bootswatch.css",
     },
 }
 
 # Settings for FontAwesome
-FONTAWESOME_5_CSS_URL = "//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
-FONTAWESOME_5_PREFIX = "fa"
+FONTAWESOME_6_CSS_URL = STATIC_URL + "fontawesomefree/css/all.min.css"
+FONTAWESOME_6_PREFIX = "fa"
 
 FOOTER_INFO = {
     "repo_url": "https://github.com/DataManagementLab/collab-coursebook",

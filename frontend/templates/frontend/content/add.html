@@ -1,9 +1,9 @@
 {% extends 'frontend/base_logged_in.html' %}
 
 {# Load the tag library #}
-{% load bootstrap4 %}
+{% load django_bootstrap5  %}
 {% load cc_frontend_tags %}
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 {% load static %}
 {% load i18n %}
 
@@ -70,11 +70,11 @@
         {# Form option #}
         <div>
             <button type="submit"
-                    class="btn btn-primary float-right">
-                {% fa5_icon 'plus-circle' 'fas' %} {% trans 'Create' %}
+                    class="btn btn-primary float-end">
+                {% fa6_icon 'plus-circle' 'fas' %} {% trans 'Create' %}
             </button>
             <a href="{% url 'frontend:course' pk=course.pk %}" class="btn btn-danger">
-                {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
+                {% fa6_icon 'times' 'fas' %} {% trans 'Cancel' %}
             </a>
         </div>
     </form>

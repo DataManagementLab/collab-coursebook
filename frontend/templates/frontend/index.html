@@ -3,8 +3,8 @@
 {# Load the tag library #}
 {% load static %}
 {% load i18n %}
-{% load bootstrap4 %}
-{% load fontawesome_5 %}
+{% load django_bootstrap5  %}
+{% load fontawesome_6 %}
 
 {% block general_content %}
     <div class="container-fluid" style="min-height:75vh;background-color: #0a3d62;padding-top:2em;padding-bottom:2em;">
@@ -12,7 +12,7 @@
             {% include 'frontend/messages.html' %}
 
             {% if user.is_authenticated %}
-                <div class="float-right" style="color: #ffffff;font-weight: bold;">
+                <div class="float-end" style="color: #ffffff;font-weight: bold;">
                     {{ user.profile.display_name }}
                     &nbsp;
                     <a href="{% url 'cas_ng_logout' %}" class="btn btn-primary" style="">

@@ -1,15 +1,12 @@
 {% extends 'frontend/base_logged_in.html' %}
 
 {# Load the tag library #}
-{% load bootstrap4 %}
+{% load django_bootstrap5  %}
 {% load cc_frontend_tags %}
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 {% load static %}
 {% load i18n %}
 
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
 
 
 {% block imports %}
@@ -39,13 +36,13 @@
             {# Topic combobox #}
             {% bootstrap_form topics %}
             <button onclick="$('#nestable3').nestable('expandAll');" class="btn btn-primary" style="margin: 5px">
-                {% fa5_icon 'expand' %} {% trans 'Expand Structure' %}
+                {% fa6_icon 'expand' %} {% trans 'Expand Structure' %}
             </button>
             <button onclick="$('#nestable3').nestable('collapseAll');" class="btn btn-primary" style="margin: 5px">
-                {% fa5_icon 'compress' %} {% trans 'Collapse Structure' %}
+                {% fa6_icon 'compress' %} {% trans 'Collapse Structure' %}
             </button>
             <button onclick="addTopic()" class="btn btn-primary" style="margin: 5px">
-                {% fa5_icon 'plus' 'fas' %} {% trans 'Add Topic' %}
+                {% fa6_icon 'plus' 'fas' %} {% trans 'Add Topic' %}
             </button>
         </div>
 
@@ -59,7 +56,7 @@
                 {% csrf_token %}
                 {% bootstrap_form form %}
                 <button type="submit" class="btn btn-primary">
-                    {% fa5_icon 'plus' 'fas' %} {% trans 'Create Topic' %}
+                    {% fa6_icon 'plus' 'fas' %} {% trans 'Create Topic' %}
                 </button>
             </form>
         </div>
@@ -84,10 +81,10 @@
 
     {# Option #}
     <button onclick="save()" type="submit" class="btn btn-primary">
-        {% fa5_icon 'save' %} {% trans 'Save' %}
+        {% fa6_icon 'save' %} {% trans 'Save' %}
     </button>
     <button onclick="cancel()" class=" btn btn-danger">
-        {% fa5_icon 'times' 'fas' %} {% trans 'Cancel' %}
+        {% fa6_icon 'times' 'fas' %} {% trans 'Cancel' %}
     </button>
 {% endblock %}
 

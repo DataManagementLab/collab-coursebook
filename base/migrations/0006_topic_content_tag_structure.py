@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import fontawesome_5.fields
+import fontawesome_6.fields
 
 
 class Migration(migrations.Migration):
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=200, verbose_name='Title')),
-                ('symbol', fontawesome_5.fields.IconField(blank=True, help_text='Symbol to show with this tag (optional)', max_length=60, verbose_name='Symbol')),
+                ('symbol', fontawesome_6.fields.IconField(blank=True, help_text='Symbol to show with this tag (optional)', max_length=60, verbose_name='Symbol')),
             ],
             options={
                 'verbose_name': 'Tag',

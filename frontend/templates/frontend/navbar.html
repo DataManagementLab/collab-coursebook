@@ -1,14 +1,14 @@
 {# Load the tag library #}
 {% load i18n %}
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 
 {% if user.is_authenticated %}
-    <div class="float-right" style="color: #ffffff;font-weight: bold;">
-        <form class="form-inline float-left" action="{% url 'frontend:search' %}">
+    <div class="float-end" style="color: #ffffff;font-weight: bold;">
+        <form class="form-inline float-start d-flex" action="{% url 'frontend:search' %}">
             <input class="form-control navbar-inline-list" type="search" name="q" placeholder="{% trans 'Search' %}"
                    aria-label="Search">
             <button class="btn btn-outline-light navbar-inline-list" type="submit">
-                {% fa5_icon 'search' 'fas' %}
+                {% fa6_icon 'search' 'fas' %}
             </button>
         </form>
 
@@ -31,15 +31,15 @@
                      style="width: 35px; height: 35px; object-fit: cover;"
                      alt="{% trans 'User profile picture' %}">
             {% else %}
-                {% fa5_icon 'user' 'far' %}
+                {% fa6_icon 'user' 'far' %}
             {% endif %}
             {{ user.profile.display_name }}
         </a>
 
         <div class="btn-group navbar-inline-list" role="group">
             <div class="btn-group" role="group">
-                <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">{% fa5_icon "bars" "fas" %}
+                <button id="btnGroupNavbar" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">{% fa6_icon "bars" "fas" %}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupNavbar" style="">
                     <div class="dropdown-header">

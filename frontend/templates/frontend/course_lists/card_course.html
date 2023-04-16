@@ -1,11 +1,11 @@
 {# Load the tag library #}
 {% load i18n %}
-{% load bootstrap4 %}
+{% load django_bootstrap5  %}
 {% load static %}
-{% load fontawesome_5 %}
+{% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 
-<div class="card ml-3 mt-3" style="width: 20rem;">
+<div class="card ms-3 mt-3" style="width: 20rem;">
     <a href="{% url 'frontend:course' pk=course.pk %}">
         <div class="card-img-top">
             {% if course.image %}
@@ -28,10 +28,10 @@
         </h5>
         <h6 class="card-subtitle mb-2 text-muted">
             {% if course in user.profile.stared_courses.all %}
-                {% fa5_icon 'bookmark' 'fas' %}
+                {% fa6_icon 'bookmark' 'fas' %}
             {% endif %}
             {% if user.profile in course.owners.all %}
-                {% fa5_icon 'chalkboard-teacher' 'fas' %}
+                {% fa6_icon 'chalkboard-teacher' 'fas' %}
             {% endif %}
             {{ course.owners.all|join:', ' }}
         </h6>
