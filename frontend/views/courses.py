@@ -2,7 +2,7 @@
 
 This file describes the frontend views related to courses.
 """
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Lower
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
@@ -10,7 +10,7 @@ from django.views.generic import ListView
 from base.models import Course, Category, Period
 
 
-class CourseListView(ListView):  # pylint: disable=too-many-ancestors)
+class CourseListView(LoginRequiredMixin, ListView):  # pylint: disable=too-many-ancestors)
     """Course list view
 
     Displays the courses page with all available course.

@@ -680,7 +680,7 @@ class ContentView(DetailView):
         return context
 
 
-class AttachedImageView(DetailView):
+class AttachedImageView(LoginRequiredMixin, DetailView):
     """Attached image view
 
     Displays the attached image to the user.

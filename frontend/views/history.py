@@ -8,6 +8,7 @@ import re
 
 from builtins import staticmethod
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.core import serializers
 from django.core.files.base import ContentFile
@@ -85,7 +86,7 @@ class Reversion:
         return diff
 
 
-class BaseHistoryCompareView(HistoryCompareDetailView):
+class BaseHistoryCompareView(LoginRequiredMixin, HistoryCompareDetailView):
     """Base history compare view
 
       This detail view represents the base history compare view. It defines the default

@@ -84,7 +84,7 @@ class PrivacyNoteView(TemplateView):
     template_name = "frontend/data_protection.html"
 
 
-class AcceptPrivacyNoteView(FormView):
+class AcceptPrivacyNoteView(LoginRequiredMixin, FormView):
     """
     View to review and accept privacy note
     """

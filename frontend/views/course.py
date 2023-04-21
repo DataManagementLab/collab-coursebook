@@ -215,7 +215,7 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         return super().post(request, *args, **kwargs)
 
 
-class EditCourseStructureView(DetailView, FormMixin):
+class EditCourseStructureView(LoginRequiredMixin, DetailView, FormMixin):
     """Edit course structure view
 
     Displays the edit course structure view with some option to
@@ -285,7 +285,7 @@ class EditCourseStructureView(DetailView, FormMixin):
         return self.form_invalid(form_create_topic)
 
 
-class CourseView(DetailView, FormMixin):
+class CourseView(LoginRequiredMixin, DetailView, FormMixin):
     """Course list view
 
     Displays the course detail page.
