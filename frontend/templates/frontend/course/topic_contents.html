@@ -20,20 +20,20 @@
                             </div>
                         </a>
                         <div class="card-footer">
-                            <span class="badge badge-primary">
+                            <span class="badge badge-primary text-body">
                                 {{ content.language }}
                             </span>
                             {% if content.tags.count > 0 %}
                                 &middot;
                                 {% for tag in content.tags.all %}
-                                    <span class="badge badge-secondary">
+                                    <span class="badge badge-secondary text-body">
                                         {{ tag }}
                                     </span>
                                 {% endfor %}
                             {% endif %}
                             {% if content.get_rate != -1 %}
                                 &middot;
-                                <span class="badge badge-info">
+                                <span class="badge badge-info text-body">
                                     {% fa6_icon 'star' 'fas' %} {{ content.get_rate }}
                                 </span>
                                 &middot;
@@ -42,19 +42,19 @@
                                 </span>
                             {% endif %}
                                 &middot;
-                            <a class= "badge badge-primary" 
+                            <a class= "badge badge-primary text-body" 
                             href="{% url 'frontend:content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
                                 {% fa6_icon 'eye' 'far' %}
                             </a>
                             &middot;
                             {% if user.is_authenticated %}
                             {% if content in favorite %}
-                            <a class="badge badge-primary"
+                            <a class="badge badge-primary text-body"
                                 href="{% url 'frontend:coursebook-remove-courseview' course.pk content.topic.pk content.pk %}">
                                 {% fa6_icon 'minus' 'fas' %}
                             </a>
                             {% else %}
-                            <a class="badge badge-primary"
+                            <a class="badge badge-primary text-body"
                                 href="{% url 'frontend:coursebook-add-courseview' course.pk content.topic.pk content.pk %}">
                                 {% fa6_icon 'plus' 'fas' %}
                             </a>
