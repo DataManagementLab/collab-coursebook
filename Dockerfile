@@ -2,7 +2,7 @@ FROM alpine:3.19.0
 
 # Add the dependencies for the collab-coursebook
 RUN apk add --no-cache \
-		 python3 py3-pip bash poppler libmagic gettext texlive-full py3-virtualenv gcc g++ build-base jpeg-dev zlib-dev;
+		 python3 py3-pip bash poppler poppler-utils libmagic gettext texlive-full py3-virtualenv gcc g++ build-base jpeg-dev zlib-dev;
 
 # Install packages not yet updated for the current alpine version TODO remove when no longer needed
 RUN echo 'https://dl-cdn.alpinelinux.org/alpine/v3.14/community' >> /etc/apk/repositories
