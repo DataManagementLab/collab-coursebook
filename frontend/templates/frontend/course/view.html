@@ -128,7 +128,7 @@
                         <li class="list-group-item">
                             {% with forloop.counter as outer_index %}
                                 <a href="#{{ entry.topic.pk }}">{{ outer_index }}. {{ entry.topic.title }}
-                                    <span class="badge badge-primary badge-pill badge-light">
+                                    <span class="badge bg-primary rounded-pill bg-light">
                                     {{ entry.topic.contents.count }}
                                 </span>
                                 </a>
@@ -138,7 +138,7 @@
                                         {% for subtopic in entry.subtopics %}
                                             <li class="list-group-item" style="border: none;">
                                                 <a href="#{{ subtopic.topic.pk }}">{{ outer_index }}.{{ forloop.counter }}. {{ subtopic.topic.title }}
-                                                    <span class="badge badge-primary badge-pill badge-light">
+                                                    <span class="badge bg-primary rounded-pill bg-light">
                                                     {{ subtopic.topic.contents.count }}
                                                 </span>
                                                 </a>

@@ -121,13 +121,13 @@
     <h5>
         {% trans "By" %} <i>{{ content.author }}</i>
         &nbsp;&middot;&nbsp;
-        <span class="badge badge-primary">
+        <span class="badge bg-primary">
             {{ content.language }}
         </span>
         {% if content.tags.count > 0 %}
             &nbsp;&middot;&nbsp;
             {% for tag in content.tags.all %}
-                <span class="badge badge-info">
+                <span class="badge bg-info">
                     {{ tag }}
                 </span>
             {% endfor %}
@@ -220,7 +220,7 @@
     {% if user.is_authenticated %}
         <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
-            {% bootstrap_form comment_form %}
+			{% bootstrap_form comment_form %} {# TODO causes a "false" on the UI #}
             <button name="action" value="submit" class="btn btn-outline-primary">
                 {% fa6_icon 'comment-dots' 'far' %} {% trans 'Send comment' %}
             </button>
