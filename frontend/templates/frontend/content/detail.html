@@ -237,7 +237,7 @@
     {% if user.is_authenticated %}
         <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
-			{% bootstrap_form comment_form %} {# TODO causes a "false" on the UI #}
+			{% bootstrap_form comment_form show_label=false %}
             <button name="action" value="submit" class="btn btn-outline-primary">
                 {% fa6_icon 'comment-dots' 'far' %} {% trans 'Send comment' %}
             </button>
