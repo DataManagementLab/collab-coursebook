@@ -6,7 +6,7 @@ This file contains forms associated with the content types.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -73,6 +73,26 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
                 attrs={
                     'placeholder': _("Default: 0:00")})
         }
+
+
+class AddContentFormPanoptoVideo(forms.ModelForm):
+    """Add Panopto video
+
+    This model represents the add form for Panopto videos.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        """
+        model = PanoptoVideoContent
+        fields = ['url', 'start_time']
 
 
 class AddContentFormImage(forms.ModelForm):

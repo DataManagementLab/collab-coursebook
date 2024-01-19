@@ -56,6 +56,23 @@ class Validator:  # pylint: disable=too-few-public-methods)
             raise ValidationError('Invalid URL')
 
     @staticmethod
+    def validate_panopto_url(url):
+        """Validate Panopto url
+
+        Validates if the given url is a valid Panopto url. If the url is
+        not a Panopto url, a validation error will be thrown
+
+        :param url: The url to be checked
+        :param url: str
+
+        :return: a validation error, if the given url is not a valid Panopto link
+        :rtype: None or ValidationError
+        """
+        valid_url = re.match(r"^https://tu-darmstadt\.cloud\.panopto\.eu/Panopto/Pages/Viewer.aspx\?id=[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}(&start=\d+(\.\d+)?)?$", url)
+        if valid_url is None:
+            raise ValidationError('Invalid Panopto URL')
+
+    @staticmethod
     def validate_md(file):
         """
         Validates if the given file has the correct Markdown MIME type. If not, a validation error

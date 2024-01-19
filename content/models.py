@@ -493,6 +493,88 @@ class YTVideoContent(BaseContentModel):
                 _('Please make sure your end time is smaller than the videos length.'))
 
 
+class PanoptoVideoContent(BaseContentModel):
+    """Panopto video model
+
+    This model represents a content with a YouTube video.
+
+    :attr PanoptoVideoContent.TYPE: Describes the content type of this model
+    :type PanoptoVideoContent.TYPE: str
+    :attr PanoptoVideoContent.DESC: Describes the name of this model
+    :type PanoptoVideoContent.DESC: __proxy__
+    :attr PanoptoVideoContent.url: The link of the Panopto video
+    :type PanoptoVideoContent.url: URLField
+    """
+    TYPE = "PanoptoVideo"
+    DESC = _("Panopto Video")
+
+    #https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=143edbe5-b2a1-48bc-bc94-b0fa011f7143
+    #https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=143edbe5-b2a1-48bc-bc94-b0fa011f7143&start=1792.375985
+    url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_panopto_url,))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("Panopto Video Content")
+        verbose_name_plural = _("Panopto Video Contents")
+
+    @property
+    def id(self):  # pylint: disable=C0103
+        """Panopto Video ID
+
+        Splits the URL by the symbol "=" to get the id of the Panopto URL.
+
+        return: The id of the Panopto video
+        rtype: str
+        """
+        if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
+            split_url = self.url.split("?")[1]
+            video_id = [url.split("=")[1] for url in split_url.split("&") if url.startswith("id=")]
+
+            if video_id:
+                return video_id[0]
+
+    @property
+    def start_time(self):
+        """Panopto Video Start Time
+
+        Extracts the Panopto video start time (if available) from the URL.
+
+        Return: str: The Panopto video start time.
+                 If start time is not present, it defaults to "0:00:00".
+        """
+        if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
+            split_url= self.url.split("?")[1]
+            start_time_param = [url.split("=")[1] for url in split_url.split("&") if url.startswith("start=")]
+
+            if start_time_param:
+                return start_time_param[0]
+            else:
+                return "0:00:00"
+
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.url}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(panoptovideocontent__isnull=False)
+
+
+
 # dict: Contains all available content types.
 CONTENT_TYPES = {
     PDFContent.TYPE: PDFContent,
@@ -500,7 +582,8 @@ CONTENT_TYPES = {
     Latex.TYPE: Latex,
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
-    MDContent.TYPE: MDContent
+    MDContent.TYPE: MDContent,
+    PanoptoVideoContent.TYPE: PanoptoVideoContent
 }
 
 # Register models for reversion if it is not already done in admin,
@@ -522,4 +605,7 @@ reversion.register(YTVideoContent,
                    follow=['content'])
 reversion.register(MDContent,
                    fields=['content', 'md', 'textfield', 'source'],
+                   follow=['content'])
+reversion.register(PanoptoVideoContent,
+                   fields=['content', 'url', 'start_time'],
                    follow=['content'])

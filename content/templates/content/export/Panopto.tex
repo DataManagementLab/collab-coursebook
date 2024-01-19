@@ -1,0 +1,34 @@
+{% load cc_export_tags %}
+{% load i18n %}
+{% autoescape off %}
+
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "Panopto Video Content" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
+
+% Show topic title when exporting
+{% if export_pdf %}
+{\Large \textbf{ {{content.topic.title}}   }}
+{% endif %}
+
+\vskip 1em
+
+% Show description when exporting
+{% if export_pdf %}
+\textit{~~{% trans "Description" %}:} {{content.description|tex_escape}}
+{% endif %}
+
+\vskip 1em
+
+% YouTube link
+\url{ {{ content.panoptovideocontent.url }} } \\
+{% trans 'Video Length' %}: {{ length }}
+
+{% trans 'Starting at' %}: {{ startTime }}
+
+{% trans 'Ending at' %}: {{ endTime}}
+
+\vskip 3em
+
+{% endautoescape %}
