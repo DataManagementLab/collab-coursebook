@@ -92,7 +92,7 @@ class AddContentFormPanoptoVideo(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = PanoptoVideoContent
-        fields = ['url', 'start_time']
+        fields = ['url']
 
 
 class AddContentFormImage(forms.ModelForm):
@@ -304,4 +304,5 @@ CONTENT_TYPE_FORMS = {
     TextField.TYPE: AddTextField,
     Latex.TYPE: AddLatex,
     MDContent.TYPE: AddMD,
+    PanoptoVideoContent.TYPE: AddContentFormPanoptoVideo,
 }
