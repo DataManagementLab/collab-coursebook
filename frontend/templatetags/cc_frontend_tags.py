@@ -14,6 +14,8 @@ from collab_coursebook.settings import ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE
 
 from content.models import CONTENT_TYPES
 
+from datetime import timedelta
+
 register = template.Library()
 
 
@@ -250,6 +252,22 @@ def get_coursebook(user, course):
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
     return coursebook
+
+
+@register.filter
+def format_seconds(seconds):
+    """
+    This filter converts seconds to a hh:mm:ss format
+    Will be used for Panopto integration since start_time is only given in seconds
+    """
+    try:
+        # Try converting as a simple numeric string
+        sec = int(seconds)
+        return str(timedelta(seconds=sec))
+    except ValueError:
+        # If conversion fails, assume it's already in the format "0:00:00"
+        return seconds
+
 
 
 def js_escape(value):
