@@ -1,15 +1,16 @@
+{% load cc_frontend_tags %}
 {% load i18n %}
 
+<div>
+<div>
 <iframe src="https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id={{ content.panoptovideocontent.id }}?start={{ content.panoptovideocontent.startTime }}" 
         width="560" height="315" frameborder="0" scrolling="no">
     
 </iframe>
-
-<b>{% trans 'Start' %}: {{ startTime }}</b><br>
-
-
+</div>
+<b>{% trans 'Start' %}: {{ content.panoptovideocontent.start_time | format_seconds }}</b>
 <br>
-<br>
-<a href="{{ content.panoptovideocontent.url }}" target="_blank">
+<a href="{{ content.panoptovideocontent.start_time}}" target="_blank">
     {% trans 'View on Panopto' %}
 </a>
+</div>
