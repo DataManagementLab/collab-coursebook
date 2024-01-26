@@ -169,6 +169,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if content type is of type YouTubeVideo
         context['is_yt_content'] = content_type == 'YouTubeVideo'
 
+        # Checks if content type is of type PanoptoVideo
+        context['is_panopto_content'] = content_type == 'PanoptoVideo'
+
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
 
@@ -412,6 +415,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['is_markdown_content'] = content_type == 'MD'
         # Checks if content type is of type YouTube
         context['is_yt_content'] = content_type == 'YouTubeVideo'
+        context['is_panopto_content'] = content_type == 'PanoptoVideo'
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
             context['latex_initial_pdf'] = content.latex.pdf.url

@@ -27,7 +27,7 @@ from base.models import Course, Content, Topic
 
 from content.attachment.models import ImageAttachment
 from content.models import ImageContent, MDContent, TextField, YTVideoContent, PDFContent, Latex, \
-    CONTENT_TYPES
+    CONTENT_TYPES, PanoptoVideoContent
 
 from export.views import generate_pdf_from_latex
 
@@ -569,3 +569,24 @@ class YTVideoHistoryCompareView(BaseContentHistoryCompareView):
         redirect to the page corresponding to the model.
         """
         super().__init__('content', 'ytvideo-history')
+
+class PanoptoVideoHistoryCompareView(BaseContentHistoryCompareView):
+    """Panopto history compare view
+
+    Displays history of this content to the user.
+
+    :attr PanoptoVideoHistoryCompareView.model: The model of the view
+    :type PanoptoVideoHistoryCompareView.model: Model
+    :attr PanoptoVideoHistoryCompareView.compare_fields: The fields which should be compared
+    :type PanoptoVideoHistoryCompareView.compare_fields: list[str]
+    """
+    model = PanoptoVideoContent
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'public', 'images', 'url']
+
+    def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
+        super().__init__('content', 'panoptovideo-history')
