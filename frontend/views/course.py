@@ -282,7 +282,7 @@ class EditCourseStructureView(LoginRequiredMixin, DetailView, FormMixin):
                 sorted_topics.append({'id': topic.id, 'title': topic.__str__()})
             data = {'topic_id': new_topic.id, 'topics': sorted_topics}
             return JsonResponse(data=data)
-        return self.form_invalid(form_create_topic)
+        return self.form_invalid(form_create_topic) #TODO Causes error with unittests
 
 
 class CourseView(LoginRequiredMixin, DetailView, FormMixin):

@@ -121,13 +121,13 @@
     <h5>
         {% trans "By" %} <i>{{ content.author }}</i>
         &nbsp;&middot;&nbsp;
-        <span class="badge badge-primary">
+        <span class="badge bg-primary">
             {{ content.language }}
         </span>
         {% if content.tags.count > 0 %}
             &nbsp;&middot;&nbsp;
             {% for tag in content.tags.all %}
-                <span class="badge badge-info">
+                <span class="badge bg-info">
                     {{ tag }}
                 </span>
             {% endfor %}
@@ -189,29 +189,46 @@
 
     <br>
 
-    {# Rating #}
+    {# Average Rating #}
     <h5>
         <a name="rating">
             {% trans 'Rating' %}
         </a>
-        {% if content.get_rate != -1 %}
-            <span class="badge float-end text-end">
-                {{ content.get_rate }}/5
-            </span>
-        {% else %}
-            <span class="badge float-end text-end">
-                {% trans 'No rating yet' %}
-            </span>
-        {% endif %}
     </h5>
-    <div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
-        {% for i in 5|rev_range %}
-            <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
-                   {% if i <= content.get_rate %}class="active" {% endif %}/>
-            <label for="star{{ i }}"
-                   onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
-        {% endfor %}
-    </div>
+	<div class="row">
+		<div class="col">
+			<h6><a name="average">{% trans 'On average' %}</a></h6>
+			<div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
+				{% for i in 5|rev_range %}
+					<input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
+						   {% if i <= content.get_rate %}class="active" {% endif %}/>
+					<label></label> {# Don't remove it, the stars wount be shown otherwise #}
+				{% endfor %}
+			</div>
+		</div>
+		{# Users own given rating #}
+		{% if user.is_authenticated %}
+		<div class="col">
+			<h6><a name="myrate">{% trans 'My rating' %}</a></h6>
+			<div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
+				{% for i in 5|rev_range %}
+					<input type="radio" id="my_star{{ i }}" name="my_rating" value="{{ i }}"
+						   {% if i <= user_rate %}class="active" {% endif %}/>
+					<label for="my_star{{ i }}" onclick="window.location.href='{% url 'frontend:rating' course.id topic.id content.id i %}'"></label>
+				{% endfor %}
+			</div>
+		</div>
+		{% endif %}
+		{# Number of ratings #}
+		<div class="col">
+			<h6># of Ratings</h6>
+			<div class="mt-4 d-flex justify-content-end flex-row-reverse">
+					<span class="badge bg-primary">
+						{{ content.get_rate_amount }}
+					</span>
+			</div>
+		</div>
+	</div>
     <h5 style="margin-top: 30px;">
         <a name="comments">
             {% trans 'Comments' %}
@@ -220,7 +237,7 @@
     {% if user.is_authenticated %}
         <form action="{% url 'frontend:content' course.id topic.id content.id %}" class="post-form" method="post">
             {% csrf_token %}
-            {% bootstrap_form comment_form %}
+			{% bootstrap_form comment_form show_label=false %}
             <button name="action" value="submit" class="btn btn-outline-primary">
                 {% fa6_icon 'comment-dots' 'far' %} {% trans 'Send comment' %}
             </button>
