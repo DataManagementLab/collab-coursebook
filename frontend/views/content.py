@@ -415,6 +415,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         context['is_markdown_content'] = content_type == 'MD'
         # Checks if content type is of type YouTube
         context['is_yt_content'] = content_type == 'YouTubeVideo'
+        # Checks if content type is of type PanoptoVideo
         context['is_panopto_content'] = content_type == 'PanoptoVideo'
         if content_type == 'Latex':
             context['latex_tooltip'] = LATEX_EXAMPLE
