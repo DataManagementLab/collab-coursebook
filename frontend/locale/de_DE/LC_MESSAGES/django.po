@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 16:14+0200\n"
+"POT-Creation-Date: 2024-01-28 16:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,22 +59,22 @@ msgstr "Ich akzeptiere die Datenschutzerklärung"
 msgid "(required to use this website)"
 msgstr "(notwendig zur Nutzung dieser Webseite)"
 
-#: frontend/templates/frontend/base.html:34
+#: frontend/templates/frontend/base.html:35
 msgid ""
 "Are you sure you want to change the language now? This will clear the form!"
 msgstr ""
 "Sind Sie sicher, dass Sie die Sprache ändern möchten? Ihre Änderungen gehen "
 "dann verloren!"
 
-#: frontend/templates/frontend/base.html:66
+#: frontend/templates/frontend/base.html:67
 msgid "Impress"
 msgstr "Impressum"
 
-#: frontend/templates/frontend/base.html:71
+#: frontend/templates/frontend/base.html:72
 msgid "Privacy Note"
 msgstr "Datenschutzerklärung"
 
-#: frontend/templates/frontend/base.html:76
+#: frontend/templates/frontend/base.html:77
 msgid "This software is open source"
 msgstr "Diese Software ist Open Source"
 
@@ -89,7 +89,7 @@ msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 
 #: frontend/templates/frontend/comment/delete_confirm.html:30
 #: frontend/templates/frontend/content/detail.html:164
-#: frontend/templates/frontend/course/view.html:254
+#: frontend/templates/frontend/course/view.html:253
 #: frontend/templates/frontend/history/history_compare_view.html:101
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -102,8 +102,8 @@ msgstr "Bestätigen"
 #: frontend/templates/frontend/course/create.html:32
 #: frontend/templates/frontend/course/duplicate.html:37
 #: frontend/templates/frontend/course/edit.html:34
-#: frontend/templates/frontend/course/edit_structure.html:90
-#: frontend/templates/frontend/course/view.html:251
+#: frontend/templates/frontend/course/edit_structure.html:87
+#: frontend/templates/frontend/course/view.html:248
 #: frontend/templates/frontend/history/history_compare_view.html:97
 #: frontend/templates/frontend/profile/profile_edit.html:22
 msgid "Cancel"
@@ -312,7 +312,7 @@ msgid "Edit content"
 msgstr "Inhalt bearbeiten"
 
 #: frontend/templates/frontend/content/edit.html:99
-#: frontend/templates/frontend/course/edit_structure.html:87
+#: frontend/templates/frontend/course/edit_structure.html:84
 msgid "Save"
 msgstr "Speichern"
 
@@ -371,36 +371,36 @@ msgstr "Kurs bearbeiten"
 msgid "Change"
 msgstr "Ändern"
 
-#: frontend/templates/frontend/course/edit_structure.html:22
-#: frontend/templates/frontend/course/edit_structure.html:28
+#: frontend/templates/frontend/course/edit_structure.html:19
+#: frontend/templates/frontend/course/edit_structure.html:25
 msgid "Edit Course Structure"
 msgstr "Kursstruktur bearbeiten"
 
-#: frontend/templates/frontend/course/edit_structure.html:37
+#: frontend/templates/frontend/course/edit_structure.html:34
 msgid "Add Topic to Structure"
 msgstr "Thema zur Kursstruktur hinzufügen"
 
-#: frontend/templates/frontend/course/edit_structure.html:42
+#: frontend/templates/frontend/course/edit_structure.html:39
 msgid "Expand Structure"
 msgstr "Struktur aufklappen"
 
-#: frontend/templates/frontend/course/edit_structure.html:45
+#: frontend/templates/frontend/course/edit_structure.html:42
 msgid "Collapse Structure"
 msgstr "Struktur zuklappen"
 
-#: frontend/templates/frontend/course/edit_structure.html:48
+#: frontend/templates/frontend/course/edit_structure.html:45
 msgid "Add Topic"
 msgstr "Thema hinzufügen"
 
-#: frontend/templates/frontend/course/edit_structure.html:55
+#: frontend/templates/frontend/course/edit_structure.html:52
 msgid "Add a new Topic"
 msgstr "Ein neues Thema erstellen"
 
-#: frontend/templates/frontend/course/edit_structure.html:62
+#: frontend/templates/frontend/course/edit_structure.html:59
 msgid "Create Topic"
 msgstr "Thema erstellen"
 
-#: frontend/templates/frontend/course/edit_structure.html:75
+#: frontend/templates/frontend/course/edit_structure.html:72
 msgid "Course Structure"
 msgstr "Kursstruktur"
 
@@ -427,7 +427,6 @@ msgid "Edit Structure"
 msgstr "Struktur bearbeiten"
 
 #: frontend/templates/frontend/course/view.html:75
-#: frontend/templates/frontend/course/view_course.html:36
 msgid "Delete Course"
 msgstr "Kurs löschen"
 
@@ -440,7 +439,6 @@ msgid "Table of Contents"
 msgstr "Inhaltsverzeichnis"
 
 #: frontend/templates/frontend/course/view.html:153
-#: frontend/templates/frontend/course/view_course.html:58
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
@@ -553,7 +551,7 @@ msgid "Dashboard"
 msgstr "Dashboard"
 
 #: frontend/templates/frontend/dashboard.html:17
-#: frontend/templates/frontend/profile/profile.html:51
+#: frontend/templates/frontend/profile/profile.html:53
 msgid "Starred Courses"
 msgstr "Favorisierte Kurse"
 
@@ -722,7 +720,7 @@ msgid "Admin Menu"
 msgstr "Admin-Menü"
 
 #: frontend/templates/frontend/navbar.html:32
-#: frontend/templates/frontend/profile/profile.html:39
+#: frontend/templates/frontend/profile/profile.html:34
 msgid "User profile picture"
 msgstr "Profilbild"
 
@@ -734,11 +732,11 @@ msgstr "Sprache"
 msgid "Profile"
 msgstr "Profil"
 
-#: frontend/templates/frontend/profile/profile.html:32
+#: frontend/templates/frontend/profile/profile.html:41
 msgid "Biography"
 msgstr "Biographie"
 
-#: frontend/templates/frontend/profile/profile.html:58
+#: frontend/templates/frontend/profile/profile.html:60
 msgid "You don't have any starred courses yet."
 msgstr "Du hast noch keine favorisierten Kurse."
 
@@ -1177,19 +1175,19 @@ msgstr "Es ist momentan kein Beispiel verfügbar."
 msgid "Content %(title)s successfully added"
 msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
-#: frontend/views/content.py:142 frontend/views/content.py:367
+#: frontend/views/content.py:142 frontend/views/content.py:370
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: frontend/views/content.py:353
+#: frontend/views/content.py:356
 msgid "You are not allowed to edit this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
-#: frontend/views/content.py:523
+#: frontend/views/content.py:528
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: frontend/views/content.py:787
+#: frontend/views/content.py:792
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 
@@ -1217,7 +1215,7 @@ msgstr "Kurs %(title)s erfolgreich bearbeitet"
 msgid "Course %(title)s successfully deleted"
 msgstr "Kurs %(title)s erfolgreich gelöscht"
 
-#: frontend/views/history.py:322 frontend/views/history.py:403
+#: frontend/views/history.py:323 frontend/views/history.py:404
 #, python-format
 msgid "Reverted to Version: %s"
 msgstr "Zurückgekehrt zu Version: %s"
