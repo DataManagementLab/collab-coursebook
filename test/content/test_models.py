@@ -36,7 +36,8 @@ class LatexTestCase(MediaTestCase):  # pylint: disable=too-few-public-methods)
         self.assertEqual('uploads/previews/Topic_Category.jpg', content.preview.name)
         self.assertTrue(bool(content.preview))
 
-class PanoptoVideoContentTestCase(MediaTestCase):
+@override_settings(MEDIA_ROOT=utils.MEDIA_ROOT)
+class PanoptoVideoContentTestCase(MediaTestCase): # pylint: disable=too-few-public-methods)
     """PanoptoVideoContent test case
 
     Defines the test cases for the model PanoptoVideoContent.
