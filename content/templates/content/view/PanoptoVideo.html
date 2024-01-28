@@ -2,15 +2,15 @@
 {% load i18n %}
 
 <div>
-<div>
-<iframe src="https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id={{ content.panoptovideocontent.id }}?start={{ content.panoptovideocontent.startTime }}" 
-        width="560" height="315" frameborder="0" scrolling="no">
-    
-</iframe>
-</div>
-<b>{% trans 'Start' %}: {{ content.panoptovideocontent.start_time | format_seconds }}</b>
-<br>
-<a href="{{ content.panoptovideocontent.start_time}}" target="_blank">
-    {% trans 'View on Panopto' %}
-</a>
+    <div>
+        <iframe src="https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id={{ content.panoptovideocontent.id }}?start={{ content.panoptovideocontent.startTime }}" 
+                width="560" height="315" frameborder="0" scrolling="no">
+            
+        </iframe>
+    </div>
+    <b>{% trans 'Start' %}: {{ content.panoptovideocontent.start_time | format_seconds }}</b>
+    <br>
+    <a href="{{ content.panoptovideocontent.start_time}}" target="_blank">
+        {% trans 'View on Panopto' %}
+    </a>
 </div>
