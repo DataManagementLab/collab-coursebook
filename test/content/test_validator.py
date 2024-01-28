@@ -14,7 +14,6 @@ import content.models as model
 from content.validator import Validator
 
 import re
-from content.validator import validate_panopto_url
 
 class ValidatorTestCase(MediaTestCase):
     """Validator test case
@@ -65,7 +64,7 @@ class ValidatorTestCase(MediaTestCase):
         """
         url = "https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=12345678-1234-1234-1234-1234567890ab"
         try:
-            validate_panopto_url(url)
+            Validator.validate_panopto_url(url)
         except ValidationError:
             self.fail("validate_panopto_url raised ValidationError unexpectedly")
 
@@ -77,4 +76,4 @@ class ValidatorTestCase(MediaTestCase):
         """
         url = "https://example.com"
         with self.assertRaises(ValidationError):
-            validate_panopto_url(url)
+            Validator.validate_panopto_url(url)
