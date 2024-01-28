@@ -29,7 +29,7 @@ class LatexTestCase(MediaTestCase):  # pylint: disable=too-few-public-methods)
         preview_path = latex.generate_preview()
         self.assertTrue(os.path.exists(os.path.join(utils.MEDIA_ROOT, preview_folder)))
 
-        content = Content.objects.first()
+        content = model.Content.objects.first()
         content.preview.name = preview_path
         content.save()
 
