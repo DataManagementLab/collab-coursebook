@@ -262,7 +262,7 @@ def format_seconds(seconds):
     """
     try:
         # Try converting as a simple numeric string
-        sec = int(seconds)
+        sec = int(float(seconds))
         return str(timedelta(seconds=sec))
     except ValueError:
         # If conversion fails, assume it's already in the format "0:00:00"
