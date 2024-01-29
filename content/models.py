@@ -508,8 +508,6 @@ class PanoptoVideoContent(BaseContentModel):
     TYPE = "PanoptoVideo"
     DESC = _("Panopto Video")
 
-    #https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=143edbe5-b2a1-48bc-bc94-b0fa011f7143
-    #https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=143edbe5-b2a1-48bc-bc94-b0fa011f7143&start=1792.375985
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_panopto_url,))
 
     class Meta:
