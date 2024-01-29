@@ -59,8 +59,8 @@ class Validator:  # pylint: disable=too-few-public-methods)
     def validate_panopto_url(url):
         """Validate Panopto url
 
-        Validates if the given url is a valid Panopto url. If the url is
-        not a Panopto url, a validation error will be thrown
+        Validates if the given url is a valid TU-Darmstadt Panopto url. If the url is
+        not a TU-Darmstadt Panopto url, a validation error will be thrown
 
         :param url: The url to be checked
         :param url: str
