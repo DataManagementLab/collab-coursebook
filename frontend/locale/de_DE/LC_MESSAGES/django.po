@@ -285,13 +285,11 @@ msgstr "Beschreibung"
 
 #: frontend/templates/frontend/content/detail.html:200
 msgid "On average"
-msgstr ""
+msgstr "Durchschnittlich Bewertung"
 
 #: frontend/templates/frontend/content/detail.html:212
-#, fuzzy
-#| msgid "Rating"
 msgid "My rating"
-msgstr "Bewertung"
+msgstr "Meine Bewertung"
 
 #: frontend/templates/frontend/content/detail.html:234
 msgid "Comments"
