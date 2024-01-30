@@ -10,7 +10,7 @@ from django.contrib import admin
 
 from reversion_compare.admin import CompareVersionAdmin
 
-from content.models import ImageContent, Latex
+from content.models import ImageContent, Latex, PanoptoVideoContent
 from content.models import PDFContent, TextField
 from content.models import YTVideoContent
 from content.models import MDContent
@@ -65,6 +65,13 @@ class TextFieldAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
 @admin.register(YTVideoContent)
 class YTVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """YouTube video content
+
+    Represents the YouTube video content model in the admin panel.
+    """
+
+@admin.register(PanoptoVideoContent)
+class PanoptoVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
+    """Panopto video content
 
     Represents the YouTube video content model in the admin panel.
     """

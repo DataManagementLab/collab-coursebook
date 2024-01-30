@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 21:21+0000\n"
+"POT-Creation-Date: 2024-01-28 16:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,23 +45,23 @@ msgstr "Bildanhänge"
 msgid "Default: 0:00"
 msgstr "Standard: 0:00"
 
-#: content/forms.py:198
+#: content/forms.py:218
 msgid "Upload an existing Markdown file"
 msgstr "Eine existierende Markdown Datei hochladen"
 
-#: content/forms.py:199
+#: content/forms.py:219
 msgid "Write Markdown with editor"
 msgstr "Markdown mit Editor schreiben"
 
-#: content/forms.py:235
+#: content/forms.py:255
 msgid "You must upload a Markdown file."
 msgstr "Laden sie bitte eine Markdown Datei hoch."
 
-#: content/forms.py:238 content/forms.py:276
+#: content/forms.py:258 content/forms.py:296
 msgid "You must put in some text."
 msgstr "Geben sie bitte Text ein."
 
-#: content/forms.py:240
+#: content/forms.py:260
 msgid "None of the options were chosen."
 msgstr "Keine Option ausgewählt."
 
@@ -173,7 +173,7 @@ msgstr "Textfeld-Inhalte"
 msgid "YouTube Video"
 msgstr "YouTube-Video"
 
-#: content/models.py:402
+#: content/models.py:402 content/models.py:513
 msgid "Video URL"
 msgstr "Video-URL"
 
@@ -230,6 +230,18 @@ msgstr "Stellen sie sicher dass ihre Startzeit kleiner ist als die Videolänge."
 msgid "Please make sure your end time is smaller than the videos length."
 msgstr "Stellen sie sicher dass ihre Endzeit kleiner ist als die Videolänge."
 
+#: content/models.py:509
+msgid "Panopto Video"
+msgstr "Panopto Video"
+
+#: content/models.py:525
+msgid "Panopto Video Content"
+msgstr "Panopto-Video-Inhalt"
+
+#: content/models.py:526
+msgid "Panopto Video Contents"
+msgstr "Panopto-Video-Inhalte"
+
 #: content/static/yt_api.py:113
 msgid "Hours"
 msgstr "Stunden"
@@ -241,6 +253,11 @@ msgstr "Minuten"
 #: content/static/yt_api.py:121
 msgid "Seconds"
 msgstr "Sekunden"
+
+#: content/templates/content/reading_mode/Panopto.html:18
+#: content/templates/content/view/PanoptoVideo.html:14
+msgid "View on Panopto"
+msgstr "Auf Panopto ansehen"
 
 #: content/templates/content/reading_mode/YouTubeVideo.html:19
 #: content/templates/content/view/YouTubeVideo.html:17
@@ -255,13 +272,14 @@ msgstr "Beschreibung"
 msgid "Download"
 msgstr "Herunterladen"
 
-#: content/templates/content/view/YouTubeVideo.html:9
-msgid "Timestamps"
-msgstr "Zeitstempel"
-
+#: content/templates/content/view/PanoptoVideo.html:11
 #: content/templates/content/view/YouTubeVideo.html:10
 msgid "Start"
 msgstr "Start"
+
+#: content/templates/content/view/YouTubeVideo.html:9
+msgid "Timestamps"
+msgstr "Zeitstempel"
 
 #: content/templates/content/view/YouTubeVideo.html:11
 msgid "End"

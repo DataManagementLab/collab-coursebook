@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 21:21+0000\n"
+"POT-Creation-Date: 2024-01-28 16:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1181,19 +1181,19 @@ msgstr "Es ist momentan kein Beispiel verfügbar."
 msgid "Content %(title)s successfully added"
 msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
-#: frontend/views/content.py:142 frontend/views/content.py:367
+#: frontend/views/content.py:142 frontend/views/content.py:370
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: frontend/views/content.py:353
+#: frontend/views/content.py:356
 msgid "You are not allowed to edit this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
-#: frontend/views/content.py:523
+#: frontend/views/content.py:528
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: frontend/views/content.py:787
+#: frontend/views/content.py:792
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 

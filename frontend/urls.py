@@ -140,6 +140,9 @@ urlpatterns = [
             path('<pk>/markdown-history/',
                  views.history.MDHistoryCompareView.as_view(),
                  name='md-history'),
+            path('<pk>/panoptovideo-history/',
+                 views.history.PanoptoVideoHistoryCompareView.as_view(),
+                 name='panoptovideo-history'),
 
         ])),
         path('add/',
