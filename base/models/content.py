@@ -167,7 +167,7 @@ class Course(models.Model):
                                                        "can only be edited by the owners"),
                                            blank=True,
                                            default=False)
-    public = models.BooleanField(verbose_name=_("Show in public courses"),
+    public = models.BooleanField(verbose_name=_("Publicly accessible"),
                                  help_text=_("This course can be accessed by unregistered users "),
                                  default=False) #thundergan
     category = models.ForeignKey(Category,

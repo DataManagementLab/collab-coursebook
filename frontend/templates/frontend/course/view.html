@@ -1,4 +1,8 @@
-{% extends 'frontend/base_logged_in.html' %}
+{% if user.is_authenticated%}
+    {% extends 'frontend/base_logged_in.html' %}
+{% else %}
+    {% extends 'frontend/base.html' %}
+{% endif %}
 
 {# Load the tag library #}
 {% load i18n %}

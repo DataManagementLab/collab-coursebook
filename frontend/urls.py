@@ -18,8 +18,14 @@ app_name = "frontend"
 
 urlpatterns = [
     path('',
-         views.StartView.as_view(),
-         name="index"),
+         include([
+        re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$',
+                views.StartView.as_view(),
+                name='public-courses-sort'),
+        path('',
+             views.StartView.as_view(),
+             name='public-courses'),
+        ])),
     path('dashboard/',
          views.DashboardView.as_view(),
          name="dashboard"),
