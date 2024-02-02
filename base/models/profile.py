@@ -25,6 +25,8 @@ class Profile(models.Model):
     :type Profile.pic: ImageField
     :attr Profile.stared_courses: The courses that the user favoured
     :type Profile.stared_courses: ManyToManyField - Course
+    :attr Profile.moderated: The courses that the user moderates
+    :type Profile.moderated: ManyToManyField - Course
     """
     class Meta:
         """Meta options
@@ -45,6 +47,8 @@ class Profile(models.Model):
     pic = models.ImageField(verbose_name=_("Profile picture"), upload_to="profile_pics", blank=True)
     stared_courses = models.ManyToManyField("Course", verbose_name=_("Stared courses:"),
                                             related_name="staring_users", blank=True)
+    moderated_courses = models.ManyToManyField("Course", verbose_name=_("Moderated courses:"),
+                                            related_name="moderated_courses", blank=True)
     accepted_privacy_note = models.BooleanField(verbose_name=_("Accepted privacy note?"),\
          blank=True, default=False)
 

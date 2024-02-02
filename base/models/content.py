@@ -160,6 +160,9 @@ class Course(models.Model):
     owners = models.ManyToManyField(Profile,
                                     related_name='owned_courses',
                                     verbose_name=_("Owners"))
+    moderators = models.ManyToManyField(Profile,
+                                    related_name='moderating_users',
+                                    verbose_name=_("Moderators"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
                                            help_text=_("This course is restricted and "
                                                        "can only be edited by the owners"),
@@ -358,6 +361,8 @@ class Content(models.Model):
     :type Content.readonly: BooleanField
     :attr Content.public: The status of the content if it is public
     :type Content.public: BooleanField
+    :attr Content.public: The status of the content if it is approved
+    :type Content.public: BooleanField
     :attr Content.creation_date: The creation date of the content
     :type Content.creation_date: DateTimeField
     :attr Content.preview: The preview image of the content
@@ -392,6 +397,9 @@ class Content(models.Model):
                                  help_text=_("This content will be displayed in courses "
                                              "that don't require registration"),
                                  default=False)
+    approved = models.BooleanField(verbose_name=_("Approved"),
+                                   help_text=_("This content is approved by a moderator"),
+                                   default=False)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
                                          default=timezone.now,
                                          blank=True)
@@ -516,6 +524,21 @@ class Content(models.Model):
         rating = Rating.objects.create(user=user, content=self, rating=rating)  # user = profile
         rating.save()
         self.save()
+
+# Function that sets the content to the given approval value if the user is a moderator of this course
+    def set_approval(self, user, approval):
+        """Content approval
+
+        Sets the approval of the content by the given approval of the user.
+
+        :param approval: The approval of content by the user
+        :type approval: bool
+        :param user: The user of the approval
+        :type user: User
+        """
+        if user in self.topic.category.courses.first().moderators.all():
+            self.approved = approval
+            self.save()
 
     def get_index_in_course(self, course):
         """Index in the course structure
