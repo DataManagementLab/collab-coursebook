@@ -3,7 +3,7 @@
 This file defines the URL mapping.
 """
 
-from django.urls import path, re_path, include
+from django.urls import path, re_path, include, register_converter
 from django.views.i18n import JavaScriptCatalog
 from django.utils.translation import gettext_lazy as _
 
@@ -15,6 +15,17 @@ from frontend import views
 
 
 app_name = "frontend"
+
+class BooleanConverter:
+    regex = "([Tt]rue)|([Ff]alse)"
+
+    def to_python(self, value):
+        return value.lower() in ["true","True"]
+
+    def to_url(self, value):
+        return str(value)
+    
+register_converter(BooleanConverter, "boolean")
 
 urlpatterns = [
     path('',
@@ -90,6 +101,9 @@ urlpatterns = [
                 path('rate/<int:pk>/',
                      views.rate_content,
                      name='rating'),
+               path('approve/<boolean:approval>/',
+                     views.approve_content,
+                     name='approve'),
                 path('comment/<int:pk>/delete/',
                      views.DeleteComment.as_view(),
                      name='comment-delete'),

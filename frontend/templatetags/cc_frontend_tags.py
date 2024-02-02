@@ -172,6 +172,23 @@ def check_delete_course_permission(user, course):
     """
     return user.profile in course.owners.all()
 
+@register.filter
+def check_approve_content_permission(user, course):
+    """Approve content permission
+
+    Checks if either a user is an owner or the user is an super user and it is
+    allowed to approve the content.
+
+    :param user: The user to check permission
+    :type user: User
+    :param content: The content to check permission
+    :type content: Content
+
+    :return: true iff the content can be approved
+    :rtype: bool
+    """
+    return user.profile.moderated_courses.filter(pk=course.pk).exists()
+
 
 @register.filter
 def check_profile_permissions(user, profile):
@@ -252,6 +269,8 @@ def get_coursebook(user, course):
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
     return coursebook
+
+
 
 
 @register.filter

@@ -93,6 +93,34 @@ def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disab
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
         + '#rating')
+    
+def approve_content(request, course_id, topic_id, content_id, approval):  # pylint: disable=invalid-name
+    """Approve content
+
+    Lets the user approve content.
+
+    :param topic_id: The id of the topic
+    :type topic_id: int
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: The course id
+    :type course_id: int
+    :param content_id: The id of the content which gets approved
+    :type content_id: int
+    :param approval: The status of the approval (should be True or False)
+    :type approval: any
+
+
+    :return: the redirection to the content page
+    :rtype: HttpResponse
+    """
+    content = get_object_or_404(Content, pk=content_id)
+    course = get_object_or_404(Course, pk=course_id)
+    profile = get_user(request)
+    content.approve_content(user=profile, course=course, approval=approval)
+
+    return HttpResponseRedirect(
+        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id)))
 
 
 class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):

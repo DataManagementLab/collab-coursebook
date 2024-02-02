@@ -6,6 +6,12 @@
 {% load cc_frontend_tags %}
 
 <div class="card ms-3 mt-3" style="width: 20rem;">
+    {% if course.moderators.all %}
+        <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill" 
+        style="font-size: 1.25em; background-color: #0a3d62;">
+            {% trans 'Official' %}
+        </span>
+    {% endif %}
     <a href="{% url 'frontend:course' pk=course.pk %}">
         <div class="card-img-top">
             {% if course.image %}

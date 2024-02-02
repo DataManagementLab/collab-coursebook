@@ -60,6 +60,13 @@
                             </a>
                             {% endif %}
                             {% endif %}
+
+                            {% if content.approved %}
+                            &middot;
+                            <span class="badge" style="background-color: green;">
+                                {% fa6_icon 'check' 'fas' %}
+                            </span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

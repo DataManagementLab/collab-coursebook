@@ -423,17 +423,17 @@ class Content(models.Model):
         verbose_name = _("Content")
         verbose_name_plural = _("Contents")
 
-    def __str__(self):
-        """String representation
+    # def __str__(self):
+    #     """String representation
 
-        Returns the string representation of this object.
+    #     Returns the string representation of this object.
 
-        :return: the string representation of this object
-        :rtype: str
-        """
-        return _('%(title)s for %(topic)s by %(author)s') % {'title': self.type,
-                                                             'topic': self.topic,
-                                                             'author': self.author}
+    #     :return: the string representation of this object
+    #     :rtype: str
+    #     """
+    #     return _('%(title)s for %(topic)s by %(author)s') % {'title': self.type,
+    #                                                          'topic': self.topic,
+    #                                                          'author': self.author}
 
     def get_rate_num(self):
         """Average rating
@@ -526,7 +526,7 @@ class Content(models.Model):
         self.save()
 
 # Function that sets the content to the given approval value if the user is a moderator of this course
-    def set_approval(self, user, approval):
+    def approve_content(self, course, user, approval):
         """Content approval
 
         Sets the approval of the content by the given approval of the user.
@@ -536,7 +536,7 @@ class Content(models.Model):
         :param user: The user of the approval
         :type user: User
         """
-        if user in self.topic.category.courses.first().moderators.all():
+        if user in course.moderators.all():
             self.approved = approval
             self.save()
 

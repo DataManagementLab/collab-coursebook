@@ -30,9 +30,22 @@
             </button>
 
             {# Drop down menu #}
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 {# Remove and add to course book option #}
                 {% if user.is_authenticated %}
+                    {% if user|check_approve_content_permission:course %}
+                        {% if not content.approved %}
+                            <a class="dropdown-item"
+                                href="{% url 'frontend:approve' course.id topic.id content.id True %}">
+                                {% fa6_icon 'check' %} {% trans 'Approve' %}
+                            </a>
+                        {% else %}
+                            <a class="dropdown-item"
+                                href="{% url 'frontend:approve' course.id topic.id content.id False %}">
+                                {% fa6_icon 'times' %} {% trans 'Disapprove' %}
+                            </a>
+                        {% endif %}
+                    {% endif %}
                     {% if favorite %}
                         <a class="dropdown-item"
                            href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">
@@ -124,6 +137,12 @@
         <span class="badge bg-primary">
             {{ content.language }}
         </span>
+        {% if content.approved %}
+        &nbsp;&middot;&nbsp;
+        <span class="badge" style="background-color: green;">
+            {% fa6_icon 'check' 'fas' %}
+        </span>
+        {% endif %}
         {% if content.tags.count > 0 %}
             &nbsp;&middot;&nbsp;
             {% for tag in content.tags.all %}
