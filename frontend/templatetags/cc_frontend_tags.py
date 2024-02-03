@@ -187,6 +187,11 @@ def check_approve_content_permission(user, course):
     :return: true iff the content can be approved
     :rtype: bool
     """
+    print("User: ",user)
+    print("Course: ", course)
+    print("User moderates these courses: ",user.profile.moderated_courses)
+    print("User moderates current course: ",user.profile.moderated_courses.filter(pk=course.pk))
+    print(user.profile.moderated_courses.filter(pk=course.pk).exists())
     return user.profile.moderated_courses.filter(pk=course.pk).exists()
 
 

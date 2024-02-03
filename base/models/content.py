@@ -161,7 +161,7 @@ class Course(models.Model):
                                     related_name='owned_courses',
                                     verbose_name=_("Owners"))
     moderators = models.ManyToManyField(Profile,
-                                    related_name='moderating_users',
+                                    related_name='moderated_courses',
                                     verbose_name=_("Moderators"))
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
                                            help_text=_("This course is restricted and "
