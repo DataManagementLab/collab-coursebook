@@ -83,7 +83,7 @@ class PanoptoVideoContentTestCase(MediaTestCase): # pylint: disable=too-few-publ
         panopto_video = model.PanoptoVideoContent(url='https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=143edbe5-b2a1-48bc-bc94-b0fa011f7143')
         panopto_video.save()
 
-        contents = model.Content.objects.all()
+        contents = model.Content.objects.all() # contains only one Latex object
         filtered_contents = model.PanoptoVideoContent.filter_by_own_type(contents)
 
         self.assertIn(panopto_video, filtered_contents)
