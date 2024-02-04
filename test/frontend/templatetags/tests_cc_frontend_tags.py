@@ -3,10 +3,14 @@
 This file contains the test cases for /export/templatetags/cc_export_tags.py
 """
 
-from frontend.templatetags.cc_frontend_tags import js_escape
+from frontend.templatetags.cc_frontend_tags import js_escape, format_seconds, check_approve_content_permission
 from datetime import timedelta
 from django.test import TestCase
-from frontend.templatetags.cc_frontend_tags import format_seconds
+
+from django.contrib.auth.models import User
+from django.test.client import RequestFactory
+
+from base.models import Course, Topic, Category
 
 
 class JSEscapeTestCase(TestCase):
@@ -50,3 +54,19 @@ class FormatSecondsTestCase(TestCase):
         expected_result = "invalid"
         result = format_seconds(seconds)
         self.assertEqual(result, expected_result)
+
+class CheckApproveContentPermissionTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create()
+        self.cat = Category.objects.create(title="Category")
+        self.course = Course.objects.create(title='Course', description='desc', category=self.cat)
+        Topic.objects.create(title="Topic", category=self.cat)
+
+    def test_check_approve_content_permission(self):
+        request = self.factory.get('/')
+        request.user = self.user
+        
+        result = check_approve_content_permission(request.user, self.course)
+
+        self.assertFalse(result)  # Modify this assertion based on your expected behavior
