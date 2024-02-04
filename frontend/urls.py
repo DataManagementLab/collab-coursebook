@@ -17,13 +17,42 @@ from frontend import views
 app_name = "frontend"
 
 class BooleanConverter:
-    regex = "([Tt]rue)|([Ff]alse)"
+     """Boolean converter
+     A URL converter for boolean values.
 
-    def to_python(self, value):
-        return value.lower() in ["true","True"]
+     This converter is used to convert boolean values between Python objects and URL strings.
+     It supports the values "True" and "False" (case-insensitive) in URL strings.
 
-    def to_url(self, value):
-        return str(value)
+     Attributes:
+          regex (str): The regular expression pattern used to match boolean values in URL strings.
+     """
+
+     regex = "([Tt]rue)|([Ff]alse)"
+
+     def to_python(self, value):
+          """To python
+          Converts a boolean value from a URL string to a Python object.
+
+          :param value: The boolean value as a string.
+          :type value: str
+
+          :return: The boolean value as a Python object.
+          :rtype: bool
+          """
+          return value.lower() in ["true","True"]
+
+     def to_url(self, value):
+          """To URL
+          Converts a boolean value from a Python object to a URL string.
+
+          :param value: The boolean value as a Python object.
+          :type value: bool
+
+          :return: The boolean value as a URL string.
+          :rtype: str
+
+          """
+          return str(value)
     
 register_converter(BooleanConverter, "boolean")
 
