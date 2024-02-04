@@ -176,7 +176,7 @@ def check_delete_course_permission(user, course):
 def check_approve_content_permission(user, course):
     """Approve content permission
 
-    Checks if either a user is an owner or the user is an super user and it is
+    Checks if a user is a moderator of a course and it is
     allowed to approve the content.
 
     :param user: The user to check permission
@@ -187,11 +187,6 @@ def check_approve_content_permission(user, course):
     :return: true iff the content can be approved
     :rtype: bool
     """
-    print("User: ",user)
-    print("Course: ", course)
-    print("User moderates these courses: ",user.profile.moderated_courses)
-    print("User moderates current course: ",user.profile.moderated_courses.filter(pk=course.pk))
-    print(user.profile.moderated_courses.filter(pk=course.pk).exists())
     return user.profile.moderated_courses.filter(pk=course.pk).exists()
 
 
