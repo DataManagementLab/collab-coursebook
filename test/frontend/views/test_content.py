@@ -13,15 +13,21 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from base.models import Content, Course
+from base.models import Content, Course, Category, Topic
+from django.contrib.auth.models import User
+from django.test import RequestFactory
 
 import content.forms as form
 import content.models as model
+from base.models.profile import Profile
 from content.attachment.forms import ImageAttachmentFormSet
 from content.attachment.models import ImageAttachment
 
 from frontend.forms import AddContentForm
-from frontend.views.content import clean_attachment
+from frontend.views.content import clean_attachment, approve_content
+
+
+from django.http import HttpResponseRedirect
 
 
 class CleanAttachmentTestCase(TestCase):
@@ -50,6 +56,54 @@ class CleanAttachmentTestCase(TestCase):
         clean_attachment(content, formset)
         self.assertEqual(content.ImageAttachments.count(), 0)
         self.assertEqual(ImageAttachment.objects.count(), 0)
+
+class ApproveContentTestCase(MediaTestCase):
+    """Approve content test case
+
+    Defines the test cases for the approve_content function.
+    """
+
+    def setUp(self):
+        """Setup
+
+        Sets up the test database.
+        """
+        super().setUp()
+        self.request_factory = RequestFactory()
+        self.course = Course.objects.first()
+        self.course.moderators.add(Profile.objects.first())
+        self.course.save()
+        self.cat = Category.objects.first()
+        self.topic = Topic.objects.first()
+        self.content = Content.objects.first()
+
+    def test_approve_content(self):
+        """Test approve content
+
+        Tests that the content is approved and the user is redirected to the content page.
+        """
+        approval = True
+        self.request_factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.request_factory.user = User.objects.first()
+        response = approve_content(self.request_factory, self.course.id, self.topic.id, self.content.id, approval)
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.content.refresh_from_db()
+        self.assertEqual(self.content.approved, approval)
+
+    def test_disapprove_content(self):
+        """Test disapprove content
+
+        Tests that the content is disapproved and the user is redirected to the content page.
+        """
+        approval = False
+        self.request_factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.request_factory.user = User.objects.first()
+        response = approve_content(self.request_factory, self.course.id, self.topic.id, self.content.id, approval)
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.content.refresh_from_db()
+        self.assertEqual(self.content.approved, approval)
 
 
 class AddContentViewTestCase(MediaTestCase):
