@@ -18,7 +18,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 COPY ./requirements.txt ./
 COPY ./dockerStartupScript.sh ./
 ENV LIBRARY_PATH=/lib:/usr/lib
-RUN pip install --no-cache-dir --upgrade setuptools pip wheel \
+RUN pip install --no-cache-dir --upgrade setuptools pip wheel tblib \
 	&& pip install --no-cache-dir -r requirements.txt
 
 # Set the working directory, here is the dev folder to be mounted
