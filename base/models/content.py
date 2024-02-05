@@ -132,6 +132,8 @@ class Course(models.Model):
     :type Course.topics: ManyToManyField - Topic
     :attr Course.owners: The owners of the course which can change the content of the course
     :type Course.owners: ManyToManyField - Profile
+    :attr Course.moderators: The moderators of the course which can approve the content of the course
+    :type Course.moderators: ManyToManyField - Profile
     :attr Course.restrict_changes: The restriction who can edit the course
     :type Course.restrict_changes: BooleanField
     :attr Course.category: The category of the course
@@ -525,7 +527,6 @@ class Content(models.Model):
         rating.save()
         self.save()
 
-# Function that sets the content to the given approval value if the user is a moderator of this course
     def approve_content(self, course, user, approval):
         """Content approval
 
