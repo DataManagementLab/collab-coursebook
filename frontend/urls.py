@@ -23,8 +23,8 @@ class BooleanConverter:
      This converter is used to convert boolean values between Python objects and URL strings.
      It supports the values "True" and "False" (case-insensitive) in URL strings.
 
-     Attributes:
-          regex (str): The regular expression pattern used to match boolean values in URL strings.
+     :param regex: The regular expression pattern used to match boolean values in URL strings.
+     :type regex: str
      """
 
      regex = "([Tt]rue)|([Ff]alse)"
