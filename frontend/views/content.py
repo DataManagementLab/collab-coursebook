@@ -659,6 +659,7 @@ class ContentView(DetailView):
         context['user'] = self.request.user
         context['count'] = content.get_rate_count()
         context['rate'] = round(content.get_rate(), 2)
+        context['user_rate'] = content.get_user_rate(self.request.user.profile)
 
         # Course id for back to course button
         course_id = self.kwargs['course_id']

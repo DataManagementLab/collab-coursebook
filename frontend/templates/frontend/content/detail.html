@@ -220,7 +220,7 @@
 			<div class="starrating risingstar d-flex justify-content-end flex-row-reverse">
 				{% for i in 5|rev_range %}
 					<input type="radio" id="star{{ i }}" name="rating" value="{{ i }}"
-						   {% if i <= content.get_rate %}class="active" {% endif %}/>
+						   {% if i <= rate %}class="active" {% endif %}/>
 					<label></label> {# Don't remove it, the stars wount be shown otherwise #}
 				{% endfor %}
 			</div>
@@ -243,7 +243,7 @@
 			<h6># of Ratings</h6>
 			<div class="mt-4 d-flex justify-content-end flex-row-reverse">
 					<span class="badge bg-primary">
-						{{ content.get_rate_amount }}
+						{{ count }}
 					</span>
 			</div>
 		</div>

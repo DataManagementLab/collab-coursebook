@@ -164,7 +164,10 @@ class Course(models.Model):
                                     verbose_name=_("Owners"))
     moderators = models.ManyToManyField(Profile,
                                     related_name='moderated_courses',
-                                    verbose_name=_("Moderators"))
+                                    verbose_name=_("Moderators"),
+                                    default=None,
+                                    null=True,
+                                    blank=True)
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
                                            help_text=_("This course is restricted and "
                                                        "can only be edited by the owners"),
@@ -509,7 +512,7 @@ class Content(models.Model):
         :rtype: int
         """
         if self.user_already_rated(user):
-            return self.ratings.get(user=user).rating_set.first().rating
+            return Rating.objects.filter(content_id=self.id).filter(user_id=user.pk).first().rating
         return 0
 
     def rate_content(self, user, rating):
