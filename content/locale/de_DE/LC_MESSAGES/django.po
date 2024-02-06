@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-28 16:02+0000\n"
+"POT-Creation-Date: 2024-02-06 14:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,7 +173,7 @@ msgstr "Textfeld-Inhalte"
 msgid "YouTube Video"
 msgstr "YouTube-Video"
 
-#: content/models.py:402 content/models.py:513
+#: content/models.py:402 content/models.py:511
 msgid "Video URL"
 msgstr "Video-URL"
 
@@ -234,11 +234,11 @@ msgstr "Stellen sie sicher dass ihre Endzeit kleiner ist als die Videolänge."
 msgid "Panopto Video"
 msgstr "Panopto Video"
 
-#: content/models.py:525
+#: content/models.py:523
 msgid "Panopto Video Content"
 msgstr "Panopto-Video-Inhalt"
 
-#: content/models.py:526
+#: content/models.py:524
 msgid "Panopto Video Contents"
 msgstr "Panopto-Video-Inhalte"
 
@@ -255,7 +255,7 @@ msgid "Seconds"
 msgstr "Sekunden"
 
 #: content/templates/content/reading_mode/Panopto.html:18
-#: content/templates/content/view/PanoptoVideo.html:14
+#: content/templates/content/view/PanoptoVideo.html:13
 msgid "View on Panopto"
 msgstr "Auf Panopto ansehen"
 
@@ -272,7 +272,7 @@ msgstr "Beschreibung"
 msgid "Download"
 msgstr "Herunterladen"
 
-#: content/templates/content/view/PanoptoVideo.html:11
+#: content/templates/content/view/PanoptoVideo.html:10
 #: content/templates/content/view/YouTubeVideo.html:10
 msgid "Start"
 msgstr "Start"
