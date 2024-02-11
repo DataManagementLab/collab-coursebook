@@ -17,7 +17,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY ./requirements.txt ./
 ENV LIBRARY_PATH=/lib:/usr/lib
-RUN pip install --no-cache-dir --upgrade setuptools pip wheel tblib \
+RUN pip install --no-cache-dir --upgrade setuptools pip wheel tblib coverage \
 	&& pip install --no-cache-dir -r requirements.txt
 
 RUN adduser --gecos '' --disabled-password collab && echo "collab ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
