@@ -1,8 +1,29 @@
+{% load static %}
 {% load i18n %}
+{% load fontawesome_6 %}
+{% load static %}
 
+<img class="card-img-top fit" style="height: 80px; width: 80px;object-fit: cover;"
+     src="{% static 'base/anki.png' %}" 
+     alt="{{ content.description }}" width="500" height="600">
+<br>
+<br>
 <b>
     {% trans 'Source' %}:
 </b>
 <p>
-    {{ content.anki.url }}
+    {{ content.ankideck.url }}
 </p>
+
+<a href="{{ content.ankideck.url}}" target="_blank">
+        {% trans 'Open on Anki Web' %}
+</a>
+
+<br>
+<br>
+<form action="{{ content.ankideck.file.url }}" method="get" target="_blank">
+    {% csrf_token %}
+    <button name="action" value="submit" class="btn btn-outline-primary">
+        {% fa6_icon 'download' 'fas' %} {% trans 'Download' %}
+    </button>
+</form>

@@ -178,6 +178,7 @@ class AddTextField(forms.ModelForm):
                     'placeholder': get_placeholder(TextField.TYPE, 'textfield')})
         }
 
+
 class AddAnkiField(forms.ModelForm):
     """Add Anki field
 
@@ -206,7 +207,7 @@ class AddAnkiField(forms.ModelForm):
         fields = ['options', 'file', 'source', 'url']
         widgets = {
             'file': ModifiedClearableFileInput(attrs={'accept': 'application/zip',
-                                                      'required': 'true'}),
+                                                      'required': ''}),
             'source': forms.Textarea(
                 attrs={
                     'style': 'height: 100px',
