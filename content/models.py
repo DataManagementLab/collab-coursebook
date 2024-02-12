@@ -14,7 +14,6 @@ from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
 
-
 from pdf2image import convert_from_path
 
 from base.models import Content
@@ -384,6 +383,58 @@ class TextField(BaseContentModel):
         return contents.filter(textfield__isnull=False)
 
 
+class AnkiDeck(BaseContentModel):
+    """Anki deck
+
+    This model represents a text based content.
+
+    :attr AnkiDeck.TYPE: Describes the content type of this model
+    :type AnkiDeck.TYPE: str
+    :attr AnkiDeck.DESC: Describes the name of this model
+    :type AnkiDeck.DESC: __proxy__
+    :attr AnkiDeck.textfield: The text of the content
+    :type AnkiDeck.textfield: TextField
+    :attr AnkiDeck.source: The source of this content
+    :type AnkiDeck.source: TextField
+    """
+    TYPE = "AnkiDeck"
+    DESC = _("Anki Deck")
+
+    file = models.FileField(verbose_name=_("Anki Deck"),
+                            upload_to='uploads/contents/%Y/%m/%d/',
+                            blank=True,
+                            validators=(Validator.validate_anki_file,))
+    source = models.TextField(verbose_name=_("Source"))
+    url = models.URLField(verbose_name=_("Insert Anki Web Link Here"), validators=(Validator.validate_anki_url,))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("Anki Deck")
+        verbose_name_plural = _("Anki Decks")
+
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.content}: {self.pk}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(ankideck__isnull=False)
+
+
 class YTVideoContent(BaseContentModel):
     """YouTube video model
 
@@ -402,13 +453,13 @@ class YTVideoContent(BaseContentModel):
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
     start_time = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8,
-                                 default="0:00",
-                                 help_text=_(
-                                     "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
+                                  default="0:00",
+                                  help_text=_(
+                                      "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
     end_time = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default="0:00",
-                               help_text=_(
-                                   "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
+                                help_text=_(
+                                    "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
     class Meta:
         """Meta options
@@ -478,10 +529,10 @@ class YTVideoContent(BaseContentModel):
 
         if start_time == end_time:
             raise ValidationError(
-            _('Please make sure that your start and end time are different.'))
+                _('Please make sure that your start and end time are different.'))
         if start_time > end_time:
             raise ValidationError(
-            _('Please make sure that your end time is larger than your start time.'))
+                _('Please make sure that your end time is larger than your start time.'))
         if (start_time > seconds and end_time > seconds):
             raise ValidationError(
                 _('Please make sure your start and end times are smaller than the videos length.'))
@@ -549,7 +600,7 @@ class PanoptoVideoContent(BaseContentModel):
                  If start time is not present, it defaults to "0:00:00".
         """
         if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
-            split_url= self.url.split("?")[1]
+            split_url = self.url.split("?")[1]
             start_time_param = [url.split("=")[1] for url in split_url.split("&") if url.startswith("start=")]
 
             if start_time_param:
@@ -572,7 +623,6 @@ class PanoptoVideoContent(BaseContentModel):
         return contents.filter(panoptovideocontent__isnull=False)
 
 
-
 # dict: Contains all available content types.
 CONTENT_TYPES = {
     PDFContent.TYPE: PDFContent,
@@ -581,7 +631,8 @@ CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
     MDContent.TYPE: MDContent,
-    PanoptoVideoContent.TYPE: PanoptoVideoContent
+    PanoptoVideoContent.TYPE: PanoptoVideoContent,
+    AnkiDeck.TYPE: AnkiDeck,
 }
 
 # Register models for reversion if it is not already done in admin,
@@ -606,4 +657,7 @@ reversion.register(MDContent,
                    follow=['content'])
 reversion.register(PanoptoVideoContent,
                    fields=['content', 'url', 'start_time'],
+                   follow=['content'])
+reversion.register(AnkiDeck,
+                   fields=['content', 'source', 'url'],
                    follow=['content'])

@@ -6,7 +6,7 @@ This file contains forms associated with the content types.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent, AnkiDeck
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -178,6 +178,54 @@ class AddTextField(forms.ModelForm):
                     'placeholder': get_placeholder(TextField.TYPE, 'textfield')})
         }
 
+class AddAnkiField(forms.ModelForm):
+    """Add Anki field
+
+    This model represents the add form for Anki fields.
+    """
+
+    CHOICES = [
+        ('url', _('Upload link to download deck from Anki Web')),
+        ('file', _('Upload an .apkg file')),
+    ]
+    options = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial='url')
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = AnkiDeck
+        fields = ['options', 'file', 'source', 'url']
+        widgets = {
+            'file': ModifiedClearableFileInput(attrs={'accept': 'application/zip',
+                                                      'required': 'true'}),
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(AnkiDeck.TYPE, 'source')})
+        }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if 'options' in cleaned_data \
+                and (cleaned_data['options'] == 'file' or cleaned_data['options'] == 'url'):
+            options = cleaned_data['options']
+            if options == 'file' and not ('file' in cleaned_data and bool(self.cleaned_data['file'])):
+                raise forms.ValidationError(_("You must upload an Anki Deck."))
+            if options == 'url' \
+                    and not ('url' in cleaned_data and bool(self.cleaned_data['url'])):
+                raise forms.ValidationError(_("You must put in a valid URL."))
+        else:
+            raise forms.ValidationError(_("None of the options were chosen."))
+
 
 class AddLatex(forms.ModelForm):
     """Add LaTeX
@@ -305,4 +353,5 @@ CONTENT_TYPE_FORMS = {
     Latex.TYPE: AddLatex,
     MDContent.TYPE: AddMD,
     PanoptoVideoContent.TYPE: AddContentFormPanoptoVideo,
+    AnkiDeck.TYPE: AddAnkiField,
 }

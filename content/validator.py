@@ -73,6 +73,46 @@ class Validator:  # pylint: disable=too-few-public-methods)
             raise ValidationError('Invalid Panopto URL')
 
     @staticmethod
+    def validate_anki_url(url):
+        """Validate Anki URL
+
+        Validates if the given URL is a valid Anki URL. If the URL is
+        not an Anki URL, a validation error will be thrown.
+
+        :param url: The URL to be checked
+        :param url: str
+
+        :return: a validation error, if the given URL is not a valid Anki link
+        :rtype: None or ValidationError
+        """
+        valid_url = re.match(r"^https://ankiweb\.net/(decks/share|shared/info)/\d+$", url)
+        if valid_url is None:
+            raise ValidationError('Invalid Anki URL')
+
+    @staticmethod
+    def validate_anki_file(file):
+        """Validate Anki
+
+        Validates if the given file is a valid PDF. If the file is not
+        a pdf, a validation error will be thrown.
+
+        :param file: The file that should be checked
+        :type file: file
+
+        :return: a validation error, if the file is not a valid pdf
+        :rtype: None or ValidationError
+
+        """
+        valid_types = ['application/zip']
+        file_type = magic.from_buffer(file.read(1024), mime=True)
+        if file_type not in valid_types:
+            raise ValidationError('Unsupported file type.')
+        valid_file_extensions = ['.apkg']
+        ext = os.path.splitext(file.name)[1]
+        if ext.lower() not in valid_file_extensions:
+            raise ValidationError('Unacceptable file extension.')
+
+    @staticmethod
     def validate_md(file):
         """
         Validates if the given file has the correct Markdown MIME type. If not, a validation error

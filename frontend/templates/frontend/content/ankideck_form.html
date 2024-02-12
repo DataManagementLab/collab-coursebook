@@ -1,0 +1,58 @@
+{# Load the tag library #}
+{% load fontawesome_6 %}
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{# jsi18n #}
+<script type="text/javascript" src="{% url 'frontend:javascript-catalog' %}"></script>
+{# Script and css for editor #}
+    {# Use either local version or latest version of the editor #}
+    {# Local version of editor #}
+        <link href="{% static 'css/toastui-editor.min.css' %}" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="{% static 'js/toastui-editor-all.min.js' %}"></script>
+    {# Latest version of editor #}
+        {# <link href="https://uicdn.toast.com/editor/latest/toastui-editor.css" type="text/css" rel="stylesheet"/> #}
+        {# <script type="text/javascript" src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script> #}
+    {# Languages for editor #}
+        <script src="https://uicdn.toast.com/editor/latest/i18n/de-de.js"></script>
+
+{% if is_add_form %}
+    {# Script for radio buttons in ankideck add form #}
+    <script type="text/javascript" src="{% static 'js/ankideck_form.js' %}"></script>
+    <script type="text/html" id="ankideck-preview">
+    </script>
+{% endif %}
+
+{% comment %}
+    Editor should always be initialized before buttons,
+    because when buttons are initialized the text window will be detached from the document.
+{% endcomment %}
+
+<script type="text/javascript">
+    const URL_BUTTON = document.getElementById("id_options_0");
+    const FILE_BUTTON = document.getElementById("id_options_1");
+    $(function(){
+        // Init list of allowed_extensions
+        {% for extension in allowed_extensions %}
+            addAllowedExtensions('{{ extension }}');
+        {% endfor %}
+
+        {% if is_add_form %}
+            // Init buttons for add form
+            // Button to copy file content to editor
+            const ankideckButton = document.getElementById('ankideck-preview').textContent;
+            $('label[for="id_ankideck"]').after(ankideckButton);
+            URL_BUTTON.addEventListener('click',() => {changeForm('id_url');});
+            FILE_BUTTON.addEventListener('click',() => {changeForm('id_file');});
+            if (URL_BUTTON.checked)
+                changeForm('id_url');
+            else if (FILE_BUTTON.checked)
+                changeForm('id_file');
+        {% else %}
+            // Create attachment files in the browser for the existing attachments
+            generateExistingAttachmentURLs();
+            updateAttachmentLinks();
+        {% endif %}
+    });
+</script>
