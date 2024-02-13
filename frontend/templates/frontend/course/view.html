@@ -1,11 +1,17 @@
-{% extends 'frontend/base_logged_in.html' %}
-
 {# Load the tag library #}
 {% load i18n %}
 {% load django_bootstrap5  %}
 {% load fontawesome_6 %}
 {% load cc_frontend_tags %}
 {% load static %}
+
+{% if user.is_authenticated %}
+    {% extends 'frontend/base_logged_in.html' %}
+    <h1>Logged in</h1>
+{% else %}
+    {% extends 'frontend/base.html' %}
+    <h1>Not logged in</h1>
+{% endif %}
 
 {% block title %}
     {{ course.title }} - Collab Coursebook

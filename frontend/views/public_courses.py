@@ -10,7 +10,7 @@ from django.views.generic import ListView
 from base.models import Course, Category, Period
 
 
-class CourseListView(LoginRequiredMixin, ListView):  # pylint: disable=too-many-ancestors)
+class CourseListView( ListView):  # pylint: disable=too-many-ancestors)
     """Course list view
 
     Displays the courses page with all available course.

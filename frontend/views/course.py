@@ -542,3 +542,92 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         message = _("Course %(title)s successfully deleted") % {'title': self.get_object().title}
         messages.success(request, message, extra_tags="alert-success")
         return super().delete(self, request, *args, **kwargs)
+
+
+class PublicCourseView(DetailView, FormMixin):
+    """Course list view
+
+    Displays the course detail page.
+
+    :attr CourseView.model: The model of the view
+    :type CourseView.model: Model
+    :attr CourseView.template_name: The path to the html template
+    :type CourseView.template_name:str
+    :attr CourseView.form_class: The form class of the view
+    :type CourseView.form_class: Form
+    :attr CourseView.context_object_name: The context object name
+    :type CourseView.context_object_name: str
+    """
+
+    template_name = 'frontend/course/view.html'
+    model = Course
+    form_class = FilterAndSortForm
+    context_object_name = "course"
+
+    def __init__(self):
+        """Initializer
+
+        Initialize the course view with pre configuration for the sort and filter options
+        with default values.
+        """
+        self.sorted_by = 'None'
+        self.filtered_by = 'None'
+        super().__init__()
+
+    def form_valid(self, form):
+        """Form validation
+
+        Saves the filters and sorting from the form.
+
+        :param form: The form that contains the filter and the sorting
+        :type form: FilterAndSortForm
+
+        :return: Itself rendered to a response
+        :rtype: HttpResponse
+        """
+        self.sorted_by = form.cleaned_data['sort']
+        self.filtered_by = form.cleaned_data['filter']
+        return self.render_to_response(self.get_context_data())
+
+    def get_context_data(self, **kwargs):
+        """Context data
+
+        Gets the context data of the view which can be accessed in
+        the html templates.
+
+        :param kwargs: The additional arguments
+        :type kwargs: dict[str, Any]
+
+        :return: the context data
+        :rtype: dict[str, Any]
+        """
+        
+        course_id = self.get_object().id
+        context = super().get_context_data(**kwargs)
+        structure_entries = CourseStructureEntry. \
+            objects.filter(course=context["course"]).order_by('index')
+        topics_recursive = []
+        current_topic = None
+        for entry in structure_entries:
+            index_split = entry.index.split('/')
+            # Topic
+            if len(index_split) == 1:
+                current_topic = {'topic': entry.topic, 'subtopics': [],
+                                 'topic_contents': entry.topic.get_contents(self.sorted_by,
+                                                                            self.filtered_by)}
+                topics_recursive.append(current_topic)
+            # Subtopic
+            # Only handle up to one subtopic level
+            else:
+                current_topic["subtopics"].append({'topic': entry.topic,
+                                                   'topic_contents':
+                                                       entry.topic.
+                                                  get_contents(self.sorted_by, self.filtered_by)})
+
+
+        context["structure"] = topics_recursive
+        if self.sorted_by is not None:
+            context['sorting'] = self.sorted_by
+        if self.filtered_by is not None:
+            context['filtering'] = self.filtered_by
+        return context

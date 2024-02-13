@@ -169,7 +169,7 @@ class Course(models.Model):
                                            default=False)
     public = models.BooleanField(verbose_name=_("Publicly accessible"),
                                  help_text=_("This course can be accessed by unregistered users "),
-                                 default=False) #thundergan
+                                 default=False)
     category = models.ForeignKey(Category,
                                  verbose_name=_("Category"),
                                  related_name="courses",

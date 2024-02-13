@@ -6,11 +6,11 @@
 {% load cc_frontend_tags %}
 
 <div class="card ms-3 mt-3" style="width: 20rem;">
-    {% comment %} {% if user.is_authenticated %} {% endcomment %}
+    {% if user.is_authenticated %}
         <a href="{% url 'frontend:course' pk=course.pk %}">
-    {% comment %} {% else %}
-        <a href="{% url 'frontend:public_courses' pk=course.pk %}">
-    {% endif %} {% endcomment %}
+    {% else %}
+        <a href="{% url 'frontend:public' pk=course.pk %}">
+    {% endif %}
         <div class="card-img-top">
             {% if course.image %}
                 <img src="{{ course.image.url }}" class="card-img-top" alt="Course Title Image" width="286"
