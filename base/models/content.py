@@ -166,7 +166,6 @@ class Course(models.Model):
                                     related_name='moderated_courses',
                                     verbose_name=_("Moderators"),
                                     default=None,
-                                    null=True,
                                     blank=True)
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
                                            help_text=_("This course is restricted and "
