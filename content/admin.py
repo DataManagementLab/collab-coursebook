@@ -83,3 +83,4 @@ class ExerciseContentAdmin(CompareVersionAdmin): # pylint: disable=too-many-ance
 
     Represents the quiz content model in the admin panel.
     """
+    

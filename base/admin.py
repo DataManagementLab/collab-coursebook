@@ -25,7 +25,8 @@ class CourseAdmin(admin.ModelAdmin):
     """
     list_display = ['title', 'category', 'period']
     readonly_fields = ['creation_date']
-
+    import frontend.forms.course as c
+    form = c.AddCourseForm
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
