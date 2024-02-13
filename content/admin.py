@@ -14,6 +14,7 @@ from content.models import ImageContent, Latex, PanoptoVideoContent
 from content.models import PDFContent, TextField
 from content.models import YTVideoContent
 from content.models import MDContent
+from content.models import ExerciseContent
 
 @admin.register(MDContent)
 class MDContentAdmin(CompareVersionAdmin):
@@ -74,4 +75,11 @@ class PanoptoVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many
     """Panopto video content
 
     Represents the YouTube video content model in the admin panel.
+    """
+
+@admin.register(ExerciseContent)
+class ExerciseContentAdmin(CompareVersionAdmin): # pylint: disable=too-many-ancestors
+    """Quiz content
+
+    Represents the quiz content model in the admin panel.
     """
