@@ -6,7 +6,7 @@ This file contains forms associated with the content types.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent, ExerciseContent
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -94,6 +94,27 @@ class AddContentFormPanoptoVideo(forms.ModelForm):
         model = PanoptoVideoContent
         fields = ['url']
 
+class AddContentExercises(forms.ModelForm):
+    """Add exercises
+
+    This model represents the add form for exercises.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+        """
+        model = ExerciseContent
+        fields = ['tasks', 'solutions', 'source', 'license']
+        widgets = {
+            'tasks': ModifiedClearableFileInput(attrs={'accept': 'application/pdf',
+                                                     'required': 'true'}),
+                
+            'solutions': ModifiedClearableFileInput(attrs={'accept': 'application/pdf',
+                                                     'required': 'true'}),
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
 
 class AddContentFormImage(forms.ModelForm):
     """Add image content
@@ -305,4 +326,5 @@ CONTENT_TYPE_FORMS = {
     Latex.TYPE: AddLatex,
     MDContent.TYPE: AddMD,
     PanoptoVideoContent.TYPE: AddContentFormPanoptoVideo,
+    ExerciseContent.TYPE: AddContentExercises
 }
