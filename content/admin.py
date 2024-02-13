@@ -79,8 +79,8 @@ class PanoptoVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many
 
 @admin.register(ExerciseContent)
 class ExerciseContentAdmin(CompareVersionAdmin): # pylint: disable=too-many-ancestors
-    """Quiz content
+    """Exercise content
 
-    Represents the quiz content model in the admin panel.
+    Represents the exercise content model in the admin panel.
     """
     
