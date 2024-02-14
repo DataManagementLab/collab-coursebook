@@ -16,7 +16,6 @@
         {# <script type="text/javascript" src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script> #}
     {# Languages for editor #}
         <script src="https://uicdn.toast.com/editor/latest/i18n/de-de.js"></script>
-
 {% if is_add_form %}
     {# Script for radio buttons in ankideck add form #}
     <script type="text/javascript" src="{% static 'js/ankideck_form.js' %}"></script>
@@ -42,7 +41,7 @@
             // Init buttons for add form
             // Button to copy file content to editor
             const ankideckButton = document.getElementById('ankideck-preview').textContent;
-            $('label[for="id_ankideck"]').after(ankideckButton);
+            $('label[for="id_url"]').after(ankideckButton);
             URL_BUTTON.addEventListener('click',() => {changeForm('id_url');});
             FILE_BUTTON.addEventListener('click',() => {changeForm('id_file');});
             if (URL_BUTTON.checked)

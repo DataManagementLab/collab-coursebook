@@ -194,6 +194,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if content type is of type Markdown
         context['is_markdown_content'] = content_type == 'MD'
 
+        # Checks if content type is of type AnkiDeck
+        context['is_ankideck'] = content_type == 'AnkiDeck'
+
         # Checks if content type is of type YouTubeVideo
         context['is_yt_content'] = content_type == 'YouTubeVideo'
 
@@ -297,6 +300,14 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             # If the content type is MD store in DB, is_file checks if there is a md file
             # so validator knows if it needs to create a md file or text
             if content_type == 'MD':
+                is_file = content_type_form.cleaned_data['options'] == 'file'
+                Validator.validate_md(get_user(request),
+                                      content,
+                                      content_type_data,
+                                      is_file)
+            # If the content type is AnkiDeck store in DB, is_file checks if there is a ankideck file
+            # so validator knows if it needs to create a ankideck file or url
+            if content_type == 'AnkiDeck':
                 is_file = content_type_form.cleaned_data['options'] == 'file'
                 Validator.validate_md(get_user(request),
                                       content,
@@ -439,8 +450,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
-        # Checks if content type if of type MDContent
+        # Checks if content type is of type MDContent
         context['is_markdown_content'] = content_type == 'MD'
+        # Checks if content type is of type AnkiDeck
+        context['is_ankideck'] = content_type == 'AnkiDeck'
         # Checks if content type is of type YouTube
         context['is_yt_content'] = content_type == 'YouTubeVideo'
         # Checks if content type is of type PanoptoVideo

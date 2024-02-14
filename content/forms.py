@@ -211,7 +211,7 @@ class AddAnkiField(forms.ModelForm):
             'source': forms.Textarea(
                 attrs={
                     'style': 'height: 100px',
-                    'placeholder': get_placeholder(AnkiDeck.TYPE, 'source')})
+                    'placeholder': get_placeholder(AnkiDeck.TYPE, 'source')}),
         }
 
     def clean(self):
