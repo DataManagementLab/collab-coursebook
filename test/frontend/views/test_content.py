@@ -760,14 +760,15 @@ class EditContentViewTestCase(MediaTestCase):
         self.assertEqual(md_content.textfield, 'Lorem ipsum')
 
 
-class PublicContentReadingModeViewTestCase(TestCase):
+class PublicContentReadingModeViewTestCase(MediaTestCase):
     def setUp(self):
+        super().setUp()
         self.factory = RequestFactory()
         self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.course = Course.objects.create(name='Test Course')
-        self.topic = Topic.objects.create(course=self.course, name='Test Topic')
-        self.content = Content.objects.create(topic=self.topic, type='MD', source='src', textfield='test text')
+        self.user = User.objects.all().first()
+        self.course = Course.objects.all().first()
+        self.topic = Topic.objects.all().first()
+        self.content = Content.objects.all().first()
 
     def test_get_context_data(self):
         request = self.factory.get(reverse('frontend:content-reading-mode', kwargs={'course_id': self.course.id, 'topic_id': self.topic.id, 'pk': self.content.id}))
