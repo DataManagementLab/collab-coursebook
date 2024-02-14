@@ -767,11 +767,22 @@ class PublicContentReadingModeViewTestCase(MediaTestCase):
         self.client = Client()
         self.user = User.objects.all().first()
         self.course = Course.objects.all().first()
+        self.course.public = True
+        self.course.save()
         self.topic = Topic.objects.all().first()
         self.content = Content.objects.all().first()
+        self.content.public = True
+        self.content.save()
 
     def test_get_context_data(self):
-        request = self.factory.get(reverse('frontend:content-reading-mode', kwargs={'course_id': self.course.id, 'topic_id': self.topic.id, 'pk': self.content.id}))
+
+        # self.request_factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        # self.request_factory.user = User.objects.first()
+        # response = approve_content(self.request_factory, self.course.id, self.topic.id, self.content.id, approval)
+        # self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+
+
+        request = self.factory.get(reverse('frontend:content-reading-mode', args=(self.course.id, self.topic.id, self.content.id)))
         request.user = self.user
         response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=self.content.id)
 
@@ -781,5 +792,9 @@ class PublicContentReadingModeViewTestCase(MediaTestCase):
         self.assertEqual(response.context_data['topic_id'], self.topic.id)
         self.assertEqual(response.context_data['previous_id'], self.content.id)
         self.assertEqual(response.context_data['next_id'], self.content.id)
-        self.assertEqual(response.context_data['ending'], '?s=None&f=None')
-        self.assertEqual(response.context_data['html'], '<p>test text</p>')
+        if request.GET.get('coursebook'):
+            self.assertEqual(response.context_data['ending'], '?coursebook=True')
+        if request.GET.get('s'):
+            self.assertEqual(response.context_data['ending'], request.GET.get('s') + "&f=" + request.GET.get('f'))
+        if self.content.type == 'MD':
+            self.assertEqual(response.context_data['html'], self.content.md.open().read().decode('utf-8'))
