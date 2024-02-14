@@ -13,7 +13,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from base.models import Content, Course
+from base.models import Content, Course, Topic
 
 import content.forms as form
 import content.models as model
@@ -22,6 +22,10 @@ from content.attachment.models import ImageAttachment
 
 from frontend.forms import AddContentForm
 from frontend.views.content import clean_attachment
+from django.contrib.auth.models import User
+from django.test.client import RequestFactory
+from django.test import Client
+from frontend.views.content import PublicContentReadingModeView
 
 
 class CleanAttachmentTestCase(TestCase):
@@ -754,3 +758,27 @@ class EditContentViewTestCase(MediaTestCase):
         md_content = model.MDContent.objects.first()
         self.assertEqual(md_content.source, 'src text')
         self.assertEqual(md_content.textfield, 'Lorem ipsum')
+
+
+class PublicContentReadingModeViewTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.course = Course.objects.create(name='Test Course')
+        self.topic = Topic.objects.create(course=self.course, name='Test Topic')
+        self.content = Content.objects.create(topic=self.topic, type='MD', source='src', textfield='test text')
+
+    def test_get_context_data(self):
+        request = self.factory.get(reverse('frontend:content-reading-mode', kwargs={'course_id': self.course.id, 'topic_id': self.topic.id, 'pk': self.content.id}))
+        request.user = self.user
+        response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=self.content.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[0], 'frontend/content/reading_mode.html')
+        self.assertEqual(response.context_data['course_id'], self.course.id)
+        self.assertEqual(response.context_data['topic_id'], self.topic.id)
+        self.assertEqual(response.context_data['previous_id'], self.content.id)
+        self.assertEqual(response.context_data['next_id'], self.content.id)
+        self.assertEqual(response.context_data['ending'], '?s=None&f=None')
+        self.assertEqual(response.context_data['html'], '<p>test text</p>')
