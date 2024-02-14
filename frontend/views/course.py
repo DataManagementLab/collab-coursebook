@@ -440,7 +440,6 @@ class CourseView(LoginRequiredMixin, DetailView, FormMixin):
                                                        entry.topic.
                                                   get_contents(self.sorted_by, self.filtered_by)})
 
-
         context["structure"] = topics_recursive
         context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()
         context['user'] = self.request.user
@@ -559,7 +558,7 @@ class PublicCourseView(DetailView, FormMixin):
     :type CourseView.context_object_name: str
     """
 
-    template_name = 'frontend/course/view.html'
+    template_name = 'frontend/course/public_view.html'
     model = Course
     form_class = FilterAndSortForm
     context_object_name = "course"
@@ -603,18 +602,22 @@ class PublicCourseView(DetailView, FormMixin):
         """
         
         course_id = self.get_object().id
+        # favorite_list = [] # Favorite.objects.filter(course=course_id, user=get_user(self.request).profile)
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
             objects.filter(course=context["course"]).order_by('index')
         topics_recursive = []
         current_topic = None
+        # for favorite in Favorite.objects.filter(course=course_id, user=get_user(self.request).profile):
+            # favorite_list.append(favorite.content)
+
         for entry in structure_entries:
             index_split = entry.index.split('/')
             # Topic
             if len(index_split) == 1:
                 current_topic = {'topic': entry.topic, 'subtopics': [],
                                  'topic_contents': entry.topic.get_contents(self.sorted_by,
-                                                                            self.filtered_by)}
+                                                                            self.filtered_by).filter(public=True)}
                 topics_recursive.append(current_topic)
             # Subtopic
             # Only handle up to one subtopic level
@@ -622,10 +625,12 @@ class PublicCourseView(DetailView, FormMixin):
                 current_topic["subtopics"].append({'topic': entry.topic,
                                                    'topic_contents':
                                                        entry.topic.
-                                                  get_contents(self.sorted_by, self.filtered_by)})
-
+                                                  get_contents(self.sorted_by, self.filtered_by)}).filter(public=True)
 
         context["structure"] = topics_recursive
+        # context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()
+        # context['user'] = self.request.user
+        # context['favorite'] = favorite_list
         if self.sorted_by is not None:
             context['sorting'] = self.sorted_by
         if self.filtered_by is not None:

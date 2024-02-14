@@ -23,7 +23,11 @@
 
     <div class="card-body">
         <h5 class="card-title">
-            <a href="{% url 'frontend:course' pk=course.pk %}">
+            {% if user.is_authenticated %}
+                <a href="{% url 'frontend:course' pk=course.pk %}">
+            {% else %}
+                <a href="{% url 'frontend:public' pk=course.pk %}">
+            {% endif %}
                 {{ course.title|slice:':33' }}
                 {% if course.title|length >= 33 %}
                     ...

@@ -42,12 +42,19 @@
                                 </span>
                             {% endif %}
                                 &middot;
-                            <a class= "badge bg-primary" 
-                            href="{% url 'frontend:content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
-                                {% fa6_icon 'eye' 'far' %}
-                            </a>
-                            &middot;
                             {% if user.is_authenticated %}
+                                <a class= "badge bg-primary" 
+                                href="{% url 'frontend:content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
+                                    {% fa6_icon 'eye' 'far' %}
+                                </a>
+                            {% else %}
+                                <a class= "badge bg-primary" 
+                                href="{% url 'frontend:public-content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
+                                    {% fa6_icon 'eye' 'far' %}
+                                </a>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                            &middot;
                             {% if content in favorite %}
                             <a class="badge bg-primary"
                                 href="{% url 'frontend:coursebook-remove-courseview' course.pk content.topic.pk content.pk %}">
