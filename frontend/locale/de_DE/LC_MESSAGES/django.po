@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 17:09+0000\n"
+"POT-Creation-Date: 2024-02-15 23:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,24 +21,24 @@ msgstr ""
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
-#: frontend/forms/course.py:108
+#: frontend/forms/course.py:109
 msgid "Date"
 msgstr "Datum"
 
-#: frontend/forms/course.py:108
-#: frontend/templates/frontend/content/detail.html:212
+#: frontend/forms/course.py:109
+#: frontend/templates/frontend/content/detail.html:231
 msgid "Rating"
 msgstr "Bewertung"
 
-#: frontend/forms/course.py:109
+#: frontend/forms/course.py:110
 msgid "Filter by"
 msgstr "Filtern nach"
 
-#: frontend/forms/course.py:114
+#: frontend/forms/course.py:115
 msgid "Sort by"
 msgstr "Sortieren nach"
 
-#: frontend/forms/course.py:132
+#: frontend/forms/course.py:133
 msgid "Topics"
 msgstr "Themen"
 
@@ -88,7 +88,7 @@ msgid "Are you sure you want to delete the following comment?"
 msgstr "Soll der folgende Kommentar wirklich gelöscht werden?"
 
 #: frontend/templates/frontend/comment/delete_confirm.html:30
-#: frontend/templates/frontend/content/detail.html:181
+#: frontend/templates/frontend/content/detail.html:200
 #: frontend/templates/frontend/course/view.html:253
 #: frontend/templates/frontend/history/history_compare_view.html:101
 msgid "Confirm"
@@ -97,7 +97,7 @@ msgstr "Bestätigen"
 #: frontend/templates/frontend/comment/delete_confirm.html:33
 #: frontend/templates/frontend/comment/edit.html:26
 #: frontend/templates/frontend/content/add.html:77
-#: frontend/templates/frontend/content/detail.html:178
+#: frontend/templates/frontend/content/detail.html:197
 #: frontend/templates/frontend/content/edit.html:102
 #: frontend/templates/frontend/course/create.html:32
 #: frontend/templates/frontend/course/duplicate.html:37
@@ -223,7 +223,7 @@ msgstr ""
 "Code zu integrieren."
 
 #: frontend/templates/frontend/content/detail.html:25
-#: frontend/templates/frontend/content/detail.html:111
+#: frontend/templates/frontend/content/detail.html:124
 #: frontend/templates/frontend/content/reading_mode.html:12
 msgid "Reading Mode"
 msgstr "Lesemodus"
@@ -233,54 +233,55 @@ msgstr "Lesemodus"
 msgid "Actions"
 msgstr "Aktionen"
 
-#: frontend/templates/frontend/content/detail.html:40
+#: frontend/templates/frontend/content/detail.html:42
 msgid "Approve"
 msgstr "Genehmigen"
 
-#: frontend/templates/frontend/content/detail.html:45
+#: frontend/templates/frontend/content/detail.html:47
 msgid "Disapprove"
 msgstr "Missbilligen"
 
-#: frontend/templates/frontend/content/detail.html:52
-#: frontend/templates/frontend/content/detail.html:57
-#: frontend/templates/frontend/course/coursebook.html:21 frontend/urls.py:115
+#: frontend/templates/frontend/content/detail.html:54
+#: frontend/templates/frontend/content/detail.html:59
+#: frontend/templates/frontend/course/coursebook.html:21 frontend/urls.py:124
 msgid "Coursebook"
 msgstr "Kursbuch"
 
-#: frontend/templates/frontend/content/detail.html:55
+#: frontend/templates/frontend/content/detail.html:68
 #: frontend/templates/frontend/profile/profile.html:18
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: frontend/templates/frontend/content/detail.html:63
-#: frontend/templates/frontend/content/detail.html:70
-#: frontend/templates/frontend/content/detail.html:77
+#: frontend/templates/frontend/content/detail.html:76
 #: frontend/templates/frontend/content/detail.html:83
 #: frontend/templates/frontend/content/detail.html:90
-#: frontend/templates/frontend/content/detail.html:97
+#: frontend/templates/frontend/content/detail.html:96
+#: frontend/templates/frontend/content/detail.html:103
+#: frontend/templates/frontend/content/detail.html:110
 #: frontend/templates/frontend/course/view.html:69
 msgid "View History"
 msgstr "Versionsgeschichte"
 
-#: frontend/templates/frontend/content/detail.html:104
-#: frontend/templates/frontend/content/detail.html:163
+#: frontend/templates/frontend/content/detail.html:117
+#: frontend/templates/frontend/content/detail.html:182
+#: frontend/templates/frontend/tutorial/content.html:36
 msgid "Delete"
 msgstr "Löschen"
 
-#: frontend/templates/frontend/content/detail.html:122
-#: frontend/templates/frontend/content/detail.html:128
+#: frontend/templates/frontend/content/detail.html:135
+#: frontend/templates/frontend/content/detail.html:141
 msgid "Back to course "
 msgstr "Zurück zum Kurs"
 
-#: frontend/templates/frontend/content/detail.html:139
+#: frontend/templates/frontend/content/detail.html:152
 msgid "By"
 msgstr "Von"
 
-#: frontend/templates/frontend/content/detail.html:154
+#: frontend/templates/frontend/content/detail.html:173
 msgid "Created at"
 msgstr "Erstellt am"
 
-#: frontend/templates/frontend/content/detail.html:168
+#: frontend/templates/frontend/content/detail.html:187
 #, python-format
 msgid ""
 "Are you sure you want to delete this %(type)s? This action cannot be undone."
@@ -288,26 +289,25 @@ msgstr ""
 "Soll dieses %(type)s wirklich gelöscht werden? Diese Aktion kann nicht "
 "rückgängig gemacht werden."
 
-#: frontend/templates/frontend/content/detail.html:197
+#: frontend/templates/frontend/content/detail.html:216
 #: frontend/templates/frontend/course/public_view.html:50
 #: frontend/templates/frontend/course/view.html:101
 msgid "Description"
 msgstr "Beschreibung"
 
-#: frontend/templates/frontend/content/detail.html:217
+#: frontend/templates/frontend/content/detail.html:236
 msgid "On average"
 msgstr "Durchschnittlich"
 
-#: frontend/templates/frontend/content/detail.html:229
+#: frontend/templates/frontend/content/detail.html:248
 msgid "My rating"
 msgstr "Meine Bewertung"
-msgstr "Meine Bewertung"
 
-#: frontend/templates/frontend/content/detail.html:251
+#: frontend/templates/frontend/content/detail.html:270
 msgid "Comments"
 msgstr "Kommentare"
 
-#: frontend/templates/frontend/content/detail.html:259
+#: frontend/templates/frontend/content/detail.html:278
 msgid "Send comment"
 msgstr "Kommentar hinzufügen"
 
@@ -437,12 +437,12 @@ msgstr "Inhaltsverzeichnis"
 msgid "No topics yet"
 msgstr "Bisher keine Themen"
 
-#: frontend/templates/frontend/course/public_view.html:155
+#: frontend/templates/frontend/course/public_view.html:140
 #: frontend/templates/frontend/course/view.html:220
 msgid "No Topics"
 msgstr "Keine Themen"
 
-#: frontend/templates/frontend/course/public_view.html:158
+#: frontend/templates/frontend/course/public_view.html:143
 #: frontend/templates/frontend/course/view.html:223
 msgid "This course doesn't have topics at the moment."
 msgstr "Der Kurs hat momentan keine Themen."
@@ -496,7 +496,7 @@ msgstr "Kurse"
 msgid "Official"
 msgstr "Offiziell"
 
-#: frontend/templates/frontend/course_lists/card_course.html:57
+#: frontend/templates/frontend/course_lists/card_course.html:65
 msgid "Contents"
 msgstr "Inhalte"
 
@@ -507,7 +507,6 @@ msgstr "Keine passenden Kurse gefunden"
 #: frontend/templates/frontend/course_lists/courses.html:25
 #: frontend/templates/frontend/course_lists/courses_category.html:26
 #: frontend/templates/frontend/course_lists/courses_period.html:25
-#: frontend/templates/frontend/course_lists/public_courses.html:21
 msgid "Sort by:"
 msgstr "Sortieren nach:"
 
@@ -858,30 +857,26 @@ msgstr ""
 "auf „AKTIONEN“ klicken, um auf mehrere Hauptfunktionen zuzugreifen:"
 
 #: frontend/templates/frontend/tutorial/content.html:16
-msgid "reading mode"
+msgid "Reading mode"
 msgstr "Lesemodus"
 
 #: frontend/templates/frontend/tutorial/content.html:21
 msgid ""
-"add or remove content from coursebook (the changes should be noticeable on "
+"Add or remove content from coursebook (the changes should be noticeable on "
 "the course page)"
 msgstr ""
 "den Inhalt zum Kursbuch hinzufügen oder aus dem Kursbuch entfernen (die "
 "Änderungen sollten auf der Kursseite sichtbar sein)"
 
 #: frontend/templates/frontend/tutorial/content.html:26
-msgid "edit, similar to section “Add Content”"
+msgid "Edit, similar to section “Add Content”"
 msgstr "den Inhalt bearbeiten, ähnlich wie im Abschnitt „Inhalt hinzufügen“ "
 
 #: frontend/templates/frontend/tutorial/content.html:31
-msgid "view history, similar to section “History”"
+msgid "View history, similar to section “History”"
 msgstr ""
 "Versionsgeschichte des Inhalts anschauen, ähnlich wie im Abschnitt "
 "„Versionsgeschichte“ "
-
-#: frontend/templates/frontend/tutorial/content.html:36
-msgid "delete"
-msgstr "löschen"
 
 #: frontend/templates/frontend/tutorial/course.html:8
 msgid "Course"
@@ -1215,7 +1210,7 @@ msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: frontend/views/content.py:821
+#: frontend/views/content.py:822
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 17:09+0000\n"
+"POT-Creation-Date: 2024-02-15 23:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,23 +45,23 @@ msgstr "Bildanhänge"
 msgid "Default: 0:00"
 msgstr "Standard: 0:00"
 
-#: content/forms.py:218
+#: content/forms.py:239
 msgid "Upload an existing Markdown file"
 msgstr "Eine existierende Markdown Datei hochladen"
 
-#: content/forms.py:219
+#: content/forms.py:240
 msgid "Write Markdown with editor"
 msgstr "Markdown mit Editor schreiben"
 
-#: content/forms.py:255
+#: content/forms.py:276
 msgid "You must upload a Markdown file."
 msgstr "Laden sie bitte eine Markdown Datei hoch."
 
-#: content/forms.py:258 content/forms.py:296
+#: content/forms.py:279 content/forms.py:317
 msgid "You must put in some text."
 msgstr "Geben sie bitte Text ein."
 
-#: content/forms.py:260
+#: content/forms.py:281
 msgid "None of the options were chosen."
 msgstr "Keine Option ausgewählt."
 
@@ -70,12 +70,15 @@ msgid "PDF"
 msgstr "PDF"
 
 #: content/models.py:123 content/models.py:211 content/models.py:309
-#: content/models.py:357 content/templates/content/reading_mode/Image.html:15
+#: content/models.py:357
+#: content/templates/content/reading_mode/Exercise.html:43
+#: content/templates/content/reading_mode/Image.html:15
 #: content/templates/content/reading_mode/Latex.html:16
 #: content/templates/content/reading_mode/MD.html:16
 #: content/templates/content/reading_mode/PDF.html:18
 #: content/templates/content/reading_mode/Textfield.html:14
 #: content/templates/content/view/AttachedImage.html:10
+#: content/templates/content/view/Exercise.html:25
 #: content/templates/content/view/Image.html:7
 #: content/templates/content/view/Latex.html:10
 #: content/templates/content/view/MD.html:16
@@ -84,9 +87,12 @@ msgstr "PDF"
 msgid "Source"
 msgstr "Quelle"
 
-#: content/models.py:124 content/templates/content/reading_mode/Image.html:25
+#: content/models.py:124
+#: content/templates/content/reading_mode/Exercise.html:53
+#: content/templates/content/reading_mode/Image.html:25
 #: content/templates/content/reading_mode/PDF.html:28
 #: content/templates/content/view/AttachedImage.html:18
+#: content/templates/content/view/Exercise.html:33
 #: content/templates/content/view/Image.html:15
 #: content/templates/content/view/PDF.html:18
 msgid "License"
@@ -241,6 +247,28 @@ msgstr "Panopto-Video-Inhalt"
 #: content/models.py:524
 msgid "Panopto Video Contents"
 msgstr "Panopto-Video-Inhalte"
+
+#: content/models.py:589
+msgid "Exercise"
+msgstr "Übungen"
+
+#: content/models.py:591
+#: content/templates/content/reading_mode/Exercise.html:13
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#: content/models.py:596
+#: content/templates/content/reading_mode/Exercise.html:25
+msgid "Solutions"
+msgstr "Lösungen"
+
+#: content/models.py:606
+msgid "Textfield Content"
+msgstr "Textfeld-Inhalt"
+
+#: content/models.py:607
+msgid "Exercise Contents"
+msgstr "Übungs-Inhalte"
 
 #: content/static/yt_api.py:113
 msgid "Hours"
