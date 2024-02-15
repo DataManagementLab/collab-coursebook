@@ -262,10 +262,6 @@ msgstr "Aufgaben"
 msgid "Solutions"
 msgstr "Lösungen"
 
-#: content/models.py:606
-msgid "Textfield Content"
-msgstr "Textfeld-Inhalt"
-
 #: content/models.py:607
 msgid "Exercise Contents"
 msgstr "Übungs-Inhalte"
