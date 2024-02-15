@@ -761,7 +761,13 @@ class EditContentViewTestCase(MediaTestCase):
 
 
 class PublicContentReadingModeViewTestCase(MediaTestCase):
+    """
+    Test case for the PublicContentReadingModeView class.
+    """
     def setUp(self):
+        """
+        Set up the test environment by initializing necessary variables and objects.
+        """
         super().setUp()
         self.factory = RequestFactory()
         self.client = Client()
@@ -774,7 +780,10 @@ class PublicContentReadingModeViewTestCase(MediaTestCase):
         self.content.public = True
         self.content.save()
 
-    def test_get_context_data(self,):
+    def test_get_context_data(self):
+        """
+        Test case for the `get_context_data` method of the PublicContentReadingModeView class.
+        """
         request = self.factory.get(reverse('frontend:public-content-reading-mode', args=(self.course.id, self.topic.id, self.content.id)))
         request.user = self.user
         response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=self.content.id)

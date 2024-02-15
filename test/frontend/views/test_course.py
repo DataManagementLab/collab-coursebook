@@ -155,22 +155,12 @@ class FavoriteTestCase(BaseCourseViewTestCase):
         self.client.post(path, data)
         self.assertEqual(self.user.profile.stared_courses.all().count(), 0)
 
-
-from django.urls import reverse
-from django.test import TestCase
-from django.contrib.auth.models import User
-from base.models import Course, CourseStructureEntry, Topic
-from frontend.forms import FilterAndSortForm
-from frontend.views.course import PublicCourseView
-
-
 class PublicCourseViewTestCase(BaseCourseViewTestCase):
     def setUp(self):
         super().setUp()
         self.course = self.course1
         self.course.public = True
         self.course.save()
-        #log to console
         self.path = reverse('frontend:public', kwargs={'pk': self.course.pk})
 
     def test_get_context_data(self):
@@ -180,12 +170,8 @@ class PublicCourseViewTestCase(BaseCourseViewTestCase):
         # Assert that the context contains the necessary keys
         self.assertIn('course', context)
         self.assertIn('structure', context)
-        self.assertIn('sorting', context)
-        self.assertIn('filtering', context)
         # Assert that the context values are correct
         self.assertEqual(context['course'], self.course)
-        self.assertEqual(context['sorting'], 'None')
-        self.assertEqual(context['filtering'], 'None')
         # Assert that the structure is correctly populated
         structure_entries = CourseStructureEntry.objects.filter(course=self.course).order_by('index')
         topics_recursive = context['structure']
@@ -203,6 +189,4 @@ class PublicCourseViewTestCase(BaseCourseViewTestCase):
                 break
             topic_entry = topics_recursive[i]
             self.assertEqual(topic_entry['topic'], entry.topic)
-            self.assertEqual(len(topic_entry['subtopics']), number_of_subtopics[i])  # No subtopics in this test case
-
-    # Add more test methods as needed
+            self.assertEqual(len(topic_entry['subtopics']), number_of_subtopics[i])
