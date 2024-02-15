@@ -569,24 +569,7 @@ class PublicCourseView(DetailView, FormMixin):
         Initialize the course view with pre configuration for the sort and filter options
         with default values.
         """
-        self.sorted_by = 'None'
-        self.filtered_by = 'None'
         super().__init__()
-
-    # def form_valid(self, form):
-    #     """Form validation
-
-    #     Saves the filters and sorting from the form.
-
-    #     :param form: The form that contains the filter and the sorting
-    #     :type form: FilterAndSortForm
-
-    #     :return: Itself rendered to a response
-    #     :rtype: HttpResponse
-    #     """
-    #     self.sorted_by = form.cleaned_data['sort']
-    #     self.filtered_by = form.cleaned_data['filter']
-    #     return self.render_to_response(self.get_context_data())
 
     def get_context_data(self, **kwargs):
         """Context data
@@ -601,23 +584,19 @@ class PublicCourseView(DetailView, FormMixin):
         :rtype: dict[str, Any]
         """
         
-        course_id = self.get_object().id
-        # favorite_list = [] # Favorite.objects.filter(course=course_id, user=get_user(self.request).profile)
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
             objects.filter(course=context["course"]).order_by('index')
         topics_recursive = []
         current_topic = None
-        # for favorite in Favorite.objects.filter(course=course_id, user=get_user(self.request).profile):
-            # favorite_list.append(favorite.content)
 
         for entry in structure_entries:
             index_split = entry.index.split('/')
             # Topic
             if len(index_split) == 1:
                 current_topic = {'topic': entry.topic, 'subtopics': [],
-                                 'topic_contents': entry.topic.get_contents(self.sorted_by,
-                                                                            self.filtered_by).filter(public=True)}
+                                 'topic_contents': entry.topic.get_contents(None,
+                                                                            None).filter(public=True)}
                 topics_recursive.append(current_topic)
             # Subtopic
             # Only handle up to one subtopic level
@@ -625,14 +604,7 @@ class PublicCourseView(DetailView, FormMixin):
                 current_topic["subtopics"].append({'topic': entry.topic,
                                                    'topic_contents':
                                                        entry.topic.
-                                                  get_contents(self.sorted_by, self.filtered_by).filter(public=True)})
+                                                  get_contents(None, None).filter(public=True)})
 
         context["structure"] = topics_recursive
-        # context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()
-        # context['user'] = self.request.user
-        # context['favorite'] = favorite_list
-        if self.sorted_by is not None:
-            context['sorting'] = self.sorted_by
-        if self.filtered_by is not None:
-            context['filtering'] = self.filtered_by
         return context
