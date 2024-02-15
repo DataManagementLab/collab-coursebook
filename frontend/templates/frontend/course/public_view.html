@@ -107,9 +107,9 @@
         </div>
     </div>
 
-    <div class="mt-3" style="margin: 40px 0;">
+    {% comment %} <div class="mt-3" style="margin: 40px 0;">
         <form id="filter+sort" class="form-inline" method="post"
-            action="{% url 'frontend:course' course.id %}">
+            action="{% url 'frontend:public' course.id %}">
             {% csrf_token %}
             {% for f in form %}
                 <div class="form-group" style="margin-end: 10px">
@@ -120,7 +120,7 @@
                 </div>
             {% endfor %}
         </form>
-    </div>
+    </div> {% endcomment %}
 
     {# Display course contents #}
     <div class="mt-3" style="margin: 40px 0;">

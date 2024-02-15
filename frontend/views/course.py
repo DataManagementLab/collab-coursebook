@@ -573,20 +573,20 @@ class PublicCourseView(DetailView, FormMixin):
         self.filtered_by = 'None'
         super().__init__()
 
-    def form_valid(self, form):
-        """Form validation
+    # def form_valid(self, form):
+    #     """Form validation
 
-        Saves the filters and sorting from the form.
+    #     Saves the filters and sorting from the form.
 
-        :param form: The form that contains the filter and the sorting
-        :type form: FilterAndSortForm
+    #     :param form: The form that contains the filter and the sorting
+    #     :type form: FilterAndSortForm
 
-        :return: Itself rendered to a response
-        :rtype: HttpResponse
-        """
-        self.sorted_by = form.cleaned_data['sort']
-        self.filtered_by = form.cleaned_data['filter']
-        return self.render_to_response(self.get_context_data())
+    #     :return: Itself rendered to a response
+    #     :rtype: HttpResponse
+    #     """
+    #     self.sorted_by = form.cleaned_data['sort']
+    #     self.filtered_by = form.cleaned_data['filter']
+    #     return self.render_to_response(self.get_context_data())
 
     def get_context_data(self, **kwargs):
         """Context data
@@ -625,7 +625,7 @@ class PublicCourseView(DetailView, FormMixin):
                 current_topic["subtopics"].append({'topic': entry.topic,
                                                    'topic_contents':
                                                        entry.topic.
-                                                  get_contents(self.sorted_by, self.filtered_by)}).filter(public=True)
+                                                  get_contents(self.sorted_by, self.filtered_by).filter(public=True)})
 
         context["structure"] = topics_recursive
         # context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()

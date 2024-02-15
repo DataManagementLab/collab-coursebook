@@ -774,15 +774,8 @@ class PublicContentReadingModeViewTestCase(MediaTestCase):
         self.content.public = True
         self.content.save()
 
-    def test_get_context_data(self):
-
-        # self.request_factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
-        # self.request_factory.user = User.objects.first()
-        # response = approve_content(self.request_factory, self.course.id, self.topic.id, self.content.id, approval)
-        # self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
-
-
-        request = self.factory.get(reverse('frontend:content-reading-mode', args=(self.course.id, self.topic.id, self.content.id)))
+    def test_get_context_data(self,):
+        request = self.factory.get(reverse('frontend:public-content-reading-mode', args=(self.course.id, self.topic.id, self.content.id)))
         request.user = self.user
         response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=self.content.id)
 
@@ -792,9 +785,21 @@ class PublicContentReadingModeViewTestCase(MediaTestCase):
         self.assertEqual(response.context_data['topic_id'], self.topic.id)
         self.assertEqual(response.context_data['previous_id'], self.content.id)
         self.assertEqual(response.context_data['next_id'], self.content.id)
-        if request.GET.get('coursebook'):
-            self.assertEqual(response.context_data['ending'], '?coursebook=True')
-        if request.GET.get('s'):
-            self.assertEqual(response.context_data['ending'], request.GET.get('s') + "&f=" + request.GET.get('f'))
-        if self.content.type == 'MD':
-            self.assertEqual(response.context_data['html'], self.content.md.open().read().decode('utf-8'))
+        tmp = utils.create_content(model.MDContent.TYPE)
+        tmp.public = True
+        tmp.save()
+        md_code = form.get_placeholder(model.MDContent.TYPE, 'textfield')
+        md = model.MDContent.objects.create(textfield=md_code, content=tmp)
+        md.save()
+
+        for content in Content.objects.all():
+            request = self.factory.get(reverse('frontend:public-content-reading-mode', args=(self.course.id, self.topic.id, content.id)))
+            request.user = self.user
+            response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=content.id)
+            if request.GET.get('coursebook'):
+                self.assertEqual(response.context_data['ending'], '?coursebook=True')
+            if request.GET.get('s'):
+                self.assertEqual(response.context_data['ending'], request.GET.get('s') + "&f=" + request.GET.get('f'))
+            if content.type == 'MD':
+                self.assertEqual(response.context_data['html'], md_code)
+        
