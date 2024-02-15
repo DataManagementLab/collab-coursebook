@@ -30,6 +30,7 @@ EXPOSE 8000
 USER 1000
 ENV USER=collab
 WORKDIR /home/collab/collab-coursebook
+RUN source /venv/bin/activate
 
 ENTRYPOINT ["python", "./manage.py"]
 CMD ["runserver", "0.0.0.0:8000"]
