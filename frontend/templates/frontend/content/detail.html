@@ -19,21 +19,23 @@
 {% block content %}
     <div class="float-end text-end">
         <div style="display:inline" class="dropdown show">
-            <a href="{% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}"
-                class= "btn btn-primary text-blue">
-                {% fa6_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
-            </a>
-            {# Drop down actions #}
-            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                {% trans 'Actions' %}
-            </button>
+            {% if user.is_authenticated %}
+                <a href="{% url 'frontend:content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}"
+                    class= "btn btn-primary text-blue">
+                    {% fa6_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
+                </a>
 
-            {# Drop down menu #}
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                {# Remove and add to course book option #}
-                {% if user.is_authenticated %}
-                    {% if user|check_approve_content_permission:course %}
+                {# Drop down actions #}
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    {% trans 'Actions' %}
+                </button>
+
+                {# Drop down menu #}
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {# Remove and add to course book option #}
+                    {% if user.is_authenticated %}
+                        {% if user|check_approve_content_permission:course %}
                         {% if not content.approved %}
                             <a class="dropdown-item"
                                 href="{% url 'frontend:approve' course.id topic.id content.id True %}">
@@ -47,84 +49,99 @@
                         {% endif %}
                     {% endif %}
                     {% if favorite %}
-                        <a class="dropdown-item"
-                           href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">
-                            {% fa6_icon 'minus' 'fas' %} {% trans 'Coursebook' %}
-                        </a>
-                    {% else %}
-                        <a class="dropdown-item"
-                           href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">
-                            {% fa6_icon 'plus' 'fas' %} {% trans 'Coursebook' %}
-                        </a>
-                    {% endif %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:coursebook-remove' course.id topic.id content.id %}">
+                                {% fa6_icon 'minus' 'fas' %} {% trans 'Coursebook' %}
+                            </a>
+                        {% else %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:coursebook-add' course.id topic.id content.id %}">
+                                {% fa6_icon 'plus' 'fas' %} {% trans 'Coursebook' %}
+                            </a>
+                        {% endif %}
 
-                    <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider"></div>
 
-                    {# Edit option #}
-                    {% if user|check_edit_content_permission:content %}
-                        <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
-                            {% fa6_icon 'pencil-alt' 'fas' %} {% trans 'Edit' %}
-                        </a>
-                    {% endif %}
+                        {# Edit option #}
+                        {% if user|check_edit_content_permission:content %}
+                            <a class="dropdown-item" href="{% url 'frontend:content-edit' course.id topic.id content.id %}">
+                                {% fa6_icon 'pencil-alt' 'fas' %} {% trans 'Edit' %}
+                            </a>
+                        {% endif %}
 
-                    {# History view #}
-                    {% if content.type == 'Textfield' %}
-                        <a class="dropdown-item"
-                           href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
-                            {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
-                        </a>
-                    {% endif %}
+                        {# History view #}
+                        {% if content.type == 'Textfield' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:textfield-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
 
-                    {% if content.type == 'YouTubeVideo' %}
-                        <a class="dropdown-item"
-                           href="{% url 'frontend:ytvideo-history' course.id topic.id content.id %}">
-                            {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
-                        </a>
-                    {% endif %}
+                        {% if content.type == 'YouTubeVideo' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:ytvideo-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
 
-                    {% if content.type == 'Image' %}
-                        <a class="dropdown-item"
-                           href="{% url 'frontend:image-history' course.id topic.id content.id %}">
-                            {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
-                        </a>
-                    {% endif %}
+                        {% if content.type == 'Image' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:image-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
 
-                    {% if content.type == 'PDF' %}
-                        <a class="dropdown-item" href="{% url 'frontend:pdf-history' course.id topic.id content.id %}">
-                            {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
-                        </a>
-                    {% endif %}
+                        {% if content.type == 'PDF' %}
+                            <a class="dropdown-item" href="{% url 'frontend:pdf-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
 
-                    {% if content.type == 'Latex' %}
-                        <a class="dropdown-item"
-                           href="{% url 'frontend:latex-history' course.id topic.id content.id %}">
-                            {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
-                        </a>
-                    {% endif %}
+                        {% if content.type == 'Latex' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:latex-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
 
-                    {% if content.type == 'MD' %}
-                        <a class="dropdown-item"
-                           href="{% url 'frontend:md-history' course.id topic.id content.id %}">
-                            {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
-                        </a>
-                    {% endif %}
+                        {% if content.type == 'MD' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:md-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
 
-                    {# Delete option #}
-                    {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
-                        <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal"
-                           data-bs-target="#deleteContentModal">{% fa6_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
+                        {# Delete option #}
+                        {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
+                            <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal"
+                            data-bs-target="#deleteContentModal">{% fa6_icon 'trash' 'fas' %} {% trans 'Delete' %}</a>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-            </div>
+                </div>
+            {% else %}
+                <a href="{% url 'frontend:public-content-reading-mode' course.id topic.id content.id %}{% if ending %}{{ ending }}{% endif %}"
+                    class= "btn btn-primary text-blue">
+                    {% fa6_icon 'eye' 'far' %} {% trans 'Reading Mode' %}
+                </a>
+            {% endif %}
         </div>
     </div>
 
     {# Back to course option #}
-    <a href="
-            {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
-       class="" style="font-size:125%">
-        {% fa6_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
-    </a>
+    {% if user.is_authenticated %}
+        <a href="
+                {% url 'frontend:course' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
+        class="" style="font-size:125%">
+            {% fa6_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
+        </a>
+    {% else %}
+        <a href="
+                {% url 'frontend:public' course.id %}{% if ending == '?coursebook=True' %}#coursebook{% else %}#{{ topic.title }}{% endif %}"
+        class="" style="font-size:125%">
+            {% fa6_icon 'chevron-left' 'fas' %} {% trans "Back to course " %} <i>{{ course.title }}</i>
+        </a>
+    {% endif %}
+
 
     <h1 style="word-wrap: break-word;margin-top: 20px;margin-bottom: 20px;">
         {{ content.topic }}

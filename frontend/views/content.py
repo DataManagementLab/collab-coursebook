@@ -669,7 +669,6 @@ class ContentView(DetailView):
 
         topic = Topic.objects.get(pk=self.kwargs['topic_id'])
         context['topic'] = topic
-        context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
 
         """
         if '.md' in content.file.name:
@@ -707,9 +706,10 @@ class ContentView(DetailView):
 
         if self.request.user.is_authenticated:
             context['user_rate'] = content.get_user_rate(self.request.user.profile)
-
-        context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
+            context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
                                                       content=content).count() > 0
+            context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
+            
 
         return context
 
@@ -883,6 +883,71 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
             # .get_coursebook_flat(get_user(self.request), course)
         else:
             contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))
+
+        list_of_content_ids = [content.id for content in contents]
+
+        index_of_content = list_of_content_ids.index(content.id)
+        if index_of_content > 0:
+            context['previous_id'] = list_of_content_ids[index_of_content - 1]
+        else:
+            context['previous_id'] = list_of_content_ids[-1]
+
+        if index_of_content == len(list_of_content_ids) - 1:
+            context['next_id'] = list_of_content_ids[0]
+        else:
+            context['next_id'] = list_of_content_ids[index_of_content + 1]
+        if self.request.GET.get('coursebook'):
+            context['ending'] = '?coursebook=True'
+        elif self.request.GET.get('s'):
+            context['ending'] = '?s=' + self.request.GET.get('s') + "&f=" + \
+                                self.request.GET.get('f')
+
+        if content.type == "MD":
+            context['html'] = Markdown.render(content, False)
+
+        return context
+
+class PublicContentReadingModeView(DetailView):
+    """Content reading mode view
+
+    Displays the content to the user.
+
+    :attr ContentReadingModeView.model: The model of the view
+    :type ContentReadingModeView.model: Model
+    :attr ContentReadingModeView.template_name: The path to the html template
+    :type ContentReadingModeView.template_name: str
+    """
+    model = Content
+    template_name = "frontend/content/reading_mode.html"
+
+    def get_context_data(self, **kwargs):
+        """Context data
+
+        Gets the context data of the view which can be accessed in
+        the html templates.
+
+        :param kwargs: The additional arguments
+        :type kwargs: dict[str, Any]
+
+        :return: the context data
+        :rtype: dict[str, Any]
+        """
+        context = super().get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+        context['topic_id'] = topic_id = self.kwargs['topic_id']
+        content = self.get_object()
+
+        topic = Topic.objects.get(pk=topic_id)
+        if self.request.GET.get('coursebook'):
+            course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
+            contents = [
+                f.content for f in Favorite.objects.filter(
+                    course=course,
+                    user=self.request.user.profile,
+                    public = True)]  # models
+            # .get_coursebook_flat(get_user(self.request), course)
+        else:
+            contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f')).filter(public=True)
 
         list_of_content_ids = [content.id for content in contents]
 

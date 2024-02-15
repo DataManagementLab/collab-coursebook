@@ -136,6 +136,8 @@ class Course(models.Model):
     :type Course.moderators: ManyToManyField - Profile
     :attr Course.restrict_changes: The restriction who can edit the course
     :type Course.restrict_changes: BooleanField
+    :attr Content.public: The status of the course if it is public
+    :type Content.public: BooleanField
     :attr Course.category: The category of the course
     :type Course.category: ForeignKey - Category
     :attr Course.period: The period of the course
@@ -173,7 +175,9 @@ class Course(models.Model):
                                                        "can only be edited by the owners"),
                                            blank=True,
                                            default=False)
-
+    public = models.BooleanField(verbose_name=_("Publicly accessible"),
+                                 help_text=_("This course can be accessed by unregistered users "),
+                                 default=False)
     category = models.ForeignKey(Category,
                                  verbose_name=_("Category"),
                                  related_name="courses",

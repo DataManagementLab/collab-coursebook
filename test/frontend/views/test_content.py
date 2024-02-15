@@ -13,9 +13,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from base.models import Content, Course, Category, Topic
-from django.contrib.auth.models import User
-from django.test import RequestFactory
+from base.models import Content, Course, Topic
 
 import content.forms as form
 import content.models as model
@@ -28,6 +26,10 @@ from frontend.views.content import clean_attachment, approve_content
 
 
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.test.client import RequestFactory
+from django.test import Client
+from frontend.views.content import PublicContentReadingModeView
 
 
 class CleanAttachmentTestCase(TestCase):
@@ -808,3 +810,57 @@ class EditContentViewTestCase(MediaTestCase):
         md_content = model.MDContent.objects.first()
         self.assertEqual(md_content.source, 'src text')
         self.assertEqual(md_content.textfield, 'Lorem ipsum')
+
+
+class PublicContentReadingModeViewTestCase(MediaTestCase):
+    """
+    Test case for the PublicContentReadingModeView class.
+    """
+    def setUp(self):
+        """
+        Set up the test environment by initializing necessary variables and objects.
+        """
+        super().setUp()
+        self.factory = RequestFactory()
+        self.client = Client()
+        self.user = User.objects.all().first()
+        self.course = Course.objects.all().first()
+        self.course.public = True
+        self.course.save()
+        self.topic = Topic.objects.all().first()
+        self.content = Content.objects.all().first()
+        self.content.public = True
+        self.content.save()
+
+    def test_get_context_data(self):
+        """
+        Test case for the `get_context_data` method of the PublicContentReadingModeView class.
+        """
+        request = self.factory.get(reverse('frontend:public-content-reading-mode', args=(self.course.id, self.topic.id, self.content.id)))
+        request.user = self.user
+        response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=self.content.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[0], 'frontend/content/reading_mode.html')
+        self.assertEqual(response.context_data['course_id'], self.course.id)
+        self.assertEqual(response.context_data['topic_id'], self.topic.id)
+        self.assertEqual(response.context_data['previous_id'], self.content.id)
+        self.assertEqual(response.context_data['next_id'], self.content.id)
+        tmp = utils.create_content(model.MDContent.TYPE)
+        tmp.public = True
+        tmp.save()
+        md_code = form.get_placeholder(model.MDContent.TYPE, 'textfield')
+        md = model.MDContent.objects.create(textfield=md_code, content=tmp)
+        md.save()
+
+        for content in Content.objects.all():
+            request = self.factory.get(reverse('frontend:public-content-reading-mode', args=(self.course.id, self.topic.id, content.id)))
+            request.user = self.user
+            response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=content.id)
+            if request.GET.get('coursebook'):
+                self.assertEqual(response.context_data['ending'], '?coursebook=True')
+            if request.GET.get('s'):
+                self.assertEqual(response.context_data['ending'], request.GET.get('s') + "&f=" + request.GET.get('f'))
+            if content.type == 'MD':
+                self.assertEqual(response.context_data['html'], md_code)
+        

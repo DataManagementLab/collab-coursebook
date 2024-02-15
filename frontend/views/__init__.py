@@ -7,7 +7,7 @@ frontend views related operation.
 from .content import ContentView
 from .content import rate_content, approve_content
 
-from .course import CourseView, AddCourseView, EditCourseStructureView, CourseDeleteView
+from .course import CourseView, AddCourseView, EditCourseStructureView, CourseDeleteView, PublicCourseView
 
 from .coursebook import add_to_coursebook
 from .courses import CourseListView, CourseListForCategoryView, CourseListForPeriodView

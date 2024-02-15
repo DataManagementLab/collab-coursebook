@@ -6,13 +6,17 @@
 {% load cc_frontend_tags %}
 
 <div class="card ms-3 mt-3" style="width: 20rem;">
-    {% if course.moderators.all %}
+    {% if user.is_authenticated %}
+        {% if course.moderators.all %}
         <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill" 
         style="font-size: 1.25em; background-color: #0a3d62;">
             {% trans 'Official' %}
         </span>
     {% endif %}
     <a href="{% url 'frontend:course' pk=course.pk %}">
+    {% else %}
+        <a href="{% url 'frontend:public' pk=course.pk %}">
+    {% endif %}
         <div class="card-img-top">
             {% if course.image %}
                 <img src="{{ course.image.url }}" class="card-img-top" alt="Course Title Image" width="286"
@@ -25,7 +29,11 @@
 
     <div class="card-body">
         <h5 class="card-title">
-            <a href="{% url 'frontend:course' pk=course.pk %}">
+            {% if user.is_authenticated %}
+                <a href="{% url 'frontend:course' pk=course.pk %}">
+            {% else %}
+                <a href="{% url 'frontend:public' pk=course.pk %}">
+            {% endif %}
                 {{ course.title|slice:':33' }}
                 {% if course.title|length >= 33 %}
                     ...

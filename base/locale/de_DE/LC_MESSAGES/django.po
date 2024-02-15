@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-06 14:37+0000\n"
+"POT-Creation-Date: 2024-02-14 17:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: base/models/content.py:35 base/models/content.py:81
-#: base/models/content.py:145 base/models/content.py:236
-#: base/models/content.py:313
+#: base/models/content.py:145 base/models/content.py:232
+#: base/models/content.py:309
 msgid "Title"
 msgstr "Titel"
 
@@ -27,8 +27,8 @@ msgstr "Titel"
 msgid "Title Image"
 msgstr "Titelbild"
 
-#: base/models/content.py:52 base/models/content.py:178
-#: base/models/content.py:239
+#: base/models/content.py:52 base/models/content.py:174
+#: base/models/content.py:235
 msgid "Category"
 msgstr "Kategorie"
 
@@ -44,7 +44,7 @@ msgstr "Start"
 msgid "end"
 msgstr "Ende"
 
-#: base/models/content.py:97 base/models/content.py:182
+#: base/models/content.py:97 base/models/content.py:178
 msgid "Period"
 msgstr "Zeitraum"
 
@@ -52,16 +52,16 @@ msgstr "Zeitraum"
 msgid "Periods"
 msgstr "Zeiträume"
 
-#: base/models/content.py:148 base/models/content.py:385
+#: base/models/content.py:148 base/models/content.py:379
 msgid "Description"
 msgstr "Beschreibung"
 
-#: base/models/content.py:150 base/models/content.py:408
+#: base/models/content.py:150 base/models/content.py:399
 #: base/models/social.py:100
 msgid "Creation Date"
 msgstr "Erstellt am"
 
-#: base/models/content.py:157 base/models/content.py:254
+#: base/models/content.py:157 base/models/content.py:250
 msgid "Topics"
 msgstr "Themen"
 
@@ -77,67 +77,75 @@ msgstr "Moderatoren"
 msgid "Edit Restriction"
 msgstr "Eingeschränkes Bearbeiten"
 
-#: base/models/content.py:172
+#: base/models/content.py:166
 msgid "This course is restricted and can only be edited by the owners"
 msgstr ""
 "Dieser Kurs ist schreibgeschützt und kann nur von den Besitzer*innen "
 "bearbeitet werden"
 
-#: base/models/content.py:200 base/models/content.py:581
+#: base/models/content.py:170
+msgid "Publicly accessible"
+msgstr "Öffentlich zugänglich"
+
+#: base/models/content.py:171
+msgid "This course can be accessed by unregistered users "
+msgstr "Dieser Kurs ist auch für nicht registrierte Benutzer zugänglich"
+
+#: base/models/content.py:196 base/models/content.py:558
 #: base/models/coursebook.py:29
 msgid "Course"
 msgstr "Kurs"
 
-#: base/models/content.py:201
+#: base/models/content.py:197
 msgid "Courses"
 msgstr "Kurse"
 
-#: base/models/content.py:253 base/models/content.py:378
-#: base/models/content.py:586
+#: base/models/content.py:249 base/models/content.py:372
+#: base/models/content.py:563
 msgid "Topic"
 msgstr "Thema"
 
-#: base/models/content.py:315
+#: base/models/content.py:311
 msgid "Symbol"
 msgstr "Symbol"
 
-#: base/models/content.py:316
+#: base/models/content.py:312
 msgid "Symbol to show with this tag (optional)"
 msgstr "Symbol, das zusammen mit diesem Tag angezeigt wird (optional)"
 
-#: base/models/content.py:329
+#: base/models/content.py:325
 msgid "Tag"
 msgstr "Tag"
 
-#: base/models/content.py:330 base/models/content.py:394
+#: base/models/content.py:326 base/models/content.py:388
 msgid "Tags"
 msgstr "Tags"
 
-#: base/models/content.py:381 base/models/social.py:94
+#: base/models/content.py:375 base/models/social.py:94
 msgid "Author"
 msgstr "Autor*in"
 
-#: base/models/content.py:388
+#: base/models/content.py:382
 msgid "Type"
 msgstr "Typ"
 
-#: base/models/content.py:390
+#: base/models/content.py:384
 msgid "Language"
 msgstr "Sprache"
 
-#: base/models/content.py:398
+#: base/models/content.py:392
 msgid "Set to Read-Only"
 msgstr "Auf Schreibgeschützt stellen"
 
-#: base/models/content.py:399
+#: base/models/content.py:393
 msgid "This content shouldn't be edited"
 msgstr "Dieser Inhalt sollte nicht verändert werden"
 
-#: base/models/content.py:401
+#: base/models/content.py:395
 msgid "Show in public courses"
 msgstr "In öffentlichen Kursen zugänglich machen"
 
-#: base/models/content.py:402
+#: base/models/content.py:396
 msgid ""
 "This content will be displayed in courses that don't require registration"
 msgstr ""
@@ -156,23 +164,28 @@ msgstr "Dieser Inhalt ist von einem Moderator geprüft"
 msgid "Rendered preview"
 msgstr "Vorschau"
 
-#: base/models/content.py:428 base/models/coursebook.py:32
+#: base/models/content.py:419 base/models/coursebook.py:32
 msgid "Content"
 msgstr "Inhalt"
 
-#: base/models/content.py:429
+#: base/models/content.py:420
 msgid "Contents"
 msgstr "Inhalte"
 
-#: base/models/content.py:583
+#: base/models/content.py:430
+#, python-format
+msgid "%(title)s for %(topic)s by %(author)s"
+msgstr "%(title)s für %(topic)s von %(author)s"
+
+#: base/models/content.py:560
 msgid "Index"
 msgstr "Index"
 
-#: base/models/content.py:599
+#: base/models/content.py:576
 msgid "Course Structure Entry"
 msgstr "Eintrag im Kursverzeichnis"
 
-#: base/models/content.py:600
+#: base/models/content.py:577
 msgid "Course Structure Entries"
 msgstr "Einträge im Kursverzeichnis"
 
