@@ -185,12 +185,6 @@ class AddAnkiField(forms.ModelForm):
     This model represents the add form for Anki fields.
     """
 
-    CHOICES = [
-        ('url', _('Upload link to download deck from Anki Web')),
-        ('file', _('Upload an .apkg file')),
-    ]
-    options = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, initial='url')
-
     class Meta:
         """Meta options
 
@@ -204,7 +198,7 @@ class AddAnkiField(forms.ModelForm):
         :type Meta.widgets: dict[str, Widget]
         """
         model = AnkiDeck
-        fields = ['options', 'file', 'source', 'url']
+        fields = ['file', 'source']
         widgets = {
             'file': ModifiedClearableFileInput(attrs={'accept': 'application/zip',
                                                       'required': ''}),
@@ -217,15 +211,10 @@ class AddAnkiField(forms.ModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data
         if 'options' in cleaned_data \
-                and (cleaned_data['options'] == 'file' or cleaned_data['options'] == 'url'):
+                and (cleaned_data['options'] == 'file'):
             options = cleaned_data['options']
             if options == 'file' and not ('file' in cleaned_data and bool(self.cleaned_data['file'])):
                 raise forms.ValidationError(_("You must upload an Anki Deck."))
-            if options == 'url' \
-                    and not ('url' in cleaned_data and bool(self.cleaned_data['url'])):
-                raise forms.ValidationError(_("You must put in a valid URL."))
-        else:
-            raise forms.ValidationError(_("None of the options were chosen."))
 
 
 class AddLatex(forms.ModelForm):

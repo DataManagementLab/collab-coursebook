@@ -405,7 +405,6 @@ class AnkiDeck(BaseContentModel):
                             blank=True,
                             validators=(Validator.validate_anki_file,))
     source = models.TextField(verbose_name=_("Source"))
-    url = models.URLField(verbose_name=_("Insert Anki Web Link Here"), validators=(Validator.validate_anki_url,))
 
     class Meta:
         """Meta options
@@ -659,5 +658,5 @@ reversion.register(PanoptoVideoContent,
                    fields=['content', 'url', 'start_time'],
                    follow=['content'])
 reversion.register(AnkiDeck,
-                   fields=['content', 'source', 'url'],
+                   fields=['content', 'source'],
                    follow=['content'])
