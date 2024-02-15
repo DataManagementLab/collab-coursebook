@@ -106,7 +106,7 @@ class AddContentExercises(forms.ModelForm):
         This class handles all possible meta options that you can give to this model.
         """
         model = ExerciseContent
-        fields = ['tasks', 'solutions', 'source', 'license']
+        fields = ['tasks', 'solutions', 'source']
         widgets = {
             'tasks': ModifiedClearableFileInput(attrs={'accept': 'application/pdf',
                                                      'required': 'true'}),
