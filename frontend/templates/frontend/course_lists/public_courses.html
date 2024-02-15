@@ -14,27 +14,6 @@
                 Public Courses{% if sort %} ({{ sort }}){% endif %}
             </h1>
         </div>
-
-        <div class="col-md-auto my-auto">
-            <button class="dropdown btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {% trans 'Sort by:' %} {{ sort }}
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{% url 'frontend:public-courses-sort' sort='date-new' %}">
-                    Date (newest)
-                </a>
-                <a class="dropdown-item" href="{% url 'frontend:public-courses-sort' sort='date-old' %}">
-                    Date (oldest)
-                </a>
-                <a class="dropdown-item" href="{% url 'frontend:public-courses-sort' sort='title-a' %}">
-                    Title (A-Z)
-                </a>
-                <a class="dropdown-item" href="{% url 'frontend:public-courses-sort' sort='title-z' %}">
-                    Title (Z-A)
-                </a>
-            </div>
-        </div>
         
         {% include 'frontend/course_lists/course_cards_paginated.html' %}
     </div>

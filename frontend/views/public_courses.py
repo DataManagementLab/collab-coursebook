@@ -39,17 +39,6 @@ class CourseListView( ListView):  # pylint: disable=too-many-ancestors)
         :rtype: QuerySet
         """
         queryset = super().get_queryset()
-
-        if 'sort' in self.kwargs:
-            sorting = self.kwargs['sort']
-            if sorting == "title-a":
-                queryset = Course.objects.order_by(Lower("title"))
-            elif sorting == "title-z":
-                queryset = Course.objects.order_by(Lower("title").desc())
-            elif sorting == "date-new":
-                queryset = Course.objects.order_by("-creation_date")
-            elif sorting == "date-old":
-                queryset = Course.objects.order_by("creation_date")
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -67,16 +56,6 @@ class CourseListView( ListView):  # pylint: disable=too-many-ancestors)
         :rtype: dict[str, Any]
         """
         context = super().get_context_data()
-        if "sort" in self.kwargs:
-            sort = self.kwargs['sort']
-            if sort == 'title-a':
-                context['sort'] = "A-Z"
-            elif sort == 'title-z':
-                context['sort'] = "Z-A"
-            elif sort == 'date-new':
-                context['sort'] = "newest"
-            elif sort == 'date-old':
-                context['sort'] = "oldest"
         return context
 
 
