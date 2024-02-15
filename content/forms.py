@@ -208,14 +208,6 @@ class AddAnkiField(forms.ModelForm):
                     'placeholder': get_placeholder(AnkiDeck.TYPE, 'source')}),
         }
 
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        if 'options' in cleaned_data \
-                and (cleaned_data['options'] == 'file'):
-            options = cleaned_data['options']
-            if options == 'file' and not ('file' in cleaned_data and bool(self.cleaned_data['file'])):
-                raise forms.ValidationError(_("You must upload an Anki Deck."))
-
 
 class AddLatex(forms.ModelForm):
     """Add LaTeX

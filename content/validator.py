@@ -73,23 +73,6 @@ class Validator:  # pylint: disable=too-few-public-methods)
             raise ValidationError('Invalid Panopto URL')
 
     @staticmethod
-    def validate_anki_url(url):
-        """Validate Anki URL
-
-        Validates if the given URL is a valid Anki URL. If the URL is
-        not an Anki URL, a validation error will be thrown.
-
-        :param url: The URL to be checked
-        :param url: str
-
-        :return: a validation error, if the given URL is not a valid Anki link
-        :rtype: None or ValidationError
-        """
-        valid_url = re.match(r"^https://ankiweb\.net/(decks/share|shared/info)/\d+$", url)
-        if valid_url is None:
-            raise ValidationError('Invalid Anki URL')
-
-    @staticmethod
     def validate_anki_file(file):
         """Validate Anki
 

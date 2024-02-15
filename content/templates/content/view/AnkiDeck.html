@@ -3,10 +3,16 @@
 {% load fontawesome_6 %}
 {% load static %}
 
-<img class="card-img-top fit" style="height: 80px; width: 80px;object-fit: cover;"
+
+<form action="{{ content.ankideck.file.url }}" method="get" target="_blank" >
+    {% csrf_token %}
+    <button name="action" value="submit" class="btn " style="font-size:2em;background-color:#0A3D62; color:white;">
+        <img class="card-img-top fit" style="height: 80px; width: 80px;object-fit: cover;"
      src="{% static 'base/anki.png' %}" 
-     alt="{{ content.description }}" width="500" height="600">
-<br>
+     alt="{{ content.description }}" width="500" height="600" >
+        {% fa6_icon 'download' 'fas' %} {% trans 'Download' %}
+    </button>
+</form>
 <br>
 <b>
     {% trans 'Source' %}:
@@ -15,11 +21,3 @@
     {{ content.ankideck.source }}
 </p>
 
-<br>
-<br>
-<form action="{{ content.ankideck.file.url }}" method="get" target="_blank">
-    {% csrf_token %}
-    <button name="action" value="submit" class="btn btn-outline-primary">
-        {% fa6_icon 'download' 'fas' %} {% trans 'Download' %}
-    </button>
-</form>
