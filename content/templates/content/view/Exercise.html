@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<div class="row">
+    <div class="col">
+        <embed src="{{ content.exercisecontent.tasks.url }}" type="application/pdf" height="700px" width="100%">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <p>
+        <button class="btn btn-danger" style="width: 100%" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution" aria-expanded="false" aria-controls="collapseSolution">
+            Show solutions
+        </button>
+        </p>
+        <div class="collapse" id="collapseSolution">
+            <div class="card card-body">
+                <embed src="{{ content.exercisecontent.solutions.url }}" type="application/pdf" height="700px" width="100%">
+            </div>
+          </div>
+    </div>
+</div>
+
+<b>
+    {% trans 'Source' %}:
+</b>
+<p>
+    {{ content.exercisecontent.source }}
+</p>
+
+{% if content.exercisecontent.license %}
+    <b>
+        {% trans 'License' %}:
+    </b>
+    <p>
+        {{ content.exercisecontent.license }}
+    </p>
+{% endif %}

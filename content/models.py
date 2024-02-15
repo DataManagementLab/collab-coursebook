@@ -571,6 +571,54 @@ class PanoptoVideoContent(BaseContentModel):
     def filter_by_own_type(contents):
         return contents.filter(panoptovideocontent__isnull=False)
 
+class ExerciseContent(BaseContentModel, BaseSourceModel):
+    """Exercise content
+
+    This model represents a content with an exercise and solution.
+
+    :attr ExerciseContent.TYPE: Describes the content type of this model
+    :type ExerciseContent.TYPE: str
+    :attr ExerciseContent.DESC: Describes the name of this model
+    :type ExerciseContent.DESC: __proxy__
+    :attr ExerciseContent.tasks: The tasks file of this model
+    :type ExerciseContent.tasks: FileField
+    :attr ExerciseContent.solutions: The solutions file of this model
+    :type ExerciseContent.solutions: FileField
+    """
+    TYPE = "Exercise"
+    DESC = _("Exercise")
+
+    tasks = models.FileField(verbose_name=_("Tasks"),
+                                upload_to='uploads/contents/%Y/%m/%d/',
+                                blank=True,
+                                validators=(Validator.validate_pdf,))
+
+    solutions = models.FileField(verbose_name=_("Solutions"),
+                                    upload_to='uploads/contents/%Y/%m/%d/',
+                                    blank=True,
+                                    validators=(Validator.validate_pdf,))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+        """
+        verbose_name = _("Exercise Content")
+        verbose_name_plural = _("Exercise Contents")
+    
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.content}: {self.tasks} <-> {self.solutions}"
+    
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(exercisecontent__isnull=False)
 
 
 # dict: Contains all available content types.
@@ -581,7 +629,8 @@ CONTENT_TYPES = {
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
     MDContent.TYPE: MDContent,
-    PanoptoVideoContent.TYPE: PanoptoVideoContent
+    PanoptoVideoContent.TYPE: PanoptoVideoContent,
+    ExerciseContent.TYPE: ExerciseContent
 }
 
 # Register models for reversion if it is not already done in admin,
@@ -606,4 +655,7 @@ reversion.register(MDContent,
                    follow=['content'])
 reversion.register(PanoptoVideoContent,
                    fields=['content', 'url', 'start_time'],
+                   follow=['content'])
+reversion.register(ExerciseContent,
+                   fields=['content', 'tasks', 'solutions', 'source', 'license'],
                    follow=['content'])
