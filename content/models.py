@@ -680,7 +680,7 @@ CONTENT_TYPES = {
     ImageContent.TYPE: ImageContent,
     MDContent.TYPE: MDContent,
     PanoptoVideoContent.TYPE: PanoptoVideoContent,
-    AnkiDeck.TYPE: AnkiDeck,,
+    AnkiDeck.TYPE: AnkiDeck,
     ExerciseContent.TYPE: ExerciseContent
 }
 
