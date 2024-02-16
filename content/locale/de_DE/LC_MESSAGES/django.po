@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 00:11+0000\n"
+"POT-Creation-Date: 2024-02-16 11:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,15 +25,15 @@ msgstr "Dieses Feld wird benötigt"
 msgid "Image Attachment"
 msgstr "Bildanhang"
 
-#: content/attachment/models.py:42 content/models.py:39
+#: content/attachment/models.py:42 content/models.py:38
 msgid "Content"
 msgstr "Inhalt"
 
-#: content/attachment/models.py:45 content/models.py:152 content/models.py:154
+#: content/attachment/models.py:45 content/models.py:151 content/models.py:153
 msgid "Image"
 msgstr "Bild"
 
-#: content/attachment/models.py:49 content/models.py:158
+#: content/attachment/models.py:49 content/models.py:157
 msgid "Allowed extensions are: "
 msgstr "Erlaubte Dateiendungen sind: "
 
@@ -45,38 +45,40 @@ msgstr "Bildanhänge"
 msgid "Default: 0:00"
 msgstr "Standard: 0:00"
 
-#: content/forms.py:239
+#: content/forms.py:269
 msgid "Upload an existing Markdown file"
 msgstr "Eine existierende Markdown Datei hochladen"
 
-#: content/forms.py:240
+#: content/forms.py:270
 msgid "Write Markdown with editor"
 msgstr "Markdown mit Editor schreiben"
 
-#: content/forms.py:276
+#: content/forms.py:306
 msgid "You must upload a Markdown file."
 msgstr "Laden sie bitte eine Markdown Datei hoch."
 
-#: content/forms.py:279 content/forms.py:317
+#: content/forms.py:309 content/forms.py:347
 msgid "You must put in some text."
 msgstr "Geben sie bitte Text ein."
 
-#: content/forms.py:281
+#: content/forms.py:311
 msgid "None of the options were chosen."
 msgstr "Keine Option ausgewählt."
 
-#: content/models.py:75 content/models.py:252
+#: content/models.py:74 content/models.py:251
 msgid "PDF"
 msgstr "PDF"
 
-#: content/models.py:123 content/models.py:211 content/models.py:309
-#: content/models.py:357
+#: content/models.py:122 content/models.py:210 content/models.py:308
+#: content/models.py:356 content/models.py:407
+#: content/templates/content/reading_mode/AnkiDeck.html:16
 #: content/templates/content/reading_mode/Exercise.html:43
 #: content/templates/content/reading_mode/Image.html:15
 #: content/templates/content/reading_mode/Latex.html:16
 #: content/templates/content/reading_mode/MD.html:16
 #: content/templates/content/reading_mode/PDF.html:18
 #: content/templates/content/reading_mode/Textfield.html:14
+#: content/templates/content/view/AnkiDeck.html:18
 #: content/templates/content/view/AttachedImage.html:10
 #: content/templates/content/view/Exercise.html:25
 #: content/templates/content/view/Image.html:7
@@ -87,7 +89,7 @@ msgstr "PDF"
 msgid "Source"
 msgstr "Quelle"
 
-#: content/models.py:124
+#: content/models.py:123
 #: content/templates/content/reading_mode/Exercise.html:53
 #: content/templates/content/reading_mode/Image.html:25
 #: content/templates/content/reading_mode/PDF.html:28
@@ -98,23 +100,23 @@ msgstr "Quelle"
 msgid "License"
 msgstr "Lizenz"
 
-#: content/models.py:172
+#: content/models.py:171
 msgid "Image Content"
 msgstr "Bild-Inhalt"
 
-#: content/models.py:173
+#: content/models.py:172
 msgid "Image Contents"
 msgstr "Bild-Inhalte"
 
-#: content/models.py:205
+#: content/models.py:204
 msgid "Text (LaTeX)"
 msgstr "Text (LaTeX)"
 
-#: content/models.py:207
+#: content/models.py:206
 msgid "Latex Code"
 msgstr "LaTeX-Code"
 
-#: content/models.py:208
+#: content/models.py:207
 #, python-brace-format
 msgid ""
 "Please insert only valid LaTeX code. The packages and \\begin{document} and "
@@ -123,150 +125,158 @@ msgstr ""
 "Bitte geben Sie nur gültigen LaTeX-Code ein. Die Packages und "
 "\\begin{document} und \\end{document} werden automatisch hinzugefügt."
 
-#: content/models.py:223
+#: content/models.py:222
 msgid "Latex Content"
 msgstr "Latex-Inhalt"
 
-#: content/models.py:224
+#: content/models.py:223
 msgid "Latex Contents"
 msgstr "Latex-Inhalte"
 
-#: content/models.py:264
+#: content/models.py:263
 msgid "PDF Content"
 msgstr "PDF-Inhalt"
 
-#: content/models.py:265
+#: content/models.py:264
 msgid "PDF Contents"
 msgstr "PDF-Inhalte"
 
-#: content/models.py:299
+#: content/models.py:298
 msgid "Markdown"
 msgstr "Markdown"
 
-#: content/models.py:301
+#: content/models.py:300
 msgid "Markdown File"
 msgstr "Markdown Datei"
 
-#: content/models.py:306
+#: content/models.py:305
 msgid "Markdown Script"
 msgstr "Markdown Skript"
 
-#: content/models.py:307
+#: content/models.py:306
 msgid "Insert your Markdown script here:"
 msgstr "Fügen Sie Ihr Markdown Skript hier ein:"
 
-#: content/models.py:321
+#: content/models.py:320
 msgid "MD Content"
 msgstr "MD-Inhalt"
 
-#: content/models.py:322
+#: content/models.py:321
 msgid "MD Contents"
 msgstr "MD-Inhalte"
 
-#: content/models.py:354 content/models.py:356
+#: content/models.py:353 content/models.py:355
 msgid "Text"
 msgstr "Text"
 
-#: content/models.py:369
+#: content/models.py:368
 msgid "Textfield Content"
 msgstr "Textfeld-Inhalt"
 
-#: content/models.py:370
+#: content/models.py:369
 msgid "Textfield Contents"
 msgstr "Textfeld-Inhalte"
 
-#: content/models.py:400
+#: content/models.py:401 content/models.py:403 content/models.py:419
+msgid "Anki Deck"
+msgstr "Anki Deck"
+
+#: content/models.py:420
+msgid "Anki Decks"
+msgstr "Anki Decks"
+
+#: content/models.py:450
 msgid "YouTube Video"
 msgstr "YouTube-Video"
 
-#: content/models.py:402 content/models.py:511
+#: content/models.py:452 content/models.py:561
 msgid "Video URL"
 msgstr "Video-URL"
 
-#: content/models.py:404
+#: content/models.py:454
 msgid "Video Start Timestamp"
 msgstr "Start des Videos"
 
-#: content/models.py:407 content/models.py:411
+#: content/models.py:457 content/models.py:461
 msgid "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."
 msgstr "Geben sie Zeiten im Format HH:MM:SS an (z.B. 2:05:10, 2:05, 0:50)."
 
-#: content/models.py:409
+#: content/models.py:459
 msgid "Video End Timestamp"
 msgstr "Ende des Videos"
 
-#: content/models.py:423
+#: content/models.py:473
 msgid "YouTube Video Content"
 msgstr "YouTube-Video-Inhalt"
 
-#: content/models.py:424
+#: content/models.py:474
 msgid "YouTube Video Contents"
 msgstr "YouTube-Video-Inhalte"
 
-#: content/models.py:467
+#: content/models.py:517
 msgid "Please input a correct format for your starting time."
 msgstr "Bitte geben sie die Startzeit in einem korrekten Format an."
 
-#: content/models.py:469
+#: content/models.py:519
 msgid "Please input a correct format for your ending time."
 msgstr "Bitte geben sie die Endzeit in einem korrekten Format an."
 
-#: content/models.py:481
+#: content/models.py:531
 msgid "Please make sure that your start and end time are different."
 msgstr ""
 "Bittetellen sie sicher dass ihre Start- und Endzeiten verschieden sind."
 
-#: content/models.py:484
+#: content/models.py:534
 msgid "Please make sure that your end time is larger than your start time."
 msgstr ""
 "Stellen sie sicher dass ihre Endzeit kleiner ist als die ihre Startzeit."
 
-#: content/models.py:487
+#: content/models.py:537
 msgid ""
 "Please make sure your start and end times are smaller than the videos length."
 msgstr ""
 "Stellen sie sicher dass ihre Start- und Endzeiten kleiner sind als die "
 "Videolänge."
 
-#: content/models.py:490
+#: content/models.py:540
 msgid "Please make sure your start time is smaller than the videos length."
 msgstr "Stellen sie sicher dass ihre Startzeit kleiner ist als die Videolänge."
 
-#: content/models.py:493
+#: content/models.py:543
 msgid "Please make sure your end time is smaller than the videos length."
 msgstr "Stellen sie sicher dass ihre Endzeit kleiner ist als die Videolänge."
 
-#: content/models.py:509
+#: content/models.py:559
 msgid "Panopto Video"
 msgstr "Panopto Video"
 
-#: content/models.py:523
+#: content/models.py:573
 msgid "Panopto Video Content"
 msgstr "Panopto-Video-Inhalt"
 
-#: content/models.py:524
+#: content/models.py:574
 msgid "Panopto Video Contents"
 msgstr "Panopto-Video-Inhalte"
 
-#: content/models.py:589
+#: content/models.py:639
 msgid "Exercise"
 msgstr "Übungen"
 
-#: content/models.py:591
+#: content/models.py:641
 #: content/templates/content/reading_mode/Exercise.html:13
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: content/models.py:596
+#: content/models.py:646
 #: content/templates/content/reading_mode/Exercise.html:25
 msgid "Solutions"
 msgstr "Lösungen"
 
-#: content/models.py:606
+#: content/models.py:656
 msgid "Exercise Content"
 msgstr "Übungs-Inhalt"
 
-#: content/models.py:607
+#: content/models.py:657
 msgid "Exercise Contents"
 msgstr "Übungs-Inhalte"
 
@@ -296,6 +306,7 @@ msgstr "Auf YouTube ansehen"
 msgid "Description"
 msgstr "Beschreibung"
 
+#: content/templates/content/view/AnkiDeck.html:13
 #: content/templates/content/view/MD.html:25
 msgid "Download"
 msgstr "Herunterladen"

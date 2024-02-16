@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 00:11+0000\n"
+"POT-Creation-Date: 2024-02-16 11:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,24 +21,24 @@ msgstr ""
 msgid "Your Comment"
 msgstr "Dein Kommentar"
 
-#: frontend/forms/course.py:109
+#: frontend/forms/course.py:108
 msgid "Date"
 msgstr "Datum"
 
-#: frontend/forms/course.py:109
+#: frontend/forms/course.py:108
 #: frontend/templates/frontend/content/detail.html:231
 msgid "Rating"
 msgstr "Bewertung"
 
-#: frontend/forms/course.py:110
+#: frontend/forms/course.py:109
 msgid "Filter by"
 msgstr "Filtern nach"
 
-#: frontend/forms/course.py:115
+#: frontend/forms/course.py:114
 msgid "Sort by"
 msgstr "Sortieren nach"
 
-#: frontend/forms/course.py:133
+#: frontend/forms/course.py:132
 msgid "Topics"
 msgstr "Themen"
 
@@ -264,7 +264,7 @@ msgstr "Versionsgeschichte"
 
 #: frontend/templates/frontend/content/detail.html:117
 #: frontend/templates/frontend/content/detail.html:182
-#: frontend/templates/frontend/tutorial/content.html:36
+#: frontend/templates/frontend/tutorial/content.html:52
 msgid "Delete"
 msgstr "Löschen"
 
@@ -728,7 +728,7 @@ msgid "Login"
 msgstr "Einloggen"
 
 #: frontend/templates/frontend/index.html:39
-#: frontend/templates/frontend/tutorial.html:46
+#: frontend/templates/frontend/tutorial.html:48
 msgid "Go to dashboard"
 msgstr "Zum Dashboard"
 
@@ -810,14 +810,17 @@ msgstr "Tutorial überspringen, direkt zum Dashboard"
 #: frontend/templates/frontend/tutorial/add_content.html:14
 msgid ""
 "After selecting “ADD CONTENT” on the course site, you can choose a type of "
-"the content which you want to create. Here we choose LaTeX content as an "
-"example:"
+"the content which you want to create. <ul> <li> PDF </li> <li> Text </li> "
+"<li> LaTeX </li> <li> YouTube </li> <li> Bild </li> <li> Panopto </li> <li> "
+"Exercise </li> </ul> Here we choose LaTeX content as an example:"
 msgstr ""
-"Nachdem Sie auf der Kursseite auf „INHALT HINZUFÜGEN“ geklickt haben, können "
-"Sie einen der Inhaltstypen auswählen, den Sie erstellen möchten. Hier nehmen "
-"wir LaTeX als Beispiel:"
+"Nachdem Sie auf der Kursseite „INHALTE HINZUFÜGEN\" gewählt haben, können "
+"Sie einen Typ von the content which you want to create. <ul> <li> PDF </li> "
+"<li> Text </li> <li> LaTeX </li> <li> YouTube </li> <li> Bild </li> <li> "
+"Panopto </li> <li> Übung </li> </ul> Hier wählen wir LaTeX-Inhalte als "
+"Beispiel:"
 
-#: frontend/templates/frontend/tutorial/add_content.html:21
+#: frontend/templates/frontend/tutorial/add_content.html:45
 msgid ""
 "in ① you can click on the “?” to see detailed instruction for the latex code "
 "field."
@@ -825,7 +828,7 @@ msgstr ""
 "In ① können Sie auf das “?” klicken um eine detaillierte Anleitung für das "
 "LaTeX-Codefeld zu sehen."
 
-#: frontend/templates/frontend/tutorial/add_content.html:26
+#: frontend/templates/frontend/tutorial/add_content.html:50
 msgid ""
 "in ② you can select “ADD ATTACHMENT” to select an image file from your local "
 "computer as an attachment to this content."
@@ -833,7 +836,7 @@ msgstr ""
 "In ② können Sie „ANHANG HINZUFÜGEN“ selektieren, um eine Bilddatei von Ihrem "
 "lokalen Computer als Anhang zu diesem Inhalt hinzufügen."
 
-#: frontend/templates/frontend/tutorial/add_content.html:32
+#: frontend/templates/frontend/tutorial/add_content.html:56
 msgid ""
 "after you click on “ADD ATTACHMENT” there will also appear a “REMOVE "
 "ATTACHMENT” button, which allows you to remove the last attachment."
@@ -841,6 +844,29 @@ msgstr ""
 "Nachdem Sie auf “ANHANG HINZUFÜGEN” geklickt haben, wird auch die "
 "Schaltfläche „ANHANG ENTFERNEN“ angezeigt, mit der Sie den zuletzt "
 "hinzugefügten Anhang entfernen können."
+
+#: frontend/templates/frontend/tutorial/add_content.html:62
+msgid "in ③ you can determine wether or not other users can edit this content."
+msgstr ""
+"in ③ können Sie festlegen, ob andere Benutzer diesen Inhalt bearbeiten "
+"können oder nicht."
+
+#: frontend/templates/frontend/tutorial/add_content.html:67
+msgid ""
+"in ④ you can mark a content as publicly visible. This means that the content "
+"will be visible to all users, even if they are not logged in. <div "
+"class=\"alert alert-primary\" role=\"alert\"> <strong>Note:</strong> This "
+"option is affects only courses that are publicly visible.<br> Please keep in "
+"mind that it is not usefull to mark content as public if the content "
+"requires a login to be viewed, e.g. the mjority of Panopto videos. </div>"
+msgstr ""
+"in ④ können Sie einen Inhalt als öffentlich sichtbar markieren. Das "
+"bedeutet, dass der Inhalt wird für alle Benutzer sichtbar sein, auch wenn "
+"sie nicht angemeldet sind. <div class=\"alert alert-primary\" "
+"role=\"alert\"> <strong>Hinweis:</strong> Dieser Option betrifft nur Kurse, "
+"die öffentlich sichtbar sind.<br> Bitte beachten Sie dass es nicht sinnvoll "
+"ist, Inhalte als öffentlich zu kennzeichnen, wenn diese ein Login erfordert, "
+"um angesehen zu werden, z.B. die meisten Panopto-Videos. </div>"
 
 #: frontend/templates/frontend/tutorial/content.html:6
 msgid "Content"
@@ -861,6 +887,16 @@ msgid "Reading mode"
 msgstr "Lesemodus"
 
 #: frontend/templates/frontend/tutorial/content.html:21
+#: frontend/templates/frontend/tutorial/content.html:29
+msgid ""
+"In case you are a moderator, you can also access the following functions: "
+"<ul> <li>Audit the content (see more in section “Course”)</li> </ul>"
+msgstr ""
+"Fall Sie ein Moderator für ein Kurs sind, dann können die folgenden "
+"Funktionen: <ul> <li>Prüfung des Inhalts (mehr dazu im Abschnitt \"Kurs\")</"
+"li> </ul>"
+
+#: frontend/templates/frontend/tutorial/content.html:37
 msgid ""
 "Add or remove content from coursebook (the changes should be noticeable on "
 "the course page)"
@@ -868,11 +904,11 @@ msgstr ""
 "den Inhalt zum Kursbuch hinzufügen oder aus dem Kursbuch entfernen (die "
 "Änderungen sollten auf der Kursseite sichtbar sein)"
 
-#: frontend/templates/frontend/tutorial/content.html:26
+#: frontend/templates/frontend/tutorial/content.html:42
 msgid "Edit, similar to section “Add Content”"
 msgstr "den Inhalt bearbeiten, ähnlich wie im Abschnitt „Inhalt hinzufügen“ "
 
-#: frontend/templates/frontend/tutorial/content.html:31
+#: frontend/templates/frontend/tutorial/content.html:47
 msgid "View history, similar to section “History”"
 msgstr ""
 "Versionsgeschichte des Inhalts anschauen, ähnlich wie im Abschnitt "
@@ -895,37 +931,45 @@ msgstr ""
 
 #: frontend/templates/frontend/tutorial/course.html:25
 msgid ""
+"“Approve / Disapprove”: If you are a moderator of a course, you can approve "
+"or disapprove content as audited."
+msgstr ""
+"\"Genehmigen / Nicht genehmigen\": Wenn Sie Moderator eines Kurses sind, "
+"können Sie Inhalte genehmigen oder missbilligen Inhalt ablehnen."
+
+#: frontend/templates/frontend/tutorial/course.html:31
+msgid ""
 "“ADD TO/ REMOVE FROM FAVOURITE”: Add/Remove the viewed course to your list "
 "of favourite courses."
 msgstr ""
 "“ZU FAVORITEN HINZUFÜGEN/ AUS FAVORITEN ENTFERNEN”: Den betrachteten Kurses "
 "zur Liste von Favoritenkursen hinzufügen/entfernen."
 
-#: frontend/templates/frontend/tutorial/course.html:31
+#: frontend/templates/frontend/tutorial/course.html:37
 msgid "DUPLICATE COURSE: Duplicate this course"
 msgstr "KURS DUPLIZIEREN: Den betrachteten Kurs duplizieren"
 
-#: frontend/templates/frontend/tutorial/course.html:36
+#: frontend/templates/frontend/tutorial/course.html:42
 msgid "EXPORT COURSE: Export all course contents in a PDF"
 msgstr "KURS EXPORTIEREN: Alle Kursinhalte in einer PDF exportieren"
 
-#: frontend/templates/frontend/tutorial/course.html:41
+#: frontend/templates/frontend/tutorial/course.html:47
 msgid "EDIT COURSE - more information in a later section"
 msgstr "KURS BEARBEITEN - mehr Informationen in einem späteren Abschnitt"
 
-#: frontend/templates/frontend/tutorial/course.html:46
+#: frontend/templates/frontend/tutorial/course.html:52
 msgid "EDIT STRUCTURE - more information in a later section"
 msgstr "STRUKTUR BEARBEITEN - mehr Informationen in einem späteren Abschnitt"
 
-#: frontend/templates/frontend/tutorial/course.html:51
+#: frontend/templates/frontend/tutorial/course.html:57
 msgid "VIEW HISTORY - more information in a later section"
 msgstr "VERSIONSGESCHICHTE - mehr Informationen in einem späteren Abschnitt"
 
-#: frontend/templates/frontend/tutorial/course.html:56
+#: frontend/templates/frontend/tutorial/course.html:62
 msgid "DELETE COURSE: Delete the course"
 msgstr "KURS LÖSCHEN: Den betrachteten Kurs löschen"
 
-#: frontend/templates/frontend/tutorial/course.html:63
+#: frontend/templates/frontend/tutorial/course.html:69
 msgid ""
 "in ② you can click on the name of a specific topic for quick topic jumping, "
 "and click on the hamburger button to toggle/untoggle the topic list."
@@ -934,7 +978,7 @@ msgstr ""
 "zum ausgewählten Thema zu springen, und auf die Hamburger-Schaltfläche "
 "klicken, um die Themenliste ein- oder auszuschalten."
 
-#: frontend/templates/frontend/tutorial/course.html:69
+#: frontend/templates/frontend/tutorial/course.html:75
 msgid ""
 "in the “Coursebook” part you can see marked coursebook content. In ③ you can "
 "also click on the hamburger button in order to toggle/untoggle the "
@@ -944,7 +988,7 @@ msgstr ""
 "können Sie auch auf die Hamburger-Schaltfläche klicken, um das Kursbuch ein- "
 "oder auszuschalten."
 
-#: frontend/templates/frontend/tutorial/course.html:75
+#: frontend/templates/frontend/tutorial/course.html:81
 msgid ""
 "if there is any content in your “Coursebook”, there will be an “EXPORT” "
 "button (see ④), which you can select to download a pdf containing all "
@@ -954,7 +998,7 @@ msgstr ""
 "auftauchen, worüber Sie eine PDF Datei herunterladen können, welche alle "
 "Inhalte des Kursbuchs enthält. "
 
-#: frontend/templates/frontend/tutorial/course.html:81
+#: frontend/templates/frontend/tutorial/course.html:87
 msgid ""
 "on the right side of each topic there is an “ADD CONTENT” button (see ⑤). "
 "Click to add new content to the corresponding topic."
@@ -962,6 +1006,30 @@ msgstr ""
 "Auf der rechten Seite jedes Themas befindet sich die Schaltfläche „INHALT "
 "HINZUFÜGEN“ (siehe ⑤). Selektieren Sie diese, um dem entsprechenden Thema "
 "einen neuen Inhalt hinzuzufügen."
+
+#: frontend/templates/frontend/tutorial/dashboard.html:8
+msgid "Moderated Courses"
+msgstr "Moderierte Kurse"
+
+#: frontend/templates/frontend/tutorial/dashboard.html:14
+msgid ""
+"In ① you can see the mark of a official course. This mark means the course "
+"is moderated by the team responsible for the lectures. This means that the "
+"course content gets reviewed by the team."
+msgstr ""
+"In ① können Sie die Markierung eines offiziellen Kurses sehen. Diese "
+"Makierung bedeutet, dass der Kurs von dem für die Vorlesungen zuständigen "
+"Team moderiert wird. Das bedeutet, dass der Kursinhalt vom Team überprüft "
+"wird."
+
+#: frontend/templates/frontend/tutorial/dashboard.html:25
+msgid ""
+"In ② you can see the mark of a approved content. This mark means the course "
+"content has been reviewed and approved by the team responsible for the "
+"lectures."
+msgstr ""
+"In ② sehen Sie die Kennzeichnung eines genehmigten Inhalts. Diese Markierung "
+"bedeutet, dass der Kurs Inhalt wurde von dem Team, das für die Vorlesungen."
 
 #: frontend/templates/frontend/tutorial/edit_course.html:14
 msgid ""
@@ -1198,19 +1266,19 @@ msgstr "Es ist momentan kein Beispiel verfügbar."
 msgid "Content %(title)s successfully added"
 msgstr "Inhalt %(title)s erfolgreich hinzugefügt"
 
-#: frontend/views/content.py:170 frontend/views/content.py:398
+#: frontend/views/content.py:170 frontend/views/content.py:403
 msgid "An error occurred while processing the request"
 msgstr "Es trat ein Fehler beim Verarbeiten der Anfrage auf"
 
-#: frontend/views/content.py:384
+#: frontend/views/content.py:389
 msgid "You are not allowed to edit this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu bearbeiten"
 
-#: frontend/views/content.py:556
+#: frontend/views/content.py:563
 msgid "Content updated"
 msgstr "Inhalt aktualisiert"
 
-#: frontend/views/content.py:822
+#: frontend/views/content.py:829
 msgid "You are not allowed to delete this content"
 msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
 
