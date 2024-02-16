@@ -20,7 +20,7 @@
                 {% trans 'Close' %}
             </a>
             <h3 class="d-inline-block">
-                {{ content }}
+                {{ content.topic }}
             </h3>
             {% if user.is_authenticated %}
                 <a href="{% url 'frontend:content-reading-mode' course_id topic_id next_id %}"
