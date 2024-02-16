@@ -34,11 +34,10 @@ class AddCourseForm(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = Course
-        fields = ['title', 'description', 'image', 'owners', 'moderators', 'public',
+        fields = ['title', 'description', 'image', 'owners', 'public',
                   'restrict_changes', 'category', 'period']
         widgets = {
             'image': ModifiedClearableFileInput(attrs={'required': 'false'}),
-            'moderators': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):
