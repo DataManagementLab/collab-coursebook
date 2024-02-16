@@ -1,0 +1,34 @@
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+
+{% get_current_language as lang %}
+
+<section>
+    <h3> {% trans 'Moderated Courses' %} </h3>
+    {% with path='tutorial/'|add:lang|add:'/1.5.moderator.jpg' %}
+        <img src="{% static path %}" class="img-fluid" alt="official course image"/>
+    {% endwith %}
+    <div>
+        <p>
+            {% blocktrans trimmed %}
+                In ① you can see the mark of a official course. This mark means the course is moderated by the
+                team responsible for the lectures. This means that the course content gets reviewed by the team.
+            {% endblocktrans %}
+        </p>
+    </div>
+    {% with path='tutorial/'|add:lang|add:'/1.5.approved.jpg' %}
+        <img src="{% static path %}" class="img-fluid" alt="approved content"/>
+    {% endwith %}
+    <div>
+        <p>
+            {% blocktrans trimmed %}
+                In ② you can see the mark of a approved content. This mark means the course content has been
+                reviewed and approved by the team responsible for the lectures.
+            {% endblocktrans %}
+        </p>
+    </div>
+    <div class="alert alert-primary" role="alert">
+        If you are responisble for a course and want to get it moderated, please contact the admin.
+    </div>
+</section>

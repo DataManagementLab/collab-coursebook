@@ -13,7 +13,31 @@
         <p>
             {% blocktrans trimmed %}
                 After selecting “ADD CONTENT” on the course site, you can choose a type of the content which you want to
-                create. Here we choose LaTeX content as an example:
+                create.
+                <ul>
+                    <li>
+                            PDF
+                    </li>
+                    <li>
+                            Text
+                    </li>
+                    <li>
+                            LaTeX
+                    </li>
+                    <li>
+                            YouTube
+                    </li>
+                    <li>
+                            Bild
+                    </li>
+                    <li>
+                            Panopto
+                    </li>
+                    <li>
+                            Exercise
+                    </li>
+                </ul>
+                Here we choose LaTeX content as an example:
             {% endblocktrans %}
         </p>
         <ul>
@@ -32,6 +56,22 @@
                 {% blocktrans trimmed %}
                     after you click on “ADD ATTACHMENT” there will also appear a “REMOVE ATTACHMENT” button, which
                     allows you to remove the last attachment.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    in ③ you can determine wether or not other users can edit this content.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    in ④ you can mark a content as publicly visible. This means that the
+                    content will be visible to all users, even if they are not logged in.
+                    <div class="alert alert-primary" role="alert">
+                        <strong>Note:</strong> This option is affects only courses that are publicly visible.<br>
+                        Please keep in mind that it is not usefull to mark content as public if the
+                        content requires a login to be viewed, e.g. the mjority of Panopto videos.
+                    </div>
                 {% endblocktrans %}
             </li>
         </ul>
