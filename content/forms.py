@@ -6,7 +6,7 @@ This file contains forms associated with the content types.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent, ExerciseContent
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent, ExerciseContent, AnkiDeck
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -200,6 +200,36 @@ class AddTextField(forms.ModelForm):
         }
 
 
+class AddAnkiField(forms.ModelForm):
+    """Add Anki field
+
+    This model represents the add form for Anki fields.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = AnkiDeck
+        fields = ['file', 'source']
+        widgets = {
+            'file': ModifiedClearableFileInput(attrs={'accept': 'application/zip',
+                                                      'required': ''}),
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(AnkiDeck.TYPE, 'source')}),
+        }
+
+
 class AddLatex(forms.ModelForm):
     """Add LaTeX
 
@@ -326,5 +356,6 @@ CONTENT_TYPE_FORMS = {
     Latex.TYPE: AddLatex,
     MDContent.TYPE: AddMD,
     PanoptoVideoContent.TYPE: AddContentFormPanoptoVideo,
+    AnkiDeck.TYPE: AddAnkiField,
     ExerciseContent.TYPE: AddContentExercises
 }

@@ -194,6 +194,9 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         # Checks if content type is of type Markdown
         context['is_markdown_content'] = content_type == 'MD'
 
+        # Checks if content type is of type AnkiDeck
+        context['is_ankideck'] = content_type == 'AnkiDeck'
+
         # Checks if content type is of type YouTubeVideo
         context['is_yt_content'] = content_type == 'YouTubeVideo'
 
@@ -302,6 +305,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                       content,
                                       content_type_data,
                                       is_file)
+            # If the content type is AnkiDeck store in DB, is_file checks if there is a ankideck file
+            # so validator knows if it needs to create a ankideck file or url
 
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
@@ -439,8 +444,10 @@ class EditContentView(LoginRequiredMixin, UpdateView):
 
         # Checks if content type is of type Latex
         context['is_latex_content'] = content_type == 'Latex'
-        # Checks if content type if of type MDContent
+        # Checks if content type is of type MDContent
         context['is_markdown_content'] = content_type == 'MD'
+        # Checks if content type is of type AnkiDeck
+        context['is_ankideck'] = content_type == 'AnkiDeck'
         # Checks if content type is of type YouTube
         context['is_yt_content'] = content_type == 'YouTubeVideo'
         # Checks if content type is of type PanoptoVideo

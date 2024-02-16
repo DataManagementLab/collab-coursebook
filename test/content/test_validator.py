@@ -77,3 +77,16 @@ class ValidatorTestCase(MediaTestCase):
         url = "https://example.com"
         with self.assertRaises(ValidationError):
             Validator.validate_panopto_url(url)
+
+    def test_validate_anki_file_invalid_type(self):
+        """Validate LaTeX test case - invalid file type
+
+        Tests that the function validate_latex raises the correct error for an invalid file
+        type (image).
+        """
+        invalid_file = utils.generate_image_file(1)
+
+        with self.assertRaises(ValidationError) as context_manager:
+            Validator.validate_anki_file(invalid_file)
+        self.assertEqual('Unsupported file type.', context_manager.exception.message)
+
