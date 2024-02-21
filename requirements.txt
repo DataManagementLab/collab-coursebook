@@ -11,9 +11,11 @@ django-split-settings==1.0.1
 django-timezone-field==4.2.1
 isodate==0.6.1
 pdf2image==1.16.0
-pillow==9.3.0
+pillow~=10.2.0
 polib==1.1.1
 python-magic==0.4.24
 markdown-it-py[linkify,plugins]==2.2.0
 pdfkit==1.0.0
 
+
+genanki~=0.13.1
