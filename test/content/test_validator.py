@@ -13,7 +13,6 @@ from django.core.exceptions import ValidationError
 import content.models as model
 from content.validator import Validator
 
-import re
 
 class ValidatorTestCase(MediaTestCase):
     """Validator test case
@@ -90,3 +89,10 @@ class ValidatorTestCase(MediaTestCase):
             Validator.validate_anki_file(invalid_file)
         self.assertEqual('Unsupported file type.', context_manager.exception.message)
 
+    def test_anki_file_valid(self):
+        """Validate Anki Deck test case - valid
+
+        Tests that the function validate_anki_file raises no error for a valid anki deck file and returns None.
+        """
+        anki_test_file = utils.generate_anki_file('name')
+        self.assertIsNone(Validator.validate_anki_file(anki_test_file))

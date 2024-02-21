@@ -17,6 +17,9 @@ from base.models.content import Category, Topic, Content, Course
 import content.forms as form
 import content.models as model
 from content.attachment.models import ImageAttachment
+import genanki
+import io
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from frontend.views.validator import Validator
 
@@ -56,6 +59,33 @@ def generate_attachment(content, image_count):
     for i in range(image_count):
         image = generate_image_file(i)
         ImageAttachment.objects.create(content=content, image=image)
+
+
+def generate_anki_file(deck_name):
+    """ Generate Anki file for testing
+
+    :param deck_name: The name of the Anki deck.
+    :type deck_name: str
+
+    :return: the generated Anki file
+    :rtype: SimpleUploadedFile
+    """
+    # Create a basic Anki deck
+    my_deck = genanki.Deck(1, deck_name)
+
+    # Create the Anki package
+    my_package = genanki.Package(my_deck)
+
+    # Save the Anki package to a BytesIO object
+    file = io.BytesIO()
+    my_package.write_to_file(file)
+    file.name = f'{deck_name}.apkg'
+    file.seek(0)
+
+    # Create a Django SimpleUploadedFile from the BytesIO object
+    uploaded_file = SimpleUploadedFile(file.name, file.read())
+
+    return uploaded_file
 
 
 def setup_database():
