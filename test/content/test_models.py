@@ -117,5 +117,4 @@ class AnkiDeckModelTestCase(MediaTestCase):
         filtered_contents = model.AnkiDeck.filter_by_own_type(all_contents)
 
         # Assert that only AnkiDeck objects are returned
-        #self.assertEqual(filtered_contents.count(), 2)  # Adjust the count based on your setup
         self.assertTrue(all(isinstance(content, model.AnkiDeck) for content in filtered_contents))
