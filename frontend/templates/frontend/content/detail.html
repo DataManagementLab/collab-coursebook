@@ -111,6 +111,27 @@
                             </a>
                         {% endif %}
 
+                        {% if content.type == 'PanoptoVideo' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:panoptovideo-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
+
+                        {% if content.type == 'Exercise' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:exercise-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
+
+                        {% if content.type == 'AnkiDeck' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:anki-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
+
                         {# Delete option #}
                         {% if isCurrentUserOwner or user.is_superuser or content.author.pk == user.pk %}
                             <a href="#" class="dropdown-item text-danger" data-bs-toggle="modal"
