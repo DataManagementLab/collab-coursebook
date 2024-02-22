@@ -671,6 +671,51 @@ class ExerciseContent(BaseContentModel, BaseSourceModel):
         return contents.filter(exercisecontent__isnull=False)
 
 
+class GeneralURL(BaseContentModel):
+    """General URL
+
+    This model represents a general url content.
+
+    :attr GeneralURL.TYPE: Describes the content type of this model
+    :type GeneralURL.TYPE: str
+    :attr GeneralURL.DESC: Describes the name of this model
+    :type GeneralURL.DESC: __proxy__
+    :attr GeneralURL.url: The given general url
+    :type GeneralURL.url: URLField
+    """
+    TYPE = "GeneralURL"
+    DESC = _("General URL")
+
+    url = models.URLField(verbose_name=_("General URL"), validators=(Validator.validate_general_url,))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("General URL")
+        verbose_name_plural = _("General URLs")
+
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.url}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(generalurl__isnull=False)
+
+
 # dict: Contains all available content types.
 CONTENT_TYPES = {
     PDFContent.TYPE: PDFContent,
@@ -681,7 +726,8 @@ CONTENT_TYPES = {
     MDContent.TYPE: MDContent,
     PanoptoVideoContent.TYPE: PanoptoVideoContent,
     AnkiDeck.TYPE: AnkiDeck,
-    ExerciseContent.TYPE: ExerciseContent
+    ExerciseContent.TYPE: ExerciseContent,
+    GeneralURL.TYPE: GeneralURL
 }
 
 # Register models for reversion if it is not already done in admin,
@@ -712,4 +758,7 @@ reversion.register(ExerciseContent,
                    follow=['content'])
 reversion.register(AnkiDeck,
                    fields=['content', 'source'],
+                   follow=['content'])
+reversion.register(GeneralURL,
+                   fields=['content', 'url'],
                    follow=['content'])

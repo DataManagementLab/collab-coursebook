@@ -6,7 +6,7 @@ This file contains forms associated with the content types.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent, ExerciseContent, AnkiDeck
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent, ExerciseContent, AnkiDeck, GeneralURL
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -115,6 +115,25 @@ class AddContentExercises(forms.ModelForm):
                                                      'required': 'true'}),
             'source': forms.Textarea(attrs={'style': 'height: 100px'}),
         }
+
+class AddGeneralURL(forms.ModelForm):
+    """Add General URL
+
+    This model represents the add form for General URLs.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        """
+        model = GeneralURL
+        fields = ['url']
 
 class AddContentFormImage(forms.ModelForm):
     """Add image content
@@ -357,5 +376,6 @@ CONTENT_TYPE_FORMS = {
     MDContent.TYPE: AddMD,
     PanoptoVideoContent.TYPE: AddContentFormPanoptoVideo,
     AnkiDeck.TYPE: AddAnkiField,
-    ExerciseContent.TYPE: AddContentExercises
+    ExerciseContent.TYPE: AddContentExercises,
+    GeneralURL.TYPE: AddGeneralURL
 }

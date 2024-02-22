@@ -15,6 +15,31 @@ from content.models import PDFContent, TextField
 from content.models import YTVideoContent
 from content.models import MDContent
 from content.models import ExerciseContent
+from content.models import GeneralURL
+
+@admin.register(AnkiDeck)
+class AnkiDeckAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
+    """Anki deck content
+
+    Represents the Anki content model in the admin panel.
+    """
+
+
+@admin.register(ExerciseContent)
+class ExerciseContentAdmin(CompareVersionAdmin): # pylint: disable=too-many-ancestors
+    """Exercise content
+
+    Represents the exercise content model in the admin panel.
+    """
+
+
+@admin.register(GeneralURL)
+class GeneralURLAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
+    """General URL content 
+
+    Represents the GeneralURL content model in the admin panel.
+    """
+
 
 @admin.register(MDContent)
 class MDContentAdmin(CompareVersionAdmin):
@@ -47,6 +72,14 @@ class LatexAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     fields = ['content', 'textfield', 'source']
 
 
+@admin.register(PanoptoVideoContent)
+class PanoptoVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
+    """Panopto video content
+
+    Represents the YouTube video content model in the admin panel.
+    """
+
+    
 @admin.register(PDFContent)
 class PDFContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
     """PDF content admin
@@ -68,27 +101,4 @@ class YTVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ance
     """YouTube video content
 
     Represents the YouTube video content model in the admin panel.
-    """
-
-
-@admin.register(PanoptoVideoContent)
-class PanoptoVideoContentAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
-    """Panopto video content
-
-    Represents the YouTube video content model in the admin panel.
-    """
-
-@admin.register(ExerciseContent)
-class ExerciseContentAdmin(CompareVersionAdmin): # pylint: disable=too-many-ancestors
-    """Exercise content
-
-    Represents the exercise content model in the admin panel.
-    """
-    
-
-@admin.register(AnkiDeck)
-class AnkiDeckAdmin(CompareVersionAdmin):  # pylint: disable=too-many-ancestors
-    """Anki deck content
-
-    Represents the Anki content model in the admin panel.
     """

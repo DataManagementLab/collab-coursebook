@@ -198,6 +198,9 @@ urlpatterns = [
             path('<pk>/panoptovideo-history/',
                  views.history.PanoptoVideoHistoryCompareView.as_view(),
                  name='panoptovideo-history'),
+            path('<pk>/generalurl-history/',
+                 views.history.GeneralURLHistoryCompareView.as_view(),
+                 name='generalurl-history'),     
 
         ])),
         path('add/',

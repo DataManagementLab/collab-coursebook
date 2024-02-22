@@ -305,8 +305,6 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                       content,
                                       content_type_data,
                                       is_file)
-            # If the content type is AnkiDeck store in DB, is_file checks if there is a ankideck file
-            # so validator knows if it needs to create a ankideck file or url
 
             # Generates preview image in 'uploads/contents/'
             preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()

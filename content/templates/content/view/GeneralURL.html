@@ -1,0 +1,14 @@
+{% load i18n %}
+{% comment %}
+<p style="font-family: Arial; padding: 0.5em; font-size: 120%; background-color: #efefef">
+    {{ content.textfield.textfield|linebreaksbr }}
+</p>{% endcomment %}
+
+<hr>
+
+<b>
+    {% trans 'Source' %}:
+</b>
+<p>
+    {{ content.generalurl.url }}
+</p>
