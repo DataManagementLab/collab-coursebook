@@ -598,10 +598,10 @@ class GeneralURLHistoryCompareView(BaseContentHistoryCompareView):
 
     Displays history of this content to the user.
 
-    :attr PanoptoVideoHistoryCompareView.model: The model of the view
-    :type PanoptoVideoHistoryCompareView.model: Model
-    :attr PanoptoVideoHistoryCompareView.compare_fields: The fields which should be compared
-    :type PanoptoVideoHistoryCompareView.compare_fields: list[str]
+    :attr GeneralURLHistoryCompareView.model: The model of the view
+    :type GeneralURLHistoryCompareView.model: Model
+    :attr GeneralURLHistoryCompareView.compare_fields: The fields which should be compared
+    :type GeneralURLHistoryCompareView.compare_fields: list[str]
     """
     model = GeneralURL
     compare_fields = ['description', 'language', 'tags', 'readonly', 'public', 'url']
