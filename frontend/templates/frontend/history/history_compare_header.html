@@ -7,6 +7,11 @@
     <form method="GET" action="{{ action }}">
 {% endif %}
 
+
+{% for action in action_list %}
+        {{action.version.field_dict}} <br>
+{% endfor %}
+
 {% if compare_view %}
     <table class="table table-borderless table-hover table-primary" id="change-history"
            style="table-layout: fixed; overflow-wrap: break-word">
@@ -37,6 +42,10 @@
             {# User change #}
             <th scope="col" style="text-align: center; width: 200px">
                 {% trans 'User' %}
+            </th>
+            {# Approved #}
+            <th scope="col" style="text-align: center; width: 200px">
+                {% trans 'Approved'%}
             </th>
             {# Change log #}
             <th scope="col">
@@ -86,6 +95,17 @@
                 <td scope="row" style="text-align: center">
                     {% if action.revision.user %}
                         {{ action.revision.user.profile.display_name }}
+                    {% endif %}
+                </td>
+                <td scope="row" style="text-align: center">
+                    {% if TRUE %}
+                        <span class="badge bg-success">
+                            {{ action.revision.field_dict }}
+                        </span>
+                    {% else %}
+                        <span class="badge bg-danger">
+                            {{ action.revision.field_dict }}
+                        </span>
                     {% endif %}
                 </td>
                 <td>

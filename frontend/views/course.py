@@ -212,7 +212,9 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         """
         # Reversion comment
         Reversion.update_comment(request)
-        return super().post(request, *args, **kwargs)
+        kwargs['aproved']=False
+        response = super().post(request, *args, **kwargs)
+        return response
 
 
 class EditCourseStructureView(LoginRequiredMixin, DetailView, FormMixin):
