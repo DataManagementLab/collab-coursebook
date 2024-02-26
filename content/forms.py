@@ -133,7 +133,10 @@ class AddGeneralURL(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = GeneralURL
-        fields = ['url']
+        fields = ['url', 'title']
+        widgets = {
+            'title': forms.Textarea(attrs={'style': 'height: 20px'}),
+        }
 
 class AddContentFormImage(forms.ModelForm):
     """Add image content

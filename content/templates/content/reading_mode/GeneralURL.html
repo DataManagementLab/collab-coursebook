@@ -3,6 +3,12 @@
 {# Load the tag library #}
 {% load i18n %}
 
-<p style="font-family: Arial; padding: 0.5em; font-size: 120%; background-color: #efefef">
-    {{ content.generalurl.url|linebreaksbr }}
-</p>
+{% block reading_content %}
+    <b>
+        {% trans 'Source' %}:
+    </b>
+
+    <p>
+        {{ content.generalurl.url }}
+    </p>
+{% endblock %}

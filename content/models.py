@@ -687,6 +687,7 @@ class GeneralURL(BaseContentModel):
     DESC = _("General URL")
 
     url = models.URLField(verbose_name=_("General URL"), validators=(Validator.validate_general_url,))
+    title = models.TextField(verbose_name=_("The clear name of the site"))
 
     class Meta:
         """Meta options
@@ -760,5 +761,5 @@ reversion.register(AnkiDeck,
                    fields=['content', 'source'],
                    follow=['content'])
 reversion.register(GeneralURL,
-                   fields=['content', 'url'],
+                   fields=['content', 'url', 'title'],
                    follow=['content'])
