@@ -97,7 +97,8 @@
                         {{ action.revision.user.profile.display_name }}
                     {% endif %}
                 </td>
-                <td scope="row" style="text-align: center">
+                {% comment %} Removed for now because I can't get the state of approval {% endcomment %}
+                {% comment %} <td scope="row" style="text-align: center">
                     {% if TRUE %}
                         <span class="badge bg-success">
                             {{ action.revision.field_dict }}
@@ -107,7 +108,7 @@
                             {{ action.revision.field_dict }}
                         </span>
                     {% endif %}
-                </td>
+                </td> {% endcomment %}
                 <td>
                     {{ action.revision.comment|default:"" }}
                 </td>
