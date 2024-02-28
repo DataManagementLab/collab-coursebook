@@ -419,18 +419,23 @@ class CourseView(LoginRequiredMixin, DetailView, FormMixin):
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
             objects.filter(course=context["course"]).order_by('index') #TODO: Fix the sorting!!!
+        
+
         topics_recursive = []
         current_topic = None
-        for favorite in Favorite.objects.filter(course=course_id, user=get_user(self.request).profile):
+        user=get_user(self.request).profile
+        for favorite in Favorite.objects.filter(course=course_id, user=user):
             favorite_list.append(favorite.content)
-
+        # If the user is a moderator of the course, set user to "" to show all contents
+        if user in context['course'].moderators.all():
+            user = ""
         for entry in structure_entries:
             index_split = entry.index.split('/')
             # Topic
             if len(index_split) == 1:
                 current_topic = {'topic': entry.topic, 'subtopics': [],
                                  'topic_contents': entry.topic.get_contents(self.sorted_by,
-                                                                            self.filtered_by)}
+                                                                            self.filtered_by, user=user)}
                 topics_recursive.append(current_topic)
             # Subtopic
             # Only handle up to one subtopic level
@@ -438,7 +443,7 @@ class CourseView(LoginRequiredMixin, DetailView, FormMixin):
                 current_topic["subtopics"].append({'topic': entry.topic,
                                                    'topic_contents':
                                                        entry.topic.
-                                                  get_contents(self.sorted_by, self.filtered_by)})
+                                                  get_contents(self.sorted_by, self.filtered_by, user=user)})
 
         context["structure"] = topics_recursive
         context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()

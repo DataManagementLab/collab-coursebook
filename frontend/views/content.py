@@ -119,6 +119,7 @@ def approve_content(request, course_id, topic_id, content_id, approval):  # pyli
     profile = get_user(request)
     content.approve_content(user=profile, course=course, approval=approval)
     content.hidden = False
+    content.save()
 
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id)))
@@ -147,6 +148,7 @@ def hide_content(request, course_id, topic_id, content_id, hide):  # pylint: dis
     profile = get_user(request)
     content.hide_content(user=profile, course=course, hide=hide)
     content.approved = False
+    content.save()
 
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id)))

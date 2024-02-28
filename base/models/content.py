@@ -266,7 +266,7 @@ class Topic(models.Model):
         """
         return f"{self.title} ({self.category})"
 
-    def get_contents(self, sorted_by, filtered_by):
+    def get_contents(self, sorted_by, filtered_by, user=None):
         """Get contents
 
         Returns all contents belonging to this topic. Additionally the contents
@@ -280,7 +280,18 @@ class Topic(models.Model):
         :return: the sorted and filtered contents belonging to this topic
         :rtype: QuerySet[Content]
         """
-        contents = self.contents.all()
+        # If the user is a moderator, user is set to "" to show all contents
+        if user is "":
+            contents = self.contents.all()
+        
+        # If the user is not a moderator and not logged in, only show unhidden contents
+        elif user is None:
+            contents = self.contents.all().filter(hidden=False)
+
+        else:
+            # filter the contents that are not hidden as well as hidden and authored by the user
+            contents = self.contents.all().filter(models.Q(hidden=False) | models.Q(author=user))
+
         # filtered by is a String and represents the decision of the user
         # , how they want to filter the data,
         # e.g. 'Text' means they want to only see all text fields in the topic
