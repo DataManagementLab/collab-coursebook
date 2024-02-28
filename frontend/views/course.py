@@ -418,7 +418,7 @@ class CourseView(LoginRequiredMixin, DetailView, FormMixin):
         favorite_list = [] # Favorite.objects.filter(course=course_id, user=get_user(self.request).profile)
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
-            objects.filter(course=context["course"]).order_by('index')
+            objects.filter(course=context["course"]).order_by('index') #TODO: Fix the sorting!!!
         topics_recursive = []
         current_topic = None
         for favorite in Favorite.objects.filter(course=course_id, user=get_user(self.request).profile):
