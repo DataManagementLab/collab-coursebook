@@ -68,7 +68,7 @@ class Validator:  # pylint: disable=too-few-public-methods)
         :return: a validation error, if the given url is not a valid Panopto link
         :rtype: None or ValidationError
         """
-        valid_url = re.match(r"^https://tu-darmstadt\.cloud\.panopto\.eu/Panopto/Pages/Viewer.aspx\?id=[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}(&start=\d+(\.\d+)?)?$", url)
+        valid_url = re.match(r"^https://tu-darmstadt\.cloud\.panopto\.eu/Panopto/Pages/Viewer.aspx\?id=[a-f\d]{8}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{4}-[a-f\d]{12}(&query=[^&]*)?(&start=\d+(\.\d+)?)?$", url)
         if valid_url is None:
             raise ValidationError('Invalid Panopto URL')
 
