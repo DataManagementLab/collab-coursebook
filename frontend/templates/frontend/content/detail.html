@@ -39,12 +39,12 @@
                         {% if not content.approved %}
                             <a class="dropdown-item"
                                 href="{% url 'frontend:approve' course.id topic.id content.id True %}">
-                                {% fa6_icon 'check' %} {% trans 'Approve' %}
+                                {% fa6_icon 'check' %} {% trans 'Mark as Verified' %}
                             </a>
                         {% else %}
                             <a class="dropdown-item"
                                 href="{% url 'frontend:approve' course.id topic.id content.id False %}">
-                                {% fa6_icon 'times' %} {% trans 'Disapprove' %}
+                                {% fa6_icon 'times' %} {% trans 'Remove Verification' %}
                             </a>
                         {% endif %}
                     {% endif %}
