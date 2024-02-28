@@ -47,6 +47,19 @@
                                 {% fa6_icon 'times' %} {% trans 'Disapprove' %}
                             </a>
                         {% endif %}
+                        {% if user|check_hide_content_permission:course %}
+                        {% if not content.hidden %}
+                            <a class="dropdown-item"
+                                href="{% url 'frontend:hide' course.id topic.id content.id True %}">
+                                {% fa6_icon 'eye-slash' %} {% trans 'Mark as Incorrect' %}
+                            </a>
+                        {% else %}
+                            <a class="dropdown-item"
+                                href="{% url 'frontend:hide' course.id topic.id content.id False %}">
+                                {% fa6_icon 'eye' %} {% trans 'Remove incorrect mark' %}
+                            </a>
+                        {% endif %}
+                    {% endif %}
                     {% endif %}
                     {% if favorite %}
                             <a class="dropdown-item"

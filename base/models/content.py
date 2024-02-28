@@ -408,6 +408,9 @@ class Content(models.Model):
     approved = models.BooleanField(verbose_name=_("Approved"),
                                    help_text=_("This content is approved by a moderator"),
                                    default=False)
+    hidden = models.BooleanField(verbose_name=_("Hidden"),
+                               help_text=_("This content is hidden in the course by a moderator"),
+                               default=False)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
                                          default=timezone.now,
                                          blank=True)
@@ -545,6 +548,20 @@ class Content(models.Model):
         """
         if user in course.moderators.all():
             self.approved = approval
+            self.save()
+
+    def hide_content(self, course, user, hide):
+        """Content hiding
+
+        Sets the hiding of the content by the given hide of the user.
+
+        :param hide: The hide of content by the user
+        :type hide: bool
+        :param user: The user of the hide
+        :type user: User
+        """
+        if user in course.moderators.all():
+            self.hidden = hide
             self.save()
 
     def get_index_in_course(self, course):

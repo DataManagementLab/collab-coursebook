@@ -74,6 +74,12 @@
                                 {% fa6_icon 'check' 'fas' %}
                             </span>
                             {% endif %}
+                            {% if content.hidden %}
+                            &middot;
+                            <span class="badge" style="background-color: red;">
+                                {% fa6_icon 'times' 'fas' %}
+                            </span>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

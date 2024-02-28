@@ -97,7 +97,7 @@ def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disab
 def approve_content(request, course_id, topic_id, content_id, approval):  # pylint: disable=invalid-name
     """Approve content
 
-    Lets the user approve content.
+    Lets the user approve content. Mutal exclusive with hide_content.
 
     :param topic_id: The id of the topic
     :type topic_id: int
@@ -118,6 +118,35 @@ def approve_content(request, course_id, topic_id, content_id, approval):  # pyli
     course = get_object_or_404(Course, pk=course_id)
     profile = get_user(request)
     content.approve_content(user=profile, course=course, approval=approval)
+    content.hidden = False
+
+    return HttpResponseRedirect(
+        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id)))
+
+def hide_content(request, course_id, topic_id, content_id, hide):  # pylint: disable=invalid-name
+    """Hide content
+
+    Lets the user hide content. Mutal exclusive with approve_content.
+
+    :param topic_id: The id of the topic
+    :type topic_id: int
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: The course id
+    :type course_id: int
+    :param content_id: The id of the content which gets hidden
+    :type content_id: int
+    :param hide: The status of the hide (should be True or False)
+    :type hide: any
+
+    :return: the redirection to the content page
+    :rtype: HttpResponse
+    """
+    content = get_object_or_404(Content, pk=content_id)
+    course = get_object_or_404(Course, pk=course_id)
+    profile = get_user(request)
+    content.hide_content(user=profile, course=course, hide=hide)
+    content.approved = False
 
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id)))
