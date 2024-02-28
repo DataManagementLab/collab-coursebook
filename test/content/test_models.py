@@ -64,6 +64,15 @@ class PanoptoVideoContentTestCase(MediaTestCase):  # pylint: disable=too-few-pub
             url='https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=143edbe5-b2a1-48bc-bc94-b0fa011f7143&start=1792.375985')
         self.assertEqual(panopto_video.start_time, '1792.375985')
 
+    def test_new_url_property(self):
+        """Test new_url property
+
+        Tests the new_url property of PanoptoVideoContent.
+        """
+        panopto_video = model.PanoptoVideoContent(
+            url='https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5e1ae5dd-a038-4a61-af99-b0c2008cfe40&query=banene')
+        self.assertEqual(panopto_video.new_url, 'https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=5e1ae5dd-a038-4a61-af99-b0c2008cfe40')
+
     def test_start_time_property_default(self):
         """Test start_time property with default value
 
@@ -107,8 +116,8 @@ class AnkiDeckModelTestCase(MediaTestCase):
 
     def test_str_representation(self):
         """Test the string representation of AnkiDeck"""
-        anki_deck = model.AnkiDeck.objects.first()
-        expected_str = f"{anki_deck.content}: {anki_deck.pk}"
+        anki_deck = utils.generate_anki_file('test2')
+        expected_str = f"{anki_deck.name}"
         self.assertEqual(str(anki_deck), expected_str)
 
     def test_filter_by_own_type(self):

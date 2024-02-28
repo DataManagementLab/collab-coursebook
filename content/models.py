@@ -610,6 +610,13 @@ class PanoptoVideoContent(BaseContentModel):
 
     @property
     def new_url(self):
+        """Panopto Video New URL
+
+        Cuts &query part (if available) from the URL.
+
+        Return: str: The Panopto video URL cut at &query.
+                 If there is an issue it defaults to regular URL
+        """
         if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
             # Define a regular expression to match the "&query" part
             regex_pattern = r'&query=[^&]*'
