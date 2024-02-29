@@ -142,7 +142,7 @@ urlpatterns = [
                path('approve/<boolean:approval>/',
                      views.approve_content,
                      name='approve'),
-               path('hide/<boolean:hide>/',
+               path('hide/<boolean:hide>',
                      views.hide_content,
                      name='hide'),
                 path('comment/<int:pk>/delete/',

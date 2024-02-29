@@ -49,9 +49,8 @@
                         {% endif %}
                         {% if user|check_hide_content_permission:course %}
                         {% if not content.hidden %}
-                            <a class="dropdown-item"
-                                href="{% url 'frontend:hide' course.id topic.id content.id True %}">
-                                {% fa6_icon 'eye-slash' %} {% trans 'Mark as Incorrect' %}
+                            <a href="#" class="dropdown-item text-warning" data-bs-toggle="modal" data-bs-target="#hideContentModal">
+                                {% fa6_icon 'eye-slash' %} {% trans 'Hide Content' %}
                             </a>
                         {% else %}
                             <a class="dropdown-item"
@@ -160,6 +159,7 @@
         {{ content.topic }}
     </h1>
 
+    
     {# Content information #}
     <h5>
         {% trans "By" %} <i>{{ content.author }}</i>
@@ -174,43 +174,56 @@
         </span>
         {% endif %}
         {% if content.tags.count > 0 %}
-            &nbsp;&middot;&nbsp;
-            {% for tag in content.tags.all %}
-                <span class="badge bg-info">
-                    {{ tag }}
-                </span>
-            {% endfor %}
+        &nbsp;&middot;&nbsp;
+        {% for tag in content.tags.all %}
+        <span class="badge bg-info">
+            {{ tag }}
+        </span>
+        {% endfor %}
         {% endif %}
         &nbsp;&middot;&nbsp;
         <span class="text-muted">
             {% trans 'Created at' %}: <i>{{ content.creation_date|date:'d.m.Y H:i' }}</i>
         </span>
     </h5>
+
+    {% if content.hidden %}
+        {% if isCurrentUserOwner %}
+        <div class="alert alert-warning p-3" role="alert">
+            {{ content.author_message }}
+        </div>
+        {% else %}
+        <div class="alert alert-warning p-3" role="alert">
+            {{ content.user_message }}
+        </div>
+        {% endif %}
+    {% endif %}
+    
     <div class="modal fade" id="deleteContentModal" tabindex="1" role="dialog" aria-labelledby="deleteContentModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteContentModalLabel">
-                        {% trans "Delete" %} <i>{{ content }}</i>?
-                    </h5>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        {% blocktrans trimmed with type=content.type %}
+    aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteContentModalLabel">
+                            {% trans "Delete" %} <i>{{ content }}</i>?
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            {% blocktrans trimmed with type=content.type %}
                             Are you sure you want to delete this {{ type }}? This action cannot be undone.
-                        {% endblocktrans %}
-                    </p>
-                </div>
-                <div class="modal-footer">
+                            {% endblocktrans %}
+                        </p>
+                    </div>
+                    <div class="modal-footer">
                     <form action="{% url 'frontend:content-delete' course.id topic.id content.id %}" method="post"
                           class="mb-0">
                         {% csrf_token %}
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">
+                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
                             {% fa6_icon 'times' 'fas' %} {% trans 'Cancel' %}
                         </button>
-                        <button
-                                type="submit" class="btn btn-danger"> {% fa6_icon 'trash' 'fas' %} {% trans 'Confirm' %}
+                        <button type="submit" class="btn btn-danger">
+                            {% fa6_icon 'trash' 'fas' %} {% trans 'Confirm' %}
                         </button>
                     </form>
                 </div>
@@ -218,7 +231,38 @@
         </div>
     </div>
 
-
+    <div class="modal fade" id="hideContentModal" tabindex="-1" role="dialog" aria-labelledby="hideContentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="hideContentModalLabel">{% trans "Hide" %} {% trans "content" %}</h5>
+                </div>
+                <form action="{% url 'frontend:hide' course.id topic.id content.id True %}" method="post"
+                class="mb-0">
+                    <div class="modal-body">
+                        <p>{% trans "Why do you want to hide this content?" %}</p>
+                        <p>{% trans "Please provide a comprehensive reason for the author:" %}</p>
+                        <textarea class="form-control rounded" rows="5" name="author_message"></textarea>
+                        <br>
+                        <hr>
+                        <br>
+                        <p>{% trans "Please provide a short description for users visiting this content:" %}</p>
+                        <textarea class="form-control rounded" rows="2" name="user_message"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        {% csrf_token %}
+                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">
+                            {% fa6_icon 'times' 'fas' %} {% trans 'Cancel' %}
+                        </button>
+                        <button type="submit" class="btn btn-warning">
+                            {% fa6_icon 'save' 'fas' %} {% trans 'Confirm' %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
 
     <div style="margin-top: 50px;margin-bottom: 50px;overflow-wrap: break-word">
         {% include content.type|content_view %}

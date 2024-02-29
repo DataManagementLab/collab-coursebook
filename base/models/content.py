@@ -390,14 +390,14 @@ class Content(models.Model):
     :type Content.ratings: ManyToManyField - Profile
     """
     topic = models.ForeignKey(Topic, verbose_name=_("Topic"),
-                              related_name='contents',
-                              on_delete=models.CASCADE)
+                                related_name='contents',
+                                on_delete=models.CASCADE)
     author = models.ForeignKey("Profile", verbose_name=_("Author"),
-                               on_delete=models.CASCADE,
-                               related_name='contents')
+                                on_delete=models.CASCADE,
+                                related_name='contents')
 
     description = models.TextField(verbose_name=_("Description"),
-                                   blank=True)
+                                blank=True)
 
     type = models.CharField(verbose_name=_("Type"), max_length=30)
 
@@ -405,32 +405,40 @@ class Content(models.Model):
                                 max_length=30,
                                 choices=settings.LANGUAGES)
     tags = models.ManyToManyField(Tag,
-                                  verbose_name=_("Tags"),
-                                  related_name='contents',
-                                  blank=True)
+                                verbose_name=_("Tags"),
+                                related_name='contents',
+                                blank=True)
 
     readonly = models.BooleanField(verbose_name=_("Set to Read-Only"),
-                                   help_text=_("This content shouldn't be edited"),
-                                   default=False)
+                                help_text=_("This content shouldn't be edited"),
+                                default=False)
     public = models.BooleanField(verbose_name=_("Show in public courses"),
-                                 help_text=_("This content will be displayed in courses "
+                                help_text=_("This content will be displayed in courses "
                                              "that don't require registration"),
-                                 default=False)
+                                default=False)
     approved = models.BooleanField(verbose_name=_("Approved"),
-                                   help_text=_("This content is approved by a moderator"),
-                                   default=False)
+                                help_text=_("This content is approved by a moderator"),
+                                default=False)
     hidden = models.BooleanField(verbose_name=_("Hidden"),
-                               help_text=_("This content is hidden in the course by a moderator"),
-                               default=False)
+                                help_text=_("This content is hidden in the course by a moderator"),
+                                default=False)
+    author_message = models.TextField(verbose_name=_("Author Message"),
+                                help_text=_("The message from the author"),
+                                blank=True,
+                                null=True)
+    user_message = models.TextField(verbose_name=_("User Message"),
+                                help_text=_("The message from the user"),
+                                blank=True,
+                                null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
-                                         default=timezone.now,
-                                         blank=True)
+                                default=timezone.now,
+                                blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"),
                                 blank=True,
                                 null=True)
 
     ratings = models.ManyToManyField("Profile",
-                                     through='Rating')
+                                through='Rating')
 
     class Meta:
         """Meta options
@@ -559,9 +567,11 @@ class Content(models.Model):
         """
         if user in course.moderators.all():
             self.approved = approval
+            self.author_message = None
+            self.user_message = None
             self.save()
 
-    def hide_content(self, course, user, hide):
+    def hide_content(self, course, user, hide, author_message=None, user_message=None):
         """Content hiding
 
         Sets the hiding of the content by the given hide of the user.
@@ -571,8 +581,12 @@ class Content(models.Model):
         :param user: The user of the hide
         :type user: User
         """
+        
+
         if user in course.moderators.all():
             self.hidden = hide
+            self.author_message = author_message
+            self.user_message = user_message
             self.save()
 
     def get_index_in_course(self, course):
