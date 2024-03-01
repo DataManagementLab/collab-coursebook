@@ -423,11 +423,11 @@ class Content(models.Model):
                                 help_text=_("This content is hidden in the course by a moderator"),
                                 default=False)
     author_message = models.TextField(verbose_name=_("Author Message"),
-                                help_text=_("The message from the author"),
+                                help_text=_("The message for the author"),
                                 blank=True,
                                 null=True)
     user_message = models.TextField(verbose_name=_("User Message"),
-                                help_text=_("The message from the user"),
+                                help_text=_("The message for the user"),
                                 blank=True,
                                 null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),

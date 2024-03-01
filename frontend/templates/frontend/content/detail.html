@@ -235,7 +235,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="hideContentModalLabel">{% trans "Hide" %} {% trans "content" %}</h5>
+                    <h5 class="modal-title" id="hideContentModalLabel">{% trans "Hide" %} <i>{{ content }}</i></h5>
                 </div>
                 <form action="{% url 'frontend:hide' course.id topic.id content.id True %}" method="post"
                 class="mb-0">
