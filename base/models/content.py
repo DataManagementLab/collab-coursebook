@@ -165,17 +165,18 @@ class Course(models.Model):
                                     related_name='owned_courses',
                                     verbose_name=_("Owners"))
     moderators = models.ManyToManyField(Profile,
-                                    related_name='moderated_courses',
-                                    verbose_name=_("Moderators"),
-                                    default=None,
-                                    blank=True)
+                                        related_name='moderated_courses',
+                                        verbose_name=_("Moderators"),
+                                        default=None,
+                                        blank=True)
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
                                            help_text=_("This course is restricted and "
                                                        "can only be edited by the owners"),
                                            blank=True,
                                            default=False)
     public = models.BooleanField(verbose_name=_("Publicly accessible"),
-                                 help_text=_("This course can be accessed by unregistered users "),
+                                 help_text=_(
+                                     "This course can be accessed by unregistered users "),
                                  default=False)
     category = models.ForeignKey(Category,
                                  verbose_name=_("Category"),
@@ -283,14 +284,15 @@ class Topic(models.Model):
         # If the user is a moderator, user is set to "" to show all contents
         if user is "":
             contents = self.contents.all()
-        
+
         # If the user is not a moderator and not logged in, only show unhidden contents
         elif user is None:
             contents = self.contents.all().filter(hidden=False)
 
         else:
             # filter the contents that are not hidden as well as hidden and authored by the user
-            contents = self.contents.all().filter(models.Q(hidden=False) | models.Q(author=user))
+            contents = self.contents.all().filter(
+                models.Q(hidden=False) | models.Q(author=user))
 
         # filtered by is a String and represents the decision of the user
         # , how they want to filter the data,
@@ -305,7 +307,8 @@ class Topic(models.Model):
         # and the String represent their decision
         if sorted_by != 'None' and sorted_by is not None:
             if sorted_by == 'Rating':
-                contents = sorted(contents, key=lambda x: x.get_rate(), reverse=True)
+                contents = sorted(
+                    contents, key=lambda x: x.get_rate(), reverse=True)
             elif sorted_by == 'Date':
                 contents = contents.order_by('-' + 'creation_date')
             else:
@@ -382,6 +385,12 @@ class Content(models.Model):
     :type Content.public: BooleanField
     :attr Content.public: The status of the content if it is approved
     :type Content.public: BooleanField
+    :attr Content.approved: The status of the content if it is hidden
+    :type Content.approved: BooleanField
+    :attr Content.author_message: The message for the author
+    :type Content.author_message: TextField
+    :attr Content.user_message: The message for the user
+    :type Content.user_message: TextField
     :attr Content.creation_date: The creation date of the content
     :type Content.creation_date: DateTimeField
     :attr Content.preview: The preview image of the content
@@ -390,14 +399,14 @@ class Content(models.Model):
     :type Content.ratings: ManyToManyField - Profile
     """
     topic = models.ForeignKey(Topic, verbose_name=_("Topic"),
-                                related_name='contents',
-                                on_delete=models.CASCADE)
+                              related_name='contents',
+                              on_delete=models.CASCADE)
     author = models.ForeignKey("Profile", verbose_name=_("Author"),
-                                on_delete=models.CASCADE,
-                                related_name='contents')
+                               on_delete=models.CASCADE,
+                               related_name='contents')
 
     description = models.TextField(verbose_name=_("Description"),
-                                blank=True)
+                                   blank=True)
 
     type = models.CharField(verbose_name=_("Type"), max_length=30)
 
@@ -405,40 +414,44 @@ class Content(models.Model):
                                 max_length=30,
                                 choices=settings.LANGUAGES)
     tags = models.ManyToManyField(Tag,
-                                verbose_name=_("Tags"),
-                                related_name='contents',
-                                blank=True)
+                                  verbose_name=_("Tags"),
+                                  related_name='contents',
+                                  blank=True)
 
     readonly = models.BooleanField(verbose_name=_("Set to Read-Only"),
-                                help_text=_("This content shouldn't be edited"),
-                                default=False)
+                                   help_text=_(
+                                       "This content shouldn't be edited"),
+                                   default=False)
     public = models.BooleanField(verbose_name=_("Show in public courses"),
-                                help_text=_("This content will be displayed in courses "
+                                 help_text=_("This content will be displayed in courses "
                                              "that don't require registration"),
-                                default=False)
+                                 default=False)
     approved = models.BooleanField(verbose_name=_("Approved"),
-                                help_text=_("This content is approved by a moderator"),
-                                default=False)
+                                   help_text=_(
+                                       "This content is approved by a moderator"),
+                                   default=False)
     hidden = models.BooleanField(verbose_name=_("Hidden"),
-                                help_text=_("This content is hidden in the course by a moderator"),
-                                default=False)
+                                 help_text=_(
+                                     "This content is hidden in the course by a moderator"),
+                                 default=False)
     author_message = models.TextField(verbose_name=_("Author Message"),
-                                help_text=_("The message for the author"),
-                                blank=True,
-                                null=True)
+                                      help_text=_(
+                                          "The message for the author"),
+                                      blank=True,
+                                      null=True)
     user_message = models.TextField(verbose_name=_("User Message"),
-                                help_text=_("The message for the user"),
-                                blank=True,
-                                null=True)
+                                    help_text=_("The message for the user"),
+                                    blank=True,
+                                    null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
-                                default=timezone.now,
-                                blank=True)
+                                         default=timezone.now,
+                                         blank=True)
     preview = models.ImageField(verbose_name=_("Rendered preview"),
                                 blank=True,
                                 null=True)
 
     ratings = models.ManyToManyField("Profile",
-                                through='Rating')
+                                     through='Rating')
 
     class Meta:
         """Meta options
@@ -496,7 +509,8 @@ class Content(models.Model):
         :return: the average number of ratings
         :rtype: float
         """
-        rating = Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
+        rating = Rating.objects.filter(content_id=self.id).aggregate(
+            Avg('rating'))['rating__avg']
         if rating is not None:
             return int(rating)
         return -1
@@ -550,8 +564,10 @@ class Content(models.Model):
         :param user: The user of the rating
         :type user: User
         """
-        Rating.objects.filter(user_id=user.user.id, content_id=self.id).delete()
-        rating = Rating.objects.create(user=user, content=self, rating=rating)  # user = profile
+        Rating.objects.filter(user_id=user.user.id,
+                              content_id=self.id).delete()
+        rating = Rating.objects.create(
+            user=user, content=self, rating=rating)  # user = profile
         rating.save()
         self.save()
 
@@ -581,8 +597,6 @@ class Content(models.Model):
         :param user: The user of the hide
         :type user: User
         """
-        
-
         if user in course.moderators.all():
             self.hidden = hide
             self.author_message = author_message
