@@ -125,6 +125,6 @@ class Validator:  # pylint: disable=too-few-public-methods)
         :return: a validation error, if the given url is not a url
         :rtype: None or ValidationError
         """
-        valid_url = re.match(r"^(http(s)?://)?(www\.|m\.)?(\.)?/.*", url)
+        valid_url = re.match(r"^(http(s)?://)?[a-zA-Z\.~]*\.[a-zA-Z]{2,}(/[a-zA-Z0-9~_\-\.]*)*", url)
         if valid_url is None:
             raise ValidationError('Invalid URL')
