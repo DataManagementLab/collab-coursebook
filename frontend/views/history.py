@@ -27,7 +27,7 @@ from base.models import Course, Content, Topic
 
 from content.attachment.models import ImageAttachment
 from content.models import ImageContent, MDContent, TextField, YTVideoContent, PDFContent, Latex, \
-    CONTENT_TYPES, PanoptoVideoContent, GeneralURL
+    CONTENT_TYPES, PanoptoVideoContent, ExerciseContent, AnkiDeck, GeneralURL
 
 from export.views import generate_pdf_from_latex
 
@@ -450,7 +450,7 @@ class ImageHistoryCompareView(BaseContentHistoryCompareView):
     :type ImageHistoryCompareView.compare_fields: list[str]
     """
     model = ImageContent
-    compare_fields = ['description', 'language', 'tags', 'readonly',
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
                       'public', 'image', 'source', 'license']
 
     def __init__(self):
@@ -473,7 +473,7 @@ class LatexHistoryCompareView(BaseContentHistoryCompareView):
     :type LatexHistoryCompareView.compare_fields: list[str]
     """
     model = Latex
-    compare_fields = ['description', 'language', 'tags', 'readonly',
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
                       'public', 'image', 'textfield', 'source', 'license']
 
     def __init__(self):
@@ -496,7 +496,7 @@ class MDHistoryCompareView(BaseContentHistoryCompareView):
     :type MDHistoryCompareView.compare_fields: list[str]
     """
     model = MDContent
-    compare_fields = ['description', 'language', 'tags', 'readonly',
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
                       'public', 'image', 'textfield', 'source', 'license']
 
     def __init__(self):
@@ -519,7 +519,7 @@ class PdfHistoryCompareView(BaseContentHistoryCompareView):
     :type PdfHistoryCompareView.compare_fields: list[str]
     """
     model = PDFContent
-    compare_fields = ['description', 'language', 'tags', 'readonly',
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
                       'public', 'images', 'pdf', 'source', 'license']
 
     def __init__(self):
@@ -542,7 +542,7 @@ class TextfieldHistoryCompareView(BaseContentHistoryCompareView):
     :type TextfieldHistoryCompareView.compare_fields: list[str]
     """
     model = TextField
-    compare_fields = ['description', 'language', 'tags', 'readonly',
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
                       'public', 'image', 'textfield', 'source', 'license']
 
     def __init__(self):
@@ -560,7 +560,8 @@ class YTVideoHistoryCompareView(BaseContentHistoryCompareView):
     :type YTVideoHistoryCompareView.compare_fields: list[str]
     """
     model = YTVideoContent
-    compare_fields = ['description', 'language', 'tags', 'readonly', 'public', 'images', 'url']
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
+                      'public', 'images', 'url']
 
     def __init__(self):
         """Initializer
@@ -582,7 +583,8 @@ class PanoptoVideoHistoryCompareView(BaseContentHistoryCompareView):
     :type PanoptoVideoHistoryCompareView.compare_fields: list[str]
     """
     model = PanoptoVideoContent
-    compare_fields = ['description', 'language', 'tags', 'readonly', 'public', 'images', 'url']
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
+                      'public', 'images', 'url']
 
     def __init__(self):
         """Initializer
@@ -613,3 +615,47 @@ class GeneralURLHistoryCompareView(BaseContentHistoryCompareView):
         redirect to the page corresponding to the model.
         """
         super().__init__('content', 'generalurl-history')
+
+class ExerciseHistoryCompareView(BaseContentHistoryCompareView):
+    """Exercise history compare view
+
+    Displays history of this content to the user.
+
+    :attr ExerciseHistoryCompareView.model: The model of the view
+    :type ExerciseHistoryCompareView.model: Model
+    :attr ExerciseHistoryCompareView.compare_fields: The fields which should be compared
+    :type ExerciseHistoryCompareView.compare_fields: list[str]
+    """
+    model = ExerciseContent
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
+                      'public', 'images', 'task', 'solution', 'source', 'license']
+
+    def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
+        super().__init__('content', 'exercise-history')
+
+class AnkiHistoryCompareView(BaseContentHistoryCompareView):
+    """Anki history compare view
+
+    Displays history of this content to the user.
+
+    :attr AnkiHistoryCompareView.model: The model of the view
+    :type AnkiHistoryCompareView.model: Model
+    :attr AnkiHistoryCompareView.compare_fields: The fields which should be compared
+    :type AnkiHistoryCompareView.compare_fields: list[str]
+    """
+    model = AnkiDeck
+    compare_fields = ['description', 'language', 'tags', 'readonly', 'approved',
+                      'public', 'images', 'file', 'source', 'license']
+
+    def __init__(self):
+        """Initializer
+
+        Initialize the history compare form with pre configuration for the back and history url to
+        redirect to the page corresponding to the model.
+        """
+        super().__init__('content', 'anki-history')

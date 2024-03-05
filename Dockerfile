@@ -20,17 +20,18 @@ ENV LIBRARY_PATH=/lib:/usr/lib
 RUN pip install --no-cache-dir --upgrade setuptools pip wheel pillow pytest-django tblib coverage \
 	&& pip install --no-cache-dir -r requirements.txt
 
+# Add the collab user
 RUN adduser --gecos '' --disabled-password collab && echo "collab ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Set the working directory, here is the dev folder to be mounted
 
 # Expose port 8000
 EXPOSE 8000
 
 USER 1000
 ENV USER=collab
+
+# Set the working directory, here is the dev folder to be mounted
 WORKDIR /home/collab/collab-coursebook
-RUN source /venv/bin/activate
 
 ENTRYPOINT ["python", "./manage.py"]
 CMD ["runserver", "0.0.0.0:8000"]

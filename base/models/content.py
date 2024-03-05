@@ -620,6 +620,6 @@ reversion.register(Course,
                            'restrict_changes'])
 
 reversion.register(Content,
-                   fields=['description', 'language',
+                   fields=['description', 'language', 'approved',
                            'tags', 'readonly', 'public'],
                    follow=['ImageAttachments'])

@@ -39,12 +39,12 @@
                         {% if not content.approved %}
                             <a class="dropdown-item"
                                 href="{% url 'frontend:approve' course.id topic.id content.id True %}">
-                                {% fa6_icon 'check' %} {% trans 'Approve' %}
+                                {% fa6_icon 'check' %} {% trans 'Mark as Verified' %}
                             </a>
                         {% else %}
                             <a class="dropdown-item"
                                 href="{% url 'frontend:approve' course.id topic.id content.id False %}">
-                                {% fa6_icon 'times' %} {% trans 'Disapprove' %}
+                                {% fa6_icon 'times' %} {% trans 'Remove Verification' %}
                             </a>
                         {% endif %}
                     {% endif %}
@@ -107,6 +107,27 @@
                         {% if content.type == 'MD' %}
                             <a class="dropdown-item"
                             href="{% url 'frontend:md-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
+
+                        {% if content.type == 'PanoptoVideo' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:panoptovideo-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
+
+                        {% if content.type == 'Exercise' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:exercise-history' course.id topic.id content.id %}">
+                                {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
+                            </a>
+                        {% endif %}
+
+                        {% if content.type == 'AnkiDeck' %}
+                            <a class="dropdown-item"
+                            href="{% url 'frontend:anki-history' course.id topic.id content.id %}">
                                 {% fa6_icon 'history' 'fas' %} {% trans 'View History' %}
                             </a>
                         {% endif %}

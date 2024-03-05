@@ -7,6 +7,11 @@
     <form method="GET" action="{{ action }}">
 {% endif %}
 
+
+{% for action in action_list %}
+        {{action.version.field_dict}} <br>
+{% endfor %}
+
 {% if compare_view %}
     <table class="table table-borderless table-hover table-primary" id="change-history"
            style="table-layout: fixed; overflow-wrap: break-word">
@@ -38,6 +43,10 @@
             <th scope="col" style="text-align: center; width: 200px">
                 {% trans 'User' %}
             </th>
+            {# Approved #} {% comment %} I did not manage to access the approval state to display it here {% endcomment %}
+            {% comment %} <th scope="col" style="text-align: center; width: 200px">
+                {% trans 'Approved'%}
+            </th> {% endcomment %}
             {# Change log #}
             <th scope="col">
                 {% trans 'Change Log' %}
@@ -88,6 +97,18 @@
                         {{ action.revision.user.profile.display_name }}
                     {% endif %}
                 </td>
+                {% comment %} Removed for now because I can't get the state of approval {% endcomment %}
+                {% comment %} <td scope="row" style="text-align: center">
+                    {% if TRUE %}
+                        <span class="badge bg-success">
+                            {{ action.revision.field_dict }}
+                        </span>
+                    {% else %}
+                        <span class="badge bg-danger">
+                            {{ action.revision.field_dict }}
+                        </span>
+                    {% endif %}
+                </td> {% endcomment %}
                 <td>
                     {{ action.revision.comment|default:"" }}
                 </td>

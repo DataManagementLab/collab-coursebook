@@ -556,6 +556,7 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 preview = CONTENT_TYPES.get(content_type) \
                     .objects.get(pk=content.pk).generate_preview()
                 content.preview.name = preview
+                content.approved = False #TODO A content is not approved after editing, but it is never stored as approved in the revserion
                 content.save()
 
                 messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
