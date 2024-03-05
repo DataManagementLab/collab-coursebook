@@ -189,6 +189,23 @@ def check_approve_content_permission(user, course):
     """
     return user.profile.moderated_courses.filter(pk=course.pk).exists()
 
+@register.filter
+def check_hide_content_permission(user, course):
+    """Hide content permission
+
+    Checks if a user is a moderator of a course and it is
+    allowed to hide the content.
+
+    :param user: The user to check permission
+    :type user: User
+    :param content: The content to check permission
+    :type content: Content
+
+    :return: true iff the content can be hidden
+    :rtype: bool
+    """
+    return user.profile.moderated_courses.filter(pk=course.pk).exists()
+
 
 @register.filter
 def check_profile_permissions(user, profile):

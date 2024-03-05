@@ -5,7 +5,7 @@ frontend views related operation.
 """
 
 from .content import ContentView
-from .content import rate_content, approve_content
+from .content import rate_content, approve_content, hide_content
 
 from .course import CourseView, AddCourseView, EditCourseStructureView, CourseDeleteView, PublicCourseView
 

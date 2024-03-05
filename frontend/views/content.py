@@ -47,7 +47,8 @@ def clean_attachment(content, image_formset):
     """
     clean = content.ImageAttachments.count() - image_formset.total_form_count()
     if clean > 0:
-        remove_source = content.ImageAttachments.order_by('id').reverse()[:clean]
+        remove_source = content.ImageAttachments.order_by('id').reverse()[
+            :clean]
         for remove_object in remove_source:
             remove_object.delete()
 
@@ -91,13 +92,15 @@ def rate_content(request, course_id, topic_id, content_id, pk):  # pylint: disab
     content.rate_content(user=profile, rating=pk)
 
     return HttpResponseRedirect(
-        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id,))
+        reverse_lazy('frontend:content', args=(
+            course_id, topic_id, content_id,))
         + '#rating')
-    
+
+
 def approve_content(request, course_id, topic_id, content_id, approval):  # pylint: disable=invalid-name
     """Approve content
 
-    Lets the user approve content.
+    Lets the user approve content. Mutal exclusive with hide_content.
 
     :param topic_id: The id of the topic
     :type topic_id: int
@@ -118,6 +121,47 @@ def approve_content(request, course_id, topic_id, content_id, approval):  # pyli
     course = get_object_or_404(Course, pk=course_id)
     profile = get_user(request)
     content.approve_content(user=profile, course=course, approval=approval)
+    content.hidden = False
+    content.author_message = None
+    content.user_message = None
+    content.save()
+
+    return HttpResponseRedirect(
+        reverse_lazy('frontend:content', args=(course_id, topic_id, content_id)))
+
+
+def hide_content(request, course_id, topic_id, content_id, hide):  # pylint: disable=invalid-name
+    """Hide content
+
+    Lets the user hide content. Mutal exclusive with approve_content.
+
+    :param topic_id: The id of the topic
+    :type topic_id: int
+    :param request: The given request
+    :type request: HttpRequest
+    :param course_id: The course id
+    :type course_id: int
+    :param content_id: The id of the content which gets hidden
+    :type content_id: int
+    :param hide: The status of the hide (should be True or False)
+    :type hide: any
+
+    :return: the redirection to the content page
+    :rtype: HttpResponse
+    """
+    user_message = None
+    author_message = None
+    if request.method == 'POST':
+        user_message = request.POST['user_message']
+        author_message = request.POST['author_message']
+
+    content = get_object_or_404(Content, pk=content_id)
+    course = get_object_or_404(Course, pk=course_id)
+    profile = get_user(request)
+    content.hide_content(user=profile, course=course, hide=hide,
+                         user_message=user_message, author_message=author_message)
+    content.approved = False
+    content.save()
 
     return HttpResponseRedirect(
         reverse_lazy('frontend:content', args=(course_id, topic_id, content_id)))
@@ -155,7 +199,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :return: the success message when the profile was updated
         :rtype: __proxy__
         """
-        message = _("Content %(title)s successfully added") % {'title': cleaned_data['type']}
+        message = _("Content %(title)s successfully added") % {
+            'title': cleaned_data['type']}
         return message
 
     def handle_error(self):
@@ -167,7 +212,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         :rtype: HttpResponseRedirect
         """
         course_id = self.kwargs['course_id']
-        messages.error(self.request, _('An error occurred while processing the request'))
+        messages.error(self.request, _(
+            'An error occurred while processing the request'))
         return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
 
     def get_context_data(self, **kwargs):
@@ -224,7 +270,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         # Setup formset
         if 'item_forms' not in context:
-            formset = ImageAttachmentFormSet(queryset=ImageAttachment.objects.none())
+            formset = ImageAttachmentFormSet(
+                queryset=ImageAttachment.objects.none())
             context['item_forms'] = formset
 
         return context
@@ -277,12 +324,13 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             if content_type in IMAGE_ATTACHMENT_TYPES:
                 if image_formset.is_valid():
                     content.save()
-                    redirect = Validator.validate_attachment(content, image_formset)
+                    redirect = Validator.validate_attachment(
+                        content, image_formset)
                 else:
                     return self.render_to_response(
-                            self.get_context_data(form=add_content_form,
-                                                  content_type_form=content_type_form,
-                                                  item_forms=image_formset))
+                        self.get_context_data(form=add_content_form,
+                                              content_type_form=content_type_form,
+                                              item_forms=image_formset))
             else:
                 content.save()
             # Evaluates generic form
@@ -307,7 +355,8 @@ class AddContentView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                                       is_file)
 
             # Generates preview image in 'uploads/contents/'
-            preview = CONTENT_TYPES.get(content_type).objects.get(pk=content.pk).generate_preview()
+            preview = CONTENT_TYPES.get(content_type).objects.get(
+                pk=content.pk).generate_preview()
             content.preview.name = preview
             content.save()
 
@@ -384,7 +433,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
             # Only admins and the content owner can edit the content
             if self.get_object().author == user or request.user.is_superuser:
                 return super().dispatch(request, *args, **kwargs)
-            messages.error(request, _('You are not allowed to edit this content'))
+            messages.error(request, _(
+                'You are not allowed to edit this content'))
             return HttpResponseRedirect(self.get_content_url())
         # Everyone can edit the content
         return super().dispatch(request, *args, **kwargs)
@@ -398,7 +448,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         :rtype: HttpResponseRedirect
         """
         course_id = self.kwargs['course_id']
-        messages.error(self.request, _('An error occurred while processing the request'))
+        messages.error(self.request, _(
+            'An error occurred while processing the request'))
         return HttpResponseRedirect(reverse('frontend:course', args=(course_id,)))
 
     def get_context_data(self, **kwargs):
@@ -426,7 +477,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         # (when passed by post method containing error messages)
         if 'content_type_form' not in context:
             if content_type in CONTENT_TYPE_FORMS:
-                content_file = CONTENT_TYPES[content_type].objects.get(pk=self.get_object().pk)
+                content_file = CONTENT_TYPES[content_type].objects.get(
+                    pk=self.get_object().pk)
                 # if content is MD and there exists an md file in DB for it,
                 # get EditMD so the user can't edit the md file.
                 if content.type == "MD":
@@ -435,7 +487,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                             EditMD(instance=content_file)
                 else:
                     context['content_type_form'] = \
-                        CONTENT_TYPE_FORMS.get(content_type)(instance=content_file)
+                        CONTENT_TYPE_FORMS.get(content_type)(
+                            instance=content_file)
 
         # Checks if attachments are allowed for given content type
         context['attachment_allowed'] = content_type in IMAGE_ATTACHMENT_TYPES
@@ -500,7 +553,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
         if self.object.type in CONTENT_TYPE_FORMS:
 
             # Bind/init form with existing data
-            content_object = CONTENT_TYPES[self.object.type].objects.get(pk=self.get_object().pk)
+            content_object = CONTENT_TYPES[self.object.type].objects.get(
+                pk=self.get_object().pk)
 
             # Careful: Order is important for file fields (instance first, afterwards form data,
             # if using kwargs dict as single argument instead, instance information
@@ -530,7 +584,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                     # Validates attachments
                     if image_formset.is_valid():
                         content.save()
-                        redirect = Validator.validate_attachment(content, image_formset)
+                        redirect = Validator.validate_attachment(
+                            content, image_formset)
                     else:
                         return self.render_to_response(
                             self.get_context_data(form=form,
@@ -559,7 +614,8 @@ class EditContentView(LoginRequiredMixin, UpdateView):
                 content.approved = False #TODO A content is not approved after editing, but it is never stored as approved in the revserion
                 content.save()
 
-                messages.add_message(self.request, messages.SUCCESS, _("Content updated"))
+                messages.add_message(
+                    self.request, messages.SUCCESS, _("Content updated"))
                 return HttpResponseRedirect(self.get_success_url())
 
             # Don't save and render error messages for both forms
@@ -644,7 +700,8 @@ class ContentView(DetailView):
         course_id = self.kwargs['course_id']
         topic_id = self.kwargs['topic_id']
         return HttpResponseRedirect(
-            reverse_lazy('frontend:content', args=(course_id, topic_id, self.get_object().id,))
+            reverse_lazy('frontend:content', args=(
+                course_id, topic_id, self.get_object().id,))
             + '#comments')
 
     def get_context_data(self, **kwargs):
@@ -666,7 +723,8 @@ class ContentView(DetailView):
         context['count'] = content.get_rate_count()
         context['rate'] = round(content.get_rate(), 2)
         if self.request.user.is_authenticated:
-            context['user_rate'] = content.get_user_rate(self.request.user.profile)
+            context['user_rate'] = content.get_user_rate(
+                self.request.user.profile)
 
         # Course id for back to course button
         course_id = self.kwargs['course_id']
@@ -696,8 +754,10 @@ class ContentView(DetailView):
             context['startTime'] = content.ytvideocontent.start_time
             context['endTime'] = content.ytvideocontent.end_time
 
-            context['startSeconds'] = timestamp_to_seconds(content.ytvideocontent.start_time)
-            context['endSeconds'] = timestamp_to_seconds(content.ytvideocontent.end_time)
+            context['startSeconds'] = timestamp_to_seconds(
+                content.ytvideocontent.start_time)
+            context['endSeconds'] = timestamp_to_seconds(
+                content.ytvideocontent.end_time)
 
         context['comment_form'] = CommentForm()
 
@@ -712,11 +772,11 @@ class ContentView(DetailView):
                                 + self.request.GET.get('f')
 
         if self.request.user.is_authenticated:
-            context['user_rate'] = content.get_user_rate(self.request.user.profile)
+            context['user_rate'] = content.get_user_rate(
+                self.request.user.profile)
             context['favorite'] = Favorite.objects.filter(course=course, user=get_user(self.request),
-                                                      content=content).count() > 0
+                                                          content=content).count() > 0
             context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
-            
 
         return context
 
@@ -825,7 +885,8 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         if self.get_object().author == user or request.user.is_superuser:
             return super().dispatch(request, *args, **kwargs)
 
-        messages.error(request, _('You are not allowed to delete this content'))
+        messages.error(request, _(
+            'You are not allowed to delete this content'))
         return HttpResponseRedirect(self.get_content_url())
 
     def delete(self, request, *args, **kwargs):
@@ -845,7 +906,8 @@ class DeleteContentView(LoginRequiredMixin, DeleteView):
         """
 
         # Sends the success message
-        messages.success(request, "Content successfully deleted", extra_tags="alert-success")
+        messages.success(request, "Content successfully deleted",
+                         extra_tags="alert-success")
 
         return super().delete(self, request, *args, **kwargs)
 
@@ -882,14 +944,16 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
 
         topic = Topic.objects.get(pk=topic_id)
         if self.request.GET.get('coursebook'):
-            course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
+            course = get_object_or_404(
+                Course, {"pk": self.kwargs['course_id']})
             contents = [
                 f.content for f in Favorite.objects.filter(
                     course=course,
                     user=self.request.user.profile)]  # models
             # .get_coursebook_flat(get_user(self.request), course)
         else:
-            contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f'))
+            contents = topic.get_contents(
+                self.request.GET.get('s'), self.request.GET.get('f'))
 
         list_of_content_ids = [content.id for content in contents]
 
@@ -913,6 +977,7 @@ class ContentReadingModeView(LoginRequiredMixin, DetailView):
             context['html'] = Markdown.render(content, False)
 
         return context
+
 
 class PublicContentReadingModeView(DetailView):
     """Content reading mode view
@@ -946,15 +1011,17 @@ class PublicContentReadingModeView(DetailView):
 
         topic = Topic.objects.get(pk=topic_id)
         if self.request.GET.get('coursebook'):
-            course = get_object_or_404(Course, {"pk": self.kwargs['course_id']})
+            course = get_object_or_404(
+                Course, {"pk": self.kwargs['course_id']})
             contents = [
                 f.content for f in Favorite.objects.filter(
                     course=course,
                     user=self.request.user.profile,
-                    public = True)]  # models
+                    public=True)]  # models
             # .get_coursebook_flat(get_user(self.request), course)
         else:
-            contents = topic.get_contents(self.request.GET.get('s'), self.request.GET.get('f')).filter(public=True)
+            contents = topic.get_contents(self.request.GET.get(
+                's'), self.request.GET.get('f')).filter(public=True)
 
         list_of_content_ids = [content.id for content in contents]
 

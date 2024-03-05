@@ -165,17 +165,18 @@ class Course(models.Model):
                                     related_name='owned_courses',
                                     verbose_name=_("Owners"))
     moderators = models.ManyToManyField(Profile,
-                                    related_name='moderated_courses',
-                                    verbose_name=_("Moderators"),
-                                    default=None,
-                                    blank=True)
+                                        related_name='moderated_courses',
+                                        verbose_name=_("Moderators"),
+                                        default=None,
+                                        blank=True)
     restrict_changes = models.BooleanField(verbose_name=_("Edit Restriction"),
                                            help_text=_("This course is restricted and "
                                                        "can only be edited by the owners"),
                                            blank=True,
                                            default=False)
     public = models.BooleanField(verbose_name=_("Publicly accessible"),
-                                 help_text=_("This course can be accessed by unregistered users "),
+                                 help_text=_(
+                                     "This course can be accessed by unregistered users "),
                                  default=False)
     category = models.ForeignKey(Category,
                                  verbose_name=_("Category"),
@@ -266,7 +267,7 @@ class Topic(models.Model):
         """
         return f"{self.title} ({self.category})"
 
-    def get_contents(self, sorted_by, filtered_by):
+    def get_contents(self, sorted_by, filtered_by, user=None):
         """Get contents
 
         Returns all contents belonging to this topic. Additionally the contents
@@ -280,7 +281,19 @@ class Topic(models.Model):
         :return: the sorted and filtered contents belonging to this topic
         :rtype: QuerySet[Content]
         """
-        contents = self.contents.all()
+        # If the user is a moderator, user is set to "" to show all contents
+        if user is "":
+            contents = self.contents.all()
+
+        # If the user is not a moderator and not logged in, only show unhidden contents
+        elif user is None:
+            contents = self.contents.all().filter(hidden=False)
+
+        else:
+            # filter the contents that are not hidden as well as hidden and authored by the user
+            contents = self.contents.all().filter(
+                models.Q(hidden=False) | models.Q(author=user))
+
         # filtered by is a String and represents the decision of the user
         # , how they want to filter the data,
         # e.g. 'Text' means they want to only see all text fields in the topic
@@ -294,7 +307,8 @@ class Topic(models.Model):
         # and the String represent their decision
         if sorted_by != 'None' and sorted_by is not None:
             if sorted_by == 'Rating':
-                contents = sorted(contents, key=lambda x: x.get_rate(), reverse=True)
+                contents = sorted(
+                    contents, key=lambda x: x.get_rate(), reverse=True)
             elif sorted_by == 'Date':
                 contents = contents.order_by('-' + 'creation_date')
             else:
@@ -371,6 +385,12 @@ class Content(models.Model):
     :type Content.public: BooleanField
     :attr Content.public: The status of the content if it is approved
     :type Content.public: BooleanField
+    :attr Content.approved: The status of the content if it is hidden
+    :type Content.approved: BooleanField
+    :attr Content.author_message: The message for the author
+    :type Content.author_message: TextField
+    :attr Content.user_message: The message for the user
+    :type Content.user_message: TextField
     :attr Content.creation_date: The creation date of the content
     :type Content.creation_date: DateTimeField
     :attr Content.preview: The preview image of the content
@@ -399,15 +419,30 @@ class Content(models.Model):
                                   blank=True)
 
     readonly = models.BooleanField(verbose_name=_("Set to Read-Only"),
-                                   help_text=_("This content shouldn't be edited"),
+                                   help_text=_(
+                                       "This content shouldn't be edited"),
                                    default=False)
     public = models.BooleanField(verbose_name=_("Show in public courses"),
                                  help_text=_("This content will be displayed in courses "
                                              "that don't require registration"),
                                  default=False)
     approved = models.BooleanField(verbose_name=_("Approved"),
-                                   help_text=_("This content is approved by a moderator"),
+                                   help_text=_(
+                                       "This content is approved by a moderator"),
                                    default=False)
+    hidden = models.BooleanField(verbose_name=_("Hidden"),
+                                 help_text=_(
+                                     "This content is hidden in the course by a moderator"),
+                                 default=False)
+    author_message = models.TextField(verbose_name=_("Author Message"),
+                                      help_text=_(
+                                          "The message for the author"),
+                                      blank=True,
+                                      null=True)
+    user_message = models.TextField(verbose_name=_("User Message"),
+                                    help_text=_("The message for the user"),
+                                    blank=True,
+                                    null=True)
     creation_date = models.DateTimeField(verbose_name=_('Creation Date'),
                                          default=timezone.now,
                                          blank=True)
@@ -474,7 +509,8 @@ class Content(models.Model):
         :return: the average number of ratings
         :rtype: float
         """
-        rating = Rating.objects.filter(content_id=self.id).aggregate(Avg('rating'))['rating__avg']
+        rating = Rating.objects.filter(content_id=self.id).aggregate(
+            Avg('rating'))['rating__avg']
         if rating is not None:
             return int(rating)
         return -1
@@ -528,8 +564,10 @@ class Content(models.Model):
         :param user: The user of the rating
         :type user: User
         """
-        Rating.objects.filter(user_id=user.user.id, content_id=self.id).delete()
-        rating = Rating.objects.create(user=user, content=self, rating=rating)  # user = profile
+        Rating.objects.filter(user_id=user.user.id,
+                              content_id=self.id).delete()
+        rating = Rating.objects.create(
+            user=user, content=self, rating=rating)  # user = profile
         rating.save()
         self.save()
 
@@ -545,6 +583,24 @@ class Content(models.Model):
         """
         if user in course.moderators.all():
             self.approved = approval
+            self.author_message = None
+            self.user_message = None
+            self.save()
+
+    def hide_content(self, course, user, hide, author_message=None, user_message=None):
+        """Content hiding
+
+        Sets the hiding of the content by the given hide of the user.
+
+        :param hide: The hide of content by the user
+        :type hide: bool
+        :param user: The user of the hide
+        :type user: User
+        """
+        if user in course.moderators.all():
+            self.hidden = hide
+            self.author_message = author_message
+            self.user_message = user_message
             self.save()
 
     def get_index_in_course(self, course):
