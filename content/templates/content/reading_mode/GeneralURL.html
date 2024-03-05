@@ -1,0 +1,14 @@
+{% extends 'content/reading_mode/base.html' %}
+
+{# Load the tag library #}
+{% load i18n %}
+
+{% block reading_content %}
+    <b>
+        {% trans 'Source' %}:
+    </b>
+
+    <p>
+        {{ content.generalurl.url }}
+    </p>
+{% endblock %}

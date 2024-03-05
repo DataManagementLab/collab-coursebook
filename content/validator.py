@@ -112,4 +112,19 @@ class Validator:  # pylint: disable=too-few-public-methods)
         file_type = magic.from_buffer(file.read(1024), mime=True)
         if file_type not in valid_types:
             raise ValidationError('Unsupported file type.')
-            
+    
+    @staticmethod
+    def validate_general_url(url):
+        """Validate general url
+
+        Validates if the given url is a valid url. If the given url is not a url, a validation error will be thrown
+
+        :param url: The url to be checked
+        :param url: str
+
+        :return: a validation error, if the given url is not a url
+        :rtype: None or ValidationError
+        """
+        valid_url = re.match(r"^(http(s)?://)?(www\.|m\.)?(\.)?/.*", url)
+        if valid_url is None:
+            raise ValidationError('Invalid URL')

@@ -1,0 +1,13 @@
+{% load cc_export_tags %}
+{% load i18n %}
+{% autoescape off %}
+
+% Add content to table of contents
+{% if export_pdf %}
+\section{ {% if no_desc %} {% trans "General URL" %} {% else %} {{content.description|tex_escape}} {% endif %} }
+{% endif %}
+
+% General URL link
+\url{ {{ content.generalurl.url }} } 
+
+{% endautoescape %}

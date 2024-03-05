@@ -1,0 +1,19 @@
+{% load static %}
+{% load i18n %}
+{% load fontawesome_6 %}
+
+<b>
+    {% trans 'Preview of' %} {{ content.generalurl.title }}:
+</b>
+<p>
+    {{ content.generalurl.preview }}
+</p>
+</br>
+<form action="{{ content.generalurl.url }}" method="get" target="_blank" >
+    {% csrf_token %}
+    <button name="action" value="submit" class="btn " style="font-size:2em;background-color:#0A3D62; color:white;">
+        {% trans 'Open' %}
+        {{ content.generalurl.title }}
+        {% fa6_icon 'up-right-from-square' 'fas' %} 
+    </button>
+</form>
