@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'reversion',  # https://github.com/etianen/django-reversion
     'reversion_compare',  # https://github.com/jedie/django-reversion-compare
+    'linkpreview',
 ]
 
 MIDDLEWARE = [

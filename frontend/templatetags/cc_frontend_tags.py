@@ -16,6 +16,8 @@ from content.models import CONTENT_TYPES
 
 from datetime import timedelta
 
+from linkpreview import link_preview
+
 register = template.Library()
 
 
@@ -288,8 +290,6 @@ def get_coursebook(user, course):
     return coursebook
 
 
-
-
 @register.filter
 def format_seconds(seconds):
     """
@@ -304,6 +304,25 @@ def format_seconds(seconds):
         # If conversion fails, assume it's already in the format "0:00:00"
         return seconds
 
+
+@register.filter
+def generalurl_title(url):
+    """
+    This filter extracts the title of a website.
+    Will be used for GeneralURL to display the URL's title.
+    """
+    preview = link_preview(url)
+    return preview.title
+
+
+@register.filter
+def generalurl_image(url):
+    """
+    This filter extracts a image of a website.
+    Will be used for GeneralURL to display an image of the site.
+    """
+    preview = link_preview(url)
+    return preview.image
 
 
 def js_escape(value):
