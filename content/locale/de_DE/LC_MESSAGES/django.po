@@ -73,6 +73,7 @@ msgstr "PDF"
 #: content/models.py:356 content/models.py:407
 #: content/templates/content/reading_mode/AnkiDeck.html:16
 #: content/templates/content/reading_mode/Exercise.html:43
+#: content/templates/content/reading_mode/GeneralURL.html:8
 #: content/templates/content/reading_mode/Image.html:15
 #: content/templates/content/reading_mode/Latex.html:16
 #: content/templates/content/reading_mode/MD.html:16
@@ -280,6 +281,20 @@ msgstr "Übungs-Inhalt"
 msgid "Exercise Contents"
 msgstr "Übungs-Inhalte"
 
+#: content/models.py:687 
+#: content/models.py:689 
+#: content/models.py:702
+msgid "General URL"
+msgstr "Allgemeine URL"
+
+#: content/models.py:690
+msgid "The clear name of the site"
+msgstr "Der Klarname der Website"
+
+#: content/models.py:703
+msgid "General URLs"
+msgstr "Allgemeine URLs"
+
 #: content/static/yt_api.py:113
 msgid "Hours"
 msgstr "Stunden"
@@ -323,6 +338,18 @@ msgstr "Zeitstempel"
 #: content/templates/content/view/YouTubeVideo.html:11
 msgid "End"
 msgstr "Ende"
+
+#: content/templates/content/view/GeneralURL.html:8
+msgid "Preview of"
+msgstr "Vorschau von"
+
+#: content/templates/content/view/GeneralURL.html:20
+msgid "Title:"
+msgstr "Titel:"
+
+#: content/templates/content/view/GeneralURL.html:27
+msgid "Open in new tab"
+msgstr "In neuem Fenster öffnen"
 
 #: content/templates/content/view/invalid.html:5
 msgid "Invalid type"
