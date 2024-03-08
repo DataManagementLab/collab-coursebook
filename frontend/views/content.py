@@ -152,8 +152,8 @@ def hide_content(request, course_id, topic_id, content_id, hide):  # pylint: dis
     user_message = None
     author_message = None
     if request.method == 'POST':
-        user_message = request.POST['user_message']
-        author_message = request.POST['author_message']
+        user_message = request.POST.get('user_message')
+        author_message = request.POST.get('author_message')
 
     content = get_object_or_404(Content, pk=content_id)
     course = get_object_or_404(Course, pk=course_id)

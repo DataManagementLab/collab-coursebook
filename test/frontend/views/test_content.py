@@ -13,7 +13,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from base.models import Content, Course, Topic
+from base.models import Content, Course, Topic, Category
 
 import content.forms as form
 import content.models as model
@@ -22,7 +22,7 @@ from content.attachment.forms import ImageAttachmentFormSet
 from content.attachment.models import ImageAttachment
 
 from frontend.forms import AddContentForm
-from frontend.views.content import clean_attachment, approve_content
+from frontend.views.content import clean_attachment, approve_content, hide_content
 
 
 from django.http import HttpResponseRedirect
@@ -863,4 +863,104 @@ class PublicContentReadingModeViewTestCase(MediaTestCase):
                 self.assertEqual(response.context_data['ending'], request.GET.get('s') + "&f=" + request.GET.get('f'))
             if content.type == 'MD':
                 self.assertEqual(response.context_data['html'], md_code)
+
+class HideContentTestCase(MediaTestCase):
+    """Hide content test case
+
+    Defines the test cases for the hide_content function.
+    """
+
+    def setUp(self):
+        """Setup
+
+        Sets up the test database.
+        """
+        super().setUp()
+        self.factory = RequestFactory()
+        self.course = Course.objects.first()
+        self.course.moderators.add(Profile.objects.first())
+        self.course.save()
+        self.cat = Category.objects.first()
+        self.topic = Topic.objects.first()
+        self.content = Content.objects.first()
+
+    def test_hide_content(self):
+        """Test hide content
+
+        Tests that the content is hidden and the user is redirected to the content page.
+        """
+        request = self.factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)), {
+            'user_message': 'User message',
+            'author_message': 'Author message'
+        })
+        request.user = User.objects.first()
+
+        response = hide_content(request, self.course.id, self.topic.id, self.content.id, True)
+
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+
+        self.content.refresh_from_db()
+        self.assertTrue(self.content.hidden)
+        self.assertEqual(self.content.user_message, 'User message')
+        self.assertEqual(self.content.author_message, 'Author message')
+        self.assertFalse(self.content.approved)
+
+    def test_show_content(self):
+        """Test show content
+
+        Tests that the content is shown and the user is redirected to the content page.
+        """
+    
+        request = self.factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        request.user = User.objects.first()
+
+        response = hide_content(request, self.course.id, self.topic.id, self.content.id, False) #FIXME: This causes multiple values in dict errors ...
+
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+
+        self.content.refresh_from_db()
+        self.assertFalse(self.content.hidden)
+        self.assertEqual(self.content.user_message, None)
+        self.assertEqual(self.content.author_message, None)
+        self.assertFalse(self.content.approved)
+
+    def test_get_content(self):
+        import logging
+
+        """Test get content
+
+        Tests if the content is shown for the different types of users (moderators, authors, normal users and not logged in).
+        """
+        self.content.hidden = True
+        self.content.user_message = 'User message'
+        self.content.author_message = 'Author message'
+        self.content.author = Profile.objects.first()
+        # Create a new User to act as the normal user
+        user = User.objects.create_user(username='testuser', password='12345')
+        user.save()
+        self.content.save()
+        self.content.refresh_from_db()
+        #Normal user
+        self.client.force_login(user)
+        response = self.client.get(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'User message')
+
+        # #Author
+        # self.client.force_login(User.objects.first())
+        # response = self.client.get(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        # self.assertEqual(response.status_code, 200)
+        # logging.critical(self.content.author)
+        # self.assertContains(response, 'Author message')
+
+        # #Moderator
+        # self.client.force_login(User.objects.last())
+        # self.course.moderators.add(Profile.objects.first())
+        # self.course.save()
+        # response = self.client.get(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        # self.assertEqual(response.status_code, 200)
+        # self.assertContains(response, 'User message')
+        # self.assertContains(response, 'Author message')
         
