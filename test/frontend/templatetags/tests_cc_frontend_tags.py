@@ -3,7 +3,7 @@
 This file contains the test cases for /export/templatetags/cc_export_tags.py
 """
 
-from frontend.templatetags.cc_frontend_tags import js_escape, format_seconds, check_approve_content_permission
+from frontend.templatetags.cc_frontend_tags import js_escape, format_seconds, check_approve_content_permission, check_hide_content_permission
 from datetime import timedelta
 from django.test import TestCase
 
@@ -69,4 +69,20 @@ class CheckApproveContentPermissionTestCase(TestCase):
         
         result = check_approve_content_permission(request.user, self.course)
 
-        self.assertFalse(result)  # Modify this assertion based on your expected behavior
+        self.assertFalse(result)
+
+class CheckHideContentPermissionTestCase(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create()
+        self.cat = Category.objects.create(title="Category")
+        self.course = Course.objects.create(title='Course', description='desc', category=self.cat)
+        Topic.objects.create(title="Topic", category=self.cat)
+
+    def test_check_hide_content_permission(self):
+        request = self.factory.get('/')
+        request.user = self.user
+        
+        result = check_hide_content_permission(request.user, self.course)
+
+        self.assertFalse(result)

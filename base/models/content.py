@@ -282,11 +282,11 @@ class Topic(models.Model):
         :rtype: QuerySet[Content]
         """
         # If the user is a moderator, user is set to "" to show all contents
-        if user is "":
+        if user == "":
             contents = self.contents.all()
 
         # If the user is not a moderator and not logged in, only show unhidden contents
-        elif user is None:
+        elif user == None:
             contents = self.contents.all().filter(hidden=False)
 
         else:
