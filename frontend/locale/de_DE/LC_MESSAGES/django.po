@@ -1033,7 +1033,7 @@ msgid ""
 "in ② you can click on the name of a specific topic for quick topic jumping, "
 "and click on the hamburger button to toggle/untoggle the topic list."
 msgstr ""
-"in ② können Sie auf den Namen eines bestimmten Themas klicken, um schnell "
+"In ② können Sie auf den Namen eines bestimmten Themas klicken, um schnell "
 "zum ausgewählten Thema zu springen, und auf die Hamburger-Schaltfläche "
 "klicken, um die Themenliste ein- oder auszuschalten."
 
