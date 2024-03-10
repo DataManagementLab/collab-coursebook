@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 13:48+0000\n"
+"POT-Creation-Date: 2024-03-10 16:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -247,9 +247,6 @@ msgstr "Verifikationsmakierung aufheben"
 msgid "Hide Content"
 msgstr "Inhalt verstecken"
 
-msgid "Add Content"
-msgstr "Inhalt hinzufügen"
-
 #: frontend/templates/frontend/content/detail.html:58
 msgid "Remove incorrect mark"
 msgstr "Fehlerhaft makierung aufheben"
@@ -310,9 +307,6 @@ msgid "Hide"
 msgstr "Verstecken"
 
 #: frontend/templates/frontend/content/detail.html:264
-msgid "You are not allowed to delete this content"
-msgstr "Sie sind nicht berechtigt diesen Inhalt zu entfernen"
-
 msgid "Why do you want to hide this content?"
 msgstr "Warum wollen Sie diesen Inhalt verstecken?"
 
@@ -321,11 +315,10 @@ msgid "Please provide a comprehensive reason for the author:"
 msgstr "Bitte geben Sie eine verständliche Begründung für den Author an:"
 
 #: frontend/templates/frontend/content/detail.html:270
-msgid "Please write down your changes of this content"
-msgstr "Bitte notieren Sie Ihre Änderungen an diesem Inhalt"
-
 msgid "Please provide a short description for users visiting this content:"
-msgstr "Bitte geben Sie eine kurze Beschreibung für Nutzer an, die diesen Inhalt aufrufen:"
+msgstr ""
+"Bitte geben Sie eine kurze Beschreibung für Nutzer an, die diesen Inhalt "
+"aufrufen:"
 
 #: frontend/templates/frontend/content/detail.html:294
 #: frontend/templates/frontend/course/public_view.html:50
@@ -856,8 +849,8 @@ msgstr ""
 "Nachdem Sie auf der Kursseite „INHALTE HINZUFÜGEN\" gewählt haben, können "
 "Sie einen Typ von the content which you want to create. <ul> <li> PDF </li> "
 "<li> Text </li> <li> LaTeX </li> <li> YouTube </li> <li> Bild </li> <li> "
-"Panopto </li> <li> Übung </li> <li> Allgemeine URL </li> </ul> Hier wählen wir LaTeX-Inhalte als "
-"Beispiel:"
+"Panopto </li> <li> Übung </li> <li> Allgemeine URL </li> </ul> Hier wählen "
+"wir LaTeX-Inhalte als Beispiel:"
 
 #: frontend/templates/frontend/tutorial/add_content.html:48
 msgid ""
@@ -916,8 +909,8 @@ msgid ""
 "A content represents a multimedia element, which can consist of a text or a "
 "valid file format. A content is assigned to a course."
 msgstr ""
-"Ein Inhaltstyp representiert ein multimediales Element welches aus Text "
-"oder einem validen Dateiformat besteht. Ein Inhaltstyp ist einem Kurs zugeordnet."
+"Ein Inhaltstyp representiert ein multimediales Element welches aus Text oder "
+"einem validen Dateiformat besteht. Ein Inhaltstyp ist einem Kurs zugeordnet."
 
 #: frontend/templates/frontend/tutorial/content.html:15
 msgid ""
@@ -970,8 +963,9 @@ msgid ""
 "A course is a structured unit of teaching or training materials on a "
 "specific learning content, usually a module, of the educational institution."
 msgstr ""
-"Ein Kurs ist eine Strukturierte Einheit von Lehr- und Übungsmaterial über ein Spezifischen"
-"Lehrninhalt, üblicherweise einem Modul, einer Bildungseinrichtung."
+"Ein Kurs ist eine Strukturierte Einheit von Lehr- und Übungsmaterial über "
+"ein SpezifischenLehrninhalt, üblicherweise einem Modul, einer "
+"Bildungseinrichtung."
 
 #: frontend/templates/frontend/tutorial/course.html:22
 msgid "The key functions of the course site are as follows:"
@@ -989,17 +983,18 @@ msgid ""
 "MARK AS VERIFIED / REMOVE VERIFICATION: If you are a moderator of a course, "
 "you can approve or disapprove content as audited."
 msgstr ""
-"Als Verifiziert makieren / Makierung entfernen: Wenn Sie Moderator eines Kurses sind, "
-"können Sie Inhalte als verifiziert makieren / die Makierung entfernen."
+"Als Verifiziert makieren / Makierung entfernen: Wenn Sie Moderator eines "
+"Kurses sind, können Sie Inhalte als verifiziert makieren / die Makierung "
+"entfernen."
 
 #: frontend/templates/frontend/tutorial/course.html:41
 msgid ""
 "HIDE CONTENT / REMOVE INCORRECT MARK: If you are a moderator of a course, "
 "you can hide or show content."
 msgstr ""
-"Inhalte vertecken / Fehlerhaft Makierung aufheben: Wenn Sie Moderator eines Kurses sind, "
-"können Sie falsche Inhalte verstecken oder die Falschmakierung aufheben und die Kurse dadurch "
-"wieder anzeigen lassen."
+"Inhalte vertecken / Fehlerhaft Makierung aufheben: Wenn Sie Moderator eines "
+"Kurses sind, können Sie falsche Inhalte verstecken oder die Falschmakierung "
+"aufheben und die Kurse dadurch wieder anzeigen lassen."
 
 #: frontend/templates/frontend/tutorial/course.html:46
 msgid ""
@@ -1263,8 +1258,9 @@ msgid ""
 "If you are responsible for a course and want to get it moderated, please "
 "contact the admin."
 msgstr ""
-"Kontaktieren Sie bitte einen Administrator wenn Sie für einen hier exestierenden Kurs "
-"verantwortlich sein und diesen Moderieren (lassen) möchten."
+"Kontaktieren Sie bitte einen Administrator wenn Sie für einen hier "
+"exestierenden Kurs verantwortlich sein und diesen Moderieren (lassen) "
+"möchten."
 
 #: frontend/templates/frontend/tutorial/navbar.html:8
 msgid "Navigation Bar"
@@ -1314,8 +1310,8 @@ msgid ""
 "Click the button (see ⑥) in order to change the language, access the "
 "tutorial or log out."
 msgstr ""
-"Klicken Sie auf den Button (siehe ⑥), um die Sprache zu "
-"wechseln, auf das Tutorial zuzugreifen oder sich auszuloggen."
+"Klicken Sie auf den Button (siehe ⑥), um die Sprache zu wechseln, auf das "
+"Tutorial zuzugreifen oder sich auszuloggen."
 
 #: frontend/views/comment.py:52 frontend/views/comment.py:164
 msgid "You do not have permission to do this."
