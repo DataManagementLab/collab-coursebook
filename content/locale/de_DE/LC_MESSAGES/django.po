@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 11:08+0000\n"
+"POT-Creation-Date: 2024-03-10 13:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,23 +45,23 @@ msgstr "Bildanhänge"
 msgid "Default: 0:00"
 msgstr "Standard: 0:00"
 
-#: content/forms.py:269
+#: content/forms.py:291
 msgid "Upload an existing Markdown file"
 msgstr "Eine existierende Markdown Datei hochladen"
 
-#: content/forms.py:270
+#: content/forms.py:292
 msgid "Write Markdown with editor"
 msgstr "Markdown mit Editor schreiben"
 
-#: content/forms.py:306
+#: content/forms.py:328
 msgid "You must upload a Markdown file."
 msgstr "Laden sie bitte eine Markdown Datei hoch."
 
-#: content/forms.py:309 content/forms.py:347
+#: content/forms.py:331 content/forms.py:369
 msgid "You must put in some text."
 msgstr "Geben sie bitte Text ein."
 
-#: content/forms.py:311
+#: content/forms.py:333
 msgid "None of the options were chosen."
 msgstr "Keine Option ausgewählt."
 
@@ -281,9 +281,7 @@ msgstr "Übungs-Inhalt"
 msgid "Exercise Contents"
 msgstr "Übungs-Inhalte"
 
-#: content/models.py:687 
-#: content/models.py:689 
-#: content/models.py:702
+#: content/models.py:687 content/models.py:689 content/models.py:702
 msgid "General URL"
 msgstr "Allgemeine URL"
 
@@ -326,6 +324,18 @@ msgstr "Beschreibung"
 msgid "Download"
 msgstr "Herunterladen"
 
+#: content/templates/content/view/GeneralURL.html:8
+msgid "Preview of"
+msgstr "Vorschau von"
+
+#: content/templates/content/view/GeneralURL.html:20
+msgid "Title:"
+msgstr "Titel:"
+
+#: content/templates/content/view/GeneralURL.html:27
+msgid "Open in new tab"
+msgstr "In neuem Fenster öffnen"
+
 #: content/templates/content/view/PanoptoVideo.html:10
 #: content/templates/content/view/YouTubeVideo.html:10
 msgid "Start"
@@ -338,18 +348,6 @@ msgstr "Zeitstempel"
 #: content/templates/content/view/YouTubeVideo.html:11
 msgid "End"
 msgstr "Ende"
-
-#: content/templates/content/view/GeneralURL.html:8
-msgid "Preview of"
-msgstr "Vorschau von"
-
-#: content/templates/content/view/GeneralURL.html:20
-msgid "Title:"
-msgstr "Titel:"
-
-#: content/templates/content/view/GeneralURL.html:27
-msgid "Open in new tab"
-msgstr "In neuem Fenster öffnen"
 
 #: content/templates/content/view/invalid.html:5
 msgid "Invalid type"
