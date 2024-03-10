@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-10 16:02+0000\n"
+"POT-Creation-Date: 2024-03-10 17:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -843,16 +843,16 @@ msgid ""
 "After selecting “ADD CONTENT” on the course site, you can choose a type of "
 "the content which you want to create. <ul> <li> PDF </li> <li> Text </li> "
 "<li> LaTeX </li> <li> YouTube </li> <li> Bild </li> <li> Panopto </li> <li> "
-"Exercise </li> <li> General URL </li> </ul> Here we choose LaTeX content as "
-"an example:"
+"Exercise </li> <li> General URL </li> <li> Anki Deck </li> </ul> Here we "
+"choose LaTeX content as an example:"
 msgstr ""
 "Nachdem Sie auf der Kursseite „INHALTE HINZUFÜGEN\" gewählt haben, können "
 "Sie einen Typ von the content which you want to create. <ul> <li> PDF </li> "
 "<li> Text </li> <li> LaTeX </li> <li> YouTube </li> <li> Bild </li> <li> "
-"Panopto </li> <li> Übung </li> <li> Allgemeine URL </li> </ul> Hier wählen "
-"wir LaTeX-Inhalte als Beispiel:"
+"Panopto </li> <li> Übung </li> <li> Allgemeine URL </li> <li> Anki Deck </"
+"li> </ul> Hier wählen wir LaTeX-Inhalte als Beispiel:"
 
-#: frontend/templates/frontend/tutorial/add_content.html:48
+#: frontend/templates/frontend/tutorial/add_content.html:51
 msgid ""
 "in ① you can click on the “?” to see detailed instruction for the latex code "
 "field."
@@ -860,7 +860,7 @@ msgstr ""
 "In ① können Sie auf das “?” klicken um eine detaillierte Anleitung für das "
 "LaTeX-Codefeld zu sehen."
 
-#: frontend/templates/frontend/tutorial/add_content.html:53
+#: frontend/templates/frontend/tutorial/add_content.html:56
 msgid ""
 "in ② you can select “ADD ATTACHMENT” to select an image file from your local "
 "computer as an attachment to this content."
@@ -868,7 +868,7 @@ msgstr ""
 "In ② können Sie „ANHANG HINZUFÜGEN“ selektieren, um eine Bilddatei von Ihrem "
 "lokalen Computer als Anhang zu diesem Inhalt hinzufügen."
 
-#: frontend/templates/frontend/tutorial/add_content.html:59
+#: frontend/templates/frontend/tutorial/add_content.html:62
 msgid ""
 "after you click on “ADD ATTACHMENT” there will also appear a “REMOVE "
 "ATTACHMENT” button, which allows you to remove the last attachment."
@@ -877,13 +877,13 @@ msgstr ""
 "Schaltfläche „ANHANG ENTFERNEN“ angezeigt, mit der Sie den zuletzt "
 "hinzugefügten Anhang entfernen können."
 
-#: frontend/templates/frontend/tutorial/add_content.html:65
+#: frontend/templates/frontend/tutorial/add_content.html:68
 msgid "in ③ you can determine wether or not other users can edit this content."
 msgstr ""
 "in ③ können Sie festlegen, ob andere Benutzer diesen Inhalt bearbeiten "
 "können oder nicht."
 
-#: frontend/templates/frontend/tutorial/add_content.html:70
+#: frontend/templates/frontend/tutorial/add_content.html:73
 msgid ""
 "in ④ you can mark a content as publicly visible. This means that the content "
 "will be visible to all users, even if they are not logged in. <div "
