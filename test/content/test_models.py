@@ -108,6 +108,7 @@ class PanoptoVideoContentTestCase(MediaTestCase):  # pylint: disable=too-few-pub
 
 class AnkiDeckModelTestCase(MediaTestCase):
     def setUp(self):
+        super().setUp()
         # Create a mock Anki file for testing
         anki_content = utils.generate_anki_file('test')
 
