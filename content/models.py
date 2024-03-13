@@ -547,7 +547,7 @@ class YTVideoContent(BaseContentModel):
 class PanoptoVideoContent(BaseContentModel):
     """Panopto video model
 
-    This model represents a content with a YouTube video.
+    This model represents a content with a Panopto video.
 
     :attr PanoptoVideoContent.TYPE: Describes the content type of this model
     :type PanoptoVideoContent.TYPE: str
