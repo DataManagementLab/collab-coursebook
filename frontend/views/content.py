@@ -734,6 +734,8 @@ class ContentView(DetailView):
 
         topic = Topic.objects.get(pk=self.kwargs['topic_id'])
         context['topic'] = topic
+        if self.request.user.is_authenticated:
+            context['isCurrentUserOwner'] = self.request.user.profile in course.owners.all()
 
         """
         if '.md' in content.file.name:
