@@ -466,17 +466,17 @@ class Content(models.Model):
         verbose_name = _("Content")
         verbose_name_plural = _("Contents")
 
-    # def __str__(self):
-    #     """String representation
+    def __str__(self):
+        """String representation
 
-    #     Returns the string representation of this object.
+        Returns the string representation of this object.
 
-    #     :return: the string representation of this object
-    #     :rtype: str
-    #     """
-    #     return _('%(title)s for %(topic)s by %(author)s') % {'title': self.type,
-    #                                                          'topic': self.topic,
-    #                                                          'author': self.author}
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return _('%(title)s for %(topic)s by %(author)s') % {'title': self.type,
+                                                             'topic': self.topic,
+                                                             'author': self.author}
 
     def get_rate_num(self):
         """Average rating
