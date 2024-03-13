@@ -4,7 +4,7 @@ This file contains the test cases for /content/forms.py.
 """
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-
+from unittest import skip
 import content.forms as form
 import content.models as model
 from test import utils
@@ -135,6 +135,8 @@ class AddAnkiFieldTests(TestCase):
     Defines the test cases for the form AddAnkiDeck
 
     """
+    @skip("Test skipped because it depends on the Anki file generation. To get more information\
+          about this, please refer to the comments in the testfile 'test/content/test_validator.py'.")
     def test_form_valid_submission(self):
         # Create a valid form submission
         form_data = {
