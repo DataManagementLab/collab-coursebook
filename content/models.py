@@ -7,6 +7,7 @@ registered in admin.py.
 
 import os
 import re
+
 import reversion
 from django.conf import settings
 from django.db import models
@@ -606,6 +607,27 @@ class PanoptoVideoContent(BaseContentModel):
                 return start_time_param[0]
             else:
                 return "0:00:00"
+
+    @property
+    def new_url(self):
+        """Panopto Video New URL
+
+        Cuts &query part (if available) from the URL.
+
+        Return: str: The Panopto video URL cut at &query.
+                 If there is an issue it defaults to regular URL
+        """
+        if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
+            # Define a regular expression to match the "&query" part
+            regex_pattern = r'&query=[^&]*'
+
+            # Use re.sub to remove the "&query" part from the URL
+            new_url = re.sub(regex_pattern, '', self.url)
+
+            if new_url:
+                return new_url
+            else:
+                return self.url
 
     def __str__(self):
         """String representation
