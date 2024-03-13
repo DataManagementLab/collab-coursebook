@@ -4,7 +4,7 @@ This file contains the test cases for this /content/validator.py.
 """
 
 import os
-
+from unittest import skip
 from test import utils
 from test.test_cases import MediaTestCase
 
@@ -103,7 +103,7 @@ class ValidatorTestCase(MediaTestCase):
 
     Because of this we decided to skip the test for the validate_anki_file function.
     """
-    @utils.skip
+    @skip('Skipped due to technical limitations. See comment above.')
     def test_anki_file_valid(self):
         """Validate Anki Deck test case - valid
 
