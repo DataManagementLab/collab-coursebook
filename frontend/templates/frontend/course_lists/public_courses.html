@@ -1,0 +1,21 @@
+
+{# Load the tag library #}
+{% load i18n %}
+{% load django_bootstrap5  %}
+{% load static %}
+{% load fontawesome_6 %}
+{% load cc_frontend_tags %}
+
+
+{% block content %}
+    <div class="row mt-3 mx-auto" style="width: 85%;">
+        <div class="col-md">
+            <h1>
+                Public Courses{% if sort %} ({{ sort }}){% endif %}
+            </h1>
+        </div>
+        
+        {% include 'frontend/course_lists/course_cards_paginated.html' %}
+    </div>
+
+{% endblock %}

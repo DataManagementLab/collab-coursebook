@@ -1,0 +1,15 @@
+{% load cc_frontend_tags %}
+{% load i18n %}
+
+<div>
+    <div>
+        <iframe src="{{ content.panoptovideocontent.new_url}}"  
+                width=100% height="650" frameborder="0" scrolling="no">
+        </iframe>
+    </div>
+    <b>{% trans 'Start' %}: {{ content.panoptovideocontent.start_time|format_seconds }}</b>
+    <br>
+    <a href="{{ content.panoptovideocontent.new_url}}" target="_blank">
+        {% trans 'View on Panopto' %}
+    </a>
+</div>

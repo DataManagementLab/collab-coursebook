@@ -3,7 +3,7 @@
 This file defines the URL mapping.
 """
 
-from django.urls import path, re_path, include
+from django.urls import path, re_path, include, register_converter
 from django.views.i18n import JavaScriptCatalog
 from django.utils.translation import gettext_lazy as _
 
@@ -16,10 +16,56 @@ from frontend import views
 
 app_name = "frontend"
 
+class BooleanConverter:
+     """Boolean converter
+     A URL converter for boolean values.
+
+     This converter is used to convert boolean values between Python objects and URL strings.
+     It supports the values "True" and "False" (case-insensitive) in URL strings.
+
+     :param regex: The regular expression pattern used to match boolean values in URL strings.
+     :type regex: str
+     """
+
+     regex = "([Tt]rue)|([Ff]alse)"
+
+     def to_python(self, value):
+          """To python
+          Converts a boolean value from a URL string to a Python object.
+
+          :param value: The boolean value as a string.
+          :type value: str
+
+          :return: The boolean value as a Python object.
+          :rtype: bool
+          """
+          return value.lower() in ["true","True"]
+
+     def to_url(self, value):
+          """To URL
+          Converts a boolean value from a Python object to a URL string.
+
+          :param value: The boolean value as a Python object.
+          :type value: bool
+
+          :return: The boolean value as a URL string.
+          :rtype: str
+
+          """
+          return str(value)
+    
+register_converter(BooleanConverter, "boolean")
+
 urlpatterns = [
     path('',
-         views.StartView.as_view(),
-         name="index"),
+         include([
+        re_path(r'^(?P<sort>date-new|date-old|title-a|title-z)/$',
+                views.StartView.as_view(),
+                name='public-courses-sort'),
+        path('',
+             views.StartView.as_view(),
+             name='public-courses'),
+        ])),
     path('dashboard/',
          views.DashboardView.as_view(),
          name="dashboard"),
@@ -58,6 +104,9 @@ urlpatterns = [
             path('',
                  views.CourseView.as_view(),
                  name='course'),
+            path('public',
+                 views.PublicCourseView.as_view(),
+                 name='public'),
             path('edit/',
                  views.course.EditCourseView.as_view(),
                  name='course-edit'),
@@ -90,6 +139,12 @@ urlpatterns = [
                 path('rate/<int:pk>/',
                      views.rate_content,
                      name='rating'),
+               path('approve/<boolean:approval>/',
+                     views.approve_content,
+                     name='approve'),
+               path('hide/<boolean:hide>',
+                     views.hide_content,
+                     name='hide'),
                 path('comment/<int:pk>/delete/',
                      views.DeleteComment.as_view(),
                      name='comment-delete'),
@@ -122,6 +177,9 @@ urlpatterns = [
             path('<pk>/read/',
                  views.content.ContentReadingModeView.as_view(),
                  name='content-reading-mode'),
+            path('<pk>/public-read/',
+                 views.content.PublicContentReadingModeView.as_view(),
+                 name='public-content-reading-mode'),
             path('<pk>/textfield-history/',
                  views.history.TextfieldHistoryCompareView.as_view(),
                  name='textfield-history'),
@@ -140,6 +198,18 @@ urlpatterns = [
             path('<pk>/markdown-history/',
                  views.history.MDHistoryCompareView.as_view(),
                  name='md-history'),
+            path('<pk>/panoptovideo-history/',
+                 views.history.PanoptoVideoHistoryCompareView.as_view(),
+                 name='panoptovideo-history'),
+            path('<pk>/anki-history/',
+                 views.history.AnkiHistoryCompareView.as_view(),
+                 name='anki-history'),
+            path('<pk>/exercise-history/',
+                 views.history.ExerciseHistoryCompareView.as_view(),
+                 name='exercise-history'),
+            path('<pk>/generalurl-history/',
+                 views.history.GeneralURLHistoryCompareView.as_view(),
+                 name='generalurl-history'),     
 
         ])),
         path('add/',

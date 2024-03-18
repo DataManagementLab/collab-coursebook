@@ -4,9 +4,10 @@ This file contains the test cases for /content/forms.py.
 """
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
-
+from unittest import skip
 import content.forms as form
 import content.models as model
+from test import utils
 
 
 class PlaceHolderTestCase(TestCase):
@@ -126,3 +127,39 @@ class AddMDTestCase(TestCase):
         test_form = form.AddMD(data=form_data)
         self.assertFalse(test_form.is_valid())
         self.assertEqual(test_form.errors['__all__'], ["You must put in some text."])
+
+
+class AddAnkiFieldTests(TestCase):
+    """ AddAnkiDeck form test case
+
+    Defines the test cases for the form AddAnkiDeck
+
+    """
+    @skip("Test skipped because it depends on the Anki file generation. To get more information\
+          about this, please refer to the comments in the testfile 'test/content/test_validator.py'.")
+    def test_form_valid_submission(self):
+        # Create a valid form submission
+        form_data = {
+            'file': utils.generate_anki_file('test'),
+            'source': 'Test Source',
+        }
+
+        # Create a form instance with the form data
+        test_form = form.AddAnkiField(data=form_data, files=form_data)
+
+        # Check if the form is valid
+        self.assertTrue(test_form.is_valid())
+
+    def test_form_invalid_submission(self):
+        # Create an invalid form submission
+        form_data = {
+            'file': 'hgfdff',
+            'source': 'Test Source',
+        }
+
+        # Create a form instance with the form data
+        test_form = form.AddAnkiField(data=form_data, files=form_data)
+
+        # Check if the form is not valid
+        self.assertFalse(test_form.is_valid())
+

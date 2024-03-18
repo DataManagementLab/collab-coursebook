@@ -20,16 +20,27 @@
                 {% trans 'Close' %}
             </a>
             <h3 class="d-inline-block">
-                {{ content }}
+                {{ content.topic }}
             </h3>
-            <a href="{% url 'frontend:content-reading-mode' course_id topic_id next_id %}"
-               class="btn btn-primary d-inline-block float-end" style="margin: 5px">
-                {% trans 'Next content' %}
-            </a>
-            <a href="{% url 'frontend:content-reading-mode' course_id topic_id previous_id %}"
-               class="btn btn-primary d-inline-block float-end" style="margin: 5px">
-                {% trans 'Previous content' %}
-            </a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'frontend:content-reading-mode' course_id topic_id next_id %}"
+                class="btn btn-primary d-inline-block float-end" style="margin: 5px">
+                    {% trans 'Next content' %}
+                </a>
+                <a href="{% url 'frontend:content-reading-mode' course_id topic_id previous_id %}"
+                class="btn btn-primary d-inline-block float-end" style="margin: 5px">
+                    {% trans 'Previous content' %}
+                </a>
+            {% else %}
+                <a href="{% url 'frontend:public-content-reading-mode' course_id topic_id next_id %}"
+                class="btn btn-primary d-inline-block float-end" style="margin: 5px">
+                    {% trans 'Next content' %}
+                </a>
+                <a href="{% url 'frontend:public-content-reading-mode' course_id topic_id previous_id %}"
+                class="btn btn-primary d-inline-block float-end" style="margin: 5px">
+                    {% trans 'Previous content' %}
+                </a>
+            {% endif %}
         </div>
     </div>
 

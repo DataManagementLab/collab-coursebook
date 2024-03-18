@@ -176,6 +176,11 @@ cmake-build-*/
 # File-based project format
 *.iws
 
+# Visual Studio Code
+.vscode
+.vscode/*
+.vscode/settings.json
+
 # IntelliJ
 out/
 
@@ -230,6 +235,7 @@ modules.xml
 # Installer logs
 
 # Unit test / coverage reports
+htmlcov/
 
 # Translations
 

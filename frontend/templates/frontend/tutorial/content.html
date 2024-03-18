@@ -7,6 +7,12 @@
     <div>
         <p>
             {% blocktrans trimmed %}
+                A content represents a multimedia element, which can consist of a text or a valid file format. 
+                A content is assigned to a course.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
                 Click on any content on the course page in order to view details. Similar to the course page, you can
                 also click on an “ACTIONS” menu to access several main functions:
             {% endblocktrans %}
@@ -14,27 +20,43 @@
         <ul>
             <li>
                 {% blocktrans trimmed %}
-                    reading mode
+                    Reading mode
                 {% endblocktrans %}
             </li>
             <li>
                 {% blocktrans trimmed %}
-                    add or remove content from coursebook (the changes should be noticeable on the course page)
+                    In case you are a moderator, you can also access the following functions:
+                    <ul>
+                        <li>Audit the content (see more in section “Course”)</li>
+                    </ul>
                 {% endblocktrans %}
             </li>
             <li>
                 {% blocktrans trimmed %}
-                    edit, similar to section “Add Content”
+                    In case you are a moderator, you can also access the following functions:
+                    <ul>
+                        <li>Audit the content (see more in section “Course”)</li>
+                    </ul>
                 {% endblocktrans %}
             </li>
             <li>
                 {% blocktrans trimmed %}
-                    view history, similar to section “History”
+                    Add or remove content from coursebook (the changes should be noticeable on the course page)
                 {% endblocktrans %}
             </li>
             <li>
                 {% blocktrans trimmed %}
-                    delete
+                    Edit, similar to section “Add Content”
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    View history, similar to section “History”
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    Delete
                 {% endblocktrans %}
             </li>
         </ul>

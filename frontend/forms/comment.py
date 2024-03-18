@@ -44,5 +44,4 @@ class CommentForm(forms.ModelForm):
         :type kwargs: dict[str, Any]
         """
         super().__init__(*args, **kwargs)
-        self.fields['text'].label = False
         self.fields['text'].widget.attrs['placeholder'] = _("Your Comment")

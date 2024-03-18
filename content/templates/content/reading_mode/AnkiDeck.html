@@ -1,0 +1,23 @@
+{% extends 'content/reading_mode/base.html' %}
+
+{# Load the tag library #}
+{% load static %}
+{% load i18n %}
+
+{% block reading_header %}
+    <img src="{% static 'base/anki.png' %}" 
+         alt="{{ content.description }}"
+         style="max-width: 100%; display: block; margin: 16px auto;">
+{% endblock %}
+
+
+{% block reading_content %}
+    <b>
+        {% trans 'Source' %}:
+    </b>
+
+    <p>
+        {{ content.ankideck.source }}
+    </p>
+
+{% endblock %}

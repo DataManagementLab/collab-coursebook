@@ -6,6 +6,14 @@
 
 <section>
     <h3> {% trans 'Course' %} </h3>
+
+    <p>
+        {% blocktrans trimmed %}
+            A course is a structured unit of teaching or training materials on a
+            specific learning content, usually a module, of the educational institution.
+        {% endblocktrans %}
+    </p>
+
     {% with path='tutorial/'|add:lang|add:'/2.Course.jpg' %}
         <img src="{% static path %}" class="img-fluid" alt="course"/>
     {% endwith %}
@@ -23,7 +31,19 @@
                 <ul>
                     <li>
                         {% blocktrans trimmed %}
-                            “ADD TO/ REMOVE FROM FAVOURITE”: Add/Remove the viewed course to your list of favourite
+                            MARK AS VERIFIED / REMOVE VERIFICATION: If you are a moderator of a course, you can approve or disapprove 
+                            content as audited.
+                        {% endblocktrans %}
+                    </li>
+                    <li>
+                        {% comment %} TODO: Make the text meaningfull {% endcomment %}
+                        {% blocktrans trimmed %}
+                            HIDE CONTENT / REMOVE INCORRECT MARK: If you are a moderator of a course, you can hide or show content.
+                        {% endblocktrans %}
+                    </li>
+                    <li>
+                        {% blocktrans trimmed %}
+                            ADD TO/ REMOVE FROM FAVOURITE: Add/Remove the viewed course to your list of favourite
                             courses.
                         {% endblocktrans %}
                     </li>

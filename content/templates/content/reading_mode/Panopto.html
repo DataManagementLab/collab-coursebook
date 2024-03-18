@@ -1,0 +1,20 @@
+{% extends 'content/reading_mode/base.html' %}
+
+{# Load the tag library #}
+{% load i18n %}
+
+{% block reading_header %}
+    <iframe src="https://tu-darmstadt.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id={{ content.panoptovideocontent.id }}?start={{ content.panoptovideocontent.startTime }}" 
+            width="560" height="315" frameborder="0" scrolling="no">
+    
+    </iframe>
+{% endblock %}
+
+
+
+
+{% block reading_content %}
+    <a href="{{ content.panoptovideocontent.new_url }}" target="_blank">
+        {% trans 'View on Panopto' %}
+    </a>
+{% endblock %}

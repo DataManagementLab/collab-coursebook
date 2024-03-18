@@ -20,45 +20,65 @@
                             </div>
                         </a>
                         <div class="card-footer">
-                            <span class="badge badge-primary">
+                            <span class="badge bg-primary">
                                 {{ content.language }}
                             </span>
                             {% if content.tags.count > 0 %}
                                 &middot;
                                 {% for tag in content.tags.all %}
-                                    <span class="badge badge-secondary">
+                                    <span class="badge bg-secondary">
                                         {{ tag }}
                                     </span>
                                 {% endfor %}
                             {% endif %}
                             {% if content.get_rate != -1 %}
                                 &middot;
-                                <span class="badge badge-info">
+                                <span class="badge bg-info">
                                     {% fa6_icon 'star' 'fas' %} {{ content.get_rate }}
                                 </span>
                                 &middot;
-                                <span class="badge badge-info">
+                                <span class="badge bg-info">
                                     {% fa6_icon 'hashtag' 'fas' %} {{ content.get_rate_amount }}
                                 </span>
                             {% endif %}
                                 &middot;
-                            <a class= "badge badge-primary" 
-                            href="{% url 'frontend:content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
-                                {% fa6_icon 'eye' 'far' %}
-                            </a>
-                            &middot;
                             {% if user.is_authenticated %}
+                                <a class= "badge bg-primary" 
+                                href="{% url 'frontend:content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
+                                    {% fa6_icon 'eye' 'far' %}
+                                </a>
+                            {% else %}
+                                <a class= "badge bg-primary" 
+                                href="{% url 'frontend:public-content-reading-mode' course.pk content.topic.pk content.pk %}{% if ending %}{{ ending }}{% endif %}">
+                                    {% fa6_icon 'eye' 'far' %}
+                                </a>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                            &middot;
                             {% if content in favorite %}
-                            <a class="badge badge-primary"
+                            <a class="badge bg-primary"
                                 href="{% url 'frontend:coursebook-remove-courseview' course.pk content.topic.pk content.pk %}">
                                 {% fa6_icon 'minus' 'fas' %}
                             </a>
                             {% else %}
-                            <a class="badge badge-primary"
+                            <a class="badge bg-primary"
                                 href="{% url 'frontend:coursebook-add-courseview' course.pk content.topic.pk content.pk %}">
                                 {% fa6_icon 'plus' 'fas' %}
                             </a>
                             {% endif %}
+                            {% endif %}
+
+                            {% if content.approved %}
+                            &middot;
+                            <span class="badge" style="background-color: green;">
+                                {% fa6_icon 'check' 'fas' %}
+                            </span>
+                            {% endif %}
+                            {% if content.hidden %}
+                            &middot;
+                            <span class="badge" style="background-color: red;">
+                                {% fa6_icon 'times' 'fas' %}
+                            </span>
                             {% endif %}
                         </div>
                     </div>

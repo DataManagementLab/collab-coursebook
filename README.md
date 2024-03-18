@@ -45,6 +45,27 @@ Python requirements are listed in ``requirements.txt``. They can be installed wi
 * Change into that directory ``cd collab-coursebook``
 * Clone this repository ``git clone URL .``
 
+**Docker**
+
+For development there is a docker container. It contains only the runtime environment and is not indented for deployment usage!
+Build the image (may take some time, downloads complete TeXLive >4GB):
+```bash
+docker build -t collab .
+```
+Aterwards the container can be started with
+```bash
+docker run --name collab -p 8000:8000 -v "$PWD:/home/collab/collab-coursebook" -u "$(id -u):$(id -g)" -e "DOCKER_USER=$USER" collab
+```
+To restart it (for example after it crashed or the host rebooted) run
+```bash
+docker start collab
+```
+
+In your browser, access ``http://127.0.0.1:8000/`` and continue from there.
+
+In case you want to attach your IDE to the container, all file operations will be executed as the outside user. So no ownership problems should happen.
+__Please note that the container does support passwordless sudo!__
+
 
 #### Linux
 

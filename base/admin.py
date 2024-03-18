@@ -25,7 +25,11 @@ class CourseAdmin(admin.ModelAdmin):
     """
     list_display = ['title', 'category', 'period']
     readonly_fields = ['creation_date']
-
+    import frontend.forms.course as c
+    form = c.AddCourseForm
+    form.Meta.fields.insert(4,'moderators')
+    form.Meta.widgets['moderators']= admin.widgets.FilteredSelectMultiple('Moderators', False)
+    
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):

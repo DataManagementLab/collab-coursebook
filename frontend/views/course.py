@@ -212,7 +212,9 @@ class EditCourseView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         """
         # Reversion comment
         Reversion.update_comment(request)
-        return super().post(request, *args, **kwargs)
+        kwargs['aproved']=False
+        response = super().post(request, *args, **kwargs)
+        return response
 
 
 class EditCourseStructureView(LoginRequiredMixin, DetailView, FormMixin):
@@ -282,7 +284,7 @@ class EditCourseStructureView(LoginRequiredMixin, DetailView, FormMixin):
                 sorted_topics.append({'id': topic.id, 'title': topic.__str__()})
             data = {'topic_id': new_topic.id, 'topics': sorted_topics}
             return JsonResponse(data=data)
-        return self.form_invalid(form_create_topic)
+        return self.form_invalid(form_create_topic) #TODO Causes error with unittests
 
 
 class CourseView(LoginRequiredMixin, DetailView, FormMixin):
@@ -418,19 +420,24 @@ class CourseView(LoginRequiredMixin, DetailView, FormMixin):
         favorite_list = [] # Favorite.objects.filter(course=course_id, user=get_user(self.request).profile)
         context = super().get_context_data(**kwargs)
         structure_entries = CourseStructureEntry. \
-            objects.filter(course=context["course"]).order_by('index')
+            objects.filter(course=context["course"]).order_by('index') #TODO: Fix the sorting!!!
+        
+
         topics_recursive = []
         current_topic = None
-        for favorite in Favorite.objects.filter(course=course_id, user=get_user(self.request).profile):
+        user=get_user(self.request).profile
+        for favorite in Favorite.objects.filter(course=course_id, user=user):
             favorite_list.append(favorite.content)
-
+        # If the user is a moderator of the course, set user to "" to show all contents
+        if user in context['course'].moderators.all():
+            user = ""
         for entry in structure_entries:
             index_split = entry.index.split('/')
             # Topic
             if len(index_split) == 1:
                 current_topic = {'topic': entry.topic, 'subtopics': [],
                                  'topic_contents': entry.topic.get_contents(self.sorted_by,
-                                                                            self.filtered_by)}
+                                                                            self.filtered_by, user=user)}
                 topics_recursive.append(current_topic)
             # Subtopic
             # Only handle up to one subtopic level
@@ -438,8 +445,7 @@ class CourseView(LoginRequiredMixin, DetailView, FormMixin):
                 current_topic["subtopics"].append({'topic': entry.topic,
                                                    'topic_contents':
                                                        entry.topic.
-                                                  get_contents(self.sorted_by, self.filtered_by)})
-
+                                                  get_contents(self.sorted_by, self.filtered_by, user=user)})
 
         context["structure"] = topics_recursive
         context['isCurrentUserOwner'] = self.request.user.profile in context['course'].owners.all()
@@ -542,3 +548,70 @@ class CourseDeleteView(LoginRequiredMixin, DeleteView):
         message = _("Course %(title)s successfully deleted") % {'title': self.get_object().title}
         messages.success(request, message, extra_tags="alert-success")
         return super().delete(self, request, *args, **kwargs)
+
+
+class PublicCourseView(DetailView, FormMixin):
+    """Course list view
+
+    Displays the course detail page.
+
+    :attr CourseView.model: The model of the view
+    :type CourseView.model: Model
+    :attr CourseView.template_name: The path to the html template
+    :type CourseView.template_name:str
+    :attr CourseView.form_class: The form class of the view
+    :type CourseView.form_class: Form
+    :attr CourseView.context_object_name: The context object name
+    :type CourseView.context_object_name: str
+    """
+
+    template_name = 'frontend/course/public_view.html'
+    model = Course
+    form_class = FilterAndSortForm
+    context_object_name = "course"
+
+    def __init__(self):
+        """Initializer
+
+        Initialize the course view with pre configuration for the sort and filter options
+        with default values.
+        """
+        super().__init__()
+
+    def get_context_data(self, **kwargs):
+        """Context data
+
+        Gets the context data of the view which can be accessed in
+        the html templates.
+
+        :param kwargs: The additional arguments
+        :type kwargs: dict[str, Any]
+
+        :return: the context data
+        :rtype: dict[str, Any]
+        """
+        
+        context = super().get_context_data(**kwargs)
+        structure_entries = CourseStructureEntry. \
+            objects.filter(course=context["course"]).order_by('index')
+        topics_recursive = []
+        current_topic = None
+
+        for entry in structure_entries:
+            index_split = entry.index.split('/')
+            # Topic
+            if len(index_split) == 1:
+                current_topic = {'topic': entry.topic, 'subtopics': [],
+                                 'topic_contents': entry.topic.get_contents(None,
+                                                                            None).filter(public=True)}
+                topics_recursive.append(current_topic)
+            # Subtopic
+            # Only handle up to one subtopic level
+            else:
+                current_topic["subtopics"].append({'topic': entry.topic,
+                                                   'topic_contents':
+                                                       entry.topic.
+                                                  get_contents(None, None).filter(public=True)})
+
+        context["structure"] = topics_recursive
+        return context

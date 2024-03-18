@@ -6,7 +6,7 @@ This file contains forms associated with the content types.
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from content.models import MDContent, YTVideoContent, ImageContent, PDFContent
+from content.models import MDContent, YTVideoContent, ImageContent, PDFContent, PanoptoVideoContent, ExerciseContent, AnkiDeck, GeneralURL
 from content.models import TextField, Latex
 from content.widgets import ModifiedClearableFileInput
 
@@ -74,6 +74,69 @@ class AddContentFormYoutubeVideo(forms.ModelForm):
                     'placeholder': _("Default: 0:00")})
         }
 
+
+class AddContentFormPanoptoVideo(forms.ModelForm):
+    """Add Panopto video
+
+    This model represents the add form for Panopto videos.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        """
+        model = PanoptoVideoContent
+        fields = ['url']
+
+class AddContentExercises(forms.ModelForm):
+    """Add exercises
+
+    This model represents the add form for exercises.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+        """
+        model = ExerciseContent
+        fields = ['tasks', 'solutions', 'source'] #There is only one source since the solution is ether selfmade or usually from the same source.
+        widgets = {
+            'tasks': ModifiedClearableFileInput(attrs={'accept': 'application/pdf',
+                                                     'required': 'true'}),
+                
+            'solutions': ModifiedClearableFileInput(attrs={'accept': 'application/pdf',
+                                                     'required': 'true'}),
+            'source': forms.Textarea(attrs={'style': 'height: 100px'}),
+        }
+
+class AddGeneralURL(forms.ModelForm):
+    """Add General URL
+
+    This model represents the add form for General URLs.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        """
+        model = GeneralURL
+        fields = ['url', 'title']
+        widgets = {
+            'title': forms.Textarea(attrs={'style': 'height: 20px'}),
+        }
 
 class AddContentFormImage(forms.ModelForm):
     """Add image content
@@ -156,6 +219,36 @@ class AddTextField(forms.ModelForm):
             'textfield': forms.Textarea(
                 attrs={
                     'placeholder': get_placeholder(TextField.TYPE, 'textfield')})
+        }
+
+
+class AddAnkiField(forms.ModelForm):
+    """Add Anki field
+
+    This model represents the add form for Anki fields.
+    """
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.model: The model to which this form corresponds
+        :type Meta.model: Model
+        :attr Meta.fields: Including fields into the form
+        :type Meta.fields: str or list[str]
+        :attr Meta.widgets: Customization of the model form
+        :type Meta.widgets: dict[str, Widget]
+        """
+        model = AnkiDeck
+        fields = ['file', 'source']
+        widgets = {
+            'file': ModifiedClearableFileInput(attrs={'accept': 'application/zip',
+                                                      'required': ''}),
+            'source': forms.Textarea(
+                attrs={
+                    'style': 'height: 100px',
+                    'placeholder': get_placeholder(AnkiDeck.TYPE, 'source')}),
         }
 
 
@@ -284,4 +377,8 @@ CONTENT_TYPE_FORMS = {
     TextField.TYPE: AddTextField,
     Latex.TYPE: AddLatex,
     MDContent.TYPE: AddMD,
+    PanoptoVideoContent.TYPE: AddContentFormPanoptoVideo,
+    AnkiDeck.TYPE: AddAnkiField,
+    ExerciseContent.TYPE: AddContentExercises,
+    GeneralURL.TYPE: AddGeneralURL
 }

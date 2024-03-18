@@ -1,0 +1,30 @@
+{% load cc_frontend_tags %}
+{% load i18n %}
+{% load static %}
+{% load fontawesome_6 %}
+
+<b>
+    <font size="4">  
+        {% trans 'Preview of' %} {{ content.generalurl.title }}: 
+    </font>  
+</b>
+<br>
+{% if "http" in content.generalurl.url|generalurl_image %}
+    <img src="{{ content.generalurl.url|generalurl_image }}" width="500" height="300">
+{% else %}
+    <img src="{% static 'content/no_preview.png' %}" width="500" height="300">
+{% endif %}
+<br>
+<b>
+    <font size="3">
+        {% trans 'Title:' %} {{ content.generalurl.url|generalurl_title }}
+    </font>
+</b>
+<br>
+<form action="{{ content.generalurl.url }}" method="get" target="_blank" >
+    {% csrf_token %}
+    <button name="action" value="submit" class="btn " style="font-size:2em;background-color:#0A3D62; color:white;">
+        {% trans 'Open in new tab' %}
+        {% fa6_icon 'up-right-from-square' 'fas' %} 
+    </button>
+</form>

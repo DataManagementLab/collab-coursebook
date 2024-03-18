@@ -7,13 +7,13 @@ registered in admin.py.
 
 import os
 import re
+
 import reversion
 from django.conf import settings
 from django.db import models
 from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import FileExtensionValidator
-
 
 from pdf2image import convert_from_path
 
@@ -384,6 +384,57 @@ class TextField(BaseContentModel):
         return contents.filter(textfield__isnull=False)
 
 
+class AnkiDeck(BaseContentModel):
+    """Anki deck
+
+    This model represents a text based content.
+
+    :attr AnkiDeck.TYPE: Describes the content type of this model
+    :type AnkiDeck.TYPE: str
+    :attr AnkiDeck.DESC: Describes the name of this model
+    :type AnkiDeck.DESC: __proxy__
+    :attr AnkiDeck.textfield: The text of the content
+    :type AnkiDeck.textfield: TextField
+    :attr AnkiDeck.source: The source of this content
+    :type AnkiDeck.source: TextField
+    """
+    TYPE = "AnkiDeck"
+    DESC = _("Anki Deck")
+
+    file = models.FileField(verbose_name=_("Anki Deck"),
+                            upload_to='uploads/contents/%Y/%m/%d/',
+                            blank=True,
+                            validators=(Validator.validate_anki_file,))
+    source = models.TextField(verbose_name=_("Source"))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("Anki Deck")
+        verbose_name_plural = _("Anki Decks")
+
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.content}: {self.pk}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(ankideck__isnull=False)
+
+
 class YTVideoContent(BaseContentModel):
     """YouTube video model
 
@@ -402,13 +453,13 @@ class YTVideoContent(BaseContentModel):
     url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_youtube_url,))
 
     start_time = models.CharField(verbose_name=_("Video Start Timestamp"), max_length=8,
-                                 default="0:00",
-                                 help_text=_(
-                                     "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
+                                  default="0:00",
+                                  help_text=_(
+                                      "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
     end_time = models.CharField(verbose_name=_("Video End Timestamp"), max_length=8, default="0:00",
-                               help_text=_(
-                                   "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
+                                help_text=_(
+                                    "Type in the time as HH:MM:SS (e.g. 2:05:10, 2:05, 0:50)."))
 
     class Meta:
         """Meta options
@@ -478,10 +529,10 @@ class YTVideoContent(BaseContentModel):
 
         if start_time == end_time:
             raise ValidationError(
-            _('Please make sure that your start and end time are different.'))
+                _('Please make sure that your start and end time are different.'))
         if start_time > end_time:
             raise ValidationError(
-            _('Please make sure that your end time is larger than your start time.'))
+                _('Please make sure that your end time is larger than your start time.'))
         if (start_time > seconds and end_time > seconds):
             raise ValidationError(
                 _('Please make sure your start and end times are smaller than the videos length.'))
@@ -493,6 +544,201 @@ class YTVideoContent(BaseContentModel):
                 _('Please make sure your end time is smaller than the videos length.'))
 
 
+class PanoptoVideoContent(BaseContentModel):
+    """Panopto video model
+
+    This model represents a content with a Panopto video.
+
+    :attr PanoptoVideoContent.TYPE: Describes the content type of this model
+    :type PanoptoVideoContent.TYPE: str
+    :attr PanoptoVideoContent.DESC: Describes the name of this model
+    :type PanoptoVideoContent.DESC: __proxy__
+    :attr PanoptoVideoContent.url: The link of the Panopto video
+    :type PanoptoVideoContent.url: URLField
+    """
+    TYPE = "PanoptoVideo"
+    DESC = _("Panopto Video")
+
+    url = models.URLField(verbose_name=_("Video URL"), validators=(Validator.validate_panopto_url,))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("Panopto Video Content")
+        verbose_name_plural = _("Panopto Video Contents")
+
+    @property
+    def id(self):  # pylint: disable=C0103
+        """Panopto Video ID
+
+        Splits the URL by the symbol "=" to get the id of the Panopto URL.
+
+        return: The id of the Panopto video
+        rtype: str
+        """
+        if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
+            split_url = self.url.split("?")[1]
+            video_id = [url.split("=")[1] for url in split_url.split("&") if url.startswith("id=")]
+
+            if video_id:
+                return video_id[0]
+
+    @property
+    def start_time(self):
+        """Panopto Video Start Time
+
+        Extracts the Panopto video start time (if available) from the URL.
+
+        Return: str: The Panopto video start time.
+                 If start time is not present, it defaults to "0:00:00".
+        """
+        if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
+            split_url = self.url.split("?")[1]
+            start_time_param = [url.split("=")[1] for url in split_url.split("&") if url.startswith("start=")]
+
+            if start_time_param:
+                return start_time_param[0]
+            else:
+                return "0:00:00"
+
+    @property
+    def new_url(self):
+        """Panopto Video New URL
+
+        Cuts &query part (if available) from the URL.
+
+        Return: str: The Panopto video URL cut at &query.
+                 If there is an issue it defaults to regular URL
+        """
+        if 'panopto.eu/Panopto/Pages/Viewer.aspx' in self.url:
+            # Define a regular expression to match the "&query" part
+            regex_pattern = r'&query=[^&]*'
+
+            # Use re.sub to remove the "&query" part from the URL
+            new_url = re.sub(regex_pattern, '', self.url)
+
+            if new_url:
+                return new_url
+            else:
+                return self.url
+
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.url}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(panoptovideocontent__isnull=False)
+
+class ExerciseContent(BaseContentModel, BaseSourceModel):
+    """Exercise content
+
+    This model represents a content with an exercise and solution.
+
+    :attr ExerciseContent.TYPE: Describes the content type of this model
+    :type ExerciseContent.TYPE: str
+    :attr ExerciseContent.DESC: Describes the name of this model
+    :type ExerciseContent.DESC: __proxy__
+    :attr ExerciseContent.tasks: The tasks file of this model
+    :type ExerciseContent.tasks: FileField
+    :attr ExerciseContent.solutions: The solutions file of this model
+    :type ExerciseContent.solutions: FileField
+    """
+    TYPE = "Exercise"
+    DESC = _("Exercise")
+
+    tasks = models.FileField(verbose_name=_("Tasks"),
+                                upload_to='uploads/contents/%Y/%m/%d/',
+                                blank=True,
+                                validators=(Validator.validate_pdf,))
+
+    solutions = models.FileField(verbose_name=_("Solutions"),
+                                    upload_to='uploads/contents/%Y/%m/%d/',
+                                    blank=True,
+                                    validators=(Validator.validate_pdf,))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+        """
+        verbose_name = _("Exercise Content")
+        verbose_name_plural = _("Exercise Contents")
+    
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.content}: {self.tasks} <-> {self.solutions}"
+    
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(exercisecontent__isnull=False)
+
+
+class GeneralURL(BaseContentModel):
+    """General URL
+
+    This model represents a general url content.
+
+    :attr GeneralURL.TYPE: Describes the content type of this model
+    :type GeneralURL.TYPE: str
+    :attr GeneralURL.DESC: Describes the name of this model
+    :type GeneralURL.DESC: __proxy__
+    :attr GeneralURL.url: The given general url
+    :type GeneralURL.url: URLField
+    """
+    TYPE = "GeneralURL"
+    DESC = _("General URL")
+
+    url = models.URLField(verbose_name=_("General URL"), validators=(Validator.validate_general_url,))
+    title = models.TextField(verbose_name=_("The clear name of the site"))
+
+    class Meta:
+        """Meta options
+
+        This class handles all possible meta options that you can give to this model.
+
+        :attr Meta.verbose_name: A human-readable name for the object in singular
+        :type Meta.verbose_name: __proxy__
+        :attr Meta.verbose_name_plural: A human-readable name for the object in plural
+        :type Meta.verbose_name_plural: __proxy__
+        """
+        verbose_name = _("General URL")
+        verbose_name_plural = _("General URLs")
+
+    def __str__(self):
+        """String representation
+
+        Returns the string representation of this object.
+
+        :return: the string representation of this object
+        :rtype: str
+        """
+        return f"{self.url}"
+
+    @staticmethod
+    def filter_by_own_type(contents):
+        return contents.filter(generalurl__isnull=False)
+
+
 # dict: Contains all available content types.
 CONTENT_TYPES = {
     PDFContent.TYPE: PDFContent,
@@ -500,7 +746,11 @@ CONTENT_TYPES = {
     Latex.TYPE: Latex,
     YTVideoContent.TYPE: YTVideoContent,
     ImageContent.TYPE: ImageContent,
-    MDContent.TYPE: MDContent
+    MDContent.TYPE: MDContent,
+    PanoptoVideoContent.TYPE: PanoptoVideoContent,
+    AnkiDeck.TYPE: AnkiDeck,
+    ExerciseContent.TYPE: ExerciseContent,
+    GeneralURL.TYPE: GeneralURL
 }
 
 # Register models for reversion if it is not already done in admin,
@@ -522,4 +772,16 @@ reversion.register(YTVideoContent,
                    follow=['content'])
 reversion.register(MDContent,
                    fields=['content', 'md', 'textfield', 'source'],
+                   follow=['content'])
+reversion.register(PanoptoVideoContent,
+                   fields=['content', 'url', 'start_time'],
+                   follow=['content'])
+reversion.register(ExerciseContent,
+                   fields=['content', 'tasks', 'solutions', 'source', 'license'],
+                   follow=['content'])
+reversion.register(AnkiDeck,
+                   fields=['content', 'source'],
+                   follow=['content'])
+reversion.register(GeneralURL,
+                   fields=['content', 'url', 'title'],
                    follow=['content'])

@@ -12,6 +12,12 @@ from base.models import Period, Category
 from collab_coursebook.settings import DATA_PROTECTION_REQURE_CONFIRMATION
 from frontend.forms import AcceptPrivacyNoteForm
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.functions import Lower
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView
+
+from base.models import Course, Category, Period
 
 class StartView(TemplateView):
     """Dashboard view
@@ -22,12 +28,30 @@ class StartView(TemplateView):
     :attr StartView.template_name: The path to the html template
     :type StartView.template_name: str
     """
-    template_name = "frontend/index.html"
+    template_name = 'frontend/index.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("frontend:dashboard")
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        """Context data
+
+        Gets the context data of the view which can be accessed in
+        the html templates.
+
+        :param kwargs: The additional arguments
+        :type kwargs: dict[str, Any]
+
+        :return: the context data
+        :rtype: dict[str, Any]
+        """
+        context = super().get_context_data(**kwargs)
+        context["periods"] = Period.objects.all()
+        context["categories"] = Category.objects.all()
+        context["courses"] = Course.objects.all().filter(public=True)
+        return context
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):

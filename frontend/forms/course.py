@@ -34,10 +34,10 @@ class AddCourseForm(forms.ModelForm):
         :type Meta.fields: str or list[str]
         """
         model = Course
-        fields = ['title', 'description', 'image', 'owners',
+        fields = ['title', 'description', 'image', 'owners', 'public',
                   'restrict_changes', 'category', 'period']
         widgets = {
-            'image': ModifiedClearableFileInput(attrs={'required': 'false'})
+            'image': ModifiedClearableFileInput(attrs={'required': 'false'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -56,7 +56,7 @@ class EditCourseForm(HistoryForm):
     """
 
     field_order = ['title', 'description', 'image',
-                   'owners', 'restrict_changes', 'category', 'period', 'change_log']
+                   'owners', 'moderators', 'public', 'restrict_changes', 'category', 'period', 'change_log']
 
     # Default value for pk is -1: if this value gets overwritten the form
     # Edits the existing course with the title in the database
@@ -75,10 +75,10 @@ class EditCourseForm(HistoryForm):
         """
 
         model = Course
-        fields = ['title', 'description', 'image', 'owners',
+        fields = ['title', 'description', 'image', 'owners', 'public',
                   'restrict_changes', 'category', 'period']
         widgets = {
-            'image': ModifiedClearableFileInput(attrs={'required': 'false'})
+            'image': ModifiedClearableFileInput(attrs={'required': 'false'}),
         }
 
     def __init__(self, *args, **kwargs):

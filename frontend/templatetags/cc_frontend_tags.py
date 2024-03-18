@@ -14,6 +14,10 @@ from collab_coursebook.settings import ALLOW_PUBLIC_COURSE_EDITING_BY_EVERYONE
 
 from content.models import CONTENT_TYPES
 
+from datetime import timedelta
+
+from linkpreview import link_preview
+
 register = template.Library()
 
 
@@ -170,6 +174,40 @@ def check_delete_course_permission(user, course):
     """
     return user.profile in course.owners.all()
 
+@register.filter
+def check_approve_content_permission(user, course):
+    """Approve content permission
+
+    Checks if a user is a moderator of a course and it is
+    allowed to approve the content.
+
+    :param user: The user to check permission
+    :type user: User
+    :param content: The content to check permission
+    :type content: Content
+
+    :return: true iff the content can be approved
+    :rtype: bool
+    """
+    return user.profile.moderated_courses.filter(pk=course.pk).exists()
+
+@register.filter
+def check_hide_content_permission(user, course):
+    """Hide content permission
+
+    Checks if a user is a moderator of a course and it is
+    allowed to hide the content.
+
+    :param user: The user to check permission
+    :type user: User
+    :param content: The content to check permission
+    :type content: Content
+
+    :return: true iff the content can be hidden
+    :rtype: bool
+    """
+    return user.profile.moderated_courses.filter(pk=course.pk).exists()
+
 
 @register.filter
 def check_profile_permissions(user, profile):
@@ -250,6 +288,41 @@ def get_coursebook(user, course):
     favorites = Favorite.objects.filter(user=user.profile, course=course)
     coursebook = [favorite.content for favorite in favorites]
     return coursebook
+
+
+@register.filter
+def format_seconds(seconds):
+    """
+    This filter converts seconds to a hh:mm:ss format
+    Will be used for Panopto integration since start_time is only given in seconds
+    """
+    try:
+        # Try converting as a simple numeric string
+        sec = int(float(seconds))
+        return str(timedelta(seconds=sec))
+    except ValueError:
+        # If conversion fails, assume it's already in the format "0:00:00"
+        return seconds
+
+
+@register.filter
+def generalurl_title(url):
+    """
+    This filter extracts the title of a website.
+    Will be used for GeneralURL to display the URL's title.
+    """
+    preview = link_preview(url)
+    return preview.title
+
+
+@register.filter
+def generalurl_image(url):
+    """
+    This filter extracts a image of a website.
+    Will be used for GeneralURL to display an image of the site.
+    """
+    preview = link_preview(url)
+    return preview.image
 
 
 def js_escape(value):

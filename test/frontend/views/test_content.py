@@ -13,15 +13,23 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from base.models import Content, Course
+from base.models import Content, Course, Topic, Category
 
 import content.forms as form
 import content.models as model
+from base.models.profile import Profile
 from content.attachment.forms import ImageAttachmentFormSet
 from content.attachment.models import ImageAttachment
 
 from frontend.forms import AddContentForm
-from frontend.views.content import clean_attachment
+from frontend.views.content import clean_attachment, approve_content, hide_content
+
+
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.test.client import RequestFactory
+from django.test import Client
+from frontend.views.content import PublicContentReadingModeView
 
 
 class CleanAttachmentTestCase(TestCase):
@@ -50,6 +58,54 @@ class CleanAttachmentTestCase(TestCase):
         clean_attachment(content, formset)
         self.assertEqual(content.ImageAttachments.count(), 0)
         self.assertEqual(ImageAttachment.objects.count(), 0)
+
+class ApproveContentTestCase(MediaTestCase):
+    """Approve content test case
+
+    Defines the test cases for the approve_content function.
+    """
+
+    def setUp(self):
+        """Setup
+
+        Sets up the test database.
+        """
+        super().setUp()
+        self.request_factory = RequestFactory()
+        self.course = Course.objects.first()
+        self.course.moderators.add(Profile.objects.first())
+        self.course.save()
+        self.cat = Category.objects.first()
+        self.topic = Topic.objects.first()
+        self.content = Content.objects.first()
+
+    def test_approve_content(self):
+        """Test approve content
+
+        Tests that the content is approved and the user is redirected to the content page.
+        """
+        approval = True
+        self.request_factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.request_factory.user = User.objects.first()
+        response = approve_content(self.request_factory, self.course.id, self.topic.id, self.content.id, approval)
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.content.refresh_from_db()
+        self.assertEqual(self.content.approved, approval)
+
+    def test_disapprove_content(self):
+        """Test disapprove content
+
+        Tests that the content is disapproved and the user is redirected to the content page.
+        """
+        approval = False
+        self.request_factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.request_factory.user = User.objects.first()
+        response = approve_content(self.request_factory, self.course.id, self.topic.id, self.content.id, approval)
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.content.refresh_from_db()
+        self.assertEqual(self.content.approved, approval)
 
 
 class AddContentViewTestCase(MediaTestCase):
@@ -754,3 +810,157 @@ class EditContentViewTestCase(MediaTestCase):
         md_content = model.MDContent.objects.first()
         self.assertEqual(md_content.source, 'src text')
         self.assertEqual(md_content.textfield, 'Lorem ipsum')
+
+
+class PublicContentReadingModeViewTestCase(MediaTestCase):
+    """
+    Test case for the PublicContentReadingModeView class.
+    """
+    def setUp(self):
+        """
+        Set up the test environment by initializing necessary variables and objects.
+        """
+        super().setUp()
+        self.factory = RequestFactory()
+        self.client = Client()
+        self.user = User.objects.all().first()
+        self.course = Course.objects.all().first()
+        self.course.public = True
+        self.course.save()
+        self.topic = Topic.objects.all().first()
+        self.content = Content.objects.all().first()
+        self.content.public = True
+        self.content.save()
+
+    def test_get_context_data(self):
+        """
+        Test case for the `get_context_data` method of the PublicContentReadingModeView class.
+        """
+        request = self.factory.get(reverse('frontend:public-content-reading-mode', args=(self.course.id, self.topic.id, self.content.id)))
+        request.user = self.user
+        response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=self.content.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.template_name[0], 'frontend/content/reading_mode.html')
+        self.assertEqual(response.context_data['course_id'], self.course.id)
+        self.assertEqual(response.context_data['topic_id'], self.topic.id)
+        self.assertEqual(response.context_data['previous_id'], self.content.id)
+        self.assertEqual(response.context_data['next_id'], self.content.id)
+        tmp = utils.create_content(model.MDContent.TYPE)
+        tmp.public = True
+        tmp.save()
+        md_code = form.get_placeholder(model.MDContent.TYPE, 'textfield')
+        md = model.MDContent.objects.create(textfield=md_code, content=tmp)
+        md.save()
+
+        for content in Content.objects.all():
+            request = self.factory.get(reverse('frontend:public-content-reading-mode', args=(self.course.id, self.topic.id, content.id)))
+            request.user = self.user
+            response = PublicContentReadingModeView.as_view()(request, course_id=self.course.id, topic_id=self.topic.id, pk=content.id)
+            if request.GET.get('coursebook'):
+                self.assertEqual(response.context_data['ending'], '?coursebook=True')
+            if request.GET.get('s'):
+                self.assertEqual(response.context_data['ending'], request.GET.get('s') + "&f=" + request.GET.get('f'))
+            if content.type == 'MD':
+                self.assertEqual(response.context_data['html'], md_code)
+
+class HideContentTestCase(MediaTestCase):
+    """Hide content test case
+
+    Defines the test cases for the hide_content function.
+    """
+
+    def setUp(self):
+        """Setup
+
+        Sets up the test database.
+        """
+        super().setUp()
+        self.factory = RequestFactory()
+        self.course = Course.objects.first()
+        self.course.moderators.add(Profile.objects.first())
+        self.course.save()
+        self.cat = Category.objects.first()
+        self.topic = Topic.objects.first()
+        self.content = Content.objects.first()
+
+    def test_hide_content(self):
+        """Test hide content
+
+        Tests that the content is hidden and the user is redirected to the content page.
+        """
+        request = self.factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)), {
+            'user_message': 'User message',
+            'author_message': 'Author message'
+        })
+        request.user = User.objects.first()
+
+        response = hide_content(request, self.course.id, self.topic.id, self.content.id, True)
+
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+
+        self.content.refresh_from_db()
+        self.assertTrue(self.content.hidden)
+        self.assertEqual(self.content.user_message, 'User message')
+        self.assertEqual(self.content.author_message, 'Author message')
+        self.assertFalse(self.content.approved)
+
+    def test_show_content(self):
+        """Test show content
+
+        Tests that the content is shown and the user is redirected to the content page.
+        """
+    
+        request = self.factory.post(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        request.user = User.objects.first()
+
+        response = hide_content(request, self.course.id, self.topic.id, self.content.id, False) #FIXME: This causes multiple values in dict errors ...
+
+        self.assertEqual(response.status_code, HttpResponseRedirect.status_code)
+        self.assertEqual(response.url, reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+
+        self.content.refresh_from_db()
+        self.assertFalse(self.content.hidden)
+        self.assertEqual(self.content.user_message, None)
+        self.assertEqual(self.content.author_message, None)
+        self.assertFalse(self.content.approved)
+
+    def test_get_content(self):
+        import logging
+
+        """Test get content
+
+        Tests if the content is shown for the different types of users (moderators, authors, normal users and not logged in).
+        """
+        self.content.hidden = True
+        self.content.user_message = 'User message'
+        self.content.author_message = 'Author message'
+        self.content.author = Profile.objects.first()
+        # Create a new User to act as the normal user
+        user = User.objects.create_user(username='testuser', password='12345')
+        user.save()
+        self.content.save()
+        self.content.refresh_from_db()
+        #Normal user
+        self.client.force_login(user)
+        response = self.client.get(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'User message')
+
+        # #Author
+        # self.client.force_login(User.objects.first())
+        # response = self.client.get(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        # self.assertEqual(response.status_code, 200)
+        # logging.critical(self.content.author)
+        # self.assertContains(response, 'Author message')
+
+        # #Moderator
+        # self.client.force_login(User.objects.last())
+        # self.course.moderators.add(Profile.objects.first())
+        # self.course.save()
+        # response = self.client.get(reverse('frontend:content', args=(self.course.id, self.topic.id, self.content.id)))
+        # self.assertEqual(response.status_code, 200)
+        # self.assertContains(response, 'User message')
+        # self.assertContains(response, 'Author message')
+        
